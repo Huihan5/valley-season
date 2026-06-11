@@ -64,6 +64,31 @@ Exhaustion (fatigue=5) forces morning rest the next day.
 
 ---
 
+## [2026-06-11] — GitHub 初始化 + Phase 2 事件与结局系统
+
+### Added
+- `.gitignore` — Node/React 标准忽略规则
+- `src/data/events/day12.json` — Kessler 税务审计（3个选项；结果与 Day 3 账本选择挂钩）
+- `src/data/events/day15.json` — 林地边界调查（3个选项；`foundForestSymbols` flag 开启结局五线索链）
+- `src/systems/EndingSystem.ts` — 五结局判定逻辑，按 NUMBERS.md §6 优先级顺序
+- `src/data/endings/endings.json` — 五个结局草稿文本（来自 GDD，结局五有扩写；Phase 3 正式润色）
+- `src/types/game.ts` — 新增 `DialogueLine` 接口、`EventData.sceneImage`、`EventData.dialogue`、`GameState.endingId` 字段（为 NPC 头像和场景图片预留）
+
+### Changed
+- `src/systems/EventSystem.ts` — 重构为 flag 条件逻辑版本：
+  - `getFixedEvent()` 新增 `state` 参数，对 Day 12 做后处理（`investigatedLedger` → 额外声望；`deferredLedger` → 禁用"主动解释"选项，拖延惩罚加倍）
+  - `getFreeChoices()` 新增 4 个 flag 解锁选项：深查账目记录（Day 3 调查后+Day<12）、拜访 Lorenz（晚宴后）、翻查旧档案（记录符号后）、Marta 对话描述随信任变化
+- `src/data/config.ts` — `DEMO_MAX_DAYS`: 10 → 30，解锁完整 30 天循环
+- `src/App.tsx` — Day 30 结束时调用 `EndingSystem.determineEnding()`，底部显示结局标题和"重新开始"按钮；移除旧的演示结束文本
+- GitHub 仓库初始化：`https://github.com/Huihan5/valley-season`（private）
+
+### 待处理（Phase 2 剩余）
+- Day 18（狩猎季开幕）、Day 22（旅人）、Day 27（领主来信）、Day 30（结算场景）事件 JSON 尚未写
+- `travelerDialogueCorrect` flag 在 Day 22 事件写完后才能激活结局五判定
+- EventSystem 测试尚未补充（CLAUDE.md 要求每个 system 有对应测试）
+
+---
+
 *Format for future entries:*
 
 ## [Date] — Phase N: Description
