@@ -1,0 +1,39 @@
+{
+  "id": "day12_audit",
+  "day": 12,
+  "phase": "morning",
+  "forced": true,
+  "title": "Kessler的审计",
+  "sceneText": "Inspektor Kessler在约定时间前十分钟到达——这本身就是一种信息。他的马车尘埃未散，他已经坐在你办公室的椅子上，把公文包放在膝盖上，用同一个动作打开了它和他的嘴。\n\n\"Von Alder庄园，本季度应缴税赋为收成总量的十四点五个百分比。请出示您的庄园总账。\"\n\n他的声音没有温度，没有修饰，像一份官方文件被人大声朗读出来。铅笔削得精确，小圆眼镜的镜面没有一点指纹。他打开公文包里的空白表格，在上面写下了今天的日期。\n\n总账就放在你桌上。他知道，你知道，那里面有些数字的解释会花上一点时间。",
+  "choices": [
+    {
+      "id": "audit_explain",
+      "text": "主动提出说明",
+      "description": "把你掌握的情况如实告知——包括账目差异和你的调查",
+      "effects": {
+        "renown": 1,
+        "flags": { "kesslerAuditPassed": true, "kesslerToldEverything": true },
+        "logEntry": "你主动向Kessler提出了账目差异的情况。他听完后在表格上写了几个字，没有评论。"
+      }
+    },
+    {
+      "id": "audit_present",
+      "text": "递交账本，等他提问",
+      "description": "如实呈交，让审计流程走完，再按他的问题作答",
+      "effects": {
+        "flags": { "kesslerAuditNeutral": true },
+        "logEntry": "你把账本递给Kessler，让他自行核查。他翻阅的速度比你想象的快很多。"
+      }
+    },
+    {
+      "id": "audit_delay",
+      "text": "请求明日书面答复",
+      "description": "以整理文件为由争取时间，但Kessler对拖延很敏感",
+      "effects": {
+        "renown": -1,
+        "flags": { "kesslerAuditDelayed": true },
+        "logEntry": "你请求推迟一天提交书面说明。Kessler在他的表格上写了什么，你没有看到。"
+      }
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 // All numerical values mirror docs/NUMBERS.md — never hardcode game balance elsewhere.
 
-export const DEMO_MAX_DAYS = 10;
+export const DEMO_MAX_DAYS = 30;
 
 export const INITIAL_RESOURCES = {
   grain: 0,

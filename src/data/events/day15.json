@@ -1,0 +1,38 @@
+{
+  "id": "day15_boundary",
+  "day": 15,
+  "phase": "afternoon",
+  "forced": true,
+  "title": "边界石",
+  "sceneText": "林地边界的争议区域比你想象的更深——从庄园北部的林地边缘骑马约半小时，到达一条几乎不可见的旧石墙遗迹，这是公国地图上标记的边界线。另一侧是Thornwall的林地，同样的橡树，同样的秋天，但莫名地感觉不同。\n\n争议区域是一片约二十公顷的混交林，两份旧地契对它的归属各执一词。按说这只是一场需要公证人仲裁的产权纠纷。\n\n但在争议区域最深处的一棵老橡树上，你注意到了一些东西：被小心清理过的树皮，以及树皮下刻着的符号——不是庄园标记，不是边界记号，不是任何你认识的东西。地面上有被规律踩踏过的痕迹，方向不是从Thornwall来的，也不是从枫径庄园来的。\n\n林子很安静。你站在那里，风在头顶的树冠里穿过，落叶一片一片地掉下来。",
+  "choices": [
+    {
+      "id": "boundary_document",
+      "text": "仔细记录这些符号",
+      "description": "把符号的形状和位置画下来，留存备查",
+      "effects": {
+        "flags": { "foundForestSymbols": true, "documentedSymbols": true },
+        "logEntry": "你把橡树上的符号临摹在随身的记录本上。你不知道这意味着什么，但你知道它不该被忘记。"
+      }
+    },
+    {
+      "id": "boundary_note",
+      "text": "记在心里，先处理边界纠纷",
+      "description": "符号的事以后再说，今天来是为了边界问题",
+      "effects": {
+        "flags": { "foundForestSymbols": true, "notedSymbolsOnly": true },
+        "logEntry": "你记下了符号的位置，但没有深究。边界石的位置基本确认——问题出在两份地契的起始测量点不一致。"
+      }
+    },
+    {
+      "id": "boundary_elke",
+      "text": "直接去找Elke谈边界",
+      "description": "带着你的发现去棘墙庄园，直接摊牌",
+      "effects": {
+        "relationships": { "elke": 1 },
+        "flags": { "foundForestSymbols": true, "confrontedElkeOnBoundary": true },
+        "logEntry": "你骑马去了棘墙庄园。Baroness Elke接待了你，听你说完后沉默了比平时更长的时间。"
+      }
+    }
+  ]
+}

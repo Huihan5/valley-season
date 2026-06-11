@@ -35,12 +35,19 @@ export interface Choice {
   disabledReason?: string;
 }
 
+export interface DialogueLine {
+  speaker: NpcId;
+  text: string;
+}
+
 export interface EventData {
   id: string;
   day: number;
   phase?: DayPhase;
   forced: boolean;
   title: string;
+  sceneImage?: string;
+  dialogue?: DialogueLine;
   sceneText: string;
   choices: Choice[] | null;
   onEnterEffects?: ChoiceEffects;
@@ -66,4 +73,5 @@ export interface GameState {
   eventResolved: boolean;
   log: LogEntry[];
   demoComplete: boolean;
+  endingId: string | null;
 }

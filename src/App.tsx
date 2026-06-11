@@ -4,6 +4,7 @@ import { generateWeather } from './systems/WeatherSystem';
 import { nextPhase, isDemoComplete } from './systems/TimeSystem';
 import { applyDailyOperatingCost, clampResources } from './systems/ResourceSystem';
 import { getFreeChoices, getFixedEvent } from './systems/EventSystem';
+import { determineEnding, getEndingData } from './systems/EndingSystem';
 import { INITIAL_RESOURCES, INITIAL_RELATIONSHIPS, RELATION_MIN, RELATION_MAX } from './data/config';
 import ScenePanel from './components/ScenePanel';
 import StatusPanel from './components/StatusPanel';
@@ -53,7 +54,7 @@ function applyEffects(state: GameState, effects: ChoiceEffects): GameState {
 }
 
 function buildStateForPhase(state: GameState): GameState {
-  const event = getFixedEvent(state.day, state.phase);
+  const event = getFixedEvent(state.day, state.phase, state);
   if (event && !state.flags[`event_done_${event.id}`]) {
     const withEvent = { ...state, activeEvent: event, eventResolved: false };
     const sceneText = event.sceneText;
@@ -91,6 +92,7 @@ function createInitialState(): GameState {
     eventResolved: false,
     log: [],
     demoComplete: false,
+    endingId: null,
   };
   return buildStateForPhase(baseState as GameState);
 }
@@ -148,7 +150,15 @@ function advancePhase(state: GameState): GameState {
   const { day: newDay, phase: newPhase, newDay: isDayChange } = nextPhase(state.day, state.phase);
 
   if (isDemoComplete(newDay)) {
-    return { ...state, demoComplete: true, currentSceneText: getDemoEndText(state), currentChoices: [] };
+    const endingId = determineEnding(state);
+    const ending = getEndingData(endingId);
+    return {
+      ...state,
+      demoComplete: true,
+      endingId,
+      currentSceneText: ending.text,
+      currentChoices: [],
+    };
   }
 
   let next: GameState = { ...state, day: newDay, phase: newPhase };
@@ -172,10 +182,6 @@ function advancePhase(state: GameState): GameState {
   return buildStateForPhase(next);
 }
 
-function getDemoEndText(state: GameState): string {
-  const { grain, guldmark, renown } = state.resources;
-  return `十天的秋收季结束了。\n\n你在枫径庄园度过了最初的十天。\n\n粮食储备：${grain} 单位\n金卢余额：${guldmark} 金卢\n木材库存：${state.resources.timber} 单位\n声望：${renown > 0 ? '+' : ''}${renown}\n\n完整的30天游戏即将到来。\n\n— 演示结束 —`;
-}
 
 export default function App() {
   const [state, dispatch] = useReducer(gameReducer, undefined, createInitialState);
@@ -200,9 +206,18 @@ export default function App() {
       </div>
 
       {/* Choice panel (bottom) */}
-      {state.demoComplete ? (
-        <div className="bg-bg-card border border-game-border rounded-sm px-5 py-4 text-center">
-          <span className="text-gold font-serif text-sm">演示完成</span>
+      {state.demoComplete && state.endingId ? (
+        <div className="bg-bg-card border border-game-border rounded-sm px-5 py-3 flex items-center justify-between">
+          <div>
+            <span className="text-gold font-serif text-sm">{getEndingData(state.endingId as Parameters<typeof getEndingData>[0]).title}</span>
+            <span className="text-game-text/50 text-xs ml-3">{getEndingData(state.endingId as Parameters<typeof getEndingData>[0]).subtitle}</span>
+          </div>
+          <button
+            onClick={() => window.location.reload()}
+            className="px-4 py-1.5 border border-game-border text-game-text/60 text-xs rounded-sm hover:border-gold-dim hover:text-cream transition-all"
+          >
+            重新开始
+          </button>
         </div>
       ) : isNarrativeOnly ? (
         <div className="bg-bg-card border border-game-border rounded-sm px-4 py-3 flex justify-center">
