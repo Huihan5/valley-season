@@ -1,0 +1,38 @@
+{
+  "id": "day3_ledger",
+  "day": 3,
+  "phase": "morning",
+  "forced": true,
+  "title": "账本的裂缝",
+  "sceneText": "你在整理Hartmann留下的文件时，在庄园总账的最后两个月发现了一些不对劲的地方。不是大金额的缺失——那种事Kessler在审计时一眼就能看出来。而是一系列小额的、规律性的、指向同一个外部收款方的支出。每次三到五金卢，每隔几天一笔，标注为“杂项维护费”。\n\n总账显示初始金卢为55，但你清点了账户，实际只有50金卢。差额5金卢，没有解释。\n\n你把账本放下，看着窗外的枫径大道。这可能什么都不是——Hartmann记账马虎，错误的标注，漏记的收据。但也可能是别的什么。\n\n税务官Inspektor Kessler定于第12天到访审计。你有九天时间。",
+  "choices": [
+    {
+      "id": "investigate",
+      "text": "深入调查",
+      "description": "花一个时段仔细核对记录，追查这笔支出的来源",
+      "effects": {
+        "flags": { "investigatedLedger": true },
+        "logEntry": "你开始深入调查账本的异常记录。"
+      }
+    },
+    {
+      "id": "report",
+      "text": "写信给Von Alder男爵",
+      "description": "将账目异常上报，获得领主支持，但也暴露了你对庄园的不完全掌控",
+      "effects": {
+        "renown": 1,
+        "flags": { "reportedLedger": true },
+        "logEntry": "你写信将账目异常上报给Von Alder男爵。"
+      }
+    },
+    {
+      "id": "defer",
+      "text": "暂时搁置",
+      "description": "优先处理秋收，这件事先放一放",
+      "effects": {
+        "flags": { "deferredLedger": true },
+        "logEntry": "你决定先把账本问题放一边，专注于秋收。"
+      }
+    }
+  ]
+}

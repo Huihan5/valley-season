@@ -1,0 +1,136 @@
+import { GameState, NpcId } from '../../types/game';
+import { WEATHER_LABELS, WEATHER_ICONS } from '../../systems/WeatherSystem';
+import { getFatigueLabel, getFatigueEffect } from '../../systems/FatigueSystem';
+import { getDayOfWeek, isMarketDay } from '../../systems/TimeSystem';
+
+const NPC_NAMES: Record<NpcId, string> = {
+  gregor: 'Gregor',
+  marta: 'Marta',
+  lena: 'Lena',
+  elke: 'Baroness Elke',
+  henk: 'Baron Henk',
+  lorenz: 'Master Lorenz',
+};
+
+interface Props {
+  state: GameState;
+}
+
+function RelationBar({ value }: { value: number }) {
+  const clamped = Math.max(-5, Math.min(5, value));
+  const color = clamped >= 3 ? 'bg-gold' : clamped >= 1 ? 'bg-gold-dim' : clamped < 0 ? 'bg-rust' : 'bg-game-border';
+  const width = `${((clamped + 5) / 10) * 100}%`;
+  return (
+    <div className="w-full h-1 bg-game-border rounded-full overflow-hidden">
+      <div className={`h-full ${color} rounded-full transition-all`} style={{ width }} />
+    </div>
+  );
+}
+
+export default function StatusPanel({ state }: Props) {
+  const { day, weather, resources, fatigue, relationships } = state;
+  const fatigueEffect = getFatigueEffect(fatigue);
+  const marketDay = isMarketDay(day);
+
+  return (
+    <div className="flex flex-col h-full bg-bg-card border border-game-border rounded-sm overflow-hidden">
+
+      {/* Date & Weather */}
+      <div className="px-4 py-3 border-b border-game-border">
+        <div className="flex items-center justify-between mb-1">
+          <span className="text-cream font-serif text-base">枫径庄园</span>
+          <span className="text-game-dim text-xs">{getDayOfWeek(day)}</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="text-lg">{WEATHER_ICONS[weather]}</span>
+          <span className="text-game-text text-sm">{WEATHER_LABELS[weather]}</span>
+          {marketDay && (
+            <span className="ml-auto text-xs text-amber border border-amber/40 rounded px-1.5 py-0.5">
+              集市日
+            </span>
+          )}
+        </div>
+      </div>
+
+      {/* Resources */}
+      <div className="px-4 py-3 border-b border-game-border">
+        <p className="text-game-dim text-xs tracking-wider mb-2">— 资源 —</p>
+        <div className="space-y-2">
+          <ResourceRow icon="🌾" label="粮食" value={resources.grain} unit="单位" target={90} />
+          <ResourceRow icon="🪙" label="金卢" value={resources.guldmark} unit="" warnBelow={15} />
+          <ResourceRow icon="🪵" label="木材" value={resources.timber} unit="单位" warnBelow={5} />
+          <ResourceRow icon="⭐" label="声望" value={resources.renown} unit="" showSign />
+        </div>
+      </div>
+
+      {/* Fatigue */}
+      <div className="px-4 py-3 border-b border-game-border">
+        <p className="text-game-dim text-xs tracking-wider mb-2">— 状态 —</p>
+        <div className="flex items-center justify-between">
+          <span className="text-game-text text-sm">{getFatigueLabel(fatigue)}</span>
+          <span className="text-game-dim text-xs">{fatigue}/5</span>
+        </div>
+        <div className="mt-1 flex gap-1">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <div
+              key={i}
+              className={`h-1.5 flex-1 rounded-full ${i < fatigue ? 'bg-rust' : 'bg-game-border'}`}
+            />
+          ))}
+        </div>
+        {fatigueEffect && (
+          <p className="text-rust text-xs mt-1">{fatigueEffect}</p>
+        )}
+      </div>
+
+      {/* Relationships */}
+      <div className="px-4 py-3 flex-1 overflow-y-auto">
+        <p className="text-game-dim text-xs tracking-wider mb-2">— 关系 —</p>
+        <div className="space-y-2.5">
+          {(Object.keys(NPC_NAMES) as NpcId[]).map((npc) => {
+            const val = relationships[npc] ?? 0;
+            return (
+              <div key={npc}>
+                <div className="flex items-center justify-between mb-0.5">
+                  <span className="text-game-text text-xs">{NPC_NAMES[npc]}</span>
+                  <span className={`text-xs ${val > 0 ? 'text-gold-dim' : val < 0 ? 'text-rust' : 'text-game-dim'}`}>
+                    {val > 0 ? `+${val}` : val}
+                  </span>
+                </div>
+                <RelationBar value={val} />
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+interface ResourceRowProps {
+  icon: string;
+  label: string;
+  value: number;
+  unit: string;
+  target?: number;
+  warnBelow?: number;
+  showSign?: boolean;
+}
+
+function ResourceRow({ icon, label, value, unit, target, warnBelow, showSign }: ResourceRowProps) {
+  const isLow = warnBelow !== undefined && value < warnBelow;
+  const isGood = target !== undefined && value >= target;
+  const color = isGood ? 'text-gold' : isLow ? 'text-rust' : 'text-cream';
+
+  return (
+    <div className="flex items-center justify-between">
+      <div className="flex items-center gap-1.5">
+        <span className="text-sm">{icon}</span>
+        <span className="text-game-dim text-xs">{label}</span>
+      </div>
+      <span className={`text-sm font-serif ${color}`}>
+        {showSign && value > 0 ? '+' : ''}{value}{unit && ` ${unit}`}
+      </span>
+    </div>
+  );
+}

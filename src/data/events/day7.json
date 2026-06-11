@@ -1,0 +1,41 @@
+{
+  "id": "day7_thornwall_dinner",
+  "day": 7,
+  "phase": "evening",
+  "forced": true,
+  "title": "Thornwall的晚宴",
+  "sceneText": "Baroness Elke von Thornwall的邀请信是三天前送来的，措辞一如既往地精确：“小型的、非正式的”晚宴。但你在河谷城打听过了——Elke的“非正式”晚宴从不只有五个人以下。\n\n棘墙庄园的主厅烧着三个壁炉，但室温依然带着一种精确的凉意。在座的有Millridge的Henk（他在你进门时就已经在向你招手了），两个你没见过的邻庄领主，以及坐在角落安静喝茶的Master Lorenz。\n\nBaron Henk立刻过来握手：“我有个想法——你的木材从北面走河谷城太远了，如果从我的地界上走捷径到码头，我们都省运费。当然，具体分成比例我们可以慢慢谈。”\n\nBaroness Elke在主桌的另一端，缓慢地看了你一眼。晚宴还没开始。",
+  "choices": [
+    {
+      "id": "engage_henk",
+      "text": "先和Henk认真谈谈这个提议",
+      "description": "Henk的商业头脑值得重视，表现出你的务实",
+      "effects": {
+        "relationships": { "henk": 1 },
+        "renown": 1,
+        "flags": { "consideringMillridgeDeal": true },
+        "logEntry": "你在晚宴上认真回应了Henk的木材运输提议。"
+      }
+    },
+    {
+      "id": "approach_elke",
+      "text": "先去向Baroness Elke致意",
+      "description": "这是她的场合，礼仪要求你先向主人表示尊重",
+      "effects": {
+        "relationships": { "elke": 1 },
+        "renown": 1,
+        "logEntry": "你将礼仪放在第一位，先向Baroness Elke致意。"
+      }
+    },
+    {
+      "id": "observe_lorenz",
+      "text": "先找机会和Master Lorenz说几句话",
+      "description": "他是社区里的信息节点，而且他认识Hartmann",
+      "effects": {
+        "relationships": { "lorenz": 1 },
+        "flags": { "metLorenzAtDinner": true },
+        "logEntry": "你在晚宴上找机会和Master Lorenz交谈了片刻。"
+      }
+    }
+  ]
+}

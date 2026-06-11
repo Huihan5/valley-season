@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>河谷季 · 核心循环流程图</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Source+Sans+3:wght@300;400;600&display=swap');
+
+  :root {
+    --bg: #1a1814;
+    --bg-warm: #211e19;
+    --bg-card: #2a2520;
+    --bg-card-hover: #332e28;
+    --gold: #c4a35a;
+    --gold-dim: #8a7440;
+    --gold-bright: #e0c06a;
+    --amber: #b8784a;
+    --rust: #8b4a2a;
+    --cream: #e8dcc8;
+    --cream-dim: #a89878;
+    --frost: #7a9aaa;
+    --green-dim: #5a7a5a;
+    --red-dim: #8a4a4a;
+    --text: #d4c8b0;
+    --text-dim: #8a7e6a;
+    --text-bright: #f0e8d8;
+    --border: #3a3530;
+    --border-light: #4a4540;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Source Sans 3', sans-serif;
+    font-weight: 300;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  .page-header {
+    padding: 48px 48px 32px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .page-header h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 400;
+    font-size: 32px;
+    color: var(--gold);
+    letter-spacing: 0.02em;
+    margin-bottom: 4px;
+  }
+
+  .page-header .subtitle {
+    font-size: 14px;
+    color: var(--text-dim);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 48px 80px;
+  }
+
+  /* ---- Section ---- */
+  .section { margin-bottom: 56px; }
+
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+    font-size: 20px;
+    color: var(--gold);
+    margin-bottom: 24px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+    letter-spacing: 0.03em;
+  }
+
+  .section-desc {
+    font-size: 14px;
+    color: var(--text-dim);
+    margin-bottom: 24px;
+    max-width: 720px;
+  }
+
+  /* ---- Daily Loop Diagram ---- */
+  .daily-loop {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    position: relative;
+  }
+
+  .loop-phase {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 0;
+    min-height: 64px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+  }
+
+  .phase-label {
+    display: flex;
+    align-items: flex-start;
+    padding: 16px 20px 16px 0;
+    justify-content: flex-end;
+    text-align: right;
+  }
+
+  .phase-label span {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 15px;
+    color: var(--cream-dim);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+
+  .phase-content {
+    border-left: 2px solid var(--border);
+    padding: 16px 0 16px 24px;
+    position: relative;
+    transition: all 0.25s ease;
+  }
+
+  .phase-content::before {
+    content: '';
+    position: absolute;
+    left: -6px;
+    top: 20px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--bg-card);
+    border: 2px solid var(--gold-dim);
+    transition: all 0.25s ease;
+    z-index: 1;
+  }
+
+  .loop-phase:hover .phase-content::before {
+    background: var(--gold);
+    border-color: var(--gold);
+    box-shadow: 0 0 8px rgba(196, 163, 90, 0.3);
+  }
+
+  .loop-phase:hover .phase-content {
+    border-left-color: var(--gold-dim);
+  }
+
+  .phase-main {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 14px 18px;
+    transition: all 0.25s ease;
+  }
+
+  .loop-phase:hover .phase-main {
+    background: var(--bg-card-hover);
+    border-color: var(--border-light);
+  }
+
+  .phase-main h3 {
+    font-family: 'Source Sans 3', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--text-bright);
+    margin-bottom: 4px;
+  }
+
+  .phase-main p {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.5;
+  }
+
+  .phase-detail {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease, margin-top 0.3s ease, opacity 0.3s ease;
+    opacity: 0;
+    margin-top: 0;
+  }
+
+  .loop-phase.expanded .phase-detail {
+    max-height: 600px;
+    opacity: 1;
+    margin-top: 12px;
+  }
+
+  .detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .detail-card {
+    background: var(--bg-warm);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 10px 14px;
+  }
+
+  .detail-card .label {
+    font-size: 11px;
+    color: var(--gold-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 4px;
+  }
+
+  .detail-card .value {
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.5;
+  }
+
+  /* special phase markers */
+  .phase-dawn .phase-content::before { border-color: var(--amber); }
+  .phase-morning .phase-content::before { border-color: var(--gold); }
+  .phase-afternoon .phase-content::before { border-color: var(--gold-dim); }
+  .phase-evening .phase-content::before { border-color: var(--frost); }
+  .phase-settle .phase-content::before { border-color: var(--cream-dim); }
+  .phase-branch .phase-content::before { border-color: var(--green-dim); }
+
+  .phase-tag {
+    display: inline-block;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 3px;
+    margin-right: 6px;
+    margin-top: 6px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  .tag-resource { background: rgba(196,163,90,0.15); color: var(--gold); }
+  .tag-relation { background: rgba(122,154,170,0.15); color: var(--frost); }
+  .tag-story { background: rgba(184,120,74,0.15); color: var(--amber); }
+  .tag-time { background: rgba(90,122,90,0.15); color: var(--green-dim); }
+
+  /* ---- Action Map ---- */
+  .action-map {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 16px;
+  }
+
+  .action-zone {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px;
+    transition: all 0.25s ease;
+  }
+
+  .action-zone:hover {
+    border-color: var(--border-light);
+    background: var(--bg-card-hover);
+  }
+
+  .zone-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  .zone-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  .zone-header h4 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+    font-size: 16px;
+    color: var(--text-bright);
+  }
+
+  .zone-header .zone-cost {
+    margin-left: auto;
+    font-size: 11px;
+    color: var(--text-dim);
+    background: var(--bg-warm);
+    padding: 2px 8px;
+    border-radius: 3px;
+  }
+
+  .zone-actions {
+    list-style: none;
+  }
+
+  .zone-actions li {
+    font-size: 13px;
+    color: var(--text-dim);
+    padding: 4px 0;
+    padding-left: 16px;
+    position: relative;
+  }
+
+  .zone-actions li::before {
+    content: '·';
+    position: absolute;
+    left: 4px;
+    color: var(--gold-dim);
+  }
+
+  .zone-outputs {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  /* ---- Feedback Loop Diagram ---- */
+  .feedback-diagram {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    padding: 32px 0;
+    flex-wrap: wrap;
+  }
+
+  .fb-node {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px 20px;
+    text-align: center;
+    min-width: 140px;
+    transition: all 0.3s ease;
+  }
+
+  .fb-node:hover {
+    border-color: var(--gold-dim);
+    transform: translateY(-2px);
+  }
+
+  .fb-node h5 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--gold);
+    margin-bottom: 4px;
+  }
+
+  .fb-node p {
+    font-size: 12px;
+    color: var(--text-dim);
+    line-height: 1.4;
+  }
+
+  .fb-arrow {
+    color: var(--gold-dim);
+    font-size: 20px;
+    padding: 0 12px;
+    user-select: none;
+  }
+
+  .fb-arrow-down {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding: 8px 0;
+    color: var(--gold-dim);
+    font-size: 20px;
+  }
+
+  /* ---- 30-Day Arc ---- */
+  .arc-timeline {
+    position: relative;
+    padding: 24px 0;
+  }
+
+  .arc-track {
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    position: relative;
+    margin: 40px 0 16px;
+  }
+
+  .arc-fill {
+    position: absolute;
+    height: 100%;
+    border-radius: 2px;
+    top: 0;
+    transition: all 0.3s ease;
+  }
+
+  .arc-phases {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+    margin-top: 24px;
+  }
+
+  .arc-phase-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 18px;
+  }
+
+  .arc-phase-card h4 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+    font-size: 16px;
+    margin-bottom: 4px;
+  }
+
+  .arc-phase-card .days {
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-bottom: 10px;
+  }
+
+  .arc-phase-card ul {
+    list-style: none;
+    font-size: 13px;
+  }
+
+  .arc-phase-card ul li {
+    padding: 3px 0;
+    color: var(--text-dim);
+    padding-left: 14px;
+    position: relative;
+  }
+
+  .arc-phase-card ul li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--gold-dim);
+    font-size: 11px;
+  }
+
+  .arc-p1 h4 { color: var(--green-dim); }
+  .arc-p2 h4 { color: var(--gold); }
+  .arc-p3 h4 { color: var(--amber); }
+
+  /* ---- Event markers on track ---- */
+  .arc-markers {
+    position: absolute;
+    top: -28px;
+    left: 0;
+    right: 0;
+    height: 24px;
+  }
+
+  .arc-marker {
+    position: absolute;
+    transform: translateX(-50%);
+    text-align: center;
+    cursor: default;
+  }
+
+  .arc-marker .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin: 0 auto 4px;
+    border: 2px solid;
+  }
+
+  .arc-marker .day-label {
+    font-size: 10px;
+    color: var(--text-dim);
+    white-space: nowrap;
+  }
+
+  .dot-story { border-color: var(--amber); background: var(--amber); }
+  .dot-social { border-color: var(--frost); background: var(--frost); }
+  .dot-system { border-color: var(--gold); background: var(--gold); }
+
+  .legend {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+    justify-content: center;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+
+  .legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+
+  /* ---- Hint ---- */
+  .hint {
+    text-align: center;
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-top: -16px;
+    margin-bottom: 32px;
+    font-style: italic;
+  }
+
+  @media (max-width: 768px) {
+    .page-header { padding: 32px 24px 24px; }
+    .container { padding: 24px 24px 48px; }
+    .loop-phase { grid-template-columns: 100px 1fr; }
+    .detail-grid { grid-template-columns: 1fr; }
+    .action-map { grid-template-columns: 1fr; }
+    .arc-phases { grid-template-columns: 1fr; }
+    .feedback-diagram { flex-direction: column; }
+    .fb-arrow { transform: rotate(90deg); padding: 4px 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>河谷季 · 核心循环</h1>
+  <div class="subtitle">Valley Season — Core Loop Reference · GDD Supplement</div>
+</div>
+
+<div class="container">
+
+  <!-- Section 1: Daily Loop -->
+  <div class="section">
+    <div class="section-title">一、每日循环</div>
+    <p class="section-desc">每一天是游戏的基本单元。玩家在三个时段中做出选择，选择的后果通过资源和关系系统反馈，最终在Day 30汇聚为结局。点击各阶段展开详情。</p>
+    <p class="hint">↓ 点击任意阶段查看细节</p>
+
+    <div class="daily-loop" id="dailyLoop">
+
+      <!-- Dawn -->
+      <div class="loop-phase phase-dawn" onclick="togglePhase(this)">
+        <div class="phase-label"><span>黎明</span></div>
+        <div class="phase-content">
+          <div class="phase-main">
+            <h3>日出 · 信息呈现</h3>
+            <p>显示当日日期、天气、特殊标记（集市日 / 节日 / 固定事件日）。无玩家操作。</p>
+          </div>
+          <div class="phase-detail">
+            <div class="detail-grid">
+              <div class="detail-card">
+                <div class="label">呈现内容</div>
+                <div class="value">日期（Day N / 星期）、天气图标与文字、当日提醒（集市日、来访者预告等）</div>
+              </div>
+              <div class="detail-card">
+                <div class="label">叙事层</div>
+                <div class="value">1-2句环境描写随天气和日期变化。"晨霜覆盖了枫径大道的石板。" 不重复，从描写池中按条件抽取。</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fixed Event Check -->
+      <div class="loop-phase phase-branch" onclick="togglePhase(this)">
+        <div class="phase-label"><span>事件检查</span></div>
+        <div class="phase-content">
+          <div class="phase-main">
+            <h3>固定事件触发判定</h3>
+            <p>检查当日是否为固定事件日（Day 3, 7, 10, 12, 15, 18, 22, 27, 30）。触发则进入事件场景，可能占用时段。</p>
+          </div>
+          <div class="phase-detail">
+            <div class="detail-grid">
+              <div class="detail-card">
+                <div class="label">占用规则</div>
+                <div class="value">小型事件占用1时段（如Day 3的账本发现占用上午）。大型事件占用全天（Day 1赴任、Day 30结算）。社交事件占用特定时段（Day 7晚宴占用晚间）。</div>
+              </div>
+              <div class="detail-card">
+                <div class="label">未触发时</div>
+                <div class="value">直接进入上午时段的自由行动。非固定事件日在时段之间有概率触发随机事件。</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Morning -->
+      <div class="loop-phase phase-morning" onclick="togglePhase(this)">
+        <div class="phase-label"><span>上午</span></div>
+        <div class="phase-content">
+          <div class="phase-main">
+            <h3>上午时段 · 自由行动</h3>
+            <p>选择地点 → 选择行动 → 执行 → 获得反馈。庄园内行动消耗1时段；前往庄园外地点消耗2时段（上午+下午）。</p>
+            <span class="phase-tag tag-resource">资源变化</span>
+            <span class="phase-tag tag-relation">关系变化</span>
+            <span class="phase-tag tag-story">叙事推进</span>
+            <span class="phase-tag tag-time">消耗1-2时段</span>
+          </div>
+          <div class="phase-detail">
+            <div class="detail-grid">
+              <div class="detail-card">
+                <div class="label">庄园内（1时段）</div>
+                <div class="value">办公室（账目/文书/接待）、农田（巡视/收割/组织佃户）、林地（采伐/巡视/调查）、马厩（交谈/运输）、厨房（交谈/检查储备）</div>
+              </div>
+              <div class="detail-card">
+                <div class="label">庄园外（2时段）</div>
+                <div class="value">河谷城集市（仅集市日）、棘墙庄园、磨坊岭庄园、地方神殿、猎场（仅狩猎季）</div>
+              </div>
+              <div class="detail-card">
+                <div class="label">行动输出</div>
+                <div class="value">每个行动产出三层反馈：① 即时文本（场景描写+对话）② 数值变化（资源±、信任±）③ 状态标记（解锁后续选项/更新日志）</div>
+              </div>
+              <div class="detail-card">
+                <div class="label">决策张力</div>
+                <div class="value">时段是最稀缺的资源。选择做A就不能做B。"今天去集市卖木材"意味着放弃一整天的收割。</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Random Event -->
+      <div class="loop-phase phase-branch" onclick="togglePhase(this)">
+        <div class="phase-label"><span>随机事件</span></div>
+        <div class="phase-content">
+          <div class="phase-main">
+            <h3>随机事件触发窗口</h3>
+            <p>上午行动结束后，30%概率从事件池中按条件抽取一个随机事件。事件不消耗时段，但需要即时决策。</p>
+          </div>
+          <div class="phase-detail">
+            <div class="detail-grid">
+              <div class="detail-card">
+                <div class="label">触发条件</div>
+                <div class="value">基础概率30%。当天已有固定事件时降至10%。连续2天无随机事件时升至50%。保证节奏感。</div>
+              </div>
+              <div class="detail-card">
+                <div class="label">事件池规则</div>
+                <div class="value">每个随机事件有前置条件标签（如"需要Day>10"、"需要声望>3"、"需要已完成佃户请愿"）。已触发的事件不重复。池深约20-25个事件。</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Afternoon -->
+      <div class="loop-phase phase-afternoon" onclick="togglePhase(this)">
+        <div class="phase-label"><span>下午</span></div>
+        <div class="phase-content">
+          <div class="phase-main">
+            <h3>下午时段 · 自由行动</h3>
+            <p>结构与上午相同。如果上午选择了庄园外行动（2时段），下午已被占用，跳过。</p>
+          </div>
+          <div class="phase-detail">
+            <div class="detail-grid">
+              <div class="detail-card">
+                <div class="label">同一地点连续行动</div>
+                <div class="value">允许。上午收割+下午收割 = 获得双倍产出。但同一NPC同日重复交谈的信息增量递减（防止刷信任）。</div>
+              </div>
+              <div class="detail-card">
+                <div class="label">时间压力感</div>
+                <div class="value">下午场景描写的光线和温度与上午不同。叙事层通过环境变化提醒时间在流逝："午后的阳光开始倾斜，树影拉长。"</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Evening -->
+      <div class="loop-phase phase-evening" onclick="togglePhase(this)">
+        <div class="phase-label"><span>晚间</span></div>
+        <div class="phase-content">
+          <div class="phase-main">
+            <h3>晚间时段 · 受限行动</h3>
+            <p>只能执行三类行动：办公室工作（整理账目/写信）、庄园内NPC交谈、休息。休息恢复疲劳值。</p>
+            <span class="phase-tag tag-relation">关系深化</span>
+            <span class="phase-tag tag-story">叙事空间</span>
+          </div>
+          <div class="phase-detail">
+            <div class="detail-grid">
+              <div class="detail-card">
+                <div class="label">晚间特殊性</div>
+                <div class="value">NPC晚间对话比白天更私密、信息量更大。Gregor在马厩给马喂夜草时更容易开口。Marta在厨房收拾时会说白天不说的话。这是关系深化的黄金时段。</div>
+              </div>
+              <div class="detail-card">
+                <div class="label">疲劳系统</div>
+                <div class="value">连续3天不休息，第4天所有行动效率-1。连续5天不休息，强制休息（失去一个白天时段）。休息重置疲劳计数器。</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Settlement -->
+      <div class="loop-phase phase-settle" onclick="togglePhase(this)">
+        <div class="phase-label"><span>日终</span></div>
+        <div class="phase-content">
+          <div class="phase-main">
+            <h3>日终结算</h3>
+            <p>扣除日常运营消耗（2金卢/天）。霜冻日额外计算作物损失。更新状态面板。推进至下一天。</p>
+          </div>
+          <div class="phase-detail">
+            <div class="detail-grid">
+              <div class="detail-card">
+                <div class="label">自动扣除</div>
+                <div class="value">金卢 -2（日常运营）。霜冻日（Day 20+随机）：未收割作物剩余量 ×10% 损失。天气池更新明日天气。</div>
+              </div>
+              <div class="detail-card">
+                <div class="label">Day 30特殊</div>
+                <div class="value">触发终局结算：汇总资源、声望、所有NPC信任值、关键选择标记。进入结局判定树。</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Section 2: Action Map -->
+  <div class="section">
+    <div class="section-title">二、行动地图 · 地点与产出</div>
+    <p class="section-desc">每个地点对应一组可执行行动，每个行动有明确的资源/关系产出。玩家的核心决策是如何在有限时段内分配注意力。</p>
+
+    <div class="action-map">
+      <div class="action-zone">
+        <div class="zone-header">
+          <div class="zone-icon" style="background:rgba(196,163,90,0.15);">📋</div>
+          <h4>管事办公室</h4>
+          <span class="zone-cost">1时段</span>
+        </div>
+        <ul class="zone-actions">
+          <li>查阅/整理账目 → 推进Hartmann调查线</li>
+          <li>处理文书 → 解锁行政类选项</li>
+          <li>写信给Von Alder → 影响Day 27来信内容</li>
+          <li>接待来访者 → 触发特定NPC对话</li>
+        </ul>
+        <div class="zone-outputs">
+          <span class="phase-tag tag-story">叙事推进</span>
+          <span class="phase-tag tag-resource">金卢（审计准备）</span>
+        </div>
+      </div>
+
+      <div class="action-zone">
+        <div class="zone-header">
+          <div class="zone-icon" style="background:rgba(90,122,90,0.15);">🌾</div>
+          <h4>农田</h4>
+          <span class="zone-cost">1时段</span>
+        </div>
+        <ul class="zone-actions">
+          <li>组织收割 → 粮食 +5~8（受效率等级和天气影响）</li>
+          <li>巡视田地 → 了解农事状况，发现隐患</li>
+          <li>组织佃户会议 → 解锁"协调加成"（一次性）</li>
+          <li>果园采摘 → 获得苹果（集市可售，5-8金卢/次）</li>
+        </ul>
+        <div class="zone-outputs">
+          <span class="phase-tag tag-resource">粮食</span>
+          <span class="phase-tag tag-resource">金卢（苹果）</span>
+          <span class="phase-tag tag-relation">佃户信任</span>
+        </div>
+      </div>
+
+      <div class="action-zone">
+        <div class="zone-header">
+          <div class="zone-icon" style="background:rgba(184,120,74,0.15);">🌲</div>
+          <h4>林地</h4>
+          <span class="zone-cost">1时段</span>
+        </div>
+        <ul class="zone-actions">
+          <li>组织采伐 → 木材 +3（阴雨天暂停）</li>
+          <li>巡视林地 → 发现非法采伐/边界问题</li>
+          <li>调查边界 → 推进Thornwall纠纷线</li>
+          <li>采集 → 次要资源（蘑菇/草药，小额金卢）</li>
+        </ul>
+        <div class="zone-outputs">
+          <span class="phase-tag tag-resource">木材</span>
+          <span class="phase-tag tag-story">调查推进</span>
+        </div>
+      </div>
+
+      <div class="action-zone">
+        <div class="zone-header">
+          <div class="zone-icon" style="background:rgba(122,154,170,0.15);">🐎</div>
+          <h4>马厩 / 厨房</h4>
+          <span class="zone-cost">1时段</span>
+        </div>
+        <ul class="zone-actions">
+          <li>与Gregor交谈 → 庄园历史情报 + 信任</li>
+          <li>修缮马厩 → 12金卢 + Gregor信任+1</li>
+          <li>与Marta交谈 → 社区情绪情报 + 信任</li>
+          <li>检查食物储备 → 了解冬季缺口</li>
+        </ul>
+        <div class="zone-outputs">
+          <span class="phase-tag tag-relation">Gregor / Marta</span>
+          <span class="phase-tag tag-story">隐藏信息</span>
+        </div>
+      </div>
+
+      <div class="action-zone">
+        <div class="zone-header">
+          <div class="zone-icon" style="background:rgba(196,163,90,0.15);">🏘️</div>
+          <h4>河谷城集市</h4>
+          <span class="zone-cost">2时段 · 仅周三/周六</span>
+        </div>
+        <ul class="zone-actions">
+          <li>出售粮食 → 每单位 1.5金卢</li>
+          <li>出售木材 → 每单位 3金卢</li>
+          <li>采购物资 → 农具维修件/铁器/布料</li>
+          <li>打听消息 → 铸都情报 + 邻庄动态</li>
+        </ul>
+        <div class="zone-outputs">
+          <span class="phase-tag tag-resource">金卢</span>
+          <span class="phase-tag tag-story">情报</span>
+          <span class="phase-tag tag-time">占半天</span>
+        </div>
+      </div>
+
+      <div class="action-zone">
+        <div class="zone-header">
+          <div class="zone-icon" style="background:rgba(184,120,74,0.15);">🏰</div>
+          <h4>邻庄 / 神殿 / 猎场</h4>
+          <span class="zone-cost">2时段</span>
+        </div>
+        <ul class="zone-actions">
+          <li>拜访Thornwall → Elke信任 + 边界谈判</li>
+          <li>拜访Millridge → Henk信任 + 商业合作</li>
+          <li>拜访神殿 → Lorenz信任 + Hartmann线索</li>
+          <li>猎场（Day 18+）→ 声望 + 贵族社交</li>
+        </ul>
+        <div class="zone-outputs">
+          <span class="phase-tag tag-relation">外部NPC</span>
+          <span class="phase-tag tag-resource">声望</span>
+          <span class="phase-tag tag-time">占半天</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 3: Feedback Loops -->
+  <div class="section">
+    <div class="section-title">三、反馈闭环</div>
+    <p class="section-desc">核心循环不是线性流水线，而是嵌套的反馈环。行动改变资源和关系，资源和关系反过来改变可用行动和事件走向。</p>
+
+    <div class="feedback-diagram">
+      <div class="fb-node">
+        <h5>行动选择</h5>
+        <p>玩家决定做什么<br>在哪里花时间</p>
+      </div>
+      <div class="fb-arrow">→</div>
+      <div class="fb-node">
+        <h5>即时反馈</h5>
+        <p>资源 ±&emsp;信任 ±<br>叙事场景展开</p>
+      </div>
+      <div class="fb-arrow">→</div>
+      <div class="fb-node">
+        <h5>状态变化</h5>
+        <p>面板数值更新<br>NPC态度可感知变化</p>
+      </div>
+      <div class="fb-arrow">→</div>
+      <div class="fb-node">
+        <h5>新选项解锁</h5>
+        <p>事件触发条件满足<br>对话分支开放</p>
+      </div>
+    </div>
+    <div class="fb-arrow-down" style="text-align:center; color:var(--gold-dim); margin-top:-8px;">
+      ↻ 循环回到下一时段的行动选择
+    </div>
+  </div>
+
+  <!-- Section 4: 30-Day Arc -->
+  <div class="section">
+    <div class="section-title">四、30天宏观节奏</div>
+    <p class="section-desc">三幕结构映射到30天周期。资源压力、叙事张力和社交密度随时间递增，形成收束的紧迫感。</p>
+
+    <div class="arc-timeline">
+      <div class="arc-track">
+        <div class="arc-fill" style="left:0; width:33.3%; background: linear-gradient(90deg, var(--green-dim), var(--green-dim));"></div>
+        <div class="arc-fill" style="left:33.3%; width:33.4%; background: linear-gradient(90deg, var(--gold-dim), var(--gold));"></div>
+        <div class="arc-fill" style="left:66.7%; width:33.3%; background: linear-gradient(90deg, var(--amber), var(--rust));"></div>
+
+        <div class="arc-markers">
+          <div class="arc-marker" style="left:3.3%"><div class="dot dot-story"></div><div class="day-label">D1</div></div>
+          <div class="arc-marker" style="left:10%"><div class="dot dot-story"></div><div class="day-label">D3</div></div>
+          <div class="arc-marker" style="left:23.3%"><div class="dot dot-social"></div><div class="day-label">D7</div></div>
+          <div class="arc-marker" style="left:33.3%"><div class="dot dot-system"></div><div class="day-label">D10</div></div>
+          <div class="arc-marker" style="left:40%"><div class="dot dot-system"></div><div class="day-label">D12</div></div>
+          <div class="arc-marker" style="left:50%"><div class="dot dot-story"></div><div class="day-label">D15</div></div>
+          <div class="arc-marker" style="left:60%"><div class="dot dot-social"></div><div class="day-label">D18</div></div>
+          <div class="arc-marker" style="left:73.3%"><div class="dot dot-story"></div><div class="day-label">D22</div></div>
+          <div class="arc-marker" style="left:90%"><div class="dot dot-system"></div><div class="day-label">D27</div></div>
+          <div class="arc-marker" style="left:100%"><div class="dot dot-story"></div><div class="day-label">D30</div></div>
+        </div>
+      </div>
+
+      <div class="legend">
+        <div class="legend-item"><div class="legend-dot" style="background:var(--amber)"></div>叙事/调查事件</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--frost)"></div>社交事件</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--gold)"></div>系统/资源事件</div>
+      </div>
+
+      <div class="arc-phases">
+        <div class="arc-phase-card arc-p1">
+          <h4>第一幕 · 扎根</h4>
+          <div class="days">Day 1 — 10&emsp;·&emsp;建立期</div>
+          <ul>
+            <li>天气以晴/多云为主，资源压力低</li>
+            <li>核心任务：了解庄园、准备收割、建立第一批关系</li>
+            <li>Hartmann线索开始浮现（Day 3）</li>
+            <li>第一次社交考验（Day 7 晚宴）</li>
+            <li>佃户请愿（Day 10）建立管理者信誉</li>
+            <li>玩家学习期：理解时间稀缺性</li>
+          </ul>
+        </div>
+
+        <div class="arc-phase-card arc-p2">
+          <h4>第二幕 · 收获与发现</h4>
+          <div class="days">Day 11 — 20&emsp;·&emsp;高产期 + 转折</div>
+          <ul>
+            <li>阴雨概率上升，收割窗口开始收窄</li>
+            <li>税务审计（Day 12）检验前期决策</li>
+            <li>林地发现（Day 15）引入深层悬疑</li>
+            <li>狩猎季（Day 18）：社交vs效率的核心取舍</li>
+            <li>第一次霜冻可能出现（Day 20+）</li>
+            <li>资源压力开始显现</li>
+          </ul>
+        </div>
+
+        <div class="arc-phase-card arc-p3">
+          <h4>第三幕 · 收束</h4>
+          <div class="days">Day 21 — 30&emsp;·&emsp;压力期 + 结算</div>
+          <ul>
+            <li>霜冻频繁，未收割作物每天损失</li>
+            <li>旅人出现（Day 22）引爆悬疑线</li>
+            <li>时间极度紧张，每个时段都关键</li>
+            <li>领主来信（Day 27）预示结局走向</li>
+            <li>Day 30 全面结算，进入结局</li>
+            <li>早期播下的种子在此收获或失败</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  function togglePhase(el) {
+    el.classList.toggle('expanded');
+  }
+</script>
+</body>
+</html>

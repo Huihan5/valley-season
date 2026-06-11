@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pandoc \"C:\\\\Users\\\\Lenovo\\\\Downloads\\\\Valley_Season_GDD.docx\" -o \"C:\\\\Users\\\\Lenovo\\\\Downloads\\\\Valley_Season_GDD_raw.md\" --track-changes=all)",
+      "PowerShell(pandoc \"C:\\\\Users\\\\Lenovo\\\\Downloads\\\\Valley_Season_GDD.docx\" -o \"C:\\\\Users\\\\Lenovo\\\\Downloads\\\\Valley_Season_GDD_raw.md\" --track-changes=all)",
+      "PowerShell(if \\($?\\) { \"Done\" } else { \"Failed\" })",
+      "Bash(npm --version)",
+      "mcp__6e8401b2-2c93-4585-a30c-883602898252__getAccessibleAtlassianResources",
+      "mcp__6e8401b2-2c93-4585-a30c-883602898252__getVisibleJiraProjects",
+      "mcp__6e8401b2-2c93-4585-a30c-883602898252__searchJiraIssuesUsingJql",
+      "Bash(jq '.issues.nodes | length' 'C:\\\\Users\\\\Lenovo\\\\.claude\\\\projects\\\\C--Users-Lenovo-Documents-Claude-Projects-valley-season\\\\0355b567-89d8-43e3-9762-5576f1415c48\\\\tool-results\\\\mcp-6e8401b2-2c93-4585-a30c-883602898252-searchJiraIssuesUsingJql-1781165234360.txt')",
+      "Bash(jq '.issues.nodes[] | {key: .key, type: .fields.issuetype.name, status: .fields.status.name, summary: .fields.summary, parent: .fields.parent.fields.summary}' 'C:\\\\Users\\\\Lenovo\\\\.claude\\\\projects\\\\C--Users-Lenovo-Documents-Claude-Projects-valley-season\\\\0355b567-89d8-43e3-9762-5576f1415c48\\\\tool-results\\\\mcp-6e8401b2-2c93-4585-a30c-883602898252-searchJiraIssuesUsingJql-1781165234360.txt')",
+      "mcp__6e8401b2-2c93-4585-a30c-883602898252__getTransitionsForJiraIssue",
+      "mcp__6e8401b2-2c93-4585-a30c-883602898252__transitionJiraIssue"
+    ]
+  }
+}

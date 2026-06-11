@@ -1,0 +1,47 @@
+{
+  "id": "day10_petition",
+  "day": 10,
+  "phase": "morning",
+  "forced": true,
+  "title": "佃户的请愿",
+  "sceneText": "Marta在早饭后把你拦在厨房门口。“先生，我代他们送来的。”她把一张对折的纸递给你。\n\n是一份联名请愿书，签了七个名字——老Wendt、以及另外六户佃户。内容直截了当：请求修缮五处严重损坏的住宅和牛棚。其中两处屋顶已经漏雨，一处牛棚的地基在下雨后有积水。这些维修在Hartmann的待办清单上，但从未被执行。\n\n你粗略估算了一下：全部修完需要约40金卢和10单位木材。你目前手头的金卢是有限的，木材也不多。\n\nMarta看着你，没有说话，但你知道她在等什么。",
+  "choices": [
+    {
+      "id": "repair_all",
+      "text": "批准全部修缮",
+      "description": "需要 40 金卢 + 10 木材，但佃户和Marta的信任大幅上升",
+      "effects": {
+        "guldmark": -40,
+        "timber": -10,
+        "renown": 2,
+        "relationships": { "marta": 2 },
+        "flags": { "repairedAllHousing": true },
+        "logEntry": "你批准了全部五户的住宅修缮，佃户们松了一口气。"
+      }
+    },
+    {
+      "id": "repair_partial",
+      "text": "优先修缮最严重的两处",
+      "description": "需要 16 金卢 + 4 木材，需要向其他人解释原因",
+      "effects": {
+        "guldmark": -16,
+        "timber": -4,
+        "renown": 1,
+        "relationships": { "marta": 1 },
+        "flags": { "repairedPartialHousing": true },
+        "logEntry": "你优先修缮了情况最严峻的两处，向其余人解释了资源限制。"
+      }
+    },
+    {
+      "id": "repair_none",
+      "text": "推迟，秋收结束后再说",
+      "description": "节省资源，但佃户信任大幅下降，声望受损",
+      "effects": {
+        "renown": -2,
+        "relationships": { "marta": -1 },
+        "flags": { "deniedHousingPetition": true },
+        "logEntry": "你推迟了修缮请求。Marta没有说什么，但转身离开时速度比平时快了很多。"
+      }
+    }
+  ]
+}
