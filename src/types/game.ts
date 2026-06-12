@@ -40,6 +40,11 @@ export interface DialogueLine {
   text: string;
 }
 
+export interface ConditionalParagraph {
+  condition: string;
+  text: string;
+}
+
 export interface EventData {
   id: string;
   day: number;
@@ -51,6 +56,10 @@ export interface EventData {
   sceneText: string;
   choices: Choice[] | null;
   onEnterEffects?: ChoiceEffects;
+  activationFlag?: string;
+  letterOpening?: string;
+  letterParagraphs?: ConditionalParagraph[];
+  letterClosing?: string;
 }
 
 export interface LogEntry {

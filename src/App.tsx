@@ -53,12 +53,16 @@ function applyEffects(state: GameState, effects: ChoiceEffects): GameState {
   return next;
 }
 
+function filterChoicesByFlags(choices: Choice[], flags: GameState['flags']): Choice[] {
+  return choices.filter(c => !c.requiresFlag || flags[c.requiresFlag]);
+}
+
 function buildStateForPhase(state: GameState): GameState {
   const event = getFixedEvent(state.day, state.phase, state);
   if (event && !state.flags[`event_done_${event.id}`]) {
     const withEvent = { ...state, activeEvent: event, eventResolved: false };
     const sceneText = event.sceneText;
-    const choices: Choice[] = event.choices ?? [];
+    const choices: Choice[] = filterChoicesByFlags(event.choices ?? [], state.flags);
     return {
       ...applyEffects(withEvent, event.onEnterEffects ?? {}),
       currentSceneText: sceneText,
@@ -131,12 +135,16 @@ function gameReducer(state: GameState, action: Action): GameState {
     }
 
     case 'ADVANCE_DAY_EVENT': {
-      // For Day 1 pure narrative: advance after reading
-      const doneFlag = `event_done_${state.activeEvent?.id}`;
+      const eventId = state.activeEvent?.id;
+      const doneFlag = `event_done_${eventId}`;
       let next = { ...state, flags: { ...state.flags, [doneFlag]: true }, activeEvent: null };
+      // Day 1 arrival gets a specific log entry; other narrative events log their title
+      const logText = eventId === 'day1_arrival'
+        ? '你到达了枫径庄园。'
+        : state.activeEvent?.title ?? '继续。';
       next = {
         ...next,
-        log: [...next.log, { day: state.day, phase: state.phase, text: '你到达了枫径庄园。' }],
+        log: [...next.log, { day: state.day, phase: state.phase, text: logText }],
       };
       return advancePhase(next);
     }
@@ -229,10 +237,12 @@ export default function App() {
           </button>
         </div>
       ) : (
-        <ChoicePanel
-          choices={state.currentChoices}
-          onChoice={(id) => dispatch({ type: 'MAKE_CHOICE', choiceId: id })}
-        />
+        <div key={`${state.day}-${state.phase}`} className="choices-enter">
+          <ChoicePanel
+            choices={state.currentChoices}
+            onChoice={(id) => dispatch({ type: 'MAKE_CHOICE', choiceId: id })}
+          />
+        </div>
       )}
     </div>
   );

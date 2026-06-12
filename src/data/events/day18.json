@@ -1,0 +1,46 @@
+{
+  "id": "day18_hunt_open",
+  "day": 18,
+  "phase": "morning",
+  "forced": true,
+  "title": "公国狩猎季",
+  "sceneText": "清晨，一名使者从桑维尔男爵府赶来，带来了一封措辞正式的信函。\n\n信件以公爵纹章封蜡，但内容是Henk男爵亲笔所书，笔迹宽阔，不像是写给下属的命令，更像是邻居之间的邀请——枫径庄园的前任管事每年都参与狩猎季，他希望这一传统能够延续。\n\n\"狩猎营地设在公国林地东侧的猎场。今日午后开幕，为期五天，至第二十二日日落为止。\"\n\n Gregor从马厩探出头来。\"每年都有这封信，\"他说，不置可否，\"Hartmann先生连续七年出席，第八年开始就找借口推掉了。\"",
+  "onEnterEffects": {
+    "flags": { "huntingSeasonStarted": true }
+  },
+  "choices": [
+    {
+      "id": "hunt_attend_day18",
+      "text": "出席开幕式",
+      "description": "代表庄园出现在猎场，消耗更多精力，午后将触发猎场事件",
+      "effects": {
+        "fatigue": 2,
+        "flags": { "huntAttendedDay18": true },
+        "nextScene": "forest",
+        "logEntry": "你整理了骑装，骑马前往公国猎场。Gregor帮你备马，什么都没说。"
+      }
+    },
+    {
+      "id": "hunt_decline_day18",
+      "text": "送去一封得体的致歉信",
+      "description": "以庄园事务繁忙为由婉拒，不影响此后几天的出席决定",
+      "effects": {
+        "guldmark": -1,
+        "flags": { "huntDeclinedDay18": true },
+        "nextScene": "office",
+        "logEntry": "你让使者带回一封言辞得体的信，说庄园正处于收割关键期，实难分身，但对男爵的盛情邀请深表感谢。"
+      }
+    },
+    {
+      "id": "hunt_no_response_day18",
+      "text": "不作回应，照常处理庄园事务",
+      "description": "沉默也是一种答复。Henk男爵会注意到的",
+      "effects": {
+        "relationships": { "henk": -1 },
+        "flags": { "huntIgnoredDay18": true },
+        "nextScene": "fields",
+        "logEntry": "你把信放到桌角，去田间巡查了。使者等了一个上午，最终只能空手而回。"
+      }
+    }
+  ]
+}

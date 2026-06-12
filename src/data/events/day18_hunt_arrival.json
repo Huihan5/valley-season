@@ -1,0 +1,40 @@
+{
+  "id": "day18_hunt_arrival",
+  "day": 18,
+  "phase": "afternoon",
+  "forced": false,
+  "activationFlag": "huntAttendedDay18",
+  "title": "猎场初印象",
+  "sceneText": "猎场开阔，松木营地的气味与马粪、皮革混在一起。公爵旗帜低垂，秋风不给力。\n\n贵族和他们的管事们分布在篝火与帐篷之间。Henk男爵站在中央，体格宽厚，围着一群熟识的猎手大笑。Elke男爵夫人坐在折叠椅上，手持一本半合的书，眼睛却没有在读。站在她旁边的是一个你不认识的人——深色袍子，不像猎手的装束，手腕上有墨迹。\n\nHenk看见你，向你挥手。\"枫径庄园！你来了——Hartmann最后那几年总是借口，我们都以为那庄园的人从此不打猎了。\"",
+  "choices": [
+    {
+      "id": "hunt_join_henk",
+      "text": "走向Henk，跟上他的笑声",
+      "description": "融入社交场合，建立与男爵的联系",
+      "effects": {
+        "relationships": { "henk": 1 },
+        "flags": { "huntMetHenkProper": true },
+        "logEntry": "你加入了Henk男爵的圈子。他说了几个你不太懂的老笑话，但你笑了，他很满意。"
+      }
+    },
+    {
+      "id": "hunt_approach_elke",
+      "text": "走向Elke，问候她",
+      "description": "边界石见过之后的第一次正式交流",
+      "effects": {
+        "relationships": { "elke": 1 },
+        "flags": { "huntGreetedElke": true },
+        "logEntry": "Elke放下书，打量你片刻。\"枫径的新管事，\"她说，语气里没有特别的情绪，\"你比我预想的要能干一些。\""
+      }
+    },
+    {
+      "id": "hunt_observe_stranger",
+      "text": "留意那个陌生人",
+      "description": "手腕有墨迹，衣着不像猎人——这个人是谁？",
+      "effects": {
+        "flags": { "huntNoticedStranger": true },
+        "logEntry": "那个人注意到你在看他。他微微点头，回到了Elke旁边，低声说了几句话。Elke的表情没有变化。"
+      }
+    }
+  ]
+}

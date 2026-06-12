@@ -1,0 +1,39 @@
+{
+  "id": "day20_hunt_stag",
+  "day": 20,
+  "phase": "afternoon",
+  "forced": false,
+  "activationFlag": "huntAttendedDay20",
+  "title": "停在林间的鹿",
+  "sceneText": "鹿出现在下午的光线里，站在两棵橡树之间的空地上。\n\n枪法最好的猎手已经瞄准，但Henk男爵举起一只手——他把这个机会留给了在场的人。每年都有一只鹿被留给最受欢迎的客人，或者被男爵认为值得一试的人。\n\n所有人的目光都没有落在鹿身上。他们在看Henk，或者看Henk在看谁。\n\nHenk的目光落在你身上，稍稍停顿了一秒，然后扫向别处——还没有决定。\n\n你旁边的Elke男爵夫人轻声说：\"别误会，他不是要找人射鹿。他在找人说话。\"",
+  "choices": [
+    {
+      "id": "stag_step_forward",
+      "text": "向前一步，接受邀请",
+      "description": "直接回应Henk的目光，无论结果如何",
+      "effects": {
+        "relationships": { "henk": 1 },
+        "flags": { "steppedForwardAtHunt": true },
+        "logEntry": "Henk看见你走上来，满意地点头。他递给你一杯酒，低声说了一些关于Hartmann的话——\"那个人最后是怎么了？\"你没有全部回答，但你听到了他问这个问题。"
+      }
+    },
+    {
+      "id": "stag_follow_elke",
+      "text": "压低声音问Elke：\"Hartmann以前怎么处理这个时刻？\"",
+      "description": "向Elke寻求指引，同时探听Hartmann的过去",
+      "effects": {
+        "relationships": { "elke": 1 },
+        "flags": { "elkeRevealedHartmannHunt": true },
+        "logEntry": "Elke沉默了一两秒。\"他会等，\"她说，\"然后他会消失。就像他每年最后那几次出席的方式。\""
+      }
+    },
+    {
+      "id": "stag_observe",
+      "text": "站在原地，什么都不做",
+      "description": "观察，不参与这个社交测试",
+      "effects": {
+        "logEntry": "鹿还在那里站着。Henk最终把目光投向别人，开幕仪式继续进行。你站在边缘，比任何人都看得更清楚。"
+      }
+    }
+  ]
+}

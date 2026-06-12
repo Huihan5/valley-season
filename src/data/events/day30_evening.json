@@ -1,0 +1,9 @@
+{
+  "id": "day30_evening",
+  "day": 30,
+  "phase": "evening",
+  "forced": true,
+  "title": "收季结算",
+  "sceneText": "夜灯还亮着，账簿摊在桌上。\n\n三十天。\n\n今日入夜之前，你在枫径庄园积累了 {grain} 单位粮食储备，库中有 {timber} 单位木材，账上剩余 {guldmark} 金卢。声望 {renown} 分。\n\n{summary}\n\n明日，男爵府使者将正式到达，宣布本季评定结果。\n\n你坐在炉边，想了一会儿。三十天里做了什么、没做什么——那些选择已经无法改变了。只有今晚还属于你。",
+  "choices": null
+}

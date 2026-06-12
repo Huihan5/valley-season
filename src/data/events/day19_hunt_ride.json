@@ -1,0 +1,37 @@
+{
+  "id": "day19_hunt_ride",
+  "day": 19,
+  "phase": "afternoon",
+  "forced": false,
+  "activationFlag": "huntAttendedDay19",
+  "title": "林地边缘骑行",
+  "sceneText": "今日的猎场范围延伸至公国林地东侧。马蹄踩过落叶，声音沉闷而规律。\n\n你的视线扫过远处的林线——你认得那里。Day 15那天，你站在边界石旁边，看见橡树树皮上刻着的图案。从马背上看，那片林地和普通的秋林没有区别：深棕、暗绿、偶有金黄。\n\n骑在你旁边的是一个你在昨日认出的陌生人。他叫什么名字，还没有人告诉你。他的马走得很平稳，他的眼睛扫过的地方和你的不同——他在看树干，不在看猎物。\n\n\"你来过这片林地，\"他说，不是问句。",
+  "choices": [
+    {
+      "id": "ride_confirm_yes",
+      "text": "\"是的，为了查看庄园边界。\"",
+      "description": "如实回答，观察他的反应",
+      "effects": {
+        "flags": { "travelerContactDay19": true, "huntRideToldBoundary": true },
+        "logEntry": "他点了点头，像是记录了什么。\"边界石，\"他说，\"你注意到了什么？\"你没有回答，他也没有追问。"
+      }
+    },
+    {
+      "id": "ride_deflect",
+      "text": "\"你对林地很感兴趣？\"",
+      "description": "反问，把问题推回去",
+      "effects": {
+        "flags": { "travelerContactDay19": true },
+        "logEntry": "他笑了一下。\"我研究这个地区的土地记录。\"他说，\"林地边界的变化，往往比任何文件都更诚实。\""
+      }
+    },
+    {
+      "id": "ride_ignore",
+      "text": "策马跟上前面的队伍",
+      "description": "不和陌生人谈话",
+      "effects": {
+        "logEntry": "你加快马速，跟上了前面的队伍。那个人没有追来，但你在后来某个时刻回头，发现他还在林线附近，低头看着什么。"
+      }
+    }
+  ]
+}

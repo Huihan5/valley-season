@@ -83,9 +83,66 @@ Exhaustion (fatigue=5) forces morning rest the next day.
 - GitHub 仓库初始化：`https://github.com/Huihan5/valley-season`（private）
 
 ### 待处理（Phase 2 剩余）
-- Day 18（狩猎季开幕）、Day 22（旅人）、Day 27（领主来信）、Day 30（结算场景）事件 JSON 尚未写
-- `travelerDialogueCorrect` flag 在 Day 22 事件写完后才能激活结局五判定
 - EventSystem 测试尚未补充（CLAUDE.md 要求每个 system 有对应测试）
+
+---
+
+## [2026-06-11 续2] — Day 23 领主来信 + Day 30 结算场景
+
+### Added
+- `src/data/events/day23.json` — 领主来信（Day 23 晨，强制）：动态拼接信件段落；四项资源各三档文字（低/中/高）；信件结尾引入驻地经纪人渠道，解锁后续换货选项
+- `src/data/events/day30_morning.json` — 第三十日（Day 30 晨，强制）：单选项叙事，标志最后一日开始
+- `src/data/events/day30_evening.json` — 收季结算（Day 30 晚，强制，choices: null）：模板文字，由 processDay30 填入实际数值；summary 段落依据结局走向动态生成
+
+### Changed
+- `src/types/game.ts` — 新增 `ConditionalParagraph` 接口，扩展 `EventData` 加入 `letterOpening`、`letterParagraphs`、`letterClosing` 字段，支持信件组装机制
+- `src/systems/EventSystem.ts` — 导入 day23、day30_morning、day30_evening；新增 `processDay23()` 按资源阈值组装信件文字；新增 `processDay30()` 替换 `{resource}` 占位符并生成 summary；`getFreeChoices()` 新增 Day 24-30 午后经纪人换货选项（两种：粮→金卢+扣木材、木→粮+扣金卢），需 `lordsLetterRead` flag 激活
+- `src/App.tsx` — `ADVANCE_DAY_EVENT` 去除硬编码 Day 1 日志文字，改为用事件 title 作为通用日志，使 Day 30 晚间 choices:null 事件可正常触发结局流程
+
+### Design decisions
+- **Day 23 阈值**（数值后期可调）：粮食 <40 低 / 40-70 中 / >70 高；金卢 <10 低 / 10-25 中 / >25 高；木材 <5 低 / 5-12 中 / >12 高；声望 ≤0 低 / 1-5 中 / ≥6 高
+- **经纪人换货比率**：粮→金（6粮+1木换4金，次优于集市 1.5/unit）；木→粮（2木+1金换7粮）。刻意偏低以保证集市仍是更优选择，经纪人仅作亡羊补牢用
+
+---
+
+## [2026-06-11 续] — 狩猎季弧线（Day 18–22）
+
+### Added
+- `src/data/events/day18.json` — 狩猎季开幕（强制，晨）：出席/婉拒/无视三选一；`huntingSeasonStarted` flag 由 onEnterEffects 激活
+- `src/data/events/day18_hunt_arrival.json` — 猎场初印象（午，activationFlag: huntAttendedDay18）：结识Henk、Elke、陌生学者
+- `src/data/events/day19_hunt_ride.json` — 林地边缘骑行（午，activationFlag: huntAttendedDay19）：与学者初次对话，触发 `travelerContactDay19`
+- `src/data/events/day20_hunt_stag.json` — 停在林间的鹿（午，activationFlag: huntAttendedDay20）：社交测试，Elke透露Hartmann猎场行为
+- `src/data/events/day20_hunt_overnight.json` — 营地夜宴（晚，强制，activationFlag: huntAttendedDay20）：留宿设置 `huntOvernightDay20`+`huntAttendedDay21`
+- `src/data/events/day21_hunt_morning.json` — 营地清晨（晨，强制，activationFlag: huntOvernightDay20）：继续/返回选择，继续设 `huntAttendedDay21Continued`
+- `src/data/events/day21_hunt_lorenz.json` — Lorenz在猎场（午，activationFlag: huntAttendedDay21Continued）：Lorenz透露Hartmann每年来此"核查"；若有 `documentedSymbols` 可触发符号确认
+- `src/data/events/day22_hunt_traveler.json` — 旅人的问题（午，activationFlag: huntAttendedDay22）：Aldric在猎场出现；正确回答（需 `documentedSymbols`）→ `travelerDialogueCorrect`
+- `src/data/events/day22_traveler_estate.json` — 庄园门口的旅人（晚，强制）：若未出席猎场显示完整遭遇；若已出席则由 `processDay22Estate()` 替换为归来后简短场景
+
+### Changed
+- `src/systems/EventSystem.ts` — 完整重构：
+  - `getFixedEvent()` 加入 `activationFlag` 检查（flag 未设则返回 null）
+  - 加入 `processDay22Estate()` 后处理器（B-i 旅人双路径逻辑）
+  - `getFreeChoices()` 加入 Day 19–22 晨间猎场出席选项（疲劳 ×2）
+  - 导入全部9个新事件文件
+- `src/App.tsx` — 新增 `filterChoicesByFlags()` 函数，事件选项按 `requiresFlag` 过滤（未满足条件的选项不显示）
+
+---
+
+## [2026-06-12] — EventSystem 测试 + 修复 Day 15 相位
+
+### Added
+- `tests/EventSystem.test.ts` — 74 个测试用例，覆盖：
+  - `getFixedEvent()` 基础查找（正确 day/phase、null for 无匹配、null for 错误 phase）
+  - `activationFlag` 逻辑（Day 18/20/21/22 猎场事件链）
+  - `processDay12` 三路分支（investigatedLedger / reportedLedger / deferredLedger → 声望/禁用/惩罚）
+  - `processDay22Estate` 双路径（huntAttendedDay22 → 简短归来场景；未出席 → 完整旅人遭遇）
+  - `processDay23` 信件组装（grain/guldmark/timber/renown 各三档段落；开头/结尾正确拼接）
+  - `processDay30` 占位符替换（{grain}/{guldmark}/{timber}/{renown}/{summary}；summary 依结局走向变化）
+  - `getFreeChoices()` 晨/午/晚三相位（exhausted 禁用、flag 解锁、猎场出席 Day 19-22、经纪人 Day 24-30）
+  - 关键通关路径验证（Hartmann 调查链；猎场过夜链）
+
+### Fixed
+- 测试文件中 Day 15 事件相位错误（`'morning'` → `'afternoon'`）；Day 15 事件本身是强制午后事件
 
 ---
 
