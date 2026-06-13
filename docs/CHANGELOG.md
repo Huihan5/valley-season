@@ -128,6 +128,42 @@ Exhaustion (fatigue=5) forces morning rest the next day.
 
 ---
 
+## [2026-06-12] — 测试、Build 验证、GitHub Push、Jira 更新
+
+### Added
+- `tests/EventSystem.test.ts` — 74 个测试用例，覆盖所有后处理器和关键通关路径（见下方详细）
+
+### Changed
+- `README.md` — 全面重写为面向公开访客的游戏介绍，移除了 Phase 1 留下的"写给设计师"内部文档
+
+### Validated
+- `npm run build` 成功，产物 180 kB JS / 10 kB CSS，零 TypeScript 错误，可部署为纯静态页面
+
+### Process notes
+- 工作流确认：Claude Code 可通过 Atlassian MCP 直接访问 Jira（cloudId: `57874a9f-3175-476e-a48b-15e43ea5f539`，site: duke-gddi-studios.atlassian.net）。后续可在会话中直接读取 ticket 状态、mark Done，无需截图。
+- Jira 更新策略：ticket 描述与实际实现存在出入时（如 VALE-26 原计划 Day 27，实际实现为 Day 23；VALE-34 原计划 9 个事件，实际 17 个），以"已完成更广覆盖"处理，mark Done；差距较大时另开新 ticket 修订。
+
+### Jira tickets marked Done this session
+- VALE-6: Vite static build feasibility
+- VALE-15: Run production build and inspect static output
+- VALE-25: Act 2 fixed-event design docs (Day 12, 15, 18)
+- VALE-26: Act 3 fixed-event design docs (Day 22, 27→23, 30)
+- VALE-34: Fixed-event scene & dialogue text (17 events implemented, exceeded original 9)
+- VALE-38: Fixed-event trigger logic integration
+- VALE-40: Ending-determination logic
+
+### EventSystem test detail
+- `getFixedEvent()` 基础查找、activationFlag 链（Day 18/20/21/22）
+- `processDay12` 三路分支、`processDay22Estate` 双路径
+- `processDay23` 信件组装、`processDay30` 占位符替换
+- `getFreeChoices()` 晨/午/晚三相位全覆盖、经纪人渠道、猎场出席
+- Hartmann 调查链和猎场过夜链关键路径验证
+
+### Fixed
+- 测试文件中 Day 15 事件相位错误（`'morning'` → `'afternoon'`）
+
+---
+
 ## [2026-06-12] — EventSystem 测试 + 修复 Day 15 相位
 
 ### Added

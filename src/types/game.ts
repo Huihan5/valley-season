@@ -57,6 +57,7 @@ export interface EventData {
   choices: Choice[] | null;
   onEnterEffects?: ChoiceEffects;
   activationFlag?: string;
+  advancesPhase?: boolean;
   letterOpening?: string;
   letterParagraphs?: ConditionalParagraph[];
   letterClosing?: string;

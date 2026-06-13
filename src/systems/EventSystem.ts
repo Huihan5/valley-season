@@ -326,6 +326,21 @@ export function getFreeChoices(state: GameState): Choice[] {
       });
 
       choices.push({
+        id: 'broker_timber_to_gold',
+        text: '以木换钱（经纪人渠道）',
+        description: resources.timber >= 3
+          ? '消耗3木材，换取3金卢（木材加工后折价出售）'
+          : '消耗3木材，换取3金卢——当前储备不足',
+        effects: {
+          timber: -3,
+          guldmark: 3,
+          logEntry: '你通过驻地经纪人将木材折价出售。价格远不如集市，但眼下也只有这条路了。',
+        },
+        disabled: resources.timber < 3,
+        disabledReason: '木材不足（需要3单位）',
+      });
+
+      choices.push({
         id: 'broker_timber_to_grain',
         text: '以木换粮（经纪人渠道）',
         description: resources.timber >= 2 && resources.guldmark >= 1

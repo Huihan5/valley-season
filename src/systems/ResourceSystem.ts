@@ -6,6 +6,7 @@ import {
   GRAIN_STORAGE_CAP_UNCLEARED,
   RENOWN_MIN,
   RENOWN_MAX,
+  FATIGUE_TIRED_THRESHOLD,
 } from '../data/config';
 
 export function getHarvestYield(state: GameState): number {
@@ -17,8 +18,7 @@ export function getHarvestYield(state: GameState): number {
 
   const weatherMod = WEATHER_HARVEST_MOD[state.weather] ?? 0;
 
-  // Fatigue penalty: exhausted loses 1 from all actions
-  const fatiguePenalty = state.fatigue >= 5 ? 1 : 0;
+  const fatiguePenalty = state.fatigue >= FATIGUE_TIRED_THRESHOLD ? 1 : 0;
 
   // Renown penalty: ≤-3 means unhappy tenants
   const renownPenalty = state.resources.renown <= -3 ? 1 : 0;
@@ -27,7 +27,7 @@ export function getHarvestYield(state: GameState): number {
 }
 
 export function getTimberYield(state: GameState): number {
-  const fatiguePenalty = state.fatigue >= 5 ? 1 : 0;
+  const fatiguePenalty = state.fatigue >= FATIGUE_TIRED_THRESHOLD ? 1 : 0;
   return Math.max(0, TIMBER_YIELD - fatiguePenalty);
 }
 

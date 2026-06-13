@@ -125,9 +125,9 @@ function gameReducer(state: GameState, action: Action): GameState {
 
       if (state.activeEvent) {
         const doneFlag = `event_done_${state.activeEvent.id}`;
+        const advancesPhase = state.activeEvent.advancesPhase ?? false;
         next = { ...next, flags: { ...next.flags, [doneFlag]: true }, activeEvent: null };
-        // After resolving event, show free choices for remainder of phase
-        return buildStateForPhase(next);
+        return advancesPhase ? advancePhase(next) : buildStateForPhase(next);
       }
 
       // Free choice: advance phase
@@ -215,14 +215,14 @@ export default function App() {
 
       {/* Choice panel (bottom) */}
       {state.demoComplete && state.endingId ? (
-        <div className="bg-bg-card border border-game-border rounded-sm px-5 py-3 flex items-center justify-between">
+        <div className="bg-bg-card border border-gold-dim rounded-sm px-5 py-3 flex items-center justify-between">
           <div>
             <span className="text-gold font-serif text-sm">{getEndingData(state.endingId as Parameters<typeof getEndingData>[0]).title}</span>
-            <span className="text-game-text/50 text-xs ml-3">{getEndingData(state.endingId as Parameters<typeof getEndingData>[0]).subtitle}</span>
+            <span className="text-game-text/60 text-xs ml-3">{getEndingData(state.endingId as Parameters<typeof getEndingData>[0]).subtitle}</span>
           </div>
           <button
             onClick={() => window.location.reload()}
-            className="px-4 py-1.5 border border-game-border text-game-text/60 text-xs rounded-sm hover:border-gold-dim hover:text-cream transition-all"
+            className="px-5 py-2 border border-gold-dim text-cream font-serif text-sm rounded-sm hover:bg-bg-hover hover:border-gold transition-all"
           >
             重新开始
           </button>

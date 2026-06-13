@@ -239,7 +239,7 @@ describe('getFixedEvent — Day 23 letter assembly', () => {
   it('contains opening and closing text', () => {
     const event = getFixedEvent(23, 'morning', makeState({ day: 23 }));
     expect(event?.sceneText).toContain('枫径庄园 管事亲启');
-    expect(event?.sceneText).toContain('贝诺瓦三世');
+    expect(event?.sceneText).toContain('Vanessa de Valenne');
   });
 
   it('sceneText is not the placeholder [GENERATED]', () => {
