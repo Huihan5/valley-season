@@ -1,6 +1,11 @@
 import { GameState, Choice, DayPhase, EventData } from '../types/game';
 import { canHarvest, canFellTimber } from './WeatherSystem';
 import { getHarvestYield, getTimberYield } from './ResourceSystem';
+import { isMarketDay, getDayOfWeek } from './TimeSystem';
+import {
+  MARKET_GRAIN_SELL_IN, MARKET_GRAIN_SELL_OUT,
+  MARKET_TIMBER_SELL_IN, MARKET_TIMBER_SELL_OUT,
+} from '../data/config';
 
 import day1Data from '../data/events/day1.json';
 import day3Data from '../data/events/day3.json';
@@ -168,12 +173,71 @@ export function getFixedEvent(day: number, phase: DayPhase, state: GameState): E
   return raw;
 }
 
+function getMarketAfternoonChoices(state: GameState): Choice[] {
+  const { day, flags, resources } = state;
+  const firstVisit = !flags.marketFirstVisitDone;
+  const renownBonus = firstVisit ? 1 : 0;
+  const visitedFlag = `visitedMarket_day${day}`;
+  const choices: Choice[] = [];
+
+  choices.push({
+    id: 'market_sell_grain',
+    text: '出售粮食',
+    description: resources.grain >= MARKET_GRAIN_SELL_IN
+      ? `出售${MARKET_GRAIN_SELL_IN}单位粮食，获得${MARKET_GRAIN_SELL_OUT}金卢（集市价 1.5金卢/单位）`
+      : `出售${MARKET_GRAIN_SELL_IN}单位粮食，获得${MARKET_GRAIN_SELL_OUT}金卢——当前储备不足`,
+    effects: {
+      grain: -MARKET_GRAIN_SELL_IN,
+      guldmark: MARKET_GRAIN_SELL_OUT,
+      ...(renownBonus ? { renown: renownBonus } : {}),
+      flags: { marketFirstVisitDone: true, [visitedFlag]: true },
+      logEntry: '你在集市将一批粮食卖了出去，价格比经纪人渠道高出不少。',
+    },
+    disabled: resources.grain < MARKET_GRAIN_SELL_IN,
+    disabledReason: `粮食不足（需要${MARKET_GRAIN_SELL_IN}单位）`,
+  });
+
+  choices.push({
+    id: 'market_sell_timber',
+    text: '出售木材',
+    description: resources.timber >= MARKET_TIMBER_SELL_IN
+      ? `出售${MARKET_TIMBER_SELL_IN}单位木材，获得${MARKET_TIMBER_SELL_OUT}金卢（集市价 3金卢/单位）`
+      : `出售${MARKET_TIMBER_SELL_IN}单位木材，获得${MARKET_TIMBER_SELL_OUT}金卢——当前储备不足`,
+    effects: {
+      timber: -MARKET_TIMBER_SELL_IN,
+      guldmark: MARKET_TIMBER_SELL_OUT,
+      ...(renownBonus ? { renown: renownBonus } : {}),
+      flags: { marketFirstVisitDone: true, [visitedFlag]: true },
+      logEntry: '你在集市出售了木材，价格比驻地经纪人高出许多。',
+    },
+    disabled: resources.timber < MARKET_TIMBER_SELL_IN,
+    disabledReason: `木材不足（需要${MARKET_TIMBER_SELL_IN}单位）`,
+  });
+
+  choices.push({
+    id: 'market_browse_only',
+    text: '转一圈，不交易',
+    description: '了解市场行情，或许能听到些有用的消息',
+    effects: {
+      flags: { [visitedFlag]: true },
+      logEntry: '你在集市转了一圈，听了些闲言碎语，没有进行交易。',
+    },
+  });
+
+  return choices;
+}
+
 export function getFreeChoices(state: GameState): Choice[] {
   const { phase, weather, fatigue, day, flags, resources } = state;
   const exhausted = fatigue >= 5;
   const ledgerResolved = !!(flags.investigatedLedger || flags.reportedLedger || flags.deferredLedger);
   const inHuntSeason = !!(flags.huntingSeasonStarted && day >= 18 && day <= 22);
   const choices: Choice[] = [];
+
+  // Market visit: spent morning traveling — afternoon is for trading at the market
+  if (phase === 'afternoon' && flags.visitingMarketToday === day) {
+    return getMarketAfternoonChoices(state);
+  }
 
   // ── Morning + Afternoon shared ───────────────────────────────────────────
 
@@ -242,6 +306,21 @@ export function getFreeChoices(state: GameState): Choice[] {
         },
         disabled: exhausted,
         disabledReason: exhausted ? '你过于疲惫' : undefined,
+      });
+    }
+
+    if (isMarketDay(day) && !flags[`visitedMarket_day${day}`] && !inHuntSeason) {
+      choices.push({
+        id: 'go_to_market',
+        text: `前往集市（${getDayOfWeek(day)}）`,
+        description: '往返占用上午+下午两个时段，可在集市出售粮食或木材',
+        effects: {
+          flags: { visitingMarketToday: day },
+          nextScene: 'market',
+          logEntry: '你出发前往河谷城集市，上午的路上有些风，但天气不算差。',
+        },
+        disabled: exhausted,
+        disabledReason: exhausted ? '你过于疲惫，无力出城' : undefined,
       });
     }
 

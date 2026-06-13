@@ -81,5 +81,13 @@ export const RELATION_MAX = 5;
 export const RENOWN_MIN = -10;
 export const RENOWN_MAX = 10;
 
+// Market exchange rates (sell side only; buy side TBD in Phase 4)
+// Grain sell: 1.5金卢/unit → transaction unit = 4 grain → 6金卢
+export const MARKET_GRAIN_SELL_IN = 4;   // grain consumed
+export const MARKET_GRAIN_SELL_OUT = 6;  // guldmark received
+// Timber sell: 3金卢/unit → transaction unit = 3 timber → 9金卢
+export const MARKET_TIMBER_SELL_IN = 3;  // timber consumed
+export const MARKET_TIMBER_SELL_OUT = 9; // guldmark received
+
 // Day range for the full game
 export const TOTAL_DAYS = 30;

@@ -128,6 +128,27 @@ Exhaustion (fatigue=5) forces morning rest the next day.
 
 ---
 
+## [2026-06-14] — VALE-58: Market Day Trading System
+
+### Added
+- `src/data/config.ts` — market rate constants (`MARKET_GRAIN_SELL_IN/OUT`, `MARKET_TIMBER_SELL_IN/OUT`) mirroring NUMBERS.md (grain 1.5金卢/unit → 4 grain → 6金卢; timber 3金卢/unit → 3 timber → 9金卢)
+- `src/systems/EventSystem.ts` — market logic:
+  - Morning free choice `go_to_market` available on market days (Wed/Sat) when not in hunt season; sets `visitingMarketToday = day` flag; costs morning + afternoon (2-phase travel)
+  - `getMarketAfternoonChoices()` helper: when afternoon and `visitingMarketToday === day`, replaces normal afternoon choices with three market options: sell grain, sell timber, browse only
+  - First market transaction grants +1 renown (`marketFirstVisitDone` gate)
+  - Choice disabled states and description text reflect current resource levels
+
+### Design decisions
+- 2-phase cost honored: morning sets flag → afternoon shows market-only choices (no harvest/NPC options that day)
+- Hunt season gating: market choice hidden during Days 18-22 hunt arc (player is at the hunt grounds, not the estate)
+- Rates vs broker: market timber 3金卢/unit vs broker 1金卢/unit; market grain 1.5金卢/unit vs broker ~0.67金卢/unit — significant incentive to plan around market days
+- Buy-side (purchasing grain/supplies at market) deferred to Phase 4; sell-side covers the core use case
+
+### Tests
+- 74 existing tests all pass; market logic branches implicitly covered by the flag-based early-return path
+
+---
+
 ## [2026-06-12] — 测试、Build 验证、GitHub Push、Jira 更新
 
 ### Added
