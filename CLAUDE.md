@@ -16,8 +16,9 @@ A text-based estate management game set in the Duchy of Valewisp, Kingdom of Mar
 valley-season/
 ├── CLAUDE.md                # You are here — project rules
 ├── docs/                    # Design documents (READ-ONLY reference)
-│   ├── GDD.md               # Game Design Document — single source of truth for game rules
-│   ├── NUMBERS.md           # Numerical balance tables — all resource/system values
+│   ├── GDD.md               # GDD v3.0 — sole design authority, numbers live in ch.5
+│   ├── DELTA_v2_to_v3.md    # v2→v3 change manifest
+│   ├── V3_BUILD_BRIEF.md    # Phased implementation brief for the v3 rebuild
 │   ├── WORLDBOOK.md         # Kingdom of Marigni setting bible
 │   ├── STYLE_GUIDE.md       # Writing tone & sensory reference for narrative text
 │   └── CHANGELOG.md         # Track all changes with dates
@@ -33,15 +34,16 @@ valley-season/
 │   │   ├── scenes/          # Location descriptions, weather variants, ambient text
 │   │   └── endings/         # Five ending scripts
 │   ├── systems/             # Game logic (no narrative text in these files)
-│   │   ├── TimeSystem.js    # Day/phase progression, 30-day cycle
-│   │   ├── WeatherSystem.js # Weather generation from probability pools
-│   │   ├── ResourceSystem.js# Grain, Guldmark, Timber, Renown tracking
-│   │   ├── RelationSystem.js# NPC trust values, threshold unlocks
-│   │   ├── EventSystem.js   # Fixed event triggers + random event pool draw
-│   │   ├── FatigueSystem.js # Rest/fatigue counter
-│   │   └── EndingSystem.js  # Day 30 ending determination logic
+│   │   ├── TimeSystem.ts    # Day/phase progression, 30-day cycle
+│   │   ├── WeatherSystem.ts # Weather generation from probability pools
+│   │   ├── ResourceSystem.ts# Grain, Guldmark, Timber, Renown tracking
+│   │   ├── RelationSystem.ts# NPC trust values, threshold unlocks
+│   │   ├── EventSystem.ts   # Fixed event triggers + random event pool draw
+│   │   ├── FatigueSystem.ts # Rest/fatigue counter
+│   │   └── EndingSystem.ts  # Day 30 ending determination logic
+│   ├── assets/              # Art: character portraits, region map
 │   ├── utils/               # Pure helper functions
-│   └── App.jsx              # Root component, game state orchestration
+│   └── App.tsx              # Root component, game state orchestration
 ├── public/
 ├── tests/                   # Test files mirror src/ structure
 ├── package.json
@@ -59,8 +61,8 @@ valley-season/
 
 ### Numerical Values
 - NEVER hardcode game balance numbers in system files
-- All values (harvest rates, costs, thresholds, weather probabilities) come from a central config that mirrors `docs/NUMBERS.md`
-- When `docs/NUMBERS.md` says "harvest yield: 7 units/phase at full prep", the code must use that exact number
+- All values (harvest rates, costs, thresholds, weather probabilities) come from `src/data/config.ts`, which mirrors **GDD ch.5**
+- GDD v3 is the sole numerical authority — the standalone `NUMBERS.md` was retired when v3 folded its tables into ch.5
 
 ### Writing Standards (for narrative content in src/data/)
 - Refer to `docs/STYLE_GUIDE.md` for tone, sensory palette, and voice samples
@@ -80,17 +82,22 @@ valley-season/
 ### Iteration Cycle
 This project follows a phased development plan. Each phase has a clear deliverable:
 
-1. **Phase 1 — Core Loop**: Time progression + scene switching + choice→result. Placeholder text OK.
-2. **Phase 2 — Narrative Fill**: Real scene descriptions, NPC dialogue. Resource system connected.
-3. **Phase 3 — Fixed Events**: Full Day 1-30 event chain. Relationship system connected.
-4. **Phase 4 — Random Events + Endings**: Event pool, ending determination, Day 30 settlement.
-5. **Phase 5 — Polish**: Text refinement, UI styling, balance testing.
+The v2 build (core loop, fixed-event chain, 5 endings) shipped in June 2026. The project is now
+rebuilding to GDD v3 — see `docs/V3_BUILD_BRIEF.md` for the authoritative phase plan:
+
+0. **Stage 0 — Rename inventory**: enumerate every occurrence, mark replace vs. delete.
+1. **Stage 1 — Rename & cleanup**: apply GDD ch.12 name table, strip retired concepts. Ending logic untouched.
+2. **Stage 2 — New systems & variables**: playerName, nobleTrust, lordImpression, market rework.
+3. **Stage 3 — Repeatable text**: greetings, location bases, act variants, weather lines, action results.
+4. **Stage 4 — Events**: 16 rewrites + Day 0/4/8/11/13/27, market structure, officer encounters.
+5. **Stage 5 — Investigation & endings**: three clue groups, rewritten ending determination.
+6. **Stage 6 — Playtest fixes**: remaining UI items from `PlaytestFeedback.md`.
 
 ### Self-Management Protocol
 When working autonomously:
 1. Before starting work, read the relevant docs/ file to confirm design intent
 2. After completing a unit of work, update `docs/CHANGELOG.md` with what changed and why
-3. If a design decision is ambiguous (not covered in GDD or NUMBERS), flag it in CHANGELOG as `[DECISION NEEDED]` and proceed with your best judgment, documenting your reasoning
+3. If a design decision is ambiguous (not covered in the GDD), **stop and ask**. Do not guess and do not leave a TODO in the code — this world's setting density is high enough that one wrong detail causes rework in ten other places (see `docs/V3_BUILD_BRIEF.md`)
 4. Run tests after every system change
 5. Never modify docs/ files without explicit user approval — those are the user's design authority
 

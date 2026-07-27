@@ -10,7 +10,7 @@ export interface EndingData {
   text: string;
 }
 
-// Priority order per docs/NUMBERS.md §6
+// Priority order per docs/NUMBERS.md §6 — SUPERSEDED by GDD v3 ch.10.1, rewritten in Stage 5
 export function determineEnding(state: GameState): EndingId {
   const { grain, guldmark, renown } = state.resources;
   const { flags, relationships } = state;

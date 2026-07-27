@@ -105,7 +105,7 @@ function processDay22Estate(event: EventData, state: GameState): EventData {
 function processDay23(event: EventData, state: GameState): EventData {
   const { grain, guldmark, timber, renown } = state.resources;
 
-  // Three-tier thresholds (can be tuned in NUMBERS.md §2)
+  // Three-tier thresholds (see GDD ch.5)
   const grainTier = grain < 40 ? 'low' : grain < 70 ? 'mid' : 'high';
   const guldmarkTier = guldmark < 10 ? 'low' : guldmark < 25 ? 'mid' : 'high';
   const timberTier = timber < 5 ? 'low' : timber < 13 ? 'mid' : 'high';

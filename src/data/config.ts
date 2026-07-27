@@ -1,4 +1,5 @@
-// All numerical values mirror docs/NUMBERS.md — never hardcode game balance elsewhere.
+// All numerical values mirror docs/GDD.md ch.5 — never hardcode game balance elsewhere.
+// (GDD v3 retired the standalone NUMBERS.md; ch.5 is the sole numerical authority.)
 
 export const DEMO_MAX_DAYS = 30;
 
@@ -44,7 +45,7 @@ export const DAILY_GULDMARK_COST = 2;
 // Storage cap without clearing storage
 export const GRAIN_STORAGE_CAP_UNCLEARED = 80;
 
-// Fatigue thresholds (see docs/NUMBERS.md §5)
+// Fatigue thresholds (see docs/GDD.md ch.5)
 export const FATIGUE_TIRED_THRESHOLD = 3;
 export const FATIGUE_EXHAUSTED_THRESHOLD = 5;
 
