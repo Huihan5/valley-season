@@ -2,6 +2,8 @@ import { GameState, NpcId } from '../../types/game';
 import { WEATHER_LABELS, WEATHER_ICONS } from '../../systems/WeatherSystem';
 import { getFatigueLabel, getFatigueEffect } from '../../systems/FatigueSystem';
 import { getDayOfWeek, isMarketDay } from '../../systems/TimeSystem';
+import { getTrust } from '../../systems/RelationSystem';
+import { GRAIN_EXCELLENT_THRESHOLD, NOBLE_TRUST_MAX, LORD_IMPRESSION_MAX } from '../../data/config';
 
 const NPC_NAMES: Record<NpcId, string> = {
   gregor: '格雷格',
@@ -28,7 +30,7 @@ function RelationBar({ value }: { value: number }) {
 }
 
 export default function StatusPanel({ state }: Props) {
-  const { day, weather, resources, fatigue, relationships } = state;
+  const { day, weather, resources, fatigue, nobleTrust, lordImpression } = state;
   const fatigueEffect = getFatigueEffect(fatigue);
   const marketDay = isMarketDay(day);
 
@@ -56,7 +58,7 @@ export default function StatusPanel({ state }: Props) {
       <div className="px-4 py-3 border-b border-game-border">
         <p className="text-game-dim text-xs tracking-wider mb-2">— 资源 —</p>
         <div className="space-y-2">
-          <ResourceRow icon="🌾" label="粮食" value={resources.grain} unit="单位" target={90} />
+          <ResourceRow icon="🌾" label="粮食" value={resources.grain} unit="单位" target={GRAIN_EXCELLENT_THRESHOLD} />
           <ResourceRow icon="🪙" label="金卢" value={resources.guldmark} unit="" warnBelow={15} />
           <ResourceRow icon="🪵" label="木材" value={resources.timber} unit="单位" warnBelow={5} />
           <ResourceRow icon="⭐" label="声望" value={resources.renown} unit="" showSign />
@@ -83,12 +85,21 @@ export default function StatusPanel({ state }: Props) {
         )}
       </div>
 
+      {/* Standing: the two axes that are not renown */}
+      <div className="px-4 py-3 border-b border-game-border">
+        <p className="text-game-dim text-xs tracking-wider mb-2">— 处境 —</p>
+        <div className="space-y-1.5">
+          <PipRow label="贵族信任" value={nobleTrust} max={NOBLE_TRUST_MAX} />
+          <PipRow label="领主印象" value={lordImpression} max={LORD_IMPRESSION_MAX} />
+        </div>
+      </div>
+
       {/* Relationships */}
       <div className="px-4 py-3 flex-1 overflow-y-auto">
         <p className="text-game-dim text-xs tracking-wider mb-2">— 关系 —</p>
         <div className="space-y-2.5">
           {(Object.keys(NPC_NAMES) as NpcId[]).map((npc) => {
-            const val = relationships[npc] ?? 0;
+            const val = getTrust(state, npc);
             return (
               <div key={npc}>
                 <div className="flex items-center justify-between mb-0.5">
@@ -102,6 +113,22 @@ export default function StatusPanel({ state }: Props) {
             );
           })}
         </div>
+      </div>
+    </div>
+  );
+}
+
+function PipRow({ label, value, max }: { label: string; value: number; max: number }) {
+  return (
+    <div className="flex items-center justify-between">
+      <span className="text-game-dim text-xs">{label}</span>
+      <div className="flex gap-1">
+        {Array.from({ length: max }).map((_, i) => (
+          <div
+            key={i}
+            className={`w-2 h-2 rounded-full ${i < value ? 'bg-gold-dim' : 'bg-game-border'}`}
+          />
+        ))}
       </div>
     </div>
   );

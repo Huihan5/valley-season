@@ -45,6 +45,11 @@ export const DAILY_GULDMARK_COST = 2;
 // Storage cap without clearing storage
 export const GRAIN_STORAGE_CAP_UNCLEARED = 80;
 
+// Two-tier grain thresholds (GDD ch.5.4 / 10.1).
+// Below 留任线 → dismissed. 留任线 to 优秀线 → ending 2 at best. 优秀线 and above → ending 3 / 4A / 4B eligible.
+export const GRAIN_RETAIN_THRESHOLD = 75;    // 留任线：冬季口粮 60 + 税约 13
+export const GRAIN_EXCELLENT_THRESHOLD = 90; // 优秀线：留任线 + 春播种子 15
+
 // Fatigue thresholds (see docs/GDD.md ch.5)
 export const FATIGUE_TIRED_THRESHOLD = 3;
 export const FATIGUE_EXHAUSTED_THRESHOLD = 5;
@@ -78,17 +83,39 @@ export const WEATHER_POOLS: Record<string, Record<string, number>> = {
 export const RELATION_MIN = -5;
 export const RELATION_MAX = 5;
 
+// Trust is layered (GDD ch.5.5): conversational trust caps low, action trust carries the rest.
+export const TALKS_PER_TRUST_POINT = 3; // 每 3 次有效交谈 +1
+export const TALK_TRUST_CAP = 2;        // 单靠交谈最高 +2
+
+// 贵族信任 (GDD ch.5.5) — three chances at +1 each: Day 7 dinner, boundary dispute, hunt season
+export const NOBLE_TRUST_MIN = 0;
+export const NOBLE_TRUST_MAX = 3;
+export const NOBLE_TRUST_ENDING3_MIN = 1;  // 结局三的必要条件之一
+export const NOBLE_TRUST_CLUE_MIN = 2;     // 狩猎季结算时解锁玛格丽特的碎片
+
+// 领主印象 (GDD ch.5.6)
+export const LORD_IMPRESSION_MIN = 0;
+export const LORD_IMPRESSION_MAX = 3;
+
 // Renown bounds
 export const RENOWN_MIN = -10;
 export const RENOWN_MAX = 10;
 
-// Market exchange rates (sell side only; buy side TBD in Phase 4)
-// Grain sell: 1.5金卢/unit → transaction unit = 4 grain → 6金卢
-export const MARKET_GRAIN_SELL_IN = 4;   // grain consumed
-export const MARKET_GRAIN_SELL_OUT = 6;  // guldmark received
-// Timber sell: 3金卢/unit → transaction unit = 3 timber → 9金卢
-export const MARKET_TIMBER_SELL_IN = 3;  // timber consumed
-export const MARKET_TIMBER_SELL_OUT = 9; // guldmark received
+// ── 集市 (GDD ch.5.4) ───────────────────────────────────────────────────────
+// v3: Saturdays only (Day 6 / 13 / 20 / 27), but quantity per trip is open up to
+// the cart's capacity. The bottleneck moved from market frequency to felling phases.
+export const MARKET_GRAIN_PRICE = 1.5;            // 金卢/unit
+export const MARKET_TIMBER_PRICE = 3;             // 金卢/unit
+export const MARKET_TIMBER_PRICE_MILLRIDGE = 4;   // after the 磨岭 agreement with 亨克
+export const MARKET_TRANSPORT_CAP = 20;           // grain + timber combined, per trip (cart capacity)
+export const MARKET_LOT_SIZES = [4, 10];          // fixed lots offered alongside a sell-max option
+
+// ── 时段与疲劳消耗 (V3_BUILD_BRIEF 阶段二) ──────────────────────────────────
+// 插入式事件不占时段；行动触发式占 1；外出式占 2（上午出发，下午抵达）。
+export const PHASE_COST_ACTION = 1;
+export const PHASE_COST_OUTING = 2;
+export const OUTING_FATIGUE = 1;        // 前往集市 / 前往猎场
+export const MARKET_TRADE_FATIGUE = 1;  // 集市交易本身，每日一次
 
 // Day range for the full game
 export const TOTAL_DAYS = 30;

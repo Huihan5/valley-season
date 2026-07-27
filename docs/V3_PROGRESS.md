@@ -11,7 +11,7 @@
 |---|---|---|
 | 0 | 改名与废止清单扫描 | 已完成 |
 | 1 | 改名 | 已完成（`15218a1`） |
-| 2 | 新增系统与变量 | 未开始 |
+| 2 | 新增系统与变量 | 已完成 |
 | 3 | 可重复文本迁入 | 未开始 |
 | 4 | 事件改造与新增 | 未开始 |
 | 5 | 调查系统与结局 | 未开始 |
@@ -50,9 +50,19 @@ brief 原定阶段一删除结局"高效的机器"并替换 `ending5`，但结�
 
 ---
 
-## 阶段二待确认项
+## 阶段二遗留与待确认项
 
-`EventSystem.ts:374` 的"去神殿拜访洛伦茨"下午选项。v3 中谷火神殿不再是可访问地点，洛伦茨改为到庄园炉堂出现（brief 阶段二"其他系统改动"）。需连同炉堂的 `unlockForgeChapel` 一并改造。
+**一 · 猎场疲劳与 GDD 5.7 冲突。** brief 阶段二写"前往集市与前往猎场各 +1 疲劳"，GDD 5.7 写"狩猎季出席消耗双倍疲劳"。已按 brief 实现（+1，原 v2 为固定 +2），改回只需动 `OUTING_FATIGUE` 一个常量。**需确认哪份为准。**
+
+**二 · 庄园炉堂在阶段四之前不可用。** 炉堂已按设计锁在 `unlockForgeChapel` 之后，而写入该 flag 的 Day 4 添柴事件属于阶段四。因此当前构建里晚间的"前往庄园炉堂"与下午的"去炉堂见洛伦茨"都不出现。晚间"早点休息"同样清零疲劳，玩法上没有断路。
+
+**三 · 集市文案是占位。** 阶段二只搭了规则层（运力上限、批量档位、疲劳）。选项文案与日志文本待阶段四的"集市日完整结构"整体替换，含播放顺序与公务员遭遇。
+
+**四 · 两处文本被系统改动带着改了，需要复核。**
+- `EventSystem.ts` 洛伦茨拜访的日志把"神殿"换成了"炉堂"，句子结构未动。但洛伦茨此时是到庄园来的客人，"接待了你""泡了两杯茶"的主客关系可能不对。阶段三迁入招呼语时应整体替换。
+- `day3.json` 选项 B 的 description 原写"获得领主支持"，与改后的数值（声望 -1、领主印象 +1）不符，已改写为"你换来了上级的容错，也承认了自己对庄园并未完全掌控"。**这句是我写的，不是定稿文本。**
+
+**五 · "有效交谈"的判定。** GDD 只说"每 3 次有效交谈 +1"，未定义何为有效。现按"每次交谈动作计一次"实现，无每日上限。当前交谈选项只在下午出现，一天最多一次，所以实际无差别；若阶段三给晚间也加交谈选项，需要回来确认是否要加每日上限。
 
 ---
 
@@ -69,13 +79,13 @@ Epic 建议名：`Valley Season v3 rebuild`。合计 35 SP。
 
 ### 阶段二 · New systems & variables（5 SP）
 
-| Summary | SP |
-|---|---|
-| `[v3] playerName text input at Day 0 guarantee-letter signature` | 1 |
-| `[v3] Add nobleTrust, lordImpression, and new narrative flags` | 1 |
-| `[v3] Conversational trust layer (+1 per 3 talks, cap +2)` | 1 |
-| `[v3] Market rework: Saturday only, 20-unit cap, fatigue cost` | 1 |
-| `[v3] Phase-cost rules and two-tier grain thresholds (75 / 90)` | 1 |
+| Summary | SP | 状态 |
+|---|---|---|
+| `[v3] playerName text input at Day 0 guarantee-letter signature` | 1 | 组件与状态已完成，接线待 Day 0 事件（阶段四） |
+| `[v3] Add nobleTrust, lordImpression, and new narrative flags` | 1 | 已完成 |
+| `[v3] Conversational trust layer (+1 per 3 talks, cap +2)` | 1 | 已完成 |
+| `[v3] Market rework: Saturday only, 20-unit cap, fatigue cost` | 1 | 已完成（supersedes VALE-58） |
+| `[v3] Phase-cost rules and two-tier grain thresholds (75 / 90)` | 1 | 已完成 |
 
 ### 阶段三 · Repeatable text（6 SP）
 

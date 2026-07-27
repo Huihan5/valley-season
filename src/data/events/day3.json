@@ -10,6 +10,7 @@
       "id": "investigate",
       "text": "深入调查",
       "description": "花一个时段仔细核对记录，追查这笔支出的来源",
+      "advancesPhase": true,
       "effects": {
         "flags": { "investigatedLedger": true },
         "logEntry": "你开始深入调查账本的异常记录。"
@@ -18,9 +19,10 @@
     {
       "id": "report",
       "text": "写信给冯·阿尔德男爵",
-      "description": "将账目异常上报，获得领主支持，但也暴露了你对庄园的不完全掌控",
+      "description": "将账目异常上报。你换来了上级的容错，也承认了自己对庄园并未完全掌控",
       "effects": {
-        "renown": 1,
+        "renown": -1,
+        "lordImpression": 1,
         "flags": { "reportedLedger": true },
         "logEntry": "你写信将账目异常上报给冯·阿尔德男爵。"
       }

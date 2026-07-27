@@ -1,5 +1,32 @@
 # Valley Season — Changelog
 
+## [2026-07-28] — v3 阶段二：新增系统与变量
+
+### Added
+- `src/systems/RelationSystem.ts` — 信任分层（GDD 5.5）。交谈性信任每 3 次 +1、上限 +2；行动性信任仍为一次性、可推至 +5。两层相加后钳制在 -5 至 +5。附带六档信任档位与 `countTrustAtLeast`
+- `src/systems/MarketSystem.ts` — 集市定价、单次运力上限、批量档位生成
+- `src/systems/FlagRegistry.ts` — `unlockForgeChapel`、`tookHenkDeal`、`admittedWantToStay`、`met_timothy`、`met_thierry`、`millridgeDealSigned` 的声明与写入方注记
+- `src/components/common/NameInput.tsx` — 全游戏唯一的文本输入组件，供 Day 0 担保书签名使用
+- `src/utils/text.ts` — `{playerName}` 占位符替换
+- `GameState` 新增 `playerName`、`conversations`、`nobleTrust`、`lordImpression`
+- `Choice.advancesPhase` — 单个选项可自行决定是否消耗时段
+- 粮食两级门槛常量与 `getGrainTier()`（留任线 75、优秀线 90）
+
+### Changed
+- **集市改为仅周六**（Day 6、13、20、27），交易量放开至单次 20 单位（粮食木材合计）。交易在同一下午内连续进行，"装车返程"才结束时段
+- 集市不再被狩猎季屏蔽，Day 20 由玩家在赶集与狩猎之间二选一
+- 疲劳：前往集市与前往猎场各 +1，集市交易当日 +1（不按笔计）。原猎场固定 +2 改为 +1
+- 谷火神殿不再是可访问地点，洛伦茨改到庄园炉堂出现
+- 庄园炉堂需 `unlockForgeChapel` 解锁（由阶段四的 Day 4 添柴事件写入）
+- 和玛莎、格雷格、洛伦茨交谈改为计入交谈次数，不再直接给行动性信任
+- Day 3 选项 A 现在真的消耗一个时段；选项 B 由声望 +1 改为声望 -1、领主印象 +1（GDD 5.6）
+- StatusPanel 关系条改读有效信任（两层之和），新增"处境"区显示贵族信任与领主印象
+
+### Tests
+115 passed（新增 `RelationSystem.test.ts`、`MarketSystem.test.ts`、`ResourceSystem.test.ts`）
+
+---
+
 ## [Unreleased] — GDD Revisions from Review Session
 
 ### Religion System Overhaul

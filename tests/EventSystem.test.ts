@@ -9,9 +9,13 @@ function makeState(overrides: Partial<GameState> = {}): GameState {
     day: 1,
     phase: 'morning',
     weather: 'sunny',
+    playerName: '',
     resources: { grain: 50, guldmark: 30, timber: 10, renown: 3 },
     fatigue: 0,
     relationships: { gregor: 0, marta: 0, lena: 0, elke: 0, henk: 0, lorenz: 0 },
+    conversations: { gregor: 0, marta: 0, lena: 0, elke: 0, henk: 0, lorenz: 0 },
+    nobleTrust: 0,
+    lordImpression: 0,
     flags: {},
     currentSceneText: '',
     currentChoices: [],
@@ -386,13 +390,29 @@ describe('getFreeChoices — afternoon choices', () => {
     expect(ids).toContain('talk_gregor');
   });
 
-  it('shows lorenz choice only after meeting at dinner', () => {
+  it('talking counts a conversation instead of handing out action trust', () => {
+    const choices = getFreeChoices(makeState({ phase: 'afternoon' }));
+    for (const id of ['talk_marta', 'talk_gregor']) {
+      const choice = choices.find(c => c.id === id);
+      expect(choice?.effects?.conversationWith).toBeDefined();
+      expect(choice?.effects?.relationships).toBeUndefined();
+    }
+  });
+
+  it('shows lorenz choice only after meeting at dinner and opening the forge-hall', () => {
     const without = getFreeChoices(makeState({ phase: 'afternoon' }));
     expect(without.find(c => c.id === 'visit_lorenz')).toBeUndefined();
 
-    const with_ = getFreeChoices(makeState({
+    // 谷火神殿 is gone in v3 — he comes to the manor's forge-hall, which Day 4 opens.
+    const dinnerOnly = getFreeChoices(makeState({
       phase: 'afternoon',
       flags: { metLorenzAtDinner: true },
+    }));
+    expect(dinnerOnly.find(c => c.id === 'visit_lorenz')).toBeUndefined();
+
+    const with_ = getFreeChoices(makeState({
+      phase: 'afternoon',
+      flags: { metLorenzAtDinner: true, unlockForgeChapel: true },
     }));
     expect(with_.find(c => c.id === 'visit_lorenz')).toBeDefined();
   });
@@ -452,7 +472,14 @@ describe('getFreeChoices — evening choices', () => {
     const ids = choices.map(c => c.id);
     expect(ids).toContain('rest');
     expect(ids).toContain('review_accounts');
-    expect(ids).toContain('visit_chapel');
+  });
+
+  it('opens the forge-hall only once the Day 4 hearth-feeding has happened', () => {
+    const before = getFreeChoices(makeState({ phase: 'evening' }));
+    expect(before.map(c => c.id)).not.toContain('visit_chapel');
+
+    const after = getFreeChoices(makeState({ phase: 'evening', flags: { unlockForgeChapel: true } }));
+    expect(after.map(c => c.id)).toContain('visit_chapel');
   });
 
   it('research_symbols absent without documentedSymbols flag', () => {
@@ -476,6 +503,20 @@ describe('Critical path — 霍特曼 investigation (Ending 5)', () => {
     const event = getFixedEvent(3, 'morning', makeState({ day: 3 }));
     const choice = event?.choices?.find(c => c.effects?.flags?.investigatedLedger);
     expect(choice).toBeDefined();
+  });
+
+  it('Day 3 is an insert event, but investigating costs the phase it claims to', () => {
+    const event = getFixedEvent(3, 'morning', makeState({ day: 3 }));
+    expect(event?.advancesPhase ?? false).toBe(false);
+    expect(event?.choices?.find(c => c.id === 'investigate')?.advancesPhase).toBe(true);
+    expect(event?.choices?.find(c => c.id === 'defer')?.advancesPhase).toBeUndefined();
+  });
+
+  it('Day 3 reporting upward trades renown for 领主印象', () => {
+    const event = getFixedEvent(3, 'morning', makeState({ day: 3 }));
+    const report = event?.choices?.find(c => c.id === 'report');
+    expect(report?.effects?.lordImpression).toBe(1);
+    expect(report?.effects?.renown).toBe(-1);
   });
 
   it('Day 15 event exists and has documentedSymbols choice', () => {

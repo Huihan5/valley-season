@@ -7,7 +7,18 @@ import {
   RENOWN_MIN,
   RENOWN_MAX,
   FATIGUE_TIRED_THRESHOLD,
+  GRAIN_RETAIN_THRESHOLD,
+  GRAIN_EXCELLENT_THRESHOLD,
 } from '../data/config';
+
+/** 未达留任线 / 留任线 / 优秀线 — the two numbers a player can work out for themselves (GDD ch.5.4). */
+export type GrainTier = 'short' | 'retain' | 'excellent';
+
+export function getGrainTier(grain: number): GrainTier {
+  if (grain < GRAIN_RETAIN_THRESHOLD) return 'short';
+  if (grain < GRAIN_EXCELLENT_THRESHOLD) return 'retain';
+  return 'excellent';
+}
 
 export function getHarvestYield(state: GameState): number {
   const flags = state.flags;

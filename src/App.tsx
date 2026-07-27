@@ -5,15 +5,20 @@ import { nextPhase, isDemoComplete } from './systems/TimeSystem';
 import { applyDailyOperatingCost, clampResources } from './systems/ResourceSystem';
 import { getFreeChoices, getFixedEvent } from './systems/EventSystem';
 import { determineEnding, getEndingData } from './systems/EndingSystem';
-import { INITIAL_RESOURCES, INITIAL_RELATIONSHIPS, RELATION_MIN, RELATION_MAX } from './data/config';
+import { adjustActionTrust, adjustNobleTrust, adjustLordImpression, recordConversation } from './systems/RelationSystem';
+import { INITIAL_FLAGS } from './systems/FlagRegistry';
+import { INITIAL_RESOURCES, INITIAL_RELATIONSHIPS } from './data/config';
+import { interpolate } from './utils/text';
 import ScenePanel from './components/ScenePanel';
 import StatusPanel from './components/StatusPanel';
 import ChoicePanel from './components/ChoicePanel';
+import NameInput from './components/common/NameInput';
 
 import locationsData from './data/scenes/locations.json';
 
 type Action =
   | { type: 'MAKE_CHOICE'; choiceId: string }
+  | { type: 'SET_PLAYER_NAME'; name: string }
   | { type: 'ADVANCE_DAY_EVENT' };
 
 function getSceneText(state: Omit<GameState, 'currentSceneText' | 'currentChoices'>, sceneKey?: string): string {
@@ -39,10 +44,21 @@ function applyEffects(state: GameState, effects: ChoiceEffects): GameState {
   if (effects.relationships) {
     const updatedRels = { ...next.relationships };
     for (const [npc, delta] of Object.entries(effects.relationships)) {
-      const cur = updatedRels[npc as NpcId] ?? 0;
-      updatedRels[npc as NpcId] = Math.max(RELATION_MIN, Math.min(RELATION_MAX, cur + (delta ?? 0)));
+      updatedRels[npc as NpcId] = adjustActionTrust(updatedRels[npc as NpcId] ?? 0, delta ?? 0);
     }
     next = { ...next, relationships: updatedRels };
+  }
+
+  if (effects.conversationWith) {
+    next = { ...next, conversations: recordConversation(next.conversations, effects.conversationWith) };
+  }
+
+  if (effects.nobleTrust) {
+    next = { ...next, nobleTrust: adjustNobleTrust(next.nobleTrust, effects.nobleTrust) };
+  }
+
+  if (effects.lordImpression) {
+    next = { ...next, lordImpression: adjustLordImpression(next.lordImpression, effects.lordImpression) };
   }
 
   if (effects.flags) {
@@ -61,11 +77,10 @@ function buildStateForPhase(state: GameState): GameState {
   const event = getFixedEvent(state.day, state.phase, state);
   if (event && !state.flags[`event_done_${event.id}`]) {
     const withEvent = { ...state, activeEvent: event, eventResolved: false };
-    const sceneText = event.sceneText;
     const choices: Choice[] = filterChoicesByFlags(event.choices ?? [], state.flags);
     return {
       ...applyEffects(withEvent, event.onEnterEffects ?? {}),
-      currentSceneText: sceneText,
+      currentSceneText: interpolate(event.sceneText, state),
       currentChoices: choices,
     };
   }
@@ -75,7 +90,7 @@ function buildStateForPhase(state: GameState): GameState {
     ...state,
     activeEvent: null,
     eventResolved: false,
-    currentSceneText: getSceneText(state),
+    currentSceneText: interpolate(getSceneText(state), state),
     currentChoices: choices,
   };
 }
@@ -88,10 +103,14 @@ function createInitialState(): GameState {
     day,
     phase,
     weather,
+    playerName: '',
     resources: { ...INITIAL_RESOURCES },
     fatigue: 0,
     relationships: { ...INITIAL_RELATIONSHIPS },
-    flags: {},
+    conversations: { gregor: 0, marta: 0, lena: 0, elke: 0, henk: 0, lorenz: 0 },
+    nobleTrust: 0,
+    lordImpression: 0,
+    flags: { ...INITIAL_FLAGS },
     activeEvent: null,
     eventResolved: false,
     log: [],
@@ -111,7 +130,7 @@ function gameReducer(state: GameState, action: Action): GameState {
       const effects = choice.effects ?? {};
       let next = applyEffects(state, effects);
 
-      const logEntry = effects.logEntry ?? choice.text;
+      const logEntry = interpolate(effects.logEntry ?? choice.text, next);
       next = {
         ...next,
         log: [...next.log, { day: state.day, phase: state.phase, text: logEntry }],
@@ -125,13 +144,20 @@ function gameReducer(state: GameState, action: Action): GameState {
 
       if (state.activeEvent) {
         const doneFlag = `event_done_${state.activeEvent.id}`;
-        const advancesPhase = state.activeEvent.advancesPhase ?? false;
+        // Insert events cost nothing; a choice may still charge a phase for itself.
+        const advancesPhase = choice.advancesPhase ?? state.activeEvent.advancesPhase ?? false;
         next = { ...next, flags: { ...next.flags, [doneFlag]: true }, activeEvent: null };
         return advancesPhase ? advancePhase(next) : buildStateForPhase(next);
       }
 
-      // Free choice: advance phase
-      return advancePhase(next);
+      // Free choices cost a phase unless they are steps within one (market trades).
+      return (choice.advancesPhase ?? true) ? advancePhase(next) : buildStateForPhase(next);
+    }
+
+    case 'SET_PLAYER_NAME': {
+      const name = action.name.trim();
+      if (!name) return state;
+      return buildStateForPhase({ ...state, playerName: name });
     }
 
     case 'ADVANCE_DAY_EVENT': {
@@ -197,6 +223,11 @@ export default function App() {
   // Day 1 has no choices — auto-show "continue" logic via ADVANCE_DAY_EVENT
   const isNarrativeOnly = state.activeEvent !== null && state.activeEvent.choices === null;
 
+  // An event may ask for the signature before its choices become available.
+  const pendingInput = state.activeEvent?.textInput && !state.playerName
+    ? state.activeEvent.textInput
+    : null;
+
   useEffect(() => {
     document.title = `河谷季 · 第${state.day}日`;
   }, [state.day]);
@@ -227,6 +258,11 @@ export default function App() {
             重新开始
           </button>
         </div>
+      ) : pendingInput ? (
+        <NameInput
+          spec={pendingInput}
+          onSubmit={(name) => dispatch({ type: 'SET_PLAYER_NAME', name })}
+        />
       ) : isNarrativeOnly ? (
         <div className="bg-bg-card border border-game-border rounded-sm px-4 py-3 flex justify-center">
           <button

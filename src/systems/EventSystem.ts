@@ -3,8 +3,12 @@ import { canHarvest, canFellTimber } from './WeatherSystem';
 import { getHarvestYield, getTimberYield } from './ResourceSystem';
 import { isMarketDay, getDayOfWeek } from './TimeSystem';
 import {
-  MARKET_GRAIN_SELL_IN, MARKET_GRAIN_SELL_OUT,
-  MARKET_TIMBER_SELL_IN, MARKET_TIMBER_SELL_OUT,
+  marketSoldKey, getUnitsSoldToday, getCapacityLeft,
+  getGrainRevenue, getTimberRevenue, getTimberUnitPrice, getSellLots,
+} from './MarketSystem';
+import {
+  MARKET_TRANSPORT_CAP, MARKET_GRAIN_PRICE,
+  OUTING_FATIGUE, MARKET_TRADE_FATIGUE,
 } from '../data/config';
 
 import day1Data from '../data/events/day1.json';
@@ -173,54 +177,69 @@ export function getFixedEvent(day: number, phase: DayPhase, state: GameState): E
   return raw;
 }
 
+// Trading happens inside the afternoon at the market: each sale keeps the phase open
+// until the player carts up and leaves, or fills the cart.
 function getMarketAfternoonChoices(state: GameState): Choice[] {
   const { day, flags, resources } = state;
-  const firstVisit = !flags.marketFirstVisitDone;
-  const renownBonus = firstVisit ? 1 : 0;
-  const visitedFlag = `visitedMarket_day${day}`;
+  const soldSoFar = getUnitsSoldToday(state);
+  const capacityLeft = getCapacityLeft(state);
+  const soldKey = marketSoldKey(day);
+  const firstTradeToday = soldSoFar === 0;
+  const renownBonus = !flags.marketFirstVisitDone ? 1 : 0;
+  const timberPrice = getTimberUnitPrice(state);
   const choices: Choice[] = [];
 
-  choices.push({
-    id: 'market_sell_grain',
-    text: '出售粮食',
-    description: resources.grain >= MARKET_GRAIN_SELL_IN
-      ? `出售${MARKET_GRAIN_SELL_IN}单位粮食，获得${MARKET_GRAIN_SELL_OUT}金卢（集市价 1.5金卢/单位）`
-      : `出售${MARKET_GRAIN_SELL_IN}单位粮食，获得${MARKET_GRAIN_SELL_OUT}金卢——当前储备不足`,
-    effects: {
-      grain: -MARKET_GRAIN_SELL_IN,
-      guldmark: MARKET_GRAIN_SELL_OUT,
-      ...(renownBonus ? { renown: renownBonus } : {}),
-      flags: { marketFirstVisitDone: true, [visitedFlag]: true },
-      logEntry: '你在集市将一批粮食卖了出去，价格比经纪人渠道高出不少。',
-    },
-    disabled: resources.grain < MARKET_GRAIN_SELL_IN,
-    disabledReason: `粮食不足（需要${MARKET_GRAIN_SELL_IN}单位）`,
+  const tradeEffects = (units: number) => ({
+    // 集市交易本身 +1 疲劳，每日一次，不按笔计
+    fatigue: firstTradeToday ? MARKET_TRADE_FATIGUE : 0,
+    ...(renownBonus ? { renown: renownBonus } : {}),
+    flags: { marketFirstVisitDone: true, [soldKey]: soldSoFar + units },
   });
 
-  choices.push({
-    id: 'market_sell_timber',
-    text: '出售木材',
-    description: resources.timber >= MARKET_TIMBER_SELL_IN
-      ? `出售${MARKET_TIMBER_SELL_IN}单位木材，获得${MARKET_TIMBER_SELL_OUT}金卢（集市价 3金卢/单位）`
-      : `出售${MARKET_TIMBER_SELL_IN}单位木材，获得${MARKET_TIMBER_SELL_OUT}金卢——当前储备不足`,
-    effects: {
-      timber: -MARKET_TIMBER_SELL_IN,
-      guldmark: MARKET_TIMBER_SELL_OUT,
-      ...(renownBonus ? { renown: renownBonus } : {}),
-      flags: { marketFirstVisitDone: true, [visitedFlag]: true },
-      logEntry: '你在集市出售了木材，价格比驻地经纪人高出许多。',
-    },
-    disabled: resources.timber < MARKET_TIMBER_SELL_IN,
-    disabledReason: `木材不足（需要${MARKET_TIMBER_SELL_IN}单位）`,
-  });
+  for (const lot of getSellLots(resources.grain, capacityLeft)) {
+    choices.push({
+      id: `market_sell_grain_${lot}`,
+      text: `出售粮食 ${lot} 单位`,
+      description: `换得 ${getGrainRevenue(lot)} 金卢（集市价 ${MARKET_GRAIN_PRICE} 金卢/单位）`,
+      effects: {
+        grain: -lot,
+        guldmark: getGrainRevenue(lot),
+        ...tradeEffects(lot),
+        logEntry: `你在集市卖出 ${lot} 单位粮食，换得 ${getGrainRevenue(lot)} 金卢。`,
+      },
+      advancesPhase: false,
+    });
+  }
+
+  for (const lot of getSellLots(resources.timber, capacityLeft)) {
+    choices.push({
+      id: `market_sell_timber_${lot}`,
+      text: `出售木材 ${lot} 单位`,
+      description: `换得 ${getTimberRevenue(state, lot)} 金卢（集市价 ${timberPrice} 金卢/单位）`,
+      effects: {
+        timber: -lot,
+        guldmark: getTimberRevenue(state, lot),
+        ...tradeEffects(lot),
+        logEntry: `你在集市卖出 ${lot} 单位木材，换得 ${getTimberRevenue(state, lot)} 金卢。`,
+      },
+      advancesPhase: false,
+    });
+  }
+
+  const capacityNote = capacityLeft > 0
+    ? `马车还能装 ${capacityLeft} 单位（单次运力上限 ${MARKET_TRANSPORT_CAP}）`
+    : `马车已装满（单次运力上限 ${MARKET_TRANSPORT_CAP}）`;
 
   choices.push({
-    id: 'market_browse_only',
-    text: '转一圈，不交易',
-    description: '了解市场行情，或许能听到些有用的消息',
+    id: 'market_finish',
+    text: soldSoFar > 0 ? '装车返程' : '转一圈，不交易',
+    description: soldSoFar > 0
+      ? `今日已出手 ${soldSoFar} 单位。${capacityNote}`
+      : '了解市场行情，或许能听到些有用的消息',
     effects: {
-      flags: { [visitedFlag]: true },
-      logEntry: '你在集市转了一圈，听了些闲言碎语，没有进行交易。',
+      logEntry: soldSoFar > 0
+        ? '你结清了今天的账，把空车赶回枫径。'
+        : '你在集市转了一圈，听了些闲言碎语，没有进行交易。',
     },
   });
 
@@ -309,13 +328,16 @@ export function getFreeChoices(state: GameState): Choice[] {
       });
     }
 
-    if (isMarketDay(day) && !flags[`visitedMarket_day${day}`] && !inHuntSeason) {
+    // Hunt season does not lock the market out: Day 20 is a Saturday, and giving up
+    // that day's hunt to make the trip is a choice the player is allowed to make.
+    if (isMarketDay(day) && !flags[`visitedMarket_day${day}`]) {
       choices.push({
         id: 'go_to_market',
         text: `前往集市（${getDayOfWeek(day)}）`,
-        description: '往返占用上午+下午两个时段，可在集市出售粮食或木材',
+        description: `往返占用上午与下午两个时段，单次运力上限 ${MARKET_TRANSPORT_CAP} 单位`,
         effects: {
-          flags: { visitingMarketToday: day },
+          fatigue: OUTING_FATIGUE,
+          flags: { visitingMarketToday: day, [`visitedMarket_day${day}`]: true },
           nextScene: 'market',
           logEntry: '你出发前往河谷城集市，上午的路上有些风，但天气不算差。',
         },
@@ -328,9 +350,9 @@ export function getFreeChoices(state: GameState): Choice[] {
       choices.push({
         id: `attend_hunt_day${day}`,
         text: '出席今日猎场',
-        description: '疲劳消耗加倍，午后将触发猎场事件',
+        description: '往返占用上午与下午两个时段，午后将触发猎场事件',
         effects: {
-          fatigue: 2,
+          fatigue: OUTING_FATIGUE,
           flags: { [`huntAttendedDay${day}`]: true },
           nextScene: 'forest',
           logEntry: '你骑马前往公国猎场，加入今日的狩猎队伍。',
@@ -351,7 +373,7 @@ export function getFreeChoices(state: GameState): Choice[] {
         ? '玛莎最近话比以前多了——这是信任的表现'
         : '了解庄园内部动态，玛莎知道所有事',
       effects: {
-        relationships: { marta: 1 },
+        conversationWith: 'marta',
         nextScene: 'kitchen',
         logEntry: '你和玛莎在厨房聊了一会儿。',
       },
@@ -362,26 +384,28 @@ export function getFreeChoices(state: GameState): Choice[] {
       text: '去马厩找格雷格',
       description: '他在庄园里待了三十年，但话不多',
       effects: {
-        relationships: { gregor: 1 },
+        conversationWith: 'gregor',
         nextScene: 'stable',
         logEntry: '你去马厩和格雷格待了一段时间。',
       },
     });
 
-    if (flags.metLorenzAtDinner) {
+    // v3: 谷火神殿 is no longer a place you can go. 洛伦茨 comes to the manor's forge-hall,
+    // which itself only opens after the Day 4 hearth-feeding.
+    if (flags.metLorenzAtDinner && flags.unlockForgeChapel) {
       choices.push({
         id: 'visit_lorenz',
-        text: '去神殿拜访洛伦茨',
+        text: '去炉堂见洛伦茨',
         description: flags.lorenzFirstVisitDone
           ? '洛伦茨总是有时间说几句话'
           : '晚宴上他欲言又止，今天也许能说完那半句话',
         effects: {
-          relationships: { lorenz: 1 },
+          conversationWith: 'lorenz',
           flags: { lorenzFirstVisitDone: true },
           nextScene: 'forge_chapel',
           logEntry: flags.lorenzFirstVisitDone
-            ? '洛伦茨在神殿接待了你。你们在炉膛边又坐了一会儿。'
-            : '洛伦茨在神殿接待了你。他泡了两杯茶，先喝了很长时间才开口。"霍特曼在走之前来找过我，"他说，"他烧了一些东西。我没有拦他。"',
+            ? '洛伦茨在炉堂接待了你。你们在炉膛边又坐了一会儿。'
+            : '洛伦茨在炉堂接待了你。他泡了两杯茶，先喝了很长时间才开口。"霍特曼在走之前来找过我，"他说，"他烧了一些东西。我没有拦他。"',
         },
       });
     }
@@ -467,18 +491,20 @@ export function getFreeChoices(state: GameState): Choice[] {
       });
     }
 
-    choices.push({
-      id: 'visit_chapel',
-      text: '前往庄园炉堂',
-      description: state.fatigue >= 3
-        ? '守火冥想，恢复精力（疲劳归零）'
-        : '守火冥想，但你现在还不觉得需要',
-      effects: {
-        fatigue: state.fatigue >= 3 ? -99 : 0,
-        nextScene: 'forge_chapel',
-        logEntry: '你在庄园炉堂守火冥想了片刻。',
-      },
-    });
+    if (flags.unlockForgeChapel) {
+      choices.push({
+        id: 'visit_chapel',
+        text: '前往庄园炉堂',
+        description: state.fatigue >= 3
+          ? '守火冥想，恢复精力（疲劳归零）'
+          : '守火冥想，但你现在还不觉得需要',
+        effects: {
+          fatigue: state.fatigue >= 3 ? -99 : 0,
+          nextScene: 'forge_chapel',
+          logEntry: '你在庄园炉堂守火冥想了片刻。',
+        },
+      });
+    }
 
     choices.push({
       id: 'rest',

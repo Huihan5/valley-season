@@ -17,16 +17,14 @@ describe('TimeSystem', () => {
     expect(result).toEqual({ day: 2, phase: 'morning', newDay: true });
   });
 
-  it('marks Wednesday (day 3) as market day', () => {
-    expect(isMarketDay(3)).toBe(true);
+  it('marks every Saturday as a market day — and only those four', () => {
+    const marketDays = Array.from({ length: 30 }, (_, i) => i + 1).filter(isMarketDay);
+    expect(marketDays).toEqual([6, 13, 20, 27]);
   });
 
-  it('marks Saturday (day 6) as market day', () => {
-    expect(isMarketDay(6)).toBe(true);
-  });
-
-  it('does not mark Monday (day 1) as market day', () => {
-    expect(isMarketDay(1)).toBe(false);
+  it('no longer treats Wednesday as a market day', () => {
+    expect(isMarketDay(3)).toBe(false);
+    expect(isMarketDay(10)).toBe(false);
   });
 
   it('getDayOfWeek cycles correctly', () => {

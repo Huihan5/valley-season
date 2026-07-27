@@ -27,15 +27,19 @@ export function nextPhase(day: number, phase: DayPhase): { day: number; phase: D
   return { day: day + 1, phase: 'morning', newDay: true };
 }
 
+/** 1=Mon … 7=Sun. Day 1 is 2018-10-01, a Monday (GDD ch.5.2). */
+export function getWeekdayNumber(day: number): number {
+  return ((day - 1) % 7) + 1;
+}
+
+/** v3: the market runs Saturdays only — Day 6, 13, 20, 27. */
 export function isMarketDay(day: number): boolean {
-  // Market opens Wednesday and Saturday. Day 1 = Monday (Day 3 = Wed, Day 6 = Sat, Day 10 = Wed...)
-  const dayOfWeek = ((day - 1) % 7) + 1; // 1=Mon, 2=Tue, 3=Wed, 4=Thu, 5=Fri, 6=Sat, 7=Sun
-  return dayOfWeek === 3 || dayOfWeek === 6;
+  return getWeekdayNumber(day) === 6;
 }
 
 export function getDayOfWeek(day: number): string {
   const labels = ['', '周一', '周二', '周三', '周四', '周五', '周六', '周日'];
-  return labels[((day - 1) % 7) + 1];
+  return labels[getWeekdayNumber(day)];
 }
 
 export function isDemoComplete(day: number): boolean {
