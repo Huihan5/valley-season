@@ -53,7 +53,7 @@ function processDay12(event: EventData, state: GameState): EventData {
   } else if (state.flags.reportedLedger) {
     choices[0] = {
       ...choices[0],
-      description: '你已向男爵报告过异常。Kessler或许已知情——主动开口比被追问更好。',
+      description: '你已向男爵报告过异常。凯斯勒或许已知情——主动开口比被追问更好。',
     };
   } else if (state.flags.deferredLedger) {
     choices[0] = {
@@ -63,7 +63,7 @@ function processDay12(event: EventData, state: GameState): EventData {
     };
     choices[2] = {
       ...choices[2],
-      description: '争取时间——但你没有更多可以准备的了，而Kessler对拖延很敏感。',
+      description: '争取时间——但你没有更多可以准备的了，而凯斯勒对拖延很敏感。',
       effects: { ...choices[2].effects, renown: -2 },
     };
   }
@@ -78,15 +78,15 @@ function processDay22Estate(event: EventData, state: GameState): EventData {
   return {
     ...event,
     title: '猎场归来',
-    sceneText: '你从猎场回来，脑子里还在想那个自称学者的人。进厨房拿水时，Marta看了你一眼："你今天遇到了什么？脸色不太对。"',
+    sceneText: '你从猎场回来，脑子里还在想那个自称学者的人。进厨房拿水时，玛莎看了你一眼："你今天遇到了什么？脸色不太对。"',
     choices: [
       {
         id: 'tell_marta_traveler',
-        text: '跟Marta说说那个旅人',
+        text: '跟玛莎说说那个旅人',
         description: '把疑虑说出来，听听她的看法',
         effects: {
           relationships: { marta: 1 },
-          logEntry: 'Marta听完后沉默了一会儿，说："Hartmann也问过我关于林地的事，就在他走之前。"',
+          logEntry: '玛莎听完后沉默了一会儿，说："霍特曼也问过我关于林地的事，就在他走之前。"',
         },
       },
       {
@@ -136,7 +136,7 @@ function processDay30(event: EventData, state: GameState): EventData {
 
   let summary = '';
   if (state.flags.travelerDialogueCorrect) {
-    summary = '在所有的事务之外，你发现了某件庄园本身不知道的事——那个叫Aldric的学者，还有他问你的那些问题。也许这才是这三十天里最重要的部分。';
+    summary = '在所有的事务之外，你发现了某件庄园本身不知道的事——那个叫维特的学者，还有他问你的那些问题。也许这才是这三十天里最重要的部分。';
   } else if (renown >= 6) {
     summary = '三十天后，枫径庄园的名字在河谷一带多了几分分量。这不是单靠账簿能做到的。';
   } else if (grain >= 110 && guldmark >= 30) {
@@ -284,7 +284,7 @@ export function getFreeChoices(state: GameState): Choice[] {
       id: 'visit_office',
       text: '处理办公室文书',
       description: ledgerResolved
-        ? '整理日常文书，处理Hartmann留下的文件堆'
+        ? '整理日常文书，处理霍特曼留下的文件堆'
         : '整理账目和文件，可能发现有用信息',
       effects: {
         fatigue: 0,
@@ -346,42 +346,42 @@ export function getFreeChoices(state: GameState): Choice[] {
   if (phase === 'afternoon') {
     choices.push({
       id: 'talk_marta',
-      text: '和Marta聊聊',
+      text: '和玛莎聊聊',
       description: flags.repairedAllHousing
-        ? 'Marta最近话比以前多了——这是信任的表现'
-        : '了解庄园内部动态，Marta知道所有事',
+        ? '玛莎最近话比以前多了——这是信任的表现'
+        : '了解庄园内部动态，玛莎知道所有事',
       effects: {
         relationships: { marta: 1 },
         nextScene: 'kitchen',
-        logEntry: '你和Marta在厨房聊了一会儿。',
+        logEntry: '你和玛莎在厨房聊了一会儿。',
       },
     });
 
     choices.push({
       id: 'talk_gregor',
-      text: '去马厩找Gregor',
+      text: '去马厩找格雷格',
       description: '他在庄园里待了三十年，但话不多',
       effects: {
         relationships: { gregor: 1 },
         nextScene: 'stable',
-        logEntry: '你去马厩和Gregor待了一段时间。',
+        logEntry: '你去马厩和格雷格待了一段时间。',
       },
     });
 
     if (flags.metLorenzAtDinner) {
       choices.push({
         id: 'visit_lorenz',
-        text: '去神殿拜访Lorenz',
+        text: '去神殿拜访洛伦茨',
         description: flags.lorenzFirstVisitDone
-          ? 'Lorenz总是有时间说几句话'
+          ? '洛伦茨总是有时间说几句话'
           : '晚宴上他欲言又止，今天也许能说完那半句话',
         effects: {
           relationships: { lorenz: 1 },
           flags: { lorenzFirstVisitDone: true },
           nextScene: 'forge_chapel',
           logEntry: flags.lorenzFirstVisitDone
-            ? 'Lorenz在神殿接待了你。你们在炉膛边又坐了一会儿。'
-            : 'Lorenz在神殿接待了你。他泡了两杯茶，先喝了很长时间才开口。"Hartmann在走之前来找过我，"他说，"他烧了一些东西。我没有拦他。"',
+            ? '洛伦茨在神殿接待了你。你们在炉膛边又坐了一会儿。'
+            : '洛伦茨在神殿接待了你。他泡了两杯茶，先喝了很长时间才开口。"霍特曼在走之前来找过我，"他说，"他烧了一些东西。我没有拦他。"',
         },
       });
     }
@@ -443,7 +443,7 @@ export function getFreeChoices(state: GameState): Choice[] {
     choices.push({
       id: 'review_accounts',
       text: '夜间审查账目',
-      description: '油灯下细看Hartmann的记录',
+      description: '油灯下细看霍特曼的记录',
       effects: {
         fatigue: 1,
         nextScene: 'office',
@@ -455,12 +455,12 @@ export function getFreeChoices(state: GameState): Choice[] {
       choices.push({
         id: 'research_symbols',
         text: '翻查庄园旧档案',
-        description: '林地橡树上的符号或许在Hartmann的旧文件里有记载',
+        description: '林地橡树上的符号或许在霍特曼的旧文件里有记载',
         effects: {
           fatigue: 1,
           flags: { researchedSymbols: true },
           nextScene: 'office',
-          logEntry: '你在灯下翻查旧档案，寻找关于林地符号的线索。Hartmann的文件里有一页被撕去了——撕痕很整齐，像是被人有意为之。',
+          logEntry: '你在灯下翻查旧档案，寻找关于林地符号的线索。霍特曼的文件里有一页被撕去了——撕痕很整齐，像是被人有意为之。',
         },
         disabled: exhausted,
         disabledReason: exhausted ? '你过于疲惫' : undefined,

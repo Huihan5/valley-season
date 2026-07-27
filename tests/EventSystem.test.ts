@@ -128,7 +128,7 @@ describe('getFixedEvent — activationFlag', () => {
   });
 });
 
-// ── processDay12: Kessler audit branching ──────────────────────────────────
+// ── processDay12: 凯斯勒 audit branching ──────────────────────────────────
 
 describe('getFixedEvent — Day 12 processDay12', () => {
   it('with investigatedLedger: first choice gets renown bonus', () => {
@@ -145,7 +145,7 @@ describe('getFixedEvent — Day 12 processDay12', () => {
       12, 'morning',
       makeState({ day: 12, flags: { reportedLedger: true } })
     );
-    expect(event?.choices?.[0].description).toContain('Kessler');
+    expect(event?.choices?.[0].description).toContain('凯斯勒');
     expect(event?.choices?.[0].disabled).toBeFalsy();
   });
 
@@ -239,7 +239,7 @@ describe('getFixedEvent — Day 23 letter assembly', () => {
   it('contains opening and closing text', () => {
     const event = getFixedEvent(23, 'morning', makeState({ day: 23 }));
     expect(event?.sceneText).toContain('枫径庄园 管事亲启');
-    expect(event?.sceneText).toContain('Vanessa de Valenne');
+    expect(event?.sceneText).toContain('瓦妮莎·德·瓦莱恩');
   });
 
   it('sceneText is not the placeholder [GENERATED]', () => {
@@ -277,7 +277,7 @@ describe('getFixedEvent — Day 30 evening processDay30', () => {
       30, 'evening',
       makeState({ day: 30, flags: { travelerDialogueCorrect: true } })
     );
-    expect(event?.sceneText).toContain('Aldric');
+    expect(event?.sceneText).toContain('维特');
   });
 
   it('high renown produces community summary', () => {
@@ -469,9 +469,9 @@ describe('getFreeChoices — evening choices', () => {
   });
 });
 
-// ── Critical path: Hartmann investigation chain ────────────────────────────
+// ── Critical path: 霍特曼 investigation chain ────────────────────────────
 
-describe('Critical path — Hartmann investigation (Ending 5)', () => {
+describe('Critical path — 霍特曼 investigation (Ending 5)', () => {
   it('Day 3 event exists and has investigatedLedger choice', () => {
     const event = getFixedEvent(3, 'morning', makeState({ day: 3 }));
     const choice = event?.choices?.find(c => c.effects?.flags?.investigatedLedger);

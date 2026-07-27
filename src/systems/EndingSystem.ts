@@ -17,7 +17,7 @@ export function determineEnding(state: GameState): EndingId {
 
   const deepTrustCount = Object.values(relationships).filter(v => v >= 3).length;
 
-  // Hartmann chain: all four nodes must be completed
+  // 霍特曼 chain: all four nodes must be completed
   // Note: travelerDialogueCorrect set by Day 22 event (not yet written)
   const hartmannChainComplete = !!(
     flags.investigatedLedger &&

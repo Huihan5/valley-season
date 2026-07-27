@@ -4,12 +4,12 @@ import { getFatigueLabel, getFatigueEffect } from '../../systems/FatigueSystem';
 import { getDayOfWeek, isMarketDay } from '../../systems/TimeSystem';
 
 const NPC_NAMES: Record<NpcId, string> = {
-  gregor: 'Gregor',
-  marta: 'Marta',
-  lena: 'Lena',
-  elke: 'Baroness Elke',
-  henk: 'Baron Henk',
-  lorenz: 'Master Lorenz',
+  gregor: '格雷格',
+  marta: '玛莎',
+  lena: '埃莱娜',
+  elke: '玛格丽特男爵夫人',
+  henk: '亨克男爵',
+  lorenz: '洛伦茨匠师',
 };
 
 interface Props {
