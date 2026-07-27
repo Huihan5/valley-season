@@ -28,6 +28,8 @@ function makeState(overrides: Partial<GameState> = {}): GameState {
     lordImpression: 0,
     flags: { visitingMarketToday: 6 },
     currentSceneText: '',
+    currentScene: 'default',
+    lastResult: null,
     currentChoices: [],
     activeEvent: null,
     eventResolved: false,
@@ -134,11 +136,25 @@ describe('market afternoon choices', () => {
     expect(lot10?.effects?.flags?.[marketSoldKey(6)]).toBe(14);
   });
 
-  it('leaves only the departure option once the cart is full', () => {
+  it('leaves nothing to sell once the cart is full', () => {
     const choices = getFreeChoices(makeState({
-      flags: { visitingMarketToday: 6, [marketSoldKey(6)]: MARKET_TRANSPORT_CAP },
+      flags: {
+        visitingMarketToday: 6,
+        marketRumours_day6: true,
+        [marketSoldKey(6)]: MARKET_TRANSPORT_CAP,
+      },
     }));
     expect(choices.map(c => c.id)).toEqual(['market_finish']);
+  });
+
+  it('offers the queue-side rumours once per market day', () => {
+    const first = getFreeChoices(makeState());
+    expect(first.some(c => c.id === 'market_listen')).toBe(true);
+
+    const again = getFreeChoices(makeState({
+      flags: { visitingMarketToday: 6, marketRumours_day6: true },
+    }));
+    expect(again.some(c => c.id === 'market_listen')).toBe(false);
   });
 
   it('grants the first-trade renown bonus only once across the season', () => {

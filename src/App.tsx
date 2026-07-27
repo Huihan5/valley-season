@@ -7,6 +7,10 @@ import { getFreeChoices, getFixedEvent } from './systems/EventSystem';
 import { determineEnding, getEndingData } from './systems/EndingSystem';
 import { adjustActionTrust, adjustNobleTrust, adjustLordImpression, recordConversation } from './systems/RelationSystem';
 import { INITIAL_FLAGS } from './systems/FlagRegistry';
+import {
+  getLocationBase, getWeatherLine, getAmbient, shouldPlayAmbient,
+  getActionResult, getGreeting,
+} from './systems/SceneSystem';
 import { INITIAL_RESOURCES, INITIAL_RELATIONSHIPS } from './data/config';
 import { interpolate } from './utils/text';
 import ScenePanel from './components/ScenePanel';
@@ -14,18 +18,25 @@ import StatusPanel from './components/StatusPanel';
 import ChoicePanel from './components/ChoicePanel';
 import NameInput from './components/common/NameInput';
 
-import locationsData from './data/scenes/locations.json';
 
 type Action =
   | { type: 'MAKE_CHOICE'; choiceId: string }
   | { type: 'SET_PLAYER_NAME'; name: string }
   | { type: 'ADVANCE_DAY_EVENT' };
 
-function getSceneText(state: Omit<GameState, 'currentSceneText' | 'currentChoices'>, sceneKey?: string): string {
-  const key = sceneKey ?? 'default';
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const scenes = locationsData as any;
-  return scenes[key]?.[state.phase] ?? scenes.default[state.phase];
+/**
+ * The layered scene: location base for the current act, then a weather line, then —
+ * rarely, and only on a quiet day — one 闲笔 that leads nowhere on purpose.
+ */
+function composeScene(state: GameState, sceneKey: string): string {
+  const layers = [
+    getLocationBase(state, sceneKey),
+    getWeatherLine(state.weather, Math.random),
+  ];
+  if (shouldPlayAmbient(state, Math.random)) {
+    layers.push(getAmbient(sceneKey, Math.random));
+  }
+  return layers.filter(Boolean).join('\n\n');
 }
 
 function applyEffects(state: GameState, effects: ChoiceEffects): GameState {
@@ -85,13 +96,11 @@ function buildStateForPhase(state: GameState): GameState {
     };
   }
 
-  const choices = getFreeChoices(state);
+  const free = { ...state, activeEvent: null, eventResolved: false };
   return {
-    ...state,
-    activeEvent: null,
-    eventResolved: false,
-    currentSceneText: interpolate(getSceneText(state), state),
-    currentChoices: choices,
+    ...free,
+    currentSceneText: interpolate(composeScene(free, free.currentScene), state),
+    currentChoices: getFreeChoices(free),
   };
 }
 
@@ -111,6 +120,8 @@ function createInitialState(): GameState {
     nobleTrust: 0,
     lordImpression: 0,
     flags: { ...INITIAL_FLAGS },
+    currentScene: 'default',
+    lastResult: null,
     activeEvent: null,
     eventResolved: false,
     log: [],
@@ -129,6 +140,20 @@ function gameReducer(state: GameState, action: Action): GameState {
 
       const effects = choice.effects ?? {};
       let next = applyEffects(state, effects);
+
+      // What the player sees happened: an action's result text, or the greeting of
+      // whoever they went to see. Trust is read after the visit is recorded.
+      let result: string | null = null;
+      if (choice.resultKind) {
+        result = getActionResult(choice.resultKind, Math.random, choice.resultVars);
+      } else if (effects.conversationWith) {
+        result = getGreeting(next, effects.conversationWith, Math.random);
+      }
+      next = {
+        ...next,
+        lastResult: result,
+        currentScene: effects.nextScene ?? next.currentScene,
+      };
 
       const logEntry = interpolate(effects.logEntry ?? choice.text, next);
       next = {
@@ -199,7 +224,8 @@ function advancePhase(state: GameState): GameState {
 
   if (isDayChange) {
     const weather = generateWeather(newDay);
-    next = { ...next, weather };
+    // A new day starts back at the manor, with yesterday's result cleared away.
+    next = { ...next, weather, currentScene: 'default', lastResult: null };
     next = { ...next, resources: applyDailyOperatingCost(next.resources) };
     next = { ...next, resources: clampResources(next.resources) };
     // Exhausted: forced rest morning

@@ -1,5 +1,33 @@
 # Valley Season — Changelog
 
+## [2026-07-28] — v3 阶段三：可重复文本迁入
+
+全部文本来自 `NARRATIVE_DRAFTS.md` 第 01、03 节与 4.9.2，逐字迁入，未改措辞。
+
+### Added
+- `src/data/dialogue/greetings.json` — 招呼语 48 条（4 名常驻 NPC × 6 档 × 2 变体）
+- `src/data/scenes/weather_lines.json` — 天气插入句 25 条
+- `src/data/scenes/action_results.json` — 行动结果文本 8 类 × 3 变体
+- `src/data/scenes/ambient.json` — 闲笔 15 条
+- `src/data/scenes/rumors.json` — 四层流言池，含集市排队的衔接段落
+- `src/systems/SceneSystem.ts` — 场景分层组装、幕次判定、招呼语与结果文本取用、流言抽取
+- `GameState.currentScene` 与 `GameState.lastResult`；`Choice.resultKind` / `resultVars`
+
+### Changed
+- `locations.json` 重构为 `label + act1/act2/act3`，补入第二、三幕各 18 条变体
+- 按草稿 3.7 做了三处修正：厨房上午删去玛莎台词、炉堂晚间按已获碎片数切换两个版本、马厩把格雷格拆成可插拔的一句
+- 场景文本改为分层组装：地点基底（按幕）+ 天气插入句 +（少量）闲笔
+- 行动结果不再只进日志，改为在 ScenePanel 顶部单独成块显示（PlaytestFeedback 1.a）
+- 收割与采伐的预估改为等级制"微薄 / 尚可 / 丰厚"，实际数值在结果文本中揭示（PlaytestFeedback 4.b）
+- 交谈选项改为播放对应信任档位的招呼语
+- 采伐现在累计本季额度并在选项上显示剩余
+- 修复：`nextScene` 此前从未生效，场景永远显示"默认"。现按玩家所在地点取用
+
+### Tests
+147 passed（新增 `SceneSystem.test.ts` 31 项）
+
+---
+
 ## [2026-07-28] — v3 阶段二：新增系统与变量
 
 ### Added

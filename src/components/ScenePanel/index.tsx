@@ -7,7 +7,7 @@ interface Props {
 }
 
 export default function ScenePanel({ state }: Props) {
-  const { day, phase, activeEvent, currentSceneText, log } = state;
+  const { day, phase, activeEvent, currentSceneText, lastResult, log } = state;
 
   return (
     <div className="flex flex-col h-full bg-bg-card border border-game-border rounded-sm overflow-hidden">
@@ -26,8 +26,15 @@ export default function ScenePanel({ state }: Props) {
         )}
       </div>
 
-      {/* Main scene text */}
-      <div className="flex-1 overflow-y-auto px-5 py-4">
+      {/* What just happened, then where you now are */}
+      <div className="flex-1 overflow-y-auto px-5 py-4 space-y-4">
+        {lastResult && !activeEvent && (
+          <div className="border-l-2 border-gold-dim pl-4">
+            <p className="text-cream font-serif text-sm leading-relaxed whitespace-pre-line">
+              {lastResult}
+            </p>
+          </div>
+        )}
         <p className="text-game-text font-serif text-sm leading-relaxed whitespace-pre-line">
           {currentSceneText}
         </p>

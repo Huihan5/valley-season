@@ -39,6 +39,9 @@ export const WEATHER_HARVEST_MOD: Record<string, number> = {
 // Timber per harvest phase
 export const TIMBER_YIELD = 3;
 
+// Seasonal felling quota set by ducal decree (GDD ch.5.4). Exceeding it costs renown.
+export const TIMBER_SEASON_QUOTA = 25;
+
 // Daily guldmark operating cost (auto-deducted each morning)
 export const DAILY_GULDMARK_COST = 2;
 
@@ -116,6 +119,26 @@ export const PHASE_COST_ACTION = 1;
 export const PHASE_COST_OUTING = 2;
 export const OUTING_FATIGUE = 1;        // 前往集市 / 前往猎场
 export const MARKET_TRADE_FATIGUE = 1;  // 集市交易本身，每日一次
+
+// ── 三幕结构 (GDD ch.7) ─────────────────────────────────────────────────────
+// Act one uses the location bases as written; acts two and three swap in variants
+// that differ only by how far the season has moved, never by what has happened.
+export const ACT_TWO_START = 11;
+export const ACT_THREE_START = 23;
+
+// ── 场景层 (GDD ch.13.1) ────────────────────────────────────────────────────
+// 闲笔 stay rare on purpose: two or three a week, never a reward, never a lead.
+export const AMBIENT_CHANCE = 0.18;
+// The forge-hall's evening line poses a question about 霍特曼; past this many clues
+// the player already knows the answer, so the line switches to its settled version.
+export const CHAPEL_INFORMED_CLUE_COUNT = 2;
+export const MARKET_RUMOURS_MIN = 2;
+export const MARKET_RUMOURS_MAX = 3;
+
+// Tiered estimates replace exact numbers on action buttons (PlaytestFeedback 4.b).
+// The real figure is revealed in the result text afterwards.
+export const YIELD_TIER_MEAGRE_MAX = 3;  // ≤ this reads 微薄
+export const YIELD_TIER_FAIR_MAX = 5;    // ≤ this reads 尚可, above reads 丰厚
 
 // Day range for the full game
 export const TOTAL_DAYS = 30;

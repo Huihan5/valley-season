@@ -32,3 +32,18 @@ export const INITIAL_FLAGS: FlagMap = {
    */
   millridgeDealSigned: false,
 };
+
+/**
+ * Investigation clue prefixes (GDD ch.9). Group totals are counted straight off the
+ * prefix, so adding a fragment later needs no change to the counting logic.
+ */
+export const CLUE_PREFIXES = {
+  position: 'clue_pos_',
+  motive: 'clue_mot_',
+  officer: 'clue_ofc_',
+  noble: 'clue_nob_',
+} as const;
+
+export function countFlagsWithPrefix(flags: FlagMap, prefix: string): number {
+  return Object.entries(flags).filter(([key, value]) => key.startsWith(prefix) && value).length;
+}

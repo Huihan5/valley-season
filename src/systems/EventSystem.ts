@@ -1,6 +1,9 @@
 import { GameState, Choice, DayPhase, EventData } from '../types/game';
 import { canHarvest, canFellTimber } from './WeatherSystem';
-import { getHarvestYield, getTimberYield } from './ResourceSystem';
+import {
+  getHarvestYield, getTimberYield, getYieldTierLabel,
+  getTimberFelled, getTimberQuotaLeft,
+} from './ResourceSystem';
 import { isMarketDay, getDayOfWeek } from './TimeSystem';
 import {
   marketSoldKey, getUnitsSoldToday, getCapacityLeft,
@@ -230,6 +233,20 @@ function getMarketAfternoonChoices(state: GameState): Choice[] {
     ? `马车还能装 ${capacityLeft} 单位（单次运力上限 ${MARKET_TRANSPORT_CAP}）`
     : `马车已装满（单次运力上限 ${MARKET_TRANSPORT_CAP}）`;
 
+  if (!flags[`marketRumours_day${day}`]) {
+    choices.push({
+      id: 'market_listen',
+      text: '排队的时候听着',
+      description: '你什么也不做，但你什么都听得见',
+      effects: {
+        flags: { [`marketRumours_day${day}`]: true },
+        logEntry: '你在粮商摊位后面排了一会儿队。',
+      },
+      resultKind: 'market_rumours',
+      advancesPhase: false,
+    });
+  }
+
   choices.push({
     id: 'market_finish',
     text: soldSoFar > 0 ? '装车返程' : '转一圈，不交易',
@@ -261,36 +278,42 @@ export function getFreeChoices(state: GameState): Choice[] {
   // ── Morning + Afternoon shared ───────────────────────────────────────────
 
   if (phase === 'morning' || phase === 'afternoon') {
-    const harvestYield = getHarvestYield(state);
+    const grainGain = canHarvest(weather) ? getHarvestYield(state) : Math.max(0, getHarvestYield(state) - 2);
     choices.push({
       id: 'harvest',
       text: '前往农田收割',
       description: canHarvest(weather)
-        ? `预计收割 ${harvestYield} 单位粮食`
+        ? `预计收割 ${getYieldTierLabel(grainGain)}`
         : '阴雨天气，田地泥泞，收割效率极低',
       effects: {
-        grain: canHarvest(weather) ? harvestYield : Math.max(0, harvestYield - 2),
+        grain: grainGain,
         fatigue: 1,
         nextScene: 'fields',
-        logEntry: `你在${phase === 'morning' ? '上午' : '下午'}收割了农田。`,
+        logEntry: `你在${phase === 'morning' ? '上午' : '下午'}收割了农田，收上来 ${grainGain} 单位。`,
       },
+      resultKind: 'harvest',
+      resultVars: { n: grainGain },
       disabled: exhausted,
       disabledReason: exhausted ? '你过于疲惫，需要先休息' : undefined,
     });
 
-    const timberYield = getTimberYield(state);
+    const timberGain = canFellTimber(weather) ? getTimberYield(state) : 0;
+    const quotaLeft = getTimberQuotaLeft(state);
     choices.push({
       id: 'fell_timber',
       text: '前往林地采伐',
       description: canFellTimber(weather)
-        ? `预计采伐 ${timberYield} 单位木材`
+        ? `预计采伐 ${getYieldTierLabel(timberGain)}，本季额度还剩 ${quotaLeft} 单位`
         : '阴雨天，林地工作暂停',
       effects: {
-        timber: canFellTimber(weather) ? timberYield : 0,
+        timber: timberGain,
         fatigue: 1,
         nextScene: 'forest',
-        logEntry: '你在林地采伐了木材。',
+        flags: { timberFelled: getTimberFelled(state) + timberGain },
+        logEntry: `你在林地采伐了 ${timberGain} 单位木材。`,
       },
+      resultKind: 'fell_timber',
+      resultVars: { n: timberGain, r: Math.max(0, quotaLeft - timberGain) },
       disabled: !canFellTimber(weather) || exhausted,
       disabledReason: !canFellTimber(weather) ? '雨天无法采伐' : exhausted ? '你过于疲惫' : undefined,
     });
@@ -515,6 +538,7 @@ export function getFreeChoices(state: GameState): Choice[] {
         nextScene: 'default',
         logEntry: '你早早休息了。',
       },
+      resultKind: 'rest',
     });
   }
 

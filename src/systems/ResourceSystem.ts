@@ -9,7 +9,28 @@ import {
   FATIGUE_TIRED_THRESHOLD,
   GRAIN_RETAIN_THRESHOLD,
   GRAIN_EXCELLENT_THRESHOLD,
+  YIELD_TIER_MEAGRE_MAX,
+  YIELD_TIER_FAIR_MAX,
+  TIMBER_SEASON_QUOTA,
 } from '../data/config';
+
+/**
+ * Action buttons show a band, not a number (PlaytestFeedback 4.b) — the exact figure
+ * is revealed in the result text once the work is done.
+ */
+export function getYieldTierLabel(amount: number): string {
+  if (amount <= YIELD_TIER_MEAGRE_MAX) return '微薄';
+  if (amount <= YIELD_TIER_FAIR_MAX) return '尚可';
+  return '丰厚';
+}
+
+export function getTimberFelled(state: GameState): number {
+  return Number(state.flags.timberFelled ?? 0);
+}
+
+export function getTimberQuotaLeft(state: GameState): number {
+  return Math.max(0, TIMBER_SEASON_QUOTA - getTimberFelled(state));
+}
 
 /** 未达留任线 / 留任线 / 优秀线 — the two numbers a player can work out for themselves (GDD ch.5.4). */
 export type GrainTier = 'short' | 'retain' | 'excellent';

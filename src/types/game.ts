@@ -43,6 +43,10 @@ export interface Choice {
    * event choices to the event's own setting (insert events cost nothing).
    */
   advancesPhase?: boolean;
+  /** Key into action_results.json — the narrative shown after the action resolves. */
+  resultKind?: string;
+  /** Placeholder values for that result text, e.g. the yield the player just brought in. */
+  resultVars?: Record<string, string | number>;
 }
 
 /** A prompt for the game's only free-text input: the signature on the Day 0 guarantee letter. */
@@ -106,6 +110,10 @@ export interface GameState {
   lordImpression: number;
   flags: FlagMap;
   currentSceneText: string;
+  /** Where the player currently is; drives which location base and 闲笔 pool is used. */
+  currentScene: string;
+  /** What just happened, shown above the scene until the next action replaces it. */
+  lastResult: string | null;
   currentChoices: Choice[];
   activeEvent: EventData | null;
   eventResolved: boolean;

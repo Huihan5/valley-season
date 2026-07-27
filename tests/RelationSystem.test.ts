@@ -28,6 +28,8 @@ function makeState(overrides: Partial<GameState> = {}): GameState {
     lordImpression: 0,
     flags: {},
     currentSceneText: '',
+    currentScene: 'default',
+    lastResult: null,
     currentChoices: [],
     activeEvent: null,
     eventResolved: false,
