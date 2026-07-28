@@ -15,6 +15,7 @@ import weatherLines from '../data/scenes/weather_lines.json';
 import actionResults from '../data/scenes/action_results.json';
 import ambientData from '../data/scenes/ambient.json';
 import rumoursData from '../data/scenes/rumors.json';
+import marketData from '../data/scenes/market.json';
 import greetingsData from '../data/dialogue/greetings.json';
 
 /**
@@ -38,6 +39,9 @@ const WEATHER = weatherLines as Record<string, string[]>;
 const RESULTS = actionResults as Record<string, string[]>;
 const AMBIENT = ambientData as Record<string, string[]>;
 const RUMOURS = rumoursData as unknown as { intro: string } & Record<string, string[] | string>;
+const MARKET = marketData as unknown as {
+  arrival: Record<'act1' | 'act2' | 'act3', string>;
+} & Record<string, string>;
 const GREETINGS = greetingsData as Record<string, Record<string, string[]>>;
 
 export function getAct(day: number): Act {
@@ -152,14 +156,105 @@ export function getActionResult(
   );
 }
 
+// ── 集市日 ──────────────────────────────────────────────────────────────────
+
+/**
+ * The city as it looks on the day the player rides in. The goods on the stalls
+ * carry the season; by the third act the fresh produce is gone and the stalls
+ * are selling what people mean to live on until spring.
+ */
+export function getMarketArrival(state: GameState): string {
+  const act = getAct(state.day);
+  const base = MARKET.arrival[`act${act}` as 'act1' | 'act2' | 'act3'];
+  // By the last market of the month the grain merchant either knows your cart or does not.
+  const recognition = act === 3
+    ? (state.flags.marketFirstVisitDone ? MARKET.act3Known : MARKET.act3Unknown)
+    : '';
+  return [base, recognition, MARKET.arrivalTail].filter(Boolean).join('\n\n');
+}
+
+/** Queueing behind the grain stall, where the rumours come from. */
+export function getMarketAfternoon(state: GameState): string {
+  const lines = readRumours(decodeRumours(state.flags[rumoursFlagKey(state.day)]));
+  return [RUMOURS.intro, ...lines].join('\n\n');
+}
+
+export function getMarketTradeResult(kind: string, state: GameState): string {
+  if (kind === 'market_grain') return MARKET.sellGrain;
+  if (kind === 'market_timber') {
+    const price = state.flags.millridgeDealSigned ? MARKET.sellTimberMillridge : MARKET.sellTimberPlain;
+    return [MARKET.sellTimber, price, MARKET.sellTimberTail].join('\n\n');
+  }
+  return '';
+}
+
+/** The ride home, which reads differently depending on how heavy the cart is. */
+export function getMarketReturn(sold: boolean): string {
+  return [
+    MARKET.returnOpen,
+    sold ? MARKET.returnSold : MARKET.returnUnsold,
+    MARKET.returnTail,
+  ].join('\n\n');
+}
+
+export function getMarketNoTrade(): string {
+  return MARKET.nothing;
+}
+
+// ── 场景组装 ────────────────────────────────────────────────────────────────
+
+/**
+ * The layered scene: location base for the current act, then a weather line, then —
+ * rarely, and only on a quiet day — one 闲笔 that leads nowhere on purpose.
+ * The market afternoon is its own thing: you are not at the manor, you are in a queue.
+ */
+export function composeScene(state: GameState, sceneKey: string, rng: () => number): string {
+  if (sceneKey === 'market' && state.flags.visitingMarketToday === state.day) {
+    return state.phase === 'afternoon' ? getMarketAfternoon(state) : getMarketArrival(state);
+  }
+
+  const layers = [getLocationBase(state, sceneKey), getWeatherLine(state.weather, rng)];
+  if (shouldPlayAmbient(state, rng)) {
+    layers.push(getAmbient(sceneKey, rng));
+  }
+  return layers.filter(Boolean).join('\n\n');
+}
+
 // ── 流言 ────────────────────────────────────────────────────────────────────
 
 const RUMOUR_LAYERS = ['local', 'duchy', 'kingdom', 'maplegate'];
+const RUMOUR_POOL = RUMOUR_LAYERS.flatMap(layer => (RUMOURS[layer] as string[]) ?? []);
 
 /** Two or three overheard while queueing, drawn across all four layers. */
 export function getMarketRumours(rng: () => number): { intro: string; lines: string[] } {
-  const pool = RUMOUR_LAYERS.flatMap(layer => (RUMOURS[layer] as string[]) ?? []);
+  return { intro: RUMOURS.intro, lines: readRumours(drawRumours(rng)) };
+}
+
+/**
+ * The draw happens once, when the cart pulls into the square. The player stands
+ * in one queue and hears what that queue is saying; selling four sacks of grain
+ * does not put a different town around them.
+ */
+export function drawRumours(rng: () => number): number[] {
   const count = MARKET_RUMOURS_MIN
     + Math.floor(rng() * (MARKET_RUMOURS_MAX - MARKET_RUMOURS_MIN + 1));
-  return { intro: RUMOURS.intro, lines: pickMany(pool, count, rng) };
+  const indices = RUMOUR_POOL.map((_, i) => i);
+  return pickMany(indices, count, rng);
+}
+
+export function readRumours(indices: number[]): string[] {
+  return indices.map(i => RUMOUR_POOL[i]).filter(Boolean);
+}
+
+/** Rumour indices are stored on the day's flag as "3,17,25". */
+export function rumoursFlagKey(day: number): string {
+  return `marketRumours_day${day}`;
+}
+
+export function encodeRumours(indices: number[]): string {
+  return indices.join(',');
+}
+
+export function decodeRumours(value: unknown): number[] {
+  return String(value ?? '').split(',').filter(Boolean).map(Number);
 }

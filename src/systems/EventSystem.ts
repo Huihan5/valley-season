@@ -14,6 +14,10 @@ import { getEstateTaskChoices } from './EstateTaskSystem';
 import { getDinnerDecorum, getDinnerSettlement, getDinnerAbsenceEffects } from './NobleSystem';
 import { getTrust } from './RelationSystem';
 import {
+  getMarketArrival, getMarketTradeResult, getMarketReturn, getMarketNoTrade,
+  drawRumours, encodeRumours, rumoursFlagKey,
+} from './SceneSystem';
+import {
   MARKET_TRANSPORT_CAP, MARKET_GRAIN_PRICE,
   OUTING_FATIGUE, MARKET_TRADE_FATIGUE,
   DINNER_DAY, PETITION_INFORMED_TRUST, ECHO_DECOROUS_AT,
@@ -24,6 +28,10 @@ import {
 import day1Data from '../data/events/day1.json';
 import day3Data from '../data/events/day3.json';
 import day4Data from '../data/events/day4.json';
+import day6Timothy from '../data/events/day6_timothy.json';
+import day13Thierry from '../data/events/day13_thierry.json';
+import day27Officers from '../data/events/day27_officers.json';
+import day27StreetCorner from '../data/events/day27_street_corner.json';
 import day7Arrival from '../data/events/day7_dinner_arrival.json';
 import day7Hartmann from '../data/events/day7_dinner_hartmann.json';
 import day7Departure from '../data/events/day7_dinner_departure.json';
@@ -50,8 +58,10 @@ import day30Evening from '../data/events/day30_evening.json';
 const FIXED_EVENTS = [
   day1Data, day3Data, day4Data,
   day7Arrival, day7Hartmann, day7Departure, day7Return,
-  day8Echo, day10Data, day11Echo, day13Echo,
+  day6Timothy,
+  day8Echo, day10Data, day11Echo, day13Echo, day13Thierry,
   day12Data, day15Data,
+  day27Officers, day27StreetCorner,
   day18Data, day18HuntArrival,
   day19HuntRide,
   day20HuntStag, day20HuntOvernight,
@@ -324,13 +334,14 @@ function getMarketAfternoonChoices(state: GameState): Choice[] {
     choices.push({
       id: `market_sell_grain_${lot}`,
       text: `出售粮食 ${lot} 单位`,
-      description: `换得 ${getGrainRevenue(lot)} 金卢（集市价 ${MARKET_GRAIN_PRICE} 金卢/单位）`,
+      description: `${getGrainRevenue(lot)} 金卢（${MARKET_GRAIN_PRICE} 金卢/单位）`,
       effects: {
         grain: -lot,
         guldmark: getGrainRevenue(lot),
         ...tradeEffects(lot),
         logEntry: `你在集市卖出 ${lot} 单位粮食，换得 ${getGrainRevenue(lot)} 金卢。`,
       },
+      resultText: getMarketTradeResult('market_grain', state),
       advancesPhase: false,
     });
   }
@@ -339,13 +350,14 @@ function getMarketAfternoonChoices(state: GameState): Choice[] {
     choices.push({
       id: `market_sell_timber_${lot}`,
       text: `出售木材 ${lot} 单位`,
-      description: `换得 ${getTimberRevenue(state, lot)} 金卢（集市价 ${timberPrice} 金卢/单位）`,
+      description: `${getTimberRevenue(state, lot)} 金卢（${timberPrice} 金卢/单位）`,
       effects: {
         timber: -lot,
         guldmark: getTimberRevenue(state, lot),
         ...tradeEffects(lot),
         logEntry: `你在集市卖出 ${lot} 单位木材，换得 ${getTimberRevenue(state, lot)} 金卢。`,
       },
+      resultText: getMarketTradeResult('market_timber', state),
       advancesPhase: false,
     });
   }
@@ -354,31 +366,19 @@ function getMarketAfternoonChoices(state: GameState): Choice[] {
     ? `马车还能装 ${capacityLeft} 单位（单次运力上限 ${MARKET_TRANSPORT_CAP}）`
     : `马车已装满（单次运力上限 ${MARKET_TRANSPORT_CAP}）`;
 
-  if (!flags[`marketRumours_day${day}`]) {
-    choices.push({
-      id: 'market_listen',
-      text: '排队的时候听着',
-      description: '你什么也不做，但你什么都听得见',
-      effects: {
-        flags: { [`marketRumours_day${day}`]: true },
-        logEntry: '你在粮商摊位后面排了一会儿队。',
-      },
-      resultKind: 'market_rumours',
-      advancesPhase: false,
-    });
-  }
-
+  // Coming home empty is not a wasted trip: you now know what things go for.
+  const sold = soldSoFar > 0;
   choices.push({
     id: 'market_finish',
-    text: soldSoFar > 0 ? '装车返程' : '转一圈，不交易',
-    description: soldSoFar > 0
-      ? `今日已出手 ${soldSoFar} 单位。${capacityNote}`
-      : '了解市场行情，或许能听到些有用的消息',
+    text: sold ? '装车返程' : '什么都不做',
+    description: sold ? `今日已出手 ${soldSoFar} 单位。${capacityNote}` : undefined,
     effects: {
-      logEntry: soldSoFar > 0
+      nextScene: 'default',
+      logEntry: sold
         ? '你结清了今天的账，把空车赶回枫径。'
-        : '你在集市转了一圈，听了些闲言碎语，没有进行交易。',
+        : '你在集市转了一圈，没有交易。',
     },
+    resultText: [sold ? '' : getMarketNoTrade(), getMarketReturn(sold)].filter(Boolean).join('\n\n'),
   });
 
   return choices;
@@ -561,10 +561,16 @@ export function getFreeChoices(state: GameState): Choice[] {
         description: `往返占用上午与下午两个时段，单次运力上限 ${MARKET_TRANSPORT_CAP} 单位`,
         effects: {
           fatigue: OUTING_FATIGUE,
-          flags: { visitingMarketToday: day, [`visitedMarket_day${day}`]: true },
+          flags: {
+            visitingMarketToday: day,
+            [`visitedMarket_day${day}`]: true,
+            // Drawn once, on the way in — see drawRumours.
+            [rumoursFlagKey(day)]: encodeRumours(drawRumours(Math.random)),
+          },
           nextScene: 'market',
-          logEntry: '你出发前往河谷城集市，上午的路上有些风，但天气不算差。',
+          logEntry: '你出发前往河谷城集市。',
         },
+        resultText: getMarketArrival(state),
         disabled: exhausted,
         disabledReason: exhausted ? '你过于疲惫，无力出城' : undefined,
       });

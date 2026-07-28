@@ -10,10 +10,7 @@ import {
 } from './systems/RelationSystem';
 import { INITIAL_FLAGS } from './systems/FlagRegistry';
 import { getOpeningPage, nextOpeningPage } from './systems/OpeningSystem';
-import {
-  getLocationBase, getWeatherLine, getAmbient, shouldPlayAmbient,
-  getActionResult, getGreeting,
-} from './systems/SceneSystem';
+import { composeScene, getActionResult, getGreeting } from './systems/SceneSystem';
 import { INITIAL_RESOURCES, INITIAL_RELATIONSHIPS, TENANT_TRUST_INITIAL } from './data/config';
 import { interpolate } from './utils/text';
 import ScenePanel from './components/ScenePanel';
@@ -29,21 +26,6 @@ type Action =
   | { type: 'SET_PLAYER_NAME'; name: string }
   | { type: 'ADVANCE_OPENING' }
   | { type: 'ADVANCE_DAY_EVENT' };
-
-/**
- * The layered scene: location base for the current act, then a weather line, then —
- * rarely, and only on a quiet day — one 闲笔 that leads nowhere on purpose.
- */
-function composeScene(state: GameState, sceneKey: string): string {
-  const layers = [
-    getLocationBase(state, sceneKey),
-    getWeatherLine(state.weather, Math.random),
-  ];
-  if (shouldPlayAmbient(state, Math.random)) {
-    layers.push(getAmbient(sceneKey, Math.random));
-  }
-  return layers.filter(Boolean).join('\n\n');
-}
 
 function applyEffects(state: GameState, effects: ChoiceEffects): GameState {
   let next = { ...state };
@@ -117,7 +99,7 @@ function buildStateForPhase(state: GameState): GameState {
   const free = { ...state, activeEvent: null, eventResolved: false };
   return {
     ...free,
-    currentSceneText: interpolate(composeScene(free, free.currentScene), state),
+    currentSceneText: interpolate(composeScene(free, free.currentScene, Math.random), state),
     currentChoices: getFreeChoices(free),
   };
 }

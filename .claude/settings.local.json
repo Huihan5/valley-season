@@ -108,7 +108,12 @@
       "Bash(awk 'NR>=4365 && NR<=4464 {print NR\": \"$0}' C:/Users/Lenovo/Documents/Claude/Projects/valley-season/updates0728/NARRATIVE_DRAFTS_v1.1.md)",
       "Bash(awk 'NR>=1728 && NR<=1955 {print NR\": \"$0}' C:/Users/Lenovo/Documents/Claude/Projects/valley-season/updates0728/NARRATIVE_DRAFTS_v1.1.md)",
       "Bash(rm src/data/events/day7.json)",
-      "Bash(awk 'NR>=1951 && NR<=2170 {print NR\": \"$0}' C:/Users/Lenovo/Documents/Claude/Projects/valley-season/updates0728/NARRATIVE_DRAFTS_v1.1.md)"
+      "Bash(awk 'NR>=1951 && NR<=2170 {print NR\": \"$0}' C:/Users/Lenovo/Documents/Claude/Projects/valley-season/updates0728/NARRATIVE_DRAFTS_v1.1.md)",
+      "Bash(awk 'NR>=2359 && NR<=2560 {print NR\": \"$0}' C:/Users/Lenovo/Documents/Claude/Projects/valley-season/updates0728/NARRATIVE_DRAFTS_v1.1.md)",
+      "Bash(awk 'NR>=2560 && NR<=2800 {print NR\": \"$0}' C:/Users/Lenovo/Documents/Claude/Projects/valley-season/updates0728/NARRATIVE_DRAFTS_v1.1.md)",
+      "Bash(awk 'NR>=2800 && NR<=3020 {print NR\": \"$0}' C:/Users/Lenovo/Documents/Claude/Projects/valley-season/updates0728/NARRATIVE_DRAFTS_v1.1.md)",
+      "Bash(node -e \"const d=require\\('./src/data/scenes/rumors.json'\\); console.log\\(Object.keys\\(d\\)\\); console.log\\(JSON.stringify\\(d.intro\\).slice\\(0,200\\)\\); console.log\\(Object.entries\\(d\\).filter\\(\\([k,v]\\)=>Array.isArray\\(v\\)\\).map\\(\\([k,v]\\)=>k+':'+v.length\\).join\\(', '\\)\\)\")",
+      "Bash(sed -i \"s|import { getMarketTradeResult, getMarketReturn, getMarketNoTrade } from './SceneSystem';|import { getMarketArrival, getMarketTradeResult, getMarketReturn, getMarketNoTrade } from './SceneSystem';|\" src/systems/EventSystem.ts)"
     ]
   }
 }

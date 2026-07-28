@@ -28,7 +28,9 @@ export default function ScenePanel({ state }: Props) {
 
       {/* What just happened, then where you now are */}
       <div className="flex-1 overflow-y-auto px-5 py-4 space-y-4">
-        {lastResult && !activeEvent && (
+        {/* What just happened stays on screen even when the next beat is an event:
+            a chained scene's branch prose is the lead-in to the beat that follows. */}
+        {lastResult && (
           <div className="border-l-2 border-gold-dim pl-4">
             <p className="text-cream font-serif text-sm leading-relaxed whitespace-pre-line">
               {lastResult}

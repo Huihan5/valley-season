@@ -150,14 +150,10 @@ describe('market afternoon choices', () => {
     expect(choices.map(c => c.id)).toEqual(['market_finish']);
   });
 
-  it('offers the queue-side rumours once per market day', () => {
-    const first = getFreeChoices(makeState());
-    expect(first.some(c => c.id === 'market_listen')).toBe(true);
-
-    const again = getFreeChoices(makeState({
-      flags: { visitingMarketToday: 6, marketRumours_day6: true },
-    }));
-    expect(again.some(c => c.id === 'market_listen')).toBe(false);
+  it('no longer asks the player to choose to overhear things', () => {
+    // The rumours belong to the queue itself now — they are the afternoon's
+    // scene, played before the trading, not an action competing with it.
+    expect(getFreeChoices(makeState()).some(c => c.id === 'market_listen')).toBe(false);
   });
 
   it('grants the first-trade renown bonus only once across the season', () => {
