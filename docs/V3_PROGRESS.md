@@ -184,6 +184,34 @@ GDD 3.3 给炉堂列了四件事：沉思、线索整理、恢复体力、与洛
 
 ---
 
+## 阶段五开工须知
+
+**源文件**：碎片文本在 `updates0728/NARRATIVE_DRAFTS_v1.1.md` 第 02 节（14 段，分三组），结局文本在第 05 节，判定规则在 `V3_BUILD_BRIEF.md` 阶段五与 GDD 第 9、10 章。
+
+**阶段四已经把公务员组和贵族组写完了**，缺的是庄园内组。已在代码里写入的碎片：
+
+| 已实现 | 写入位置 |
+|---|---|
+| `clue_ofc_timothy_person` | Day 6 集市 |
+| `clue_ofc_timothy_nature` | Day 12 审计 |
+| `clue_ofc_timothy_declaration` | Day 27 选提莫西 |
+| `clue_ofc_thierry_range` | Day 13 集市 或 Day 19 猎场 |
+| `clue_ofc_thierry_declaration` | Day 15 树桩 |
+| `clue_nob_marguerite` | Day 21 回程马车（贵族信任 ≥ 2） |
+| `clue_mot_lorenz_question` | Day 21 猎场那棵树（洛伦茨信任 ≥ 3） |
+| `clue_mot_handwriting` | 夜账第三晚 |
+| `clue_pos_locate` | Day 27 选蒂埃里（需 `clue_pos_horse_condition`） |
+
+**尚未实现的七条，全部来自四名常驻 NPC 的信任档位**（草稿 2.1 至 2.5）：格雷格三条（`clue_pos_horses_intact` / `_horse_returned` / `_horse_condition`，信任 ≥2/3/4，逐条前置）、玛莎两条（`clue_mot_martha_summer` / `_martha_lastwords`）、埃莱娜两条（`clue_mot_elena_papers` / `_elena_burned`）、洛伦茨信任 4 那条（草稿 2.5）。这就是阶段五的主体：**按信任档位交付碎片的机制**，每条 1 时段、晚间可做。
+
+**注意 `clue_pos_horse_condition` 是承重的**：Day 27 蒂埃里那个选项用它做 `requiresFlag`，而那条路是位置线的第 4 条，也就是 4A 与 4B 的分野。格雷格那三条不实现，结局 4B 不可达。
+
+**结局判定现在是临时接线**：`EndingSystem` 还是 v2 的线性优先级，霍特曼链被我改成 `investigatedLedger + documentedStumps + wynterRestated` 只为让它在 v3 证据上继续成立。brief 明确要求**重写而不是打补丁**。
+
+**可以直接复用的机制**（阶段四建的）：`EventData.variants` 条件正文块、`next` / `Choice.nextEvent` 事件连锁、`Choice.resultText` 分支正文、`timing` 四种时点、`countClues()` 与 `countFlagsWithPrefix()`。
+
+---
+
 ## 阶段四开工须知（已完成，保留作实现记录）
 
 **源文件在仓库外**：`updates0728/NARRATIVE_DRAFTS_v1.1.md`（已 gitignore）。第 04 节，16 个事件加集市结构。GDD 与 brief 已同步进 `docs/`，是 v3.1 与 v1.1。
