@@ -17,6 +17,7 @@ import {
   getDinnerDecorum, getDinnerSettlement, getDinnerAbsenceEffects, isHuntOpeningDecorous,
 } from './NobleSystem';
 import { getTrust } from './RelationSystem';
+import { countFlagsWithPrefix, countClues, CLUE_PREFIXES } from './FlagRegistry';
 import {
   getMarketArrival, getMarketTradeResult, getMarketReturn, getMarketNoTrade,
   drawRumours, encodeRumours, rumoursFlagKey,
@@ -26,6 +27,7 @@ import {
   OUTING_FATIGUE, MARKET_TRADE_FATIGUE,
   DINNER_DAY, PETITION_INFORMED_TRUST, ECHO_DECOROUS_AT,
   HUNT_FIRST_DAY, HUNT_LAST_DAY, LORENZ_FRAGMENT_TRUST, MARGUERITE_FRAGMENT_TRUST,
+  WYNTER_PARTIAL_ACCOUNT, WYNTER_FULL_ACCOUNT, POSITION_LINE_COMPLETE,
   SURVEY_FIELDS_LAST_DAY, SURVEY_FOREST_LAST_DAY,
   ORCHARD_FULL_YIELD_LAST_DAY, NIGHT_LEDGER_CLUE_AT,
 } from '../data/config';
@@ -58,8 +60,7 @@ import day20CampBanquet from '../data/events/day20_camp_banquet.json';
 import day21CampHarvest from '../data/events/day21_camp_harvest.json';
 import day21HuntMorning from '../data/events/day21_hunt_morning.json';
 import day21HuntLorenz from '../data/events/day21_hunt_lorenz.json';
-import day22HuntTraveler from '../data/events/day22_hunt_traveler.json';
-import day22TravelerEstate from '../data/events/day22_traveler_estate.json';
+import day22Wynter from '../data/events/day22.json';
 import day23Data from '../data/events/day23.json';
 import day30Morning from '../data/events/day30_morning.json';
 import day30Evening from '../data/events/day30_evening.json';
@@ -75,7 +76,7 @@ const FIXED_EVENTS = [
   day19HuntRide,
   day20HuntStag, day20HuntOvernight, day20CampBanquet,
   day21HuntMorning, day21CampHarvest, day21HuntLorenz,
-  day22HuntTraveler, day22TravelerEstate,
+  day22Wynter,
   day23Data,
   day30Morning, day30Evening,
 ] as unknown as EventData[];
@@ -269,34 +270,41 @@ function processHuntRide(event: EventData, state: GameState): EventData {
   return { ...event, choices };
 }
 
-// Day 22 evening: show full estate encounter if player missed hunt,
-// or a brief follow-up if they already met the traveler at the hunt.
-function processDay22Estate(event: EventData, state: GameState): EventData {
-  if (!state.flags.huntAttendedDay22) return event;
+/**
+ * Day 22. 维特 supplies no new information at any tier — he only puts what the
+ * player already holds into the order things happened in. What he can say is
+ * therefore a function of how much the player has been told by other people.
+ */
+function processWynter(event: EventData, state: GameState): EventData {
+  const v = event.variants ?? {};
+  const clues = countClues(state.flags);
+  const positionLine = countFlagsWithPrefix(state.flags, CLUE_PREFIXES.position);
+
+  const parts = [event.sceneText];
+  const flags: FlagMap = {};
+
+  if (clues >= WYNTER_FULL_ACCOUNT) {
+    parts.push(v.tier3);
+    flags.wynterRestated = true;
+    if (positionLine >= POSITION_LINE_COMPLETE) {
+      parts.push(v.tier4);
+      flags.wynterKnowsYouKnow = true;
+    }
+  } else if (clues >= WYNTER_PARTIAL_ACCOUNT) {
+    // The reordering itself is assembled from per-clue lines the drafts have
+    // not written yet; until they exist he says the order is wrong and stops.
+    parts.push(v.tier2_open, v.tier2_close);
+  } else {
+    parts.push(v.tier1);
+  }
 
   return {
     ...event,
-    title: '猎场归来',
-    sceneText: '你从猎场回来，脑子里还在想那个自称学者的人。进厨房拿水时，玛莎看了你一眼："你今天遇到了什么？脸色不太对。"',
-    choices: [
-      {
-        id: 'tell_marta_traveler',
-        text: '跟玛莎说说那个旅人',
-        description: '把疑虑说出来，听听她的看法',
-        effects: {
-          relationships: { marta: 1 },
-          logEntry: '玛莎听完后沉默了一会儿，说："霍特曼也问过我关于林地的事，就在他走之前。"',
-        },
-      },
-      {
-        id: 'keep_quiet_traveler',
-        text: '什么都不说',
-        description: '这件事还不到说的时候',
-        effects: {
-          logEntry: '你说今天很累，早点休息了。',
-        },
-      },
-    ],
+    sceneText: parts.filter(Boolean).join('\n\n'),
+    onEnterEffects: {
+      ...event.onEnterEffects,
+      flags: { ...event.onEnterEffects?.flags, ...flags },
+    },
   };
 }
 
@@ -334,7 +342,7 @@ function processDay30(event: EventData, state: GameState): EventData {
   const { grain, guldmark, timber, renown } = state.resources;
 
   let summary = '';
-  if (state.flags.travelerDialogueCorrect) {
+  if (state.flags.wynterRestated) {
     summary = '在所有的事务之外，你发现了某件庄园本身不知道的事——那个叫维特的学者，还有他问你的那些问题。也许这才是这三十天里最重要的部分。';
   } else if (renown >= 6) {
     summary = '三十天后，枫径庄园的名字在河谷一带多了几分分量。这不是单靠账簿能做到的。';
@@ -383,7 +391,7 @@ function process(raw: EventData, state: GameState): EventData {
   if (event.id === 'day21_hunt_lorenz') return processHuntLorenz(event, state);
   if (event.id === 'day10_petition') return processDay10(event, state);
   if (event.id === 'day12_audit') return processDay12(event, state);
-  if (event.id === 'day22_traveler_estate') return processDay22Estate(event, state);
+  if (event.id === 'day22_wynter') return processWynter(event, state);
   if (event.id === 'day23_lords_letter') return processDay23(event, state);
   if (event.id === 'day30_evening') return processDay30(event, state);
   return event;

@@ -1,5 +1,6 @@
 // All numerical values mirror docs/GDD.md ch.5 — never hardcode game balance elsewhere.
 // (GDD v3 retired the standalone NUMBERS.md; ch.5 is the sole numerical authority.)
+import { WeatherType } from '../types/game';
 
 export const DEMO_MAX_DAYS = 30;
 
@@ -101,6 +102,12 @@ export const HUNT_LAST_DAY = 21;
 // The hunt's opening is the third chance. Following 亨克, greeting 玛格丽特 and
 // watching 蒂埃里 work are all 得体; only hiding at the edge of the camp is not.
 export const HUNT_OPENING_DECOROUS = ['A', 'B', 'C'];
+// 维特 restates what the player already holds; how much of it he can put in
+// order depends on how many pieces there are (drafts 4.11).
+export const WYNTER_PARTIAL_ACCOUNT = 3; // he can tell the order is wrong
+export const WYNTER_FULL_ACCOUNT = 6;    // he can lay the whole thing out
+export const POSITION_LINE_COMPLETE = 4; // 格雷格 three plus 蒂埃里 cross-fix
+
 // Fragments that need someone to have decided you are worth telling (GDD 5.5, 9.1).
 export const LORENZ_FRAGMENT_TRUST = 3;
 export const MARGUERITE_FRAGMENT_TRUST = 2;
@@ -124,6 +131,11 @@ export const GRAIN_EXCELLENT_THRESHOLD = 90; // 优秀线：留任线 + 春播�
 // Fatigue thresholds (see docs/GDD.md ch.5)
 export const FATIGUE_TIRED_THRESHOLD = 3;
 export const FATIGUE_EXHAUSTED_THRESHOLD = 5;
+
+// Days whose weather is written rather than rolled.
+export const FORCED_WEATHER: Record<number, WeatherType> = {
+  22: 'frost', // 维特 arrives on the day the wind turns (drafts 4.11)
+};
 
 // Weather probability pools by day range (day 1-10 only for demo)
 export const WEATHER_POOLS: Record<string, Record<string, number>> = {

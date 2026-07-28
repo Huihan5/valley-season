@@ -120,7 +120,14 @@
       "Bash(sed -i \"s|^import { getFixedEvent, getFreeChoices } from '../src/systems/EventSystem';$|import { getFixedEvent, getFreeChoices, getEventById } from '../src/systems/EventSystem';\\\\nimport { determineEnding } from '../src/systems/EndingSystem';|\" tests/EventSystem.test.ts)",
       "Bash(awk 'NR>=3017 && NR<=3250 {print NR\": \"$0}' C:/Users/Lenovo/Documents/Claude/Projects/valley-season/updates0728/NARRATIVE_DRAFTS_v1.1.md)",
       "Bash(awk 'NR>=3250 && NR<=3500 {print NR\": \"$0}' C:/Users/Lenovo/Documents/Claude/Projects/valley-season/updates0728/NARRATIVE_DRAFTS_v1.1.md)",
-      "Bash(awk 'NR>=3500 && NR<=3782 {print NR\": \"$0}' C:/Users/Lenovo/Documents/Claude/Projects/valley-season/updates0728/NARRATIVE_DRAFTS_v1.1.md)"
+      "Bash(awk 'NR>=3500 && NR<=3782 {print NR\": \"$0}' C:/Users/Lenovo/Documents/Claude/Projects/valley-season/updates0728/NARRATIVE_DRAFTS_v1.1.md)",
+      "Bash(awk 'NR>=3780 && NR<=3990 {print NR\": \"$0}' C:/Users/Lenovo/Documents/Claude/Projects/valley-season/updates0728/NARRATIVE_DRAFTS_v1.1.md)",
+      "Bash(awk 'NR>=202 && NR<=280 {print NR\": \"$0}' C:/Users/Lenovo/Documents/Claude/Projects/valley-season/updates0728/NARRATIVE_DRAFTS_v1.1.md)",
+      "Bash(sed -i 's/if \\(state\\\\.flags\\\\.travelerDialogueCorrect\\) {/if \\(state.flags.wynterRestated\\) {/' src/systems/EventSystem.ts)",
+      "Bash(sed -i 's/flags: { travelerDialogueCorrect: true }/flags: { wynterRestated: true }/' tests/EventSystem.test.ts)",
+      "Bash(sed -i \"s/makeState\\({ day: 30, flags: { travelerDialogueCorrect: true } }\\)/makeState\\({ day: 30, flags: { wynterRestated: true } }\\)/\" tests/EventSystem.test.ts)",
+      "Bash(sed -i \"s/it\\('travelerDialogueCorrect flag produces investigation summary'/it\\('the retelling on Day 22 is what Day 30 reaches back for'/\" tests/EventSystem.test.ts)",
+      "Bash(sed -i '552s/travelerDialogueCorrect: true,/wynterRestated: true,/' tests/EventSystem.test.ts)"
     ]
   }
 }

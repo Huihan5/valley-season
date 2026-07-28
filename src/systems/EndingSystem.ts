@@ -23,7 +23,7 @@ export function determineEnding(state: GameState): EndingId {
   const hartmannChainComplete = !!(
     flags.investigatedLedger &&
     flags.documentedStumps &&
-    flags.travelerDialogueCorrect
+    flags.wynterRestated
   );
 
   // 1 — 发现了什么的人

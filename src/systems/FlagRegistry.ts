@@ -47,3 +47,9 @@ export const CLUE_PREFIXES = {
 export function countFlagsWithPrefix(flags: FlagMap, prefix: string): number {
   return Object.entries(flags).filter(([key, value]) => key.startsWith(prefix) && value).length;
 }
+
+/** Every fragment the player holds, across all three groups. */
+export function countClues(flags: FlagMap): number {
+  return Object.values(CLUE_PREFIXES)
+    .reduce((total, prefix) => total + countFlagsWithPrefix(flags, prefix), 0);
+}

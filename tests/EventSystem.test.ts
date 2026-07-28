@@ -123,18 +123,18 @@ describe('getFixedEvent — activationFlag', () => {
     expect(withFlag?.id).toBe('day21_hunt_lorenz');
   });
 
-  it('Day 22 hunt traveler fires only with huntAttendedDay22', () => {
+  it('no longer puts 维特 at the hunt — he only ever comes to the manor', () => {
     expect(getFixedEvent(22, 'afternoon', makeState({ day: 22 }))).toBeNull();
-    const withFlag = getFixedEvent(
+    expect(getFixedEvent(
       22, 'afternoon',
       makeState({ day: 22, flags: { huntAttendedDay22: true } })
-    );
-    expect(withFlag?.id).toBe('day22_hunt_traveler');
+    )).toBeNull();
   });
 
-  it('Day 22 estate traveler always fires (no activationFlag)', () => {
+  it('Day 22 brings him to the gate at dusk, for everyone', () => {
     const event = getFixedEvent(22, 'evening', makeState({ day: 22 }));
-    expect(event?.id).toBe('day22_traveler_estate');
+    expect(event?.id).toBe('day22_wynter');
+    expect(event?.advancesPhase).toBe(false);
   });
 });
 
@@ -184,23 +184,14 @@ describe('getFixedEvent — Day 12 processDay12', () => {
   });
 });
 
-// ── processDay22Estate: traveler B-i path ─────────────────────────────────
+// ── processWynter: the same scene at four depths ──────────────────────────
 
-describe('getFixedEvent — Day 22 estate processDay22Estate', () => {
-  it('shows full traveler encounter when player did NOT attend hunt', () => {
+describe('getFixedEvent — Day 22 维特', () => {
+  it('is the same encounter for everyone, and asks nothing of the player', () => {
     const event = getFixedEvent(22, 'evening', makeState({ day: 22, flags: {} }));
-    expect(event?.title).toBe('庄园门口的旅人');
-    expect(event?.choices?.length).toBeGreaterThan(1);
-  });
-
-  it('shows follow-up scene when player attended hunt on Day 22', () => {
-    const event = getFixedEvent(
-      22, 'evening',
-      makeState({ day: 22, flags: { huntAttendedDay22: true } })
-    );
-    expect(event?.title).toBe('猎场归来');
-    expect(event?.choices?.length).toBe(2);
-    expect(event?.choices?.[0].id).toBe('tell_marta_traveler');
+    expect(event?.title).toBe('维特');
+    expect(event?.choices).toBeNull();
+    expect(event?.onEnterEffects?.flags?.metWynter).toBe(true);
   });
 });
 
@@ -291,10 +282,10 @@ describe('getFixedEvent — Day 30 evening processDay30', () => {
     expect(text).not.toContain('{summary}');
   });
 
-  it('travelerDialogueCorrect flag produces investigation summary', () => {
+  it('the retelling on Day 22 is what Day 30 reaches back for', () => {
     const event = getFixedEvent(
       30, 'evening',
-      makeState({ day: 30, flags: { travelerDialogueCorrect: true } })
+      makeState({ day: 30, flags: { wynterRestated: true } })
     );
     expect(event?.sceneText).toContain('维特');
   });
@@ -532,11 +523,22 @@ describe('Critical path — 霍特曼 investigation (Ending 5)', () => {
     expect(choice).toBeDefined();
   });
 
-  it('Day 22 estate traveler has travelerDialogueCorrect choice gated by documentedSymbols', () => {
-    // Without documentedSymbols: this choice is filtered out by requiresFlag
-    const event = getFixedEvent(22, 'evening', makeState({ day: 22 }));
-    const correctChoice = event?.choices?.find(c => c.effects?.flags?.travelerDialogueCorrect);
-    expect(correctChoice?.requiresFlag).toBe('documentedSymbols');
+  it('Day 22 has no right answer to get wrong — the chain node is the retelling', () => {
+    // v3 removed the traveler dialogue check entirely. What 维特 can say is a
+    // function of how many fragments the player is carrying, not of one choice.
+    const thin = getFixedEvent(22, 'evening', makeState({ day: 22 }));
+    expect(thin?.choices).toBeNull();
+    expect(thin?.onEnterEffects?.flags?.wynterRestated).toBeUndefined();
+
+    const carrying = getFixedEvent(22, 'evening', makeState({
+      day: 22,
+      flags: {
+        clue_pos_horses_intact: true, clue_pos_horse_returned: true,
+        clue_pos_horse_condition: true, clue_mot_martha_summer: true,
+        clue_mot_handwriting: true, clue_ofc_timothy_nature: true,
+      },
+    }));
+    expect(carrying?.onEnterEffects?.flags?.wynterRestated).toBe(true);
   });
 
   it('no longer needs a night of archive research to complete the chain', () => {
@@ -547,7 +549,7 @@ describe('Critical path — 霍特曼 investigation (Ending 5)', () => {
       flags: {
         investigatedLedger: true,
         documentedStumps: true,
-        travelerDialogueCorrect: true,
+        wynterRestated: true,
       },
     }));
     expect(reached).toBe('ending5');
