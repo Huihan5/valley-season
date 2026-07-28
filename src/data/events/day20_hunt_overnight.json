@@ -1,33 +1,33 @@
 {
   "id": "day20_hunt_overnight",
   "day": 20,
-  "phase": "evening",
+  "timing": "dusk",
   "forced": true,
   "activationFlag": "huntAttendedDay20",
-  "title": "营地夜宴",
-  "sceneText": "篝火在营地中央燃着，比庄园炉堂的火要热，也要粗糙得多。\n\n亨克男爵在入夜前截住了你。\"留下来吃晚饭，\"他说，不像邀请，更像陈述，\"每年猎季的第三夜，我们都在营地过。\"他没有解释\"我们\"是谁。\n\n营地的帐篷已经支好。侍从开始搬运酒坛。那个陌生的学者模样的人坐在一顶帐篷外的折凳上，手里有一本薄册子，背对着你。\n\n你意识到：如果你留下，就回不了庄园了。明早需要从营地直接开始。",
-  "advancesPhase": true,
-  "onEnterEffects": {},
+  "title": "夜宴去留",
+  "sceneText": "篝火在营地中央燃着，比庄园炉堂的火要热，也要粗糙得多。\n\n亨克在入夜前截住了你。\n\n“留下来吃晚饭。”他说。这不像邀请，更像陈述，“每年猎季的第三夜，我们都在营地过。”\n\n他没有解释“我们”是谁。\n\n帐篷已经支好。侍从开始搬酒坛。\n\n你意识到：如果留下，今晚就回不了庄园。明早要从营地开始。",
   "choices": [
     {
       "id": "overnight_stay",
-      "text": "留下来，参加夜宴",
-      "description": "接受邀请，在营地过夜。明早将在猎场醒来，疲劳+1",
+      "text": "留下来",
+      "description": "占用晚间与次日上午 · 疲劳 +1",
       "effects": {
         "fatigue": 1,
-        "relationships": { "henk": 1 },
-        "flags": { "huntOvernightDay20": true, "huntAttendedDay21": true },
-        "logEntry": "你留了下来。夜宴上有人喝醉，有人谈生意，有人争论公爵的税收政策。在某个时刻，亨克和那个陌生人低头说了很长时间的话。"
-      }
+        "flags": { "campOvernight": true, "huntOvernightDay20": true },
+        "nextScene": "forest",
+        "logEntry": "你留在了营地过夜。"
+      },
+      "nextEvent": "day20_camp_banquet"
     },
     {
       "id": "overnight_decline",
       "text": "婉拒，连夜返回庄园",
-      "description": "以庄园职责为由离开。亨克会注意到的",
       "effects": {
         "relationships": { "henk": -1 },
-        "logEntry": "你向亨克解释庄园明早有安排无法缺席。他点了点头，但笑容变窄了一些。你骑马回程，黑暗中枫径庄园的灯光比平时显得更远。"
-      }
+        "nextScene": "default",
+        "logEntry": "你连夜骑马回了枫径。"
+      },
+      "resultText": "你说庄园明天有事，得回去。\n\n亨克愣了半秒，他大概很久没有被人拒绝过这种邀请了，然后立刻笑起来。\n\n“那当然。”他说，“您比我们忙。”\n\n他叫人给你备马，还嘱咐了一句路上黑，让人给你挂个灯笼。他做这些的时候还是那么热情。\n\n你骑马回去用了两个钟头。夜里的林道比白天长得多。\n\n到庄园的时候厨房还亮着灯。玛莎从窗户里看见你，愣了一下，她以为你不回来了。\n\n“锅里还有。”她说。"
     }
   ]
 }

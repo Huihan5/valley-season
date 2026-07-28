@@ -2,6 +2,7 @@ import { GameState, ChoiceEffects } from '../types/game';
 import { getDecorumBonus } from './EstateTaskSystem';
 import {
   DINNER_DECORUM_ANSWERS, DINNER_SETTLEMENT, DINNER_ABSENT_RENOWN,
+  HUNT_OPENING_DECOROUS,
 } from '../data/config';
 
 /**
@@ -33,6 +34,16 @@ export function getDinnerSettlement(decorum: number): ChoiceEffects {
     ...(renown ? { renown } : {}),
     flags: { dinnerPerformance: decorum },
   };
+}
+
+/**
+ * The hunt's opening is the third chance. Three of the four ways to enter the
+ * camp are 得体; the only failure is attending and then standing at the edge of
+ * it, which reads worse than not coming, because not coming was a decision.
+ * The right coat still raises the floor, exactly as at the dinner.
+ */
+export function isHuntOpeningDecorous(pick: unknown, state: GameState): boolean {
+  return HUNT_OPENING_DECOROUS.includes(String(pick)) || getDecorumBonus(state) > 0;
 }
 
 /** Not going is also an answer, and it uses up one of the three chances. */

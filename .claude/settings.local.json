@@ -117,7 +117,10 @@
       "Bash(awk 'NR>=2166 && NR<=2360 {print NR\": \"$0}' C:/Users/Lenovo/Documents/Claude/Projects/valley-season/updates0728/NARRATIVE_DRAFTS_v1.1.md)",
       "Bash(sed -i \"s/import day15Data from '..\\\\/data\\\\/events\\\\/day15.json';/import day15Data from '..\\\\/data\\\\/events\\\\/day15.json';\\\\nimport day15Stumps from '..\\\\/data\\\\/events\\\\/day15_stumps.json';\\\\nimport day15Record from '..\\\\/data\\\\/events\\\\/day15_record.json';/\" src/systems/EventSystem.ts)",
       "Bash(sed -i \"s/^  day12Data, day15Data,$/  day12Data, day15Data, day15Stumps, day15Record,/\" src/systems/EventSystem.ts)",
-      "Bash(sed -i \"s|^import { getFixedEvent, getFreeChoices } from '../src/systems/EventSystem';$|import { getFixedEvent, getFreeChoices, getEventById } from '../src/systems/EventSystem';\\\\nimport { determineEnding } from '../src/systems/EndingSystem';|\" tests/EventSystem.test.ts)"
+      "Bash(sed -i \"s|^import { getFixedEvent, getFreeChoices } from '../src/systems/EventSystem';$|import { getFixedEvent, getFreeChoices, getEventById } from '../src/systems/EventSystem';\\\\nimport { determineEnding } from '../src/systems/EndingSystem';|\" tests/EventSystem.test.ts)",
+      "Bash(awk 'NR>=3017 && NR<=3250 {print NR\": \"$0}' C:/Users/Lenovo/Documents/Claude/Projects/valley-season/updates0728/NARRATIVE_DRAFTS_v1.1.md)",
+      "Bash(awk 'NR>=3250 && NR<=3500 {print NR\": \"$0}' C:/Users/Lenovo/Documents/Claude/Projects/valley-season/updates0728/NARRATIVE_DRAFTS_v1.1.md)",
+      "Bash(awk 'NR>=3500 && NR<=3782 {print NR\": \"$0}' C:/Users/Lenovo/Documents/Claude/Projects/valley-season/updates0728/NARRATIVE_DRAFTS_v1.1.md)"
     ]
   }
 }

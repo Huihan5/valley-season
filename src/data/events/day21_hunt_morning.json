@@ -3,30 +3,32 @@
   "day": 21,
   "phase": "morning",
   "forced": true,
-  "activationFlag": "huntOvernightDay20",
   "advancesPhase": true,
+  "activationFlag": "campOvernight",
   "title": "营地清晨",
-  "sceneText": "帐篷布透着冷光。你在营地醒来，骨头比在床上睡要僵得多。\n\n篝火已经熄了，留着灰烬和几个还在睡的侍从。远处有鸟叫，马厩方向有动静。\n\n亨克男爵已经起来了，站在林边喝着什么热的，背对着营地。那个陌生人不见了——他的折凳是空的，薄册子也不在。\n\n你面前有两条路：一是留下来，参加今日的猎场活动；二是借口庄园事务，在猎队出发前策马回去。",
+  "sceneText": "帐篷布透着冷光。你在营地醒来，骨头比在床上睡要僵得多。\n\n篝火已经熄了，剩下灰烬和几个还在睡的侍从。远处有鸟叫。马那边有动静。\n\n亨克已经起来了，站在林边喝着什么热的，背对着营地。\n\n你昨晚说的那句话，今天早上没有人提。",
   "choices": [
     {
-      "id": "morning_stay_hunt",
+      "id": "camp_stay",
       "text": "留下，参加今日猎场",
-      "description": "已经过夜了，不如继续。疲劳+2，触发今日午后事件",
+      "description": "疲劳 +1",
+      "advancesPhase": false,
       "effects": {
-        "fatigue": 2,
-        "flags": { "huntAttendedDay21Continued": true, "huntAttendedDay22": true },
+        "fatigue": 1,
+        "flags": { "huntAttendedDay21": true, "huntAttendedDay21Continued": true },
         "nextScene": "forest",
-        "logEntry": "你从马夫那里要了一杯热水，等待猎队集结出发。"
-      }
+        "logEntry": "你留在营地，跟着队伍走了今天的路线。"
+      },
+      "nextEvent": "day21_camp_harvest"
     },
     {
-      "id": "morning_return_estate",
+      "id": "camp_return",
       "text": "向亨克道别，返回庄园",
-      "description": "以庄园职责为由离开，但昨夜的留宿已给足面子",
       "effects": {
         "nextScene": "default",
-        "logEntry": "亨克听你说完，点了点头。\"该走就走，\"他说，\"霍特曼在最后那几年也是这样。\"你不太确定这是不是一句赞美。"
-      }
+        "logEntry": "你向亨克道别，骑马回了枫径。"
+      },
+      "resultText": "你去跟亨克道别。\n\n他正在跟两个人说今天走哪条路，看见你过来，把话停下。\n\n“这就走？”\n\n你说庄园那边压着事。\n\n“行。”他说，“昨天您留下来了，这就够意思了。”\n\n他说的是真心话。他拍了拍你的肩，然后转回去继续说他的路线。\n\n回程的路上有霜。马走得比来的时候慢。\n\n你到庄园的时候上午已经过去了大半。田里的人早就出去了，玛莎在厨房，看见你回来点了点头，没有问狩猎的事。\n\n下午你还有一个时段。"
     }
   ]
 }

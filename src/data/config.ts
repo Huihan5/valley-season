@@ -93,6 +93,18 @@ export const ECHO_DECOROUS_AT = 2;
 export const DINNER_ABSENT_RENOWN = -1;
 export const DINNER_DAY = 7;
 
+// The season runs to the 22nd officially, but the local field breaks up on the
+// 21st and the duke's party rides on without them. Day 22 happens at the manor.
+export const HUNT_FIRST_DAY = 18;
+export const HUNT_LAST_DAY = 21;
+
+// The hunt's opening is the third chance. Following 亨克, greeting 玛格丽特 and
+// watching 蒂埃里 work are all 得体; only hiding at the edge of the camp is not.
+export const HUNT_OPENING_DECOROUS = ['A', 'B', 'C'];
+// Fragments that need someone to have decided you are worth telling (GDD 5.5, 9.1).
+export const LORENZ_FRAGMENT_TRUST = 3;
+export const MARGUERITE_FRAGMENT_TRUST = 2;
+
 // ── 非资源行动 (GDD ch.5.4) ─────────────────────────────────────────────────
 // The two surveys are one-shot and expire: their whole use is preparing for one event.
 export const SURVEY_FIELDS_LAST_DAY = 9;   // prepares the Day 10 petition

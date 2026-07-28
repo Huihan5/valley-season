@@ -1,4 +1,6 @@
-import { GameState, Choice, ChoiceEffects, DayPhase, EventData, EventTiming } from '../types/game';
+import {
+  GameState, Choice, ChoiceEffects, DayPhase, EventData, EventTiming, FlagMap,
+} from '../types/game';
 import { canHarvest, canFellTimber } from './WeatherSystem';
 import {
   getHarvestYield, getTimberYield, getYieldTierLabel,
@@ -11,7 +13,9 @@ import {
   getGrainRevenue, getTimberRevenue, getTimberUnitPrice, getSellLots,
 } from './MarketSystem';
 import { getEstateTaskChoices } from './EstateTaskSystem';
-import { getDinnerDecorum, getDinnerSettlement, getDinnerAbsenceEffects } from './NobleSystem';
+import {
+  getDinnerDecorum, getDinnerSettlement, getDinnerAbsenceEffects, isHuntOpeningDecorous,
+} from './NobleSystem';
 import { getTrust } from './RelationSystem';
 import {
   getMarketArrival, getMarketTradeResult, getMarketReturn, getMarketNoTrade,
@@ -21,6 +25,7 @@ import {
   MARKET_TRANSPORT_CAP, MARKET_GRAIN_PRICE,
   OUTING_FATIGUE, MARKET_TRADE_FATIGUE,
   DINNER_DAY, PETITION_INFORMED_TRUST, ECHO_DECOROUS_AT,
+  HUNT_FIRST_DAY, HUNT_LAST_DAY, LORENZ_FRAGMENT_TRUST, MARGUERITE_FRAGMENT_TRUST,
   SURVEY_FIELDS_LAST_DAY, SURVEY_FOREST_LAST_DAY,
   ORCHARD_FULL_YIELD_LAST_DAY, NIGHT_LEDGER_CLUE_AT,
 } from '../data/config';
@@ -49,6 +54,8 @@ import day18HuntArrival from '../data/events/day18_hunt_arrival.json';
 import day19HuntRide from '../data/events/day19_hunt_ride.json';
 import day20HuntStag from '../data/events/day20_hunt_stag.json';
 import day20HuntOvernight from '../data/events/day20_hunt_overnight.json';
+import day20CampBanquet from '../data/events/day20_camp_banquet.json';
+import day21CampHarvest from '../data/events/day21_camp_harvest.json';
 import day21HuntMorning from '../data/events/day21_hunt_morning.json';
 import day21HuntLorenz from '../data/events/day21_hunt_lorenz.json';
 import day22HuntTraveler from '../data/events/day22_hunt_traveler.json';
@@ -66,8 +73,8 @@ const FIXED_EVENTS = [
   day27Officers, day27StreetCorner,
   day18Data, day18HuntArrival,
   day19HuntRide,
-  day20HuntStag, day20HuntOvernight,
-  day21HuntMorning, day21HuntLorenz,
+  day20HuntStag, day20HuntOvernight, day20CampBanquet,
+  day21HuntMorning, day21CampHarvest, day21HuntLorenz,
   day22HuntTraveler, day22TravelerEstate,
   day23Data,
   day30Morning, day30Evening,
@@ -202,6 +209,66 @@ function processStumps(event: EventData, state: GameState): EventData {
   return { ...event, sceneText };
 }
 
+// Day 18 at the camp: 蒂埃里 introduces himself only if the market and the north
+// woods were both skipped, and the four ways of entering the camp settle 贵族信任.
+function processHuntOpening(event: EventData, state: GameState): EventData {
+  const v = event.variants ?? {};
+  const meeting = state.flags.met_thierry ? v.thierry_met : v.thierry_unmet;
+
+  const choices = (event.choices ?? []).map(choice => {
+    const pick = choice.effects?.flags?.huntDay18Pick;
+    const decorous = isHuntOpeningDecorous(pick, state);
+    return {
+      ...choice,
+      effects: { ...choice.effects, ...(decorous ? { nobleTrust: 1 } : {}) },
+      // Watching him work is how the player meets him if nothing else has.
+      ...(choice.id === 'hunt18_thierry'
+        ? { resultText: [choice.resultText, meeting].filter(Boolean).join('\n\n') }
+        : {}),
+    };
+  });
+
+  return { ...event, choices };
+}
+
+// Day 21 at the tree. Both fragments are given, not found: 洛伦茨 needs to have
+// decided you are worth telling, and 玛格丽特 will only say it in her carriage.
+function processHuntLorenz(event: EventData, state: GameState): EventData {
+  const v = event.variants ?? {};
+  const flags: FlagMap = {};
+  const parts = [event.sceneText];
+
+  if (getTrust(state, 'lorenz') >= LORENZ_FRAGMENT_TRUST) {
+    const repeat = !!state.flags.clue_mot_lorenz_question;
+    parts.push(repeat ? v.lorenz_question_again : v.lorenz_question);
+    if (!repeat) flags.clue_mot_lorenz_question = true;
+  }
+
+  if (state.nobleTrust >= MARGUERITE_FRAGMENT_TRUST && !state.flags.clue_nob_marguerite) {
+    parts.push(v.marguerite);
+    flags.clue_nob_marguerite = true;
+  }
+
+  return {
+    ...event,
+    sceneText: parts.filter(Boolean).join('\n\n'),
+    onEnterEffects: { ...event.onEnterEffects, flags: { ...event.onEnterEffects?.flags, ...flags } },
+  };
+}
+
+// Day 19 in the saddle: asking where his patrol ends pays once, and asking a
+// second time gets the three places told apart.
+function processHuntRide(event: EventData, state: GameState): EventData {
+  const v = event.variants ?? {};
+  const asked = !!state.flags.clue_ofc_thierry_range;
+  const choices = (event.choices ?? []).map(choice =>
+    choice.id === 'ride_ask_range'
+      ? { ...choice, resultText: asked ? v.range_again : v.range_first }
+      : choice,
+  );
+  return { ...event, choices };
+}
+
 // Day 22 evening: show full estate encounter if player missed hunt,
 // or a brief follow-up if they already met the traveler at the hunt.
 function processDay22Estate(event: EventData, state: GameState): EventData {
@@ -311,6 +378,9 @@ function process(raw: EventData, state: GameState): EventData {
   if (event.id === 'day8_echo' || event.id === 'day11_echo') return processEcho(event, state);
   if (event.id === 'day15_forest_report') return processForestReport(event, state);
   if (event.id === 'day15_stumps') return processStumps(event, state);
+  if (event.id === 'day18_hunt_arrival') return processHuntOpening(event, state);
+  if (event.id === 'day19_hunt_ride') return processHuntRide(event, state);
+  if (event.id === 'day21_hunt_lorenz') return processHuntLorenz(event, state);
   if (event.id === 'day10_petition') return processDay10(event, state);
   if (event.id === 'day12_audit') return processDay12(event, state);
   if (event.id === 'day22_traveler_estate') return processDay22Estate(event, state);
@@ -412,7 +482,7 @@ function getMarketAfternoonChoices(state: GameState): Choice[] {
 export function getFreeChoices(state: GameState): Choice[] {
   const { phase, weather, fatigue, day, flags, resources } = state;
   const exhausted = fatigue >= 5;
-  const inHuntSeason = !!(flags.huntingSeasonStarted && day >= 18 && day <= 22);
+  const inHuntSeason = !!(flags.huntingSeasonStarted && day >= HUNT_FIRST_DAY && day <= HUNT_LAST_DAY);
   const choices: Choice[] = [];
 
   // Market visit: spent morning traveling — afternoon is for trading at the market
@@ -601,11 +671,14 @@ export function getFreeChoices(state: GameState): Choice[] {
       });
     }
 
-    if (inHuntSeason && day >= 19 && day <= 22 && !flags[`huntAttendedDay${day}`]) {
+    // The local field rides out on Day 19, 20 and 21; the duke's party goes on
+    // without them. Day 22 is back at the manor. The decision is made fresh each
+    // morning, so attending the opening commits the player to nothing.
+    if (inHuntSeason && day >= 19 && day <= HUNT_LAST_DAY && !flags[`huntAttendedDay${day}`]) {
       choices.push({
         id: `attend_hunt_day${day}`,
         text: '出席今日猎场',
-        description: '往返占用上午与下午两个时段，午后将触发猎场事件',
+        description: `2 时段 · 疲劳 +${OUTING_FATIGUE}`,
         effects: {
           fatigue: OUTING_FATIGUE,
           flags: { [`huntAttendedDay${day}`]: true },

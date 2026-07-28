@@ -105,20 +105,20 @@ describe('getFixedEvent — activationFlag', () => {
     expect(event?.id).toBe('day20_hunt_overnight');
   });
 
-  it('Day 21 morning forced event fires only with huntOvernightDay20', () => {
+  it('Day 21 morning starts at the camp only for whoever slept there', () => {
     expect(getFixedEvent(21, 'morning', makeState({ day: 21 }))).toBeNull();
     const withFlag = getFixedEvent(
       21, 'morning',
-      makeState({ day: 21, flags: { huntOvernightDay20: true } })
+      makeState({ day: 21, flags: { campOvernight: true } })
     );
     expect(withFlag?.id).toBe('day21_hunt_morning');
   });
 
-  it('Day 21 lorenz fires only with huntAttendedDay21Continued', () => {
+  it('Day 21 lorenz fires for anyone at the hunt that day, camped or not', () => {
     expect(getFixedEvent(21, 'afternoon', makeState({ day: 21 }))).toBeNull();
     const withFlag = getFixedEvent(
       21, 'afternoon',
-      makeState({ day: 21, flags: { huntAttendedDay21Continued: true } })
+      makeState({ day: 21, flags: { huntAttendedDay21: true } })
     );
     expect(withFlag?.id).toBe('day21_hunt_lorenz');
   });
@@ -495,7 +495,8 @@ describe('getFreeChoices — evening choices', () => {
   it('no longer offers the night spent researching woodland symbols', () => {
     // v3 retired the symbols entirely: the evidence in the north woods is the
     // stumps, their diameters, and the direction the skid road runs.
-    for (const flags of [{}, { documentedSymbols: true }, { documentedStumps: true }]) {
+    const cases: GameState['flags'][] = [{}, { documentedSymbols: true }, { documentedStumps: true }];
+    for (const flags of cases) {
       const choices = getFreeChoices(makeState({ phase: 'evening', flags }));
       expect(choices.find(c => c.id === 'research_symbols')).toBeUndefined();
     }
@@ -556,22 +557,24 @@ describe('Critical path — 霍特曼 investigation (Ending 5)', () => {
 // ── Critical path: hunt overnight chain ───────────────────────────────────
 
 describe('Critical path — hunt overnight chain', () => {
-  it('overnight_stay choice sets both huntOvernightDay20 and huntAttendedDay21', () => {
+  it('staying the night takes over the evening and the morning after it', () => {
     const event = getFixedEvent(
       20, 'evening',
       makeState({ day: 20, flags: { huntAttendedDay20: true } })
     );
     const stayChoice = event?.choices?.find(c => c.id === 'overnight_stay');
-    expect(stayChoice?.effects?.flags?.huntOvernightDay20).toBe(true);
-    expect(stayChoice?.effects?.flags?.huntAttendedDay21).toBe(true);
+    expect(stayChoice?.effects?.flags?.campOvernight).toBe(true);
+    // The evening is spent at the banquet, which is where the phase is charged.
+    expect(stayChoice?.nextEvent).toBe('day20_camp_banquet');
   });
 
-  it('morning_stay_hunt sets huntAttendedDay21Continued', () => {
+  it('riding out from the camp continues the day at the hunt', () => {
     const event = getFixedEvent(
       21, 'morning',
-      makeState({ day: 21, flags: { huntOvernightDay20: true } })
+      makeState({ day: 21, flags: { campOvernight: true } })
     );
-    const continueChoice = event?.choices?.find(c => c.id === 'morning_stay_hunt');
-    expect(continueChoice?.effects?.flags?.huntAttendedDay21Continued).toBe(true);
+    const continueChoice = event?.choices?.find(c => c.id === 'camp_stay');
+    expect(continueChoice?.effects?.flags?.huntAttendedDay21).toBe(true);
+    expect(continueChoice?.nextEvent).toBe('day21_camp_harvest');
   });
 });
