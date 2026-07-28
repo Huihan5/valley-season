@@ -83,10 +83,13 @@ function chainedEvent(state: GameState, id: string | undefined): EventData | nul
 /** Put an event on screen: its own text, its own choices, its arrival effects. */
 function enterEvent(state: GameState, event: EventData): GameState {
   const withEvent = { ...state, activeEvent: event, eventResolved: false };
+  const entered = applyEffects(withEvent, event.onEnterEffects ?? {});
   return {
-    ...applyEffects(withEvent, event.onEnterEffects ?? {}),
+    ...entered,
     currentSceneText: interpolate(event.sceneText, state),
-    currentChoices: filterChoicesByFlags(event.choices ?? [], state.flags),
+    // Filtered against the flags the event itself just set: an event may decide
+    // on arrival which of its choices exist at all.
+    currentChoices: filterChoicesByFlags(event.choices ?? [], entered.flags),
   };
 }
 
@@ -286,8 +289,9 @@ function advancePhase(state: GameState): GameState {
 export default function App() {
   const [state, dispatch] = useReducer(gameReducer, undefined, createInitialState);
 
-  // Day 1 has no choices — auto-show "continue" logic via ADVANCE_DAY_EVENT
-  const isNarrativeOnly = state.activeEvent !== null && state.activeEvent.choices === null;
+  // An event with nothing to decide gets a "继续" — either because it never had
+  // choices, or because none of them apply to this playthrough.
+  const isNarrativeOnly = state.activeEvent !== null && state.currentChoices.length === 0;
 
   // An event may ask for the signature before its choices become available.
   const pendingInput = state.activeEvent?.textInput && !state.playerName

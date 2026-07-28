@@ -28,6 +28,8 @@ import {
   DINNER_DAY, PETITION_INFORMED_TRUST, ECHO_DECOROUS_AT,
   HUNT_FIRST_DAY, HUNT_LAST_DAY, LORENZ_FRAGMENT_TRUST, MARGUERITE_FRAGMENT_TRUST,
   WYNTER_PARTIAL_ACCOUNT, WYNTER_FULL_ACCOUNT, POSITION_LINE_COMPLETE,
+  GRAIN_RETAIN_THRESHOLD, GRAIN_EXCELLENT_THRESHOLD, LETTER_GOOD_GULDMARK,
+  LENA_QUILTS_TRUST, MILLRIDGE_TRUST, MILLRIDGE_CASH, MILLRIDGE_TIMBER, MILLRIDGE_SPRING_SEED,
   SURVEY_FIELDS_LAST_DAY, SURVEY_FOREST_LAST_DAY,
   ORCHARD_FULL_YIELD_LAST_DAY, NIGHT_LEDGER_CLUE_AT,
 } from '../data/config';
@@ -64,6 +66,7 @@ import day22Wynter from '../data/events/day22.json';
 import day23Data from '../data/events/day23.json';
 import day30Morning from '../data/events/day30_morning.json';
 import day30Evening from '../data/events/day30_evening.json';
+import day30Millridge from '../data/events/day30_millridge.json';
 
 const FIXED_EVENTS = [
   day1Data, day3Data, day4Data,
@@ -78,7 +81,7 @@ const FIXED_EVENTS = [
   day21HuntMorning, day21CampHarvest, day21HuntLorenz,
   day22Wynter,
   day23Data,
-  day30Morning, day30Evening,
+  day30Morning, day30Evening, day30Millridge,
 ] as unknown as EventData[];
 
 // ── Timing ─────────────────────────────────────────────────────────────────
@@ -308,58 +311,101 @@ function processWynter(event: EventData, state: GameState): EventData {
   };
 }
 
-// Day 23: assemble the lord's letter from conditional paragraphs.
+/**
+ * Day 23. The chancery writes about the harvest and about the guarantee running
+ * out in the same letter, because both come out of the same office. That is the
+ * moment the 30th stops being only a work deadline.
+ */
 function processDay23(event: EventData, state: GameState): EventData {
-  const { grain, guldmark, timber, renown } = state.resources;
+  const v = event.variants ?? {};
+  const { grain, guldmark } = state.resources;
 
-  // Three-tier thresholds (see GDD ch.5)
-  const grainTier = grain < 40 ? 'low' : grain < 70 ? 'mid' : 'high';
-  const guldmarkTier = guldmark < 10 ? 'low' : guldmark < 25 ? 'mid' : 'high';
-  const timberTier = timber < 5 ? 'low' : timber < 13 ? 'mid' : 'high';
-  const renownTier = renown <= 0 ? 'low' : renown < 6 ? 'mid' : 'high';
+  const tier = grain >= GRAIN_EXCELLENT_THRESHOLD && guldmark >= LETTER_GOOD_GULDMARK
+    ? 'good'
+    : grain >= GRAIN_RETAIN_THRESHOLD ? 'fair' : 'poor';
 
-  const pick = (prefix: string, tier: string) =>
-    event.letterParagraphs?.find(p => p.condition === `${prefix}_${tier}`)?.text ?? '';
-
-  const body = [
-    pick('grain', grainTier),
-    pick('guldmark', guldmarkTier),
-    pick('timber', timberTier),
-    pick('renown', renownTier),
-  ]
+  const sceneText = [event.sceneText, v[tier], v.renewal, v.after, v.broker]
     .filter(Boolean)
     .join('\n\n');
 
-  const assembled = [event.letterOpening, body, event.letterClosing]
-    .filter(Boolean)
-    .join('\n\n');
-
-  return { ...event, sceneText: assembled };
+  return { ...event, sceneText };
 }
 
-// Day 30 evening: replace {resource} placeholders and add a summary sentence.
+// Day 30 morning: 埃莱娜 airs the winter quilts on the day the contract expires.
+// She has not asked anyone whether that is still worth doing.
+function processDay30Morning(event: EventData, state: GameState): EventData {
+  const v = event.variants ?? {};
+  const close = getTrust(state, 'lena') >= LENA_QUILTS_TRUST;
+  return {
+    ...event,
+    sceneText: [event.sceneText, close ? v.lena_close : v.lena_distant].filter(Boolean).join('\n\n'),
+  };
+}
+
+/**
+ * Day 30 evening. Either the books balance, or they are short by exactly the
+ * amount one more morning two weeks ago would have covered — and then there is
+ * one person left to ask.
+ */
 function processDay30(event: EventData, state: GameState): EventData {
-  const { grain, guldmark, timber, renown } = state.resources;
+  const v = event.variants ?? {};
+  const short = state.resources.grain < GRAIN_RETAIN_THRESHOLD;
 
-  let summary = '';
-  if (state.flags.wynterRestated) {
-    summary = '在所有的事务之外，你发现了某件庄园本身不知道的事——那个叫维特的学者，还有他问你的那些问题。也许这才是这三十天里最重要的部分。';
-  } else if (renown >= 6) {
-    summary = '三十天后，枫径庄园的名字在河谷一带多了几分分量。这不是单靠账簿能做到的。';
-  } else if (grain >= 110 && guldmark >= 30) {
-    summary = '账簿上的数字很好看。效率、产出、成本控制——这些你都做得不错。';
-  } else {
-    summary = '三十天，一个季节，一本账簿。';
-  }
+  const sceneText = [
+    event.sceneText,
+    state.flags.admittedWantToStay ? v.admitted : '',
+    v.review,
+    short ? v.short : v.settled,
+  ].filter(Boolean).join('\n\n');
 
-  const text = event.sceneText
-    .replace('{grain}', String(grain))
-    .replace('{guldmark}', String(guldmark))
-    .replace('{timber}', String(timber))
-    .replace('{renown}', String(renown))
-    .replace('{summary}', summary);
+  return {
+    ...event,
+    sceneText,
+    // The ride to 磨岭 is offered only to a steward who needs it.
+    onEnterEffects: {
+      ...event.onEnterEffects,
+      flags: { ...event.onEnterEffects?.flags, ...(short ? { day30Short: true } : {}) },
+    },
+  };
+}
 
-  return { ...event, sceneText: text };
+/**
+ * 磨岭 at night. What 亨克 gives depends on how far the player has actually got
+ * with him; asking for more than that is the worst conversation in the game,
+ * because he is not rude about it. The renown is gone either way — not for what
+ * was asked, but for having gone.
+ */
+function processMillridge(event: EventData, state: GameState): EventData {
+  const trust = getTrust(state, 'henk');
+  const shortfall = Math.max(0, GRAIN_RETAIN_THRESHOLD - state.resources.grain);
+
+  const choices = (event.choices ?? []).map(choice => {
+    const needed = MILLRIDGE_TRUST[choice.id];
+    if (needed === undefined) return choice;
+    if (trust >= needed) {
+      return { ...choice, effects: { ...choice.effects, ...millridgeGift(choice.id, shortfall) } };
+    }
+    // He does not refuse. He explains the account, and gives you a coin for the horse.
+    return {
+      ...choice,
+      effects: { ...choice.effects, guldmark: 1, logEntry: '你在磨岭开了口，但你们还没到那个份上。' },
+      resultText: event.variants?.short_of_trust,
+    };
+  });
+
+  return { ...event, choices };
+}
+
+function millridgeGift(choiceId: string, shortfall: number): ChoiceEffects {
+  const flags = { tookHenkDeal: true };
+  if (choiceId === 'millridge_cash') return { guldmark: MILLRIDGE_CASH, flags };
+  if (choiceId === 'millridge_goods') return { grain: shortfall, timber: MILLRIDGE_TIMBER, flags };
+  return {
+    grain: shortfall + MILLRIDGE_SPRING_SEED,
+    timber: MILLRIDGE_TIMBER,
+    guldmark: MILLRIDGE_CASH,
+    flags,
+  };
 }
 
 // ── Public API ─────────────────────────────────────────────────────────────
@@ -393,7 +439,9 @@ function process(raw: EventData, state: GameState): EventData {
   if (event.id === 'day12_audit') return processDay12(event, state);
   if (event.id === 'day22_wynter') return processWynter(event, state);
   if (event.id === 'day23_lords_letter') return processDay23(event, state);
+  if (event.id === 'day30_morning') return processDay30Morning(event, state);
   if (event.id === 'day30_evening') return processDay30(event, state);
+  if (event.id === 'day30_millridge') return processMillridge(event, state);
   return event;
 }
 
@@ -779,7 +827,7 @@ export function getFreeChoices(state: GameState): Choice[] {
     }
 
     // ── 经纪人换货渠道 (Day 24-30, unlocked by lord's letter) ────────────
-    if (flags.lordsLetterRead && day >= 24 && day <= 30) {
+    if (flags.brokerUnlocked && day <= 30) {
       choices.push({
         id: 'broker_grain_to_gold',
         text: '以粮换钱（经纪人渠道）',

@@ -127,7 +127,16 @@
       "Bash(sed -i 's/flags: { travelerDialogueCorrect: true }/flags: { wynterRestated: true }/' tests/EventSystem.test.ts)",
       "Bash(sed -i \"s/makeState\\({ day: 30, flags: { travelerDialogueCorrect: true } }\\)/makeState\\({ day: 30, flags: { wynterRestated: true } }\\)/\" tests/EventSystem.test.ts)",
       "Bash(sed -i \"s/it\\('travelerDialogueCorrect flag produces investigation summary'/it\\('the retelling on Day 22 is what Day 30 reaches back for'/\" tests/EventSystem.test.ts)",
-      "Bash(sed -i '552s/travelerDialogueCorrect: true,/wynterRestated: true,/' tests/EventSystem.test.ts)"
+      "Bash(sed -i '552s/travelerDialogueCorrect: true,/wynterRestated: true,/' tests/EventSystem.test.ts)",
+      "Bash(awk 'NR>=3989 && NR<=4200 {print NR\": \"$0}' C:/Users/Lenovo/Documents/Claude/Projects/valley-season/updates0728/NARRATIVE_DRAFTS_v1.1.md)",
+      "Bash(awk 'NR>=4200 && NR<=4366 {print NR\": \"$0}' C:/Users/Lenovo/Documents/Claude/Projects/valley-season/updates0728/NARRATIVE_DRAFTS_v1.1.md)",
+      "Bash(node -e \"const d=require\\('./src/data/events/day23.json'\\); console.log\\(JSON.stringify\\(d\\).length\\); console.log\\(d.letterOpening\\); console.log\\(\\(d.letterParagraphs||[]\\).map\\(p=>p.condition\\).join\\(', '\\)\\); console.log\\(d.letterClosing\\); console.log\\(JSON.stringify\\(d.choices,null,1\\).slice\\(0,800\\)\\);\")",
+      "Bash(node -)",
+      "Bash(sed -i '201s/\\(grain, guldmark\\)/\\(grain: number, guldmark: number\\)/' tests/EventSystem.test.ts)",
+      "Bash(sed -i '252s/\\(grain, flags = {}\\)/\\(grain: number, flags: GameState[\"flags\"] = {}\\)/' tests/EventSystem.test.ts)",
+      "Bash(sed -i 's/flags: { lordsLetterRead: true },/flags: { lordsLetterRead: true, brokerUnlocked: true },/' tests/EventSystem.test.ts)",
+      "Bash(sed -i \"s/it\\('broker choices absent without lordsLetterRead'/it\\('broker choices absent until the letter opens the channel'/\" tests/EventSystem.test.ts)",
+      "Bash(sed -i \"s/it\\('broker choices appear on Day 24 after lords letter'/it\\('broker choices open the same day the letter arrives'/\" tests/EventSystem.test.ts)"
     ]
   }
 }

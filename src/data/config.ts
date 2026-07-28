@@ -102,6 +102,22 @@ export const HUNT_LAST_DAY = 21;
 // The hunt's opening is the third chance. Following 亨克, greeting 玛格丽特 and
 // watching 蒂埃里 work are all 得体; only hiding at the edge of the camp is not.
 export const HUNT_OPENING_DECOROUS = ['A', 'B', 'C'];
+// 埃莱娜 only airs the winter quilts for a steward she expects to still be here.
+export const LENA_QUILTS_TRUST = 4;
+
+// 磨岭 at night: what 亨克 is willing to do, by how far the player has got with him.
+export const MILLRIDGE_TRUST: Record<string, number> = {
+  millridge_everything: 4,
+  millridge_cash: 2,
+  millridge_goods: 2,
+};
+export const MILLRIDGE_CASH = 20;       // enough to clear the winter's margin
+export const MILLRIDGE_TIMBER = 10;
+export const MILLRIDGE_SPRING_SEED = 15; // 优秀线 minus 留任线: seed for the spring
+
+// The chancery calls the season "如常" only if both the grain and the cash are there.
+export const LETTER_GOOD_GULDMARK = 15;
+
 // 维特 restates what the player already holds; how much of it he can put in
 // order depends on how many pieces there are (drafts 4.11).
 export const WYNTER_PARTIAL_ACCOUNT = 3; // he can tell the order is wrong

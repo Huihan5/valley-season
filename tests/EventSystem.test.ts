@@ -195,107 +195,100 @@ describe('getFixedEvent — Day 22 维特', () => {
   });
 });
 
-// ── processDay23: letter assembly ─────────────────────────────────────────
+// ── processDay23: the chancery writes about two deadlines at once ─────────
 
 describe('getFixedEvent — Day 23 letter assembly', () => {
-  it('includes grain_low paragraph when grain < 40', () => {
-    const event = getFixedEvent(
-      23, 'morning',
-      makeState({ day: 23, resources: { grain: 20, guldmark: 30, timber: 10, renown: 3 } })
-    );
-    expect(event?.sceneText).toContain('情况堪忧');
+  const letter = (grain: number, guldmark: number) =>
+    getFixedEvent(23, 'morning', makeState({
+      day: 23, resources: { grain, guldmark, timber: 10, renown: 3 },
+    }))?.sceneText ?? '';
+
+  it('calls the season 如常 only when the grain and the cash are both there', () => {
+    expect(letter(95, 20)).toContain('列为如常');
   });
 
-  it('includes grain_mid paragraph when grain 40-70', () => {
-    const event = getFixedEvent(
-      23, 'morning',
-      makeState({ day: 23, resources: { grain: 55, guldmark: 30, timber: 10, renown: 3 } })
-    );
-    expect(event?.sceneText).toContain('进展合理');
+  it('warns without copying anyone in when the harvest is merely behind', () => {
+    const text = letter(80, 5);
+    expect(text).toContain('低于本区平均');
+    expect(text).not.toContain('抄送');
   });
 
-  it('includes grain_high paragraph when grain > 70', () => {
-    const event = getFixedEvent(
-      23, 'morning',
-      makeState({ day: 23, resources: { grain: 90, guldmark: 30, timber: 10, renown: 3 } })
-    );
-    expect(event?.sceneText).toContain('情况良好');
+  it('copies the lord in only at the worst tier, and explains nothing', () => {
+    const text = letter(40, 5);
+    expect(text).toContain('显著落后');
+    expect(text).toContain('本室已将此情况抄送庄园领主');
   });
 
-  it('includes guldmark_low paragraph when guldmark < 10', () => {
-    const event = getFixedEvent(
-      23, 'morning',
-      makeState({ day: 23, resources: { grain: 50, guldmark: 5, timber: 10, renown: 3 } })
-    );
-    expect(event?.sceneText).toContain('账面已偏紧');
+  it('always carries the renewal clause, whatever the harvest looks like', () => {
+    for (const text of [letter(95, 20), letter(80, 5), letter(40, 5)]) {
+      expect(text).toContain('十月三十日届满');
+      expect(text).toContain('届满前七日内提交');
+    }
   });
 
-  it('includes timber_low paragraph when timber < 5', () => {
-    const event = getFixedEvent(
-      23, 'morning',
-      makeState({ day: 23, resources: { grain: 50, guldmark: 30, timber: 3, renown: 3 } })
-    );
-    expect(event?.sceneText).toContain('不足以保障');
+  it('lets the player notice the date is now two deadlines', () => {
+    const text = letter(80, 20);
+    expect(text).toContain('它同时是另一个东西的期限');
+    expect(text).toContain('还有八天');
   });
 
-  it('includes renown_high paragraph when renown >= 6', () => {
-    const event = getFixedEvent(
-      23, 'morning',
-      makeState({ day: 23, resources: { grain: 50, guldmark: 30, timber: 10, renown: 7 } })
-    );
-    expect(event?.sceneText).toContain('难得的成就');
-  });
-
-  it('contains opening and closing text', () => {
+  it('opens the broker channel in the same breath', () => {
     const event = getFixedEvent(23, 'morning', makeState({ day: 23 }));
-    expect(event?.sceneText).toContain('枫径庄园 管事亲启');
-    expect(event?.sceneText).toContain('瓦妮莎·德·瓦莱恩');
+    expect(event?.sceneText).toContain('愿以物易物');
+    expect(event?.onEnterEffects?.flags?.brokerUnlocked).toBe(true);
+    expect(event?.onEnterEffects?.flags?.renewalWindowOpen).toBe(true);
   });
 
-  it('sceneText is not the placeholder [GENERATED]', () => {
+  it('costs nothing — it is a letter', () => {
     const event = getFixedEvent(23, 'morning', makeState({ day: 23 }));
-    expect(event?.sceneText).not.toBe('[GENERATED]');
+    expect(event?.advancesPhase).toBe(false);
+    expect(event?.choices).toBeNull();
   });
 });
 
-// ── processDay30: placeholder replacement ─────────────────────────────────
+// ── processDay30: the last day, and the one person left to ask ────────────
 
-describe('getFixedEvent — Day 30 evening processDay30', () => {
-  it('replaces {grain} with actual grain value', () => {
-    const event = getFixedEvent(
-      30, 'evening',
-      makeState({ day: 30, resources: { grain: 95, guldmark: 20, timber: 8, renown: 4 } })
-    );
-    expect(event?.sceneText).toContain('95');
-    expect(event?.sceneText).not.toContain('{grain}');
+describe('getFixedEvent — Day 30', () => {
+  const evening = (grain: number, flags: GameState["flags"] = {}) =>
+    getFixedEvent(30, 'evening', makeState({
+      day: 30, resources: { grain, guldmark: 20, timber: 8, renown: 4 }, flags,
+    }));
+
+  it('leaves the last day a working day', () => {
+    const morning = getFixedEvent(30, 'morning', makeState({ day: 30 }));
+    expect(morning?.advancesPhase).toBe(false);
+    expect(morning?.choices).toBeNull();
   });
 
-  it('replaces all resource placeholders', () => {
-    const event = getFixedEvent(
-      30, 'evening',
-      makeState({ day: 30, resources: { grain: 80, guldmark: 15, timber: 6, renown: 2 } })
-    );
-    const text = event?.sceneText ?? '';
-    expect(text).not.toContain('{guldmark}');
-    expect(text).not.toContain('{timber}');
-    expect(text).not.toContain('{renown}');
-    expect(text).not.toContain('{summary}');
+  it('has 埃莱娜 air the winter quilts only if she expects you to be here', () => {
+    const distant = getFixedEvent(30, 'morning', makeState({ day: 30 }));
+    expect(distant?.sceneText).toContain('侧过身让你过去');
+
+    const close = getFixedEvent(30, 'morning', makeState({
+      day: 30,
+      relationships: { gregor: 0, marta: 0, lena: 4, elke: 0, henk: 0, lorenz: 0 },
+    }));
+    expect(close?.sceneText).toContain('要到十一月中旬才用得上');
   });
 
-  it('the retelling on Day 22 is what Day 30 reaches back for', () => {
-    const event = getFixedEvent(
-      30, 'evening',
-      makeState({ day: 30, flags: { wynterRestated: true } })
-    );
-    expect(event?.sceneText).toContain('维特');
+  it('closes the books when the season came in', () => {
+    const text = evening(95)?.sceneText ?? '';
+    expect(text).toContain('但今晚这本账是平的');
+    expect(text).not.toContain('你把数字算了三遍');
   });
 
-  it('high renown produces community summary', () => {
-    const event = getFixedEvent(
-      30, 'evening',
-      makeState({ day: 30, resources: { grain: 50, guldmark: 20, timber: 5, renown: 7 } })
-    );
-    expect(event?.sceneText).toContain('河谷一带');
+  it('offers the ride to 磨岭 only to a steward who is short', () => {
+    expect(evening(95)?.onEnterEffects?.flags?.day30Short).toBeUndefined();
+    expect(evening(60)?.onEnterEffects?.flags?.day30Short).toBe(true);
+    for (const choice of evening(60)?.choices ?? []) {
+      expect(choice.requiresFlag).toBe('day30Short');
+    }
+  });
+
+  it('remembers what the player admitted on a street in 河谷城', () => {
+    expect(evening(95)?.sceneText).not.toContain('还没有对第二个人说过');
+    expect(evening(95, { admittedWantToStay: true })?.sceneText)
+      .toContain('你到现在还没有对第二个人说过');
   });
 });
 
@@ -418,26 +411,28 @@ describe('getFreeChoices — afternoon choices', () => {
     expect(opened.find(c => c.id === 'visit_lorenz')).toBeDefined();
   });
 
-  it('broker choices absent before Day 24', () => {
-    const choices = getFreeChoices(makeState({
-      day: 23,
-      phase: 'afternoon',
-      flags: { lordsLetterRead: true },
+  it('broker choices are gated on the letter, not on the date', () => {
+    // The man with the note comes the same afternoon the letter arrives (drafts 4.12).
+    const beforeLetter = getFreeChoices(makeState({ day: 23, phase: 'afternoon' }));
+    expect(beforeLetter.find(c => c.id === 'broker_grain_to_gold')).toBeUndefined();
+
+    const afterLetter = getFreeChoices(makeState({
+      day: 23, phase: 'afternoon', flags: { brokerUnlocked: true },
     }));
-    expect(choices.find(c => c.id === 'broker_grain_to_gold')).toBeUndefined();
+    expect(afterLetter.find(c => c.id === 'broker_grain_to_gold')).toBeDefined();
   });
 
-  it('broker choices appear on Day 24 after lords letter', () => {
+  it('broker choices open the same day the letter arrives', () => {
     const choices = getFreeChoices(makeState({
       day: 24,
       phase: 'afternoon',
-      flags: { lordsLetterRead: true },
+      flags: { lordsLetterRead: true, brokerUnlocked: true },
     }));
     expect(choices.find(c => c.id === 'broker_grain_to_gold')).toBeDefined();
     expect(choices.find(c => c.id === 'broker_timber_to_grain')).toBeDefined();
   });
 
-  it('broker choices absent without lordsLetterRead', () => {
+  it('broker choices absent until the letter opens the channel', () => {
     const choices = getFreeChoices(makeState({ day: 25, phase: 'afternoon' }));
     expect(choices.find(c => c.id === 'broker_grain_to_gold')).toBeUndefined();
   });
@@ -446,7 +441,7 @@ describe('getFreeChoices — afternoon choices', () => {
     const choices = getFreeChoices(makeState({
       day: 25,
       phase: 'afternoon',
-      flags: { lordsLetterRead: true },
+      flags: { lordsLetterRead: true, brokerUnlocked: true },
       resources: { grain: 4, guldmark: 20, timber: 5, renown: 0 },
     }));
     const broker = choices.find(c => c.id === 'broker_grain_to_gold');
@@ -457,7 +452,7 @@ describe('getFreeChoices — afternoon choices', () => {
     const choices = getFreeChoices(makeState({
       day: 25,
       phase: 'afternoon',
-      flags: { lordsLetterRead: true },
+      flags: { lordsLetterRead: true, brokerUnlocked: true },
       resources: { grain: 50, guldmark: 5, timber: 1, renown: 0 },
     }));
     const broker = choices.find(c => c.id === 'broker_timber_to_grain');
