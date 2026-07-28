@@ -35,11 +35,13 @@ export default function ChoicePanel({ choices, onChoice, locked = false }: Props
             <p className={`text-sm font-serif mb-0.5 ${choice.disabled || locked ? 'text-game-dim' : 'text-cream group-hover:text-gold'}`}>
               {choice.text}
             </p>
-            <p className="text-xs text-game-dim leading-snug">
-              {choice.disabled && choice.disabledReason
+            {(() => {
+              // Judgment choices carry no microcopy at all — no empty line either.
+              const note = choice.disabled && choice.disabledReason
                 ? choice.disabledReason
-                : choice.description}
-            </p>
+                : choice.description;
+              return note ? <p className="text-xs text-game-dim leading-snug">{note}</p> : null;
+            })()}
           </button>
         ))}
       </div>

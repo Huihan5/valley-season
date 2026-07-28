@@ -33,7 +33,11 @@ export interface ChoiceEffects {
 export interface Choice {
   id: string;
   text: string;
-  description: string;
+  /**
+   * Mechanical microcopy — cost and effect, never narration (GDD 11.6). Judgment
+   * choices inside events carry none: spelling out the effect gives the answer away.
+   */
+  description?: string;
   effects?: ChoiceEffects;
   requiresWeather?: WeatherType[];
   requiresFlag?: string;
@@ -82,9 +86,18 @@ export interface ConditionalParagraph {
   text: string;
 }
 
+/**
+ * When in the day an event lands, in the drafts' own vocabulary (§04):
+ * 上午前 before the morning is spent, 日中 between morning and afternoon,
+ * 入夜前 between afternoon and evening, 晚间 inside the evening itself.
+ * Only 晚间 costs the player a phase — the rest come to you, so they are free.
+ */
+export type EventTiming = 'dawn' | 'midday' | 'dusk' | 'evening';
+
 export interface EventData {
   id: string;
   day: number;
+  timing?: EventTiming;
   phase?: DayPhase;
   forced: boolean;
   title: string;

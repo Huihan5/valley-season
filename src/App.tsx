@@ -156,7 +156,9 @@ function gameReducer(state: GameState, action: Action): GameState {
       // What the player sees happened: an action's result text, or the greeting of
       // whoever they went to see. Trust is read after the visit is recorded.
       let result: string | null = null;
-      if (choice.resultKind) {
+      if (choice.resultText) {
+        result = choice.resultText;
+      } else if (choice.resultKind) {
         result = getActionResult(choice.resultKind, Math.random, choice.resultVars);
       } else if (effects.conversationWith) {
         result = getGreeting(next, effects.conversationWith, Math.random);
@@ -207,6 +209,9 @@ function gameReducer(state: GameState, action: Action): GameState {
     case 'ADVANCE_DAY_EVENT': {
       const eventId = state.activeEvent?.id;
       const doneFlag = `event_done_${eventId}`;
+      // An event with no choices still obeys the phase rule: the ones that come to
+      // you are free, and Day 1 leaves the player all three phases to spend.
+      const advances = state.activeEvent?.advancesPhase ?? true;
       let next = { ...state, flags: { ...state.flags, [doneFlag]: true }, activeEvent: null };
       // Day 1 arrival gets a specific log entry; other narrative events log their title
       const logText = eventId === 'day1_arrival'
@@ -216,7 +221,7 @@ function gameReducer(state: GameState, action: Action): GameState {
         ...next,
         log: [...next.log, { day: state.day, phase: state.phase, text: logText }],
       };
-      return advancePhase(next);
+      return advances ? advancePhase(next) : buildStateForPhase(next);
     }
 
     default:

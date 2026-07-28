@@ -101,7 +101,10 @@
       "Bash(awk 'NR>=1583 && NR<=1730 {print NR\": \"$0}' C:/Users/Lenovo/Documents/Claude/Projects/valley-season/updates0728/NARRATIVE_DRAFTS_v1.1.md)",
       "Bash(node -e \"const d=require\\('./src/data/events/day7.json'\\); console.log\\(JSON.stringify\\(d,null,1\\).slice\\(0,2600\\)\\);\")",
       "Bash(git mv *)",
-      "Bash(mv src/data/events/day0_opening.json src/data/opening.json)"
+      "Bash(mv src/data/events/day0_opening.json src/data/opening.json)",
+      "Bash(sed -i 's/^      \"description\": \"\",\\\\n//' src/data/events/day3.json)",
+      "Bash(sed -i \"s/getFixedEvent\\(3, 'morning', makeState\\({ day: 3 }\\)\\)/getFixedEvent\\(3, 'afternoon', makeState\\({ day: 3 }\\)\\)/g\" tests/EventSystem.test.ts)",
+      "Bash(python -)"
     ]
   }
 }

@@ -1,4 +1,4 @@
-import { GameState, Choice, DayPhase, EventData } from '../types/game';
+import { GameState, Choice, DayPhase, EventData, EventTiming } from '../types/game';
 import { canHarvest, canFellTimber } from './WeatherSystem';
 import {
   getHarvestYield, getTimberYield, getYieldTierLabel,
@@ -48,6 +48,27 @@ const FIXED_EVENTS = [
   day23Data,
   day30Morning, day30Evening,
 ] as unknown as EventData[];
+
+// ── Timing ─────────────────────────────────────────────────────────────────
+
+// 日中 sits between the morning action and the afternoon one, so it plays at the
+// head of the afternoon; 入夜前 likewise at the head of the evening. Neither
+// costs the phase it opens.
+const TIMING_PHASE: Record<EventTiming, DayPhase> = {
+  dawn: 'morning',
+  midday: 'afternoon',
+  dusk: 'evening',
+  evening: 'evening',
+};
+
+export function eventPhase(event: EventData): DayPhase | undefined {
+  return event.timing ? TIMING_PHASE[event.timing] : event.phase;
+}
+
+export function eventAdvancesPhase(event: EventData): boolean {
+  if (event.timing) return event.timing === 'evening';
+  return event.advancesPhase ?? false;
+}
 
 // ── Per-event post-processors ──────────────────────────────────────────────
 
@@ -169,13 +190,18 @@ function processDay30(event: EventData, state: GameState): EventData {
 // ── Public API ─────────────────────────────────────────────────────────────
 
 export function getFixedEvent(day: number, phase: DayPhase, state: GameState): EventData | null {
-  const raw = FIXED_EVENTS.find(
-    (e) => e.day === day && (e.phase === phase || e.phase === undefined)
+  const found = FIXED_EVENTS.find(
+    (e) => e.day === day && (eventPhase(e) === phase || eventPhase(e) === undefined)
   ) ?? null;
 
-  if (!raw) return null;
+  if (!found) return null;
 
-  if (raw.activationFlag && !state.flags[raw.activationFlag]) return null;
+  if (found.activationFlag && !state.flags[found.activationFlag]) return null;
+
+  // Timing is the authority once an event declares it; phase and cost follow from it.
+  const raw: EventData = found.timing
+    ? { ...found, phase: eventPhase(found), advancesPhase: eventAdvancesPhase(found) }
+    : found;
 
   if (raw.id === 'day12_audit') return processDay12(raw, state);
   if (raw.id === 'day22_traveler_estate') return processDay22Estate(raw, state);

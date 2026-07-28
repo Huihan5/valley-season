@@ -42,7 +42,7 @@ describe('getFixedEvent — basic lookup', () => {
   });
 
   it('returns Day 3 morning event', () => {
-    const event = getFixedEvent(3, 'morning', makeState({ day: 3 }));
+    const event = getFixedEvent(3, 'afternoon', makeState({ day: 3 }));
     expect(event?.id).toBe('day3_ledger');
     expect(event?.forced).toBe(true);
   });
@@ -53,9 +53,10 @@ describe('getFixedEvent — basic lookup', () => {
   });
 
   it('returns null for wrong phase', () => {
-    // Day 3 event is morning-only; afternoon should return null
-    const event = getFixedEvent(3, 'afternoon', makeState({ day: 3 }));
-    expect(event).toBeNull();
+    // The ledger surfaces between the morning action and the afternoon one,
+    // so it is not there when the day opens, nor once it is over.
+    expect(getFixedEvent(3, 'morning', makeState({ day: 3 }))).toBeNull();
+    expect(getFixedEvent(3, 'evening', makeState({ day: 3 }))).toBeNull();
   });
 
   it('returns Day 18 forced morning event', () => {
@@ -504,20 +505,20 @@ describe('getFreeChoices — evening choices', () => {
 
 describe('Critical path — 霍特曼 investigation (Ending 5)', () => {
   it('Day 3 event exists and has investigatedLedger choice', () => {
-    const event = getFixedEvent(3, 'morning', makeState({ day: 3 }));
+    const event = getFixedEvent(3, 'afternoon', makeState({ day: 3 }));
     const choice = event?.choices?.find(c => c.effects?.flags?.investigatedLedger);
     expect(choice).toBeDefined();
   });
 
   it('Day 3 is an insert event, but investigating costs the phase it claims to', () => {
-    const event = getFixedEvent(3, 'morning', makeState({ day: 3 }));
+    const event = getFixedEvent(3, 'afternoon', makeState({ day: 3 }));
     expect(event?.advancesPhase ?? false).toBe(false);
     expect(event?.choices?.find(c => c.id === 'investigate')?.advancesPhase).toBe(true);
     expect(event?.choices?.find(c => c.id === 'defer')?.advancesPhase).toBeUndefined();
   });
 
   it('Day 3 reporting upward trades renown for 领主印象', () => {
-    const event = getFixedEvent(3, 'morning', makeState({ day: 3 }));
+    const event = getFixedEvent(3, 'afternoon', makeState({ day: 3 }));
     const report = event?.choices?.find(c => c.id === 'report');
     expect(report?.effects?.lordImpression).toBe(1);
     expect(report?.effects?.renown).toBe(-1);
