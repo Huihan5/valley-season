@@ -136,7 +136,10 @@
       "Bash(sed -i '252s/\\(grain, flags = {}\\)/\\(grain: number, flags: GameState[\"flags\"] = {}\\)/' tests/EventSystem.test.ts)",
       "Bash(sed -i 's/flags: { lordsLetterRead: true },/flags: { lordsLetterRead: true, brokerUnlocked: true },/' tests/EventSystem.test.ts)",
       "Bash(sed -i \"s/it\\('broker choices absent without lordsLetterRead'/it\\('broker choices absent until the letter opens the channel'/\" tests/EventSystem.test.ts)",
-      "Bash(sed -i \"s/it\\('broker choices appear on Day 24 after lords letter'/it\\('broker choices open the same day the letter arrives'/\" tests/EventSystem.test.ts)"
+      "Bash(sed -i \"s/it\\('broker choices appear on Day 24 after lords letter'/it\\('broker choices open the same day the letter arrives'/\" tests/EventSystem.test.ts)",
+      "Bash(node -e \"const e=require\\('./src/data/endings/endings.json'\\); console.log\\(JSON.stringify\\(Object.keys\\(e\\)\\)\\); for\\(const k of Object.keys\\(e\\)\\){const v=e[k]; console.log\\('---',k, typeof v==='object'? JSON.stringify\\(Object.keys\\(v\\)\\):''\\)}\")",
+      "Bash(node -e \"const g=require\\('./src/data/dialogue/greetings.json'\\); console.log\\(Object.keys\\(g\\)\\); console.log\\(Object.keys\\(g[Object.keys\\(g\\)[0]]\\)\\);\")",
+      "Bash(npx vitest *)"
     ]
   }
 }

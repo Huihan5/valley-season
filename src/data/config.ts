@@ -127,6 +127,33 @@ export const POSITION_LINE_COMPLETE = 4; // 格雷格 three plus 蒂埃里 cross
 // Fragments that need someone to have decided you are worth telling (GDD 5.5, 9.1).
 export const LORENZ_FRAGMENT_TRUST = 3;
 export const MARGUERITE_FRAGMENT_TRUST = 2;
+export const LORENZ_WHY_TRUST = 4;         // he explains why he broke his own rule
+
+// The estate's own fragments, delivered by trust tier (drafts 2.1 to 2.3). Each
+// line unlocks in order: nobody hands over the third thing before the first.
+export const FRAGMENT_TRUST = {
+  gregor_intact: 2,
+  gregor_returned: 3,
+  gregor_condition: 4,
+  marta_summer: 2,
+  marta_lastwords: 4,
+  lena_papers: 3,
+  lena_burned: 4,
+} as const;
+
+// ── 结局判定 (GDD ch.9.1 / 10.1, V3_BUILD_BRIEF 阶段五) ──────────────────────
+// Three groups must all clear before the truth endings open at all.
+export const CLUE_ESTATE_REQUIRED = 4;   // clue_pos_ + clue_mot_
+export const CLUE_OFFICER_REQUIRED = 3;  // clue_ofc_
+export const CLUE_NOBLE_REQUIRED = 1;    // clue_nob_
+export const ENDING_TRUTH_MIN_RENOWN = 0;
+export const ENDING3_RENOWN = 8;
+export const ENDING3_DEEP_TRUST = 3;      // 信任 ≥ 3 …
+export const ENDING3_DEEP_TRUST_COUNT = 3; // … held by at least this many NPCs
+// 领主印象 ≥ 1 buys one margin of error at the 留任线 (GDD 5.6). Two units down
+// from 75 is 73, which is winter rations 60 plus the tax 13 and nothing spare.
+export const LORD_IMPRESSION_MARGIN_MIN = 1;
+export const RETAIN_MARGIN = 2;
 
 // ── 非资源行动 (GDD ch.5.4) ─────────────────────────────────────────────────
 // The two surveys are one-shot and expire: their whole use is preparing for one event.

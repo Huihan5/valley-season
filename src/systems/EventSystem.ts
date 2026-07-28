@@ -18,6 +18,7 @@ import {
 } from './NobleSystem';
 import { getTrust } from './RelationSystem';
 import { countFlagsWithPrefix, countClues, CLUE_PREFIXES } from './FlagRegistry';
+import { getFragmentChoices, getLorenzChapelExtra } from './ClueSystem';
 import {
   getMarketArrival, getMarketTradeResult, getMarketReturn, getMarketNoTrade,
   drawRumours, encodeRumours, rumoursFlagKey,
@@ -256,7 +257,13 @@ function processHuntLorenz(event: EventData, state: GameState): EventData {
   return {
     ...event,
     sceneText: parts.filter(Boolean).join('\n\n'),
-    onEnterEffects: { ...event.onEnterEffects, flags: { ...event.onEnterEffects?.flags, ...flags } },
+    onEnterEffects: {
+      ...event.onEnterEffects,
+      // GDD 5.5: the tree is one of his two action-trust occasions, and the only
+      // one that carries him to 4 — where he says why he told the player anything.
+      relationships: { lorenz: 1 },
+      flags: { ...event.onEnterEffects?.flags, ...flags },
+    },
   };
 }
 
@@ -813,16 +820,20 @@ export function getFreeChoices(state: GameState): Choice[] {
     // call is his working day and pays conversational trust only — the fragments
     // belong to the Thursday vigil (brief appendix 六).
     if (flags.unlockForgeChapel) {
+      // He does not hand anything over on a schedule. If he has decided the player
+      // is worth telling, the visit is where it happens (drafts 2.4, 2.5).
+      const extra = getLorenzChapelExtra(state);
       choices.push({
         id: 'visit_lorenz',
         text: '去炉堂见洛伦茨',
         description: '1 时段 · 计一次与洛伦茨的交谈',
         effects: {
           conversationWith: 'lorenz',
-          flags: { lorenzFirstVisitDone: true },
+          flags: { lorenzFirstVisitDone: true, ...extra?.flags },
           nextScene: 'forge_chapel',
-          logEntry: '你去炉堂找洛伦茨说了一会儿话。',
+          logEntry: extra?.logEntry ?? '你去炉堂找洛伦茨说了一会儿话。',
         },
+        ...(extra ? { resultText: extra.resultText } : {}),
       });
     }
 
@@ -877,6 +888,10 @@ export function getFreeChoices(state: GameState): Choice[] {
     }
   }
 
+  // The estate's own fragments. They cost a phase like any other visit and appear
+  // only when the person in question has decided the player is worth telling.
+  choices.push(...getFragmentChoices(state));
+
   // ── Evening-only ─────────────────────────────────────────────────────────
 
   if (phase === 'evening') {
@@ -905,6 +920,8 @@ export function getFreeChoices(state: GameState): Choice[] {
     // room is empty, so sitting there is meditation and counts for nothing with him.
     if (flags.unlockForgeChapel) {
       const vigil = isVigilNight(day);
+      // The empty room gives rest; the room with him in it may give something else.
+      const extra = vigil ? getLorenzChapelExtra(state) : null;
       choices.push({
         id: 'visit_chapel',
         text: vigil ? '去炉堂陪洛伦茨守夜' : '前往庄园炉堂',
@@ -915,15 +932,16 @@ export function getFreeChoices(state: GameState): Choice[] {
           ? {
             conversationWith: 'lorenz',
             ...(flags.satVigilWithLorenz ? {} : { relationships: { lorenz: 1 } }),
-            flags: { satVigilWithLorenz: true },
+            flags: { satVigilWithLorenz: true, ...extra?.flags },
             nextScene: 'forge_chapel',
-            logEntry: '你在炉堂陪洛伦茨守了一夜的火。',
+            logEntry: extra?.logEntry ?? '你在炉堂陪洛伦茨守了一夜的火。',
           }
           : {
             fatigue: -99,
             nextScene: 'forge_chapel',
             logEntry: '你在庄园炉堂守火冥想了片刻。',
           },
+        ...(extra ? { resultText: extra.resultText } : {}),
       });
     }
 
