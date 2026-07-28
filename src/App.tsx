@@ -76,7 +76,7 @@ function applyEffects(state: GameState, effects: ChoiceEffects): GameState {
     next = { ...next, flags: { ...next.flags, ...effects.flags } };
   }
 
-  next = { ...next, resources: clampResources(next.resources) };
+  next = { ...next, resources: clampResources(next.resources, next.flags) };
   return next;
 }
 
@@ -227,7 +227,7 @@ function advancePhase(state: GameState): GameState {
     // A new day starts back at the manor, with yesterday's result cleared away.
     next = { ...next, weather, currentScene: 'default', lastResult: null };
     next = { ...next, resources: applyDailyOperatingCost(next.resources) };
-    next = { ...next, resources: clampResources(next.resources) };
+    next = { ...next, resources: clampResources(next.resources, next.flags) };
     // Exhausted: forced rest morning
     if (next.fatigue >= 5) {
       next = {

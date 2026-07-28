@@ -1,4 +1,4 @@
-import { Resources, WeatherType, GameState } from '../types/game';
+import { Resources, WeatherType, GameState, FlagMap } from '../types/game';
 import {
   WEATHER_HARVEST_MOD,
   TIMBER_YIELD,
@@ -67,13 +67,18 @@ export function applyDailyOperatingCost(resources: Resources): Resources {
   return { ...resources, guldmark: resources.guldmark - DAILY_GULDMARK_COST };
 }
 
-export function clampResources(resources: Resources): Resources {
-  const storageCap = resources.grain > GRAIN_STORAGE_CAP_UNCLEARED ? GRAIN_STORAGE_CAP_UNCLEARED : undefined;
+/**
+ * Grain spills over 80 until the barn is cleared out; anything above the cap is lost.
+ * Clearing storage removes the ceiling, which is what puts the 90 优秀线 within reach.
+ */
+export function clampResources(resources: Resources, flags: FlagMap = {}): Resources {
+  const capped = flags.storageCleared ? resources.grain : Math.min(resources.grain, GRAIN_STORAGE_CAP_UNCLEARED);
   return {
     ...resources,
-    grain: storageCap !== undefined ? Math.min(resources.grain, storageCap) : resources.grain,
+    grain: capped,
     renown: Math.max(RENOWN_MIN, Math.min(RENOWN_MAX, resources.renown)),
-    guldmark: Math.max(0, resources.guldmark),
+    // Guldmark settles in halves: grain at 1.5/unit cannot come out whole (GDD ch.5.4).
+    guldmark: Math.max(0, Math.round(resources.guldmark * 2) / 2),
     timber: Math.max(0, resources.timber),
   };
 }

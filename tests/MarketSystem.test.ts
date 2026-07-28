@@ -63,10 +63,11 @@ describe('cart capacity', () => {
 });
 
 describe('pricing', () => {
-  it('pays 1.5 per grain, rounded down on odd lots', () => {
+  it('pays 1.5 per grain and settles odd lots in halves rather than rounding', () => {
     expect(getGrainRevenue(4)).toBe(6);
     expect(getGrainRevenue(10)).toBe(15);
-    expect(getGrainRevenue(5)).toBe(7);
+    expect(getGrainRevenue(5)).toBe(7.5);
+    expect(getGrainRevenue(7)).toBe(10.5);
   });
 
   it('pays 3 per timber, or 4 once the 磨岭 agreement is closed', () => {

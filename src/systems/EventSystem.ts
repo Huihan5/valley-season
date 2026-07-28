@@ -278,7 +278,8 @@ export function getFreeChoices(state: GameState): Choice[] {
   // ── Morning + Afternoon shared ───────────────────────────────────────────
 
   if (phase === 'morning' || phase === 'afternoon') {
-    const grainGain = canHarvest(weather) ? getHarvestYield(state) : Math.max(0, getHarvestYield(state) - 2);
+    // The weather penalty is already in getHarvestYield — do not charge it twice.
+    const grainGain = getHarvestYield(state);
     choices.push({
       id: 'harvest',
       text: '前往农田收割',

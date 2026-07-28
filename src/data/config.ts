@@ -45,8 +45,14 @@ export const TIMBER_SEASON_QUOTA = 25;
 // Daily guldmark operating cost (auto-deducted each morning)
 export const DAILY_GULDMARK_COST = 2;
 
-// Storage cap without clearing storage
+// Storage cap until the barn is cleared out; clearing lifts it entirely (GDD ch.5.4).
 export const GRAIN_STORAGE_CAP_UNCLEARED = 80;
+
+// ── 准备投入 (GDD ch.5.4) ───────────────────────────────────────────────────
+// The efficiency ladder: each rung costs a phase and money, and pays back in yield.
+export const REPAIR_TOOLS_COST = 15;
+export const CLEAR_STORAGE_COST = 10;
+export const REPAIR_STABLE_COST = { guldmark: 12, timber: 3 };
 
 // Two-tier grain thresholds (GDD ch.5.4 / 10.1).
 // Below 留任线 → dismissed. 留任线 to 优秀线 → ending 2 at best. 优秀线 and above → ending 3 / 4A / 4B eligible.

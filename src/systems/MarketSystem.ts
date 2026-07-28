@@ -26,8 +26,12 @@ export function getCapacityLeft(state: GameState): number {
   return Math.max(0, MARKET_TRANSPORT_CAP - getUnitsSoldToday(state));
 }
 
+/**
+ * Grain sells at 1.5/unit, so an odd lot cannot come out whole. Guldmark settles in
+ * halves rather than rounding (GDD ch.5.4) — rounding would break the budget balance.
+ */
 export function getGrainRevenue(units: number): number {
-  return Math.floor(units * MARKET_GRAIN_PRICE);
+  return Math.round(units * MARKET_GRAIN_PRICE * 2) / 2;
 }
 
 /** 亨克's agreement raises the timber rate; it does not touch grain. */
