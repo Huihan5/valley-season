@@ -1,5 +1,37 @@
 # Valley Season — Changelog
 
+## [2026-07-28] — v3 阶段四（上半）：Day 0 至 Day 13
+
+文本全部来自 `NARRATIVE_DRAFTS_v1.1.md` 第 04 节，逐字迁入，未改措辞。
+
+### Added
+- `src/data/opening.json` + `OpeningSystem.ts` + `OpeningSequence.tsx` — Day 0 抵达：担保书加四幕共 13 页。担保书是全游戏唯一一次文本输入，签名后名字留在文件上，再翻页
+- `src/data/events/day4.json` — Day 4 添柴。写入 `met_lorenz` 与 `unlockForgeChapel`，炉堂在此之前不可访问，守夜规则由洛伦茨本人说出
+- Day 7 棘墙晚宴四段连锁（`day7_dinner_arrival` / `_hartmann` / `_departure` / `_return`），取代 v2 的单场景版本
+- `src/systems/NobleSystem.ts` — 贵族信任三次机会的第一次。得体计数、结算表、缺席罚则
+- Day 8 / 11 / 13 三个回音事件，确定触发，不占时段，无选项
+- `EventData.timing`（上午前 / 日中 / 入夜前 / 晚间）取代直接写 `phase`。只有晚间占时段
+- `EventData.next` 与 `Choice.nextEvent` — 事件连锁。一次外出可以有多个判定点，时段只在链尾扣一次
+- `Choice.resultText` — 事件分支正文，显示在行动结果的位置
+- `EventData.variants` — 条件正文块（信息层、四档组装），选择逻辑在系统，文本仍在数据
+- `getEffectiveTenantTrust()` — GDD 5.5 的"玛莎信任 ≥4 则佃户整体信任 +1，≤-4 则 -1"
+
+### Changed
+- Day 1 改写为草稿 4.2，不再重复介绍开场已经走过一遍的三个人，也不再吃掉它所介绍的那个上午
+- Day 3 改写为草稿 4.3，两段正文加三条分支正文。事件位置从上午移到日中
+- Day 10 请愿改写为草稿 4.6。信息层由玛莎信任 ≥2 或 `surveyedFields` 解锁；无信息时"先修三户"是盲选，写入 `petitionFairness: unfair`
+- Day 12 审计改写为草稿 4.7。凯斯勒（提莫西）的判定给 `clue_ofc_timothy_nature`，未读账的代价是声望 -1 与 Day 13 的回音
+- 下午"去炉堂见洛伦茨"改由 `unlockForgeChapel` 把关，不再挂在晚宴上；按附录六，下午不给碎片
+- 现有事件的选项小字按 GDD 11.6 重做：判断类不给小字，只有真实的时段与资源花费保留
+
+### Removed
+- `src/data/events/day7.json`（v2 单场景晚宴）
+
+### Tests
+238 passed（新增 `OpeningSystem.test.ts` 10 项、`EventTiming.test.ts` 20 项、`DinnerAndEchoes.test.ts` 25 项）
+
+---
+
 ## [2026-07-28] — v3 阶段 3.5：行动层
 
 CC_BRIEF v1.1 附录一新插入的一块，位置在阶段三之后、阶段四之前。
