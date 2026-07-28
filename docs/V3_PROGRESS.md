@@ -151,6 +151,24 @@ GDD 3.3 给炉堂列了四件事：沉思、线索整理、恢复体力、与洛
 
 ---
 
+## 阶段四开工须知
+
+**源文件在仓库外**：`updates0728/NARRATIVE_DRAFTS_v1.1.md`（已 gitignore）。第 04 节，16 个事件加集市结构。GDD 与 brief 已同步进 `docs/`，是 v3.1 与 v1.1。
+
+**已核实**：草稿 v1.1 的 26 处选项表逐一扫过，全部有分支正文。三处看似缺 A 的是误判，由紧随的整节承接——Day 18 开幕的 A 走 4.10.2，Day 30 备马的 A 走「磨岭·夜访」，营地过夜的 A 走「若留下」。
+
+**选项小字规则（GDD 11.6）**：日常行动机械生成，格式 `1 时段 · 15 金卢 · 收割 3→5`；**事件内的判断选项一律不给小字**——晚宴三选一、公务员组判定、Day 27 街口都属此类，给了等于给答案。现有 17 个事件的 38 条 v2 小字要按此规则重做。
+
+**接线点**：
+- `getDecorumBonus(state)` 已实现，Day 7 晚宴与狩猎季的得体计数要加上它
+- `surveyedFields` 解锁 Day 10 请愿的信息层；`surveyedForest` 让 Day 15 能确认树桩是新伐的
+- `met_timothy` / `met_thierry` / `unlockForgeChapel` / `tookHenkDeal` / `admittedWantToStay` 已在 `FlagRegistry.ts` 声明，等事件写入
+- `unlockForgeChapel` 由 Day 4 添柴事件写入，写入之前炉堂与洛伦茨下午拜访都不出现
+
+**注意**：Day 1 与 Day 12 的正文仍是 v2 文本，含作停顿的破折号，违反 brief 硬规则五。这两个事件在阶段四随草稿整体替换，不要单独改。
+
+---
+
 ## 施工单（Jira 票拆分）
 
 Epic 建议名：`Valley Season v3 rebuild`。合计 35 SP。
