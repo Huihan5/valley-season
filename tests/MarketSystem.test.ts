@@ -26,6 +26,7 @@ function makeState(overrides: Partial<GameState> = {}): GameState {
     conversations: { ...ZERO },
     nobleTrust: 0,
     lordImpression: 0,
+    tenantTrust: -2,
     flags: { visitingMarketToday: 6 },
     currentSceneText: '',
     currentScene: 'default',

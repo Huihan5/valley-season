@@ -12,6 +12,10 @@ import {
   YIELD_TIER_MEAGRE_MAX,
   YIELD_TIER_FAIR_MAX,
   TIMBER_SEASON_QUOTA,
+  FORAGE_YIELD_RANGE,
+  ORCHARD_YIELD_RANGE,
+  ORCHARD_FULL_YIELD_LAST_DAY,
+  ORCHARD_TENANT_TRUST_CAP,
 } from '../data/config';
 
 /**
@@ -22,6 +26,38 @@ export function getYieldTierLabel(amount: number): string {
   if (amount <= YIELD_TIER_MEAGRE_MAX) return '微薄';
   if (amount <= YIELD_TIER_FAIR_MAX) return '尚可';
   return '丰厚';
+}
+
+/**
+ * Foraging and the orchard pay a small, varying sum. The variation is derived from
+ * the day and phase rather than drawn at random, so the figure cannot be rerolled
+ * by anything the player does short of spending the phase.
+ */
+function spread(state: GameState, salt: number, min: number, max: number): number {
+  const phaseIndex = ['morning', 'afternoon', 'evening'].indexOf(state.phase);
+  const span = max - min + 1;
+  return min + ((state.day * salt + phaseIndex) % span);
+}
+
+export function getForageYield(state: GameState): number {
+  const [min, max] = FORAGE_YIELD_RANGE;
+  return spread(state, 7, min, max);
+}
+
+/** After Day 15 the good fruit is on the ground; what is left is worth half. */
+export function getOrchardYield(state: GameState): number {
+  const [min, max] = ORCHARD_YIELD_RANGE;
+  const full = spread(state, 3, min, max);
+  return state.day > ORCHARD_FULL_YIELD_LAST_DAY ? full / 2 : full;
+}
+
+/** How much tenant trust the orchard has already contributed, against its own ceiling. */
+export function getOrchardTenantTotal(state: GameState): number {
+  return Number(state.flags.orchardTenantGained ?? 0);
+}
+
+export function getOrchardTenantGain(state: GameState): number {
+  return getOrchardTenantTotal(state) < ORCHARD_TENANT_TRUST_CAP ? 1 : 0;
 }
 
 export function getTimberFelled(state: GameState): number {

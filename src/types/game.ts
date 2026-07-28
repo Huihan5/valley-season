@@ -24,6 +24,7 @@ export interface ChoiceEffects {
   conversationWith?: NpcId;
   nobleTrust?: number;
   lordImpression?: number;
+  tenantTrust?: number;
   flags?: FlagMap;
   nextScene?: string;
   logEntry?: string;
@@ -108,6 +109,8 @@ export interface GameState {
   nobleTrust: number;
   /** 领主印象 0-3. Changes how 路德维希 speaks and buys one margin of error at the 留任线. */
   lordImpression: number;
+  /** 佃户整体信任 -5..+5. Gates the tenant meeting, which is the only route to efficiency 7. */
+  tenantTrust: number;
   flags: FlagMap;
   currentSceneText: string;
   /** Where the player currently is; drives which location base and 闲笔 pool is used. */

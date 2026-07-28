@@ -8,6 +8,8 @@ import {
   NOBLE_TRUST_MAX,
   LORD_IMPRESSION_MIN,
   LORD_IMPRESSION_MAX,
+  TENANT_TRUST_MIN,
+  TENANT_TRUST_MAX,
 } from '../data/config';
 
 /**
@@ -64,6 +66,10 @@ export function adjustNobleTrust(current: number, delta: number): number {
 
 export function adjustLordImpression(current: number, delta: number): number {
   return clamp(current + delta, LORD_IMPRESSION_MIN, LORD_IMPRESSION_MAX);
+}
+
+export function adjustTenantTrust(current: number, delta: number): number {
+  return clamp(current + delta, TENANT_TRUST_MIN, TENANT_TRUST_MAX);
 }
 
 // ── 信任档位 ────────────────────────────────────────────────────────────────

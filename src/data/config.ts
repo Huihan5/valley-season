@@ -48,11 +48,34 @@ export const DAILY_GULDMARK_COST = 2;
 // Storage cap until the barn is cleared out; clearing lifts it entirely (GDD ch.5.4).
 export const GRAIN_STORAGE_CAP_UNCLEARED = 80;
 
-// ── 准备投入 (GDD ch.5.4) ───────────────────────────────────────────────────
-// The efficiency ladder: each rung costs a phase and money, and pays back in yield.
+// ── 庄园事务 (GDD ch.5.4) ───────────────────────────────────────────────────
+// One-off purchases. Each costs a phase as well as money, because a phase is the
+// scarcer currency and the trade between them is the decision worth making.
 export const REPAIR_TOOLS_COST = 15;
 export const CLEAR_STORAGE_COST = 10;
 export const REPAIR_STABLE_COST = { guldmark: 12, timber: 3 };
+export const GIFT_COST = 5;          // 河谷城风尚伴手礼
+export const ATTIRE_COST = 10;       // 瓦莱维斯普秋装
+
+// ── 佃户整体信任 (GDD ch.5.5) ───────────────────────────────────────────────
+// Starts negative: three weeks with nobody answering requests is a low point,
+// not hostility. A full repair at Day 10 alone brings it back to zero.
+export const TENANT_TRUST_INITIAL = -2;
+export const TENANT_TRUST_MIN = -5;
+export const TENANT_TRUST_MAX = 5;
+export const TENANT_MEETING_MIN_TRUST = 0;
+export const ORCHARD_TENANT_TRUST_CAP = 2; // the orchard alone cannot carry it further
+
+// ── 非资源行动 (GDD ch.5.4) ─────────────────────────────────────────────────
+// The two surveys are one-shot and expire: their whole use is preparing for one event.
+export const SURVEY_FIELDS_LAST_DAY = 9;   // prepares the Day 10 petition
+export const SURVEY_FOREST_LAST_DAY = 14;  // prepares the Day 15 boundary
+export const FORAGE_YIELD_RANGE = [2, 3];  // 金卢
+export const ORCHARD_YIELD_RANGE = [2, 5]; // 金卢
+export const ORCHARD_FULL_YIELD_LAST_DAY = 15; // after this the fruit is on the ground
+
+// Reviewing the ledger at night pays off only once it becomes a habit.
+export const NIGHT_LEDGER_CLUE_AT = 3;
 
 // Two-tier grain thresholds (GDD ch.5.4 / 10.1).
 // Below 留任线 → dismissed. 留任线 to 优秀线 → ending 2 at best. 优秀线 and above → ending 3 / 4A / 4B eligible.

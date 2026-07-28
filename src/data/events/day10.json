@@ -14,9 +14,14 @@
         "guldmark": -40,
         "timber": -10,
         "renown": 2,
-        "relationships": { "marta": 2 },
-        "flags": { "repairedAllHousing": true },
-        "logEntry": "你批准了全部五户的住宅修缮，佃户们松了一口气。"
+        "relationships": {
+          "marta": 2
+        },
+        "flags": {
+          "repairedAllHousing": true
+        },
+        "logEntry": "你批准了全部五户的住宅修缮，佃户们松了一口气。",
+        "tenantTrust": 2
       }
     },
     {
@@ -27,9 +32,14 @@
         "guldmark": -16,
         "timber": -4,
         "renown": 1,
-        "relationships": { "marta": 1 },
-        "flags": { "repairedPartialHousing": true },
-        "logEntry": "你优先修缮了情况最严峻的两处，向其余人解释了资源限制。"
+        "relationships": {
+          "marta": 1
+        },
+        "flags": {
+          "repairedPartialHousing": true
+        },
+        "logEntry": "你优先修缮了情况最严峻的两处，向其余人解释了资源限制。",
+        "tenantTrust": 1
       }
     },
     {
@@ -38,9 +48,14 @@
       "description": "节省资源，但佃户信任大幅下降，声望受损",
       "effects": {
         "renown": -2,
-        "relationships": { "marta": -1 },
-        "flags": { "deniedHousingPetition": true },
-        "logEntry": "你推迟了修缮请求。玛莎没有说什么，但转身离开时速度比平时快了很多。"
+        "relationships": {
+          "marta": -1
+        },
+        "flags": {
+          "deniedHousingPetition": true
+        },
+        "logEntry": "你推迟了修缮请求。玛莎没有说什么，但转身离开时速度比平时快了很多。",
+        "tenantTrust": -1
       }
     }
   ]

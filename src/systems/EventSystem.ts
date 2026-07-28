@@ -3,15 +3,19 @@ import { canHarvest, canFellTimber } from './WeatherSystem';
 import {
   getHarvestYield, getTimberYield, getYieldTierLabel,
   getTimberFelled, getTimberQuotaLeft,
+  getForageYield, getOrchardYield, getOrchardTenantGain, getOrchardTenantTotal,
 } from './ResourceSystem';
-import { isMarketDay, getDayOfWeek } from './TimeSystem';
+import { isMarketDay, isVigilNight, getDayOfWeek } from './TimeSystem';
 import {
   marketSoldKey, getUnitsSoldToday, getCapacityLeft,
   getGrainRevenue, getTimberRevenue, getTimberUnitPrice, getSellLots,
 } from './MarketSystem';
+import { getEstateTaskChoices } from './EstateTaskSystem';
 import {
   MARKET_TRANSPORT_CAP, MARKET_GRAIN_PRICE,
   OUTING_FATIGUE, MARKET_TRADE_FATIGUE,
+  SURVEY_FIELDS_LAST_DAY, SURVEY_FOREST_LAST_DAY,
+  ORCHARD_FULL_YIELD_LAST_DAY, NIGHT_LEDGER_CLUE_AT,
 } from '../data/config';
 
 import day1Data from '../data/events/day1.json';
@@ -266,7 +270,6 @@ function getMarketAfternoonChoices(state: GameState): Choice[] {
 export function getFreeChoices(state: GameState): Choice[] {
   const { phase, weather, fatigue, day, flags, resources } = state;
   const exhausted = fatigue >= 5;
-  const ledgerResolved = !!(flags.investigatedLedger || flags.reportedLedger || flags.deferredLedger);
   const inHuntSeason = !!(flags.huntingSeasonStarted && day >= 18 && day <= 22);
   const choices: Choice[] = [];
 
@@ -322,19 +325,99 @@ export function getFreeChoices(state: GameState): Choice[] {
 
   // ── Morning-only ─────────────────────────────────────────────────────────
 
+  // 庄园事务: one-off preparations, taken like any other action in a working phase.
+  if (phase === 'morning' || phase === 'afternoon') {
+    choices.push(...getEstateTaskChoices(state));
+
+    // 采集与果园开局即有，不需要解锁。第一幕性价比高于收割是有意的。
+    const forageYield = getForageYield(state);
+    choices.push({
+      id: 'forage',
+      text: '去林地采集蘑菇草药',
+      description: `1 时段 · ${forageYield} 金卢 · 计一次与玛莎的交谈`,
+      effects: {
+        guldmark: forageYield,
+        fatigue: 1,
+        conversationWith: 'marta',
+        nextScene: 'forest',
+        logEntry: `你采了一趟，换了 ${forageYield} 金卢。`,
+      },
+      resultKind: 'forage',
+      resultVars: { n: forageYield },
+      disabled: exhausted,
+      disabledReason: exhausted ? '你过于疲惫' : undefined,
+    });
+
+    const orchardYield = getOrchardYield(state);
+    const orchardCapped = getOrchardTenantGain(state) === 0;
+    choices.push({
+      id: 'orchard',
+      text: '去果园采摘',
+      description: `1 时段 · ${orchardYield} 金卢${orchardCapped ? '' : ' · 佃户整体信任 +1'}`
+        + (day > ORCHARD_FULL_YIELD_LAST_DAY ? '（果子过熟，收益减半）' : ''),
+      effects: {
+        guldmark: orchardYield,
+        fatigue: 1,
+        tenantTrust: getOrchardTenantGain(state),
+        flags: { orchardTenantGained: getOrchardTenantTotal(state) + getOrchardTenantGain(state) },
+        nextScene: 'fields',
+        logEntry: `你在果园摘了一趟，换了 ${orchardYield} 金卢。`,
+      },
+      resultKind: 'orchard',
+      disabled: exhausted,
+      disabledReason: exhausted ? '你过于疲惫' : undefined,
+    });
+  }
+
   if (phase === 'morning') {
+    // v3: the office is where 埃莱娜 is. There is no separate "go and talk to her".
     choices.push({
       id: 'visit_office',
       text: '处理办公室文书',
-      description: ledgerResolved
-        ? '整理日常文书，处理霍特曼留下的文件堆'
-        : '整理账目和文件，可能发现有用信息',
+      description: '1 时段 · 计一次与埃莱娜的交谈',
       effects: {
         fatigue: 0,
+        conversationWith: 'lena',
         nextScene: 'office',
         logEntry: '你在办公室处理了一上午的文书。',
       },
+      resultKind: 'office_paperwork',
     });
+
+    // 巡视是限时的一次性行动：用途只有对应的那一个事件，过期就不能再做。
+    if (!flags.surveyedFields && day <= SURVEY_FIELDS_LAST_DAY) {
+      choices.push({
+        id: 'survey_fields',
+        text: '巡视农田',
+        description: '1 时段 · 无产出',
+        effects: {
+          fatigue: 1,
+          flags: { surveyedFields: true },
+          nextScene: 'fields',
+          logEntry: '你把每一块地都走了一遍。',
+        },
+        resultKind: 'survey_fields',
+        disabled: exhausted,
+        disabledReason: exhausted ? '你过于疲惫' : undefined,
+      });
+    }
+
+    if (!flags.surveyedForest && day <= SURVEY_FOREST_LAST_DAY) {
+      choices.push({
+        id: 'survey_forest',
+        text: '巡视林地',
+        description: '1 时段 · 无产出',
+        effects: {
+          fatigue: 1,
+          flags: { surveyedForest: true },
+          nextScene: 'forest',
+          logEntry: '你在林地里走了一趟，把看见的都记下来了。',
+        },
+        resultKind: 'survey_forest',
+        disabled: exhausted,
+        disabledReason: exhausted ? '你过于疲惫' : undefined,
+      });
+    }
 
     if (flags.investigatedLedger && !flags.foundLedgerSource && day < 12) {
       choices.push({
@@ -488,15 +571,25 @@ export function getFreeChoices(state: GameState): Choice[] {
   // ── Evening-only ─────────────────────────────────────────────────────────
 
   if (phase === 'evening') {
+    // Reading the ledger at night pays off only as a habit: the third night is the
+    // one where eight Octobers laid side by side say something. This is the only
+    // clue in the game that needs no NPC at all.
+    const ledgerNights = Number(flags.nightLedgerCount ?? 0);
     choices.push({
       id: 'review_accounts',
       text: '夜间审查账目',
-      description: '油灯下细看霍特曼的记录',
+      description: '1 时段 · 疲劳 +1 · 无产出',
       effects: {
         fatigue: 1,
+        flags: {
+          nightLedgerCount: ledgerNights + 1,
+          ...(ledgerNights + 1 === NIGHT_LEDGER_CLUE_AT ? { clue_mot_handwriting: true } : {}),
+        },
         nextScene: 'office',
         logEntry: '你在灯下审查了账目到深夜。',
       },
+      // Only the first three nights have text; past that the ledger has said its piece.
+      resultKind: `night_ledger_${ledgerNights + 1}`,
     });
 
     if (flags.documentedSymbols) {
@@ -515,18 +608,29 @@ export function getFreeChoices(state: GameState): Choice[] {
       });
     }
 
+    // 洛伦茨 keeps vigil at the manor forge-hall on Thursdays. Any other night the
+    // room is empty, so sitting there is meditation and counts for nothing with him.
     if (flags.unlockForgeChapel) {
+      const vigil = isVigilNight(day);
       choices.push({
         id: 'visit_chapel',
-        text: '前往庄园炉堂',
-        description: state.fatigue >= 3
-          ? '守火冥想，恢复精力（疲劳归零）'
-          : '守火冥想，但你现在还不觉得需要',
-        effects: {
-          fatigue: state.fatigue >= 3 ? -99 : 0,
-          nextScene: 'forge_chapel',
-          logEntry: '你在庄园炉堂守火冥想了片刻。',
-        },
+        text: vigil ? '去炉堂陪洛伦茨守夜' : '前往庄园炉堂',
+        description: vigil
+          ? '1 时段 · 计一次与洛伦茨的交谈'
+          : '1 时段 · 疲劳归零',
+        effects: vigil
+          ? {
+            conversationWith: 'lorenz',
+            ...(flags.satVigilWithLorenz ? {} : { relationships: { lorenz: 1 } }),
+            flags: { satVigilWithLorenz: true },
+            nextScene: 'forge_chapel',
+            logEntry: '你在炉堂陪洛伦茨守了一夜的火。',
+          }
+          : {
+            fatigue: -99,
+            nextScene: 'forge_chapel',
+            logEntry: '你在庄园炉堂守火冥想了片刻。',
+          },
       });
     }
 

@@ -37,6 +37,11 @@ export function isMarketDay(day: number): boolean {
   return getWeekdayNumber(day) === 6;
 }
 
+/** 洛伦茨 keeps vigil at the manor forge-hall on Thursdays — Day 4, 11, 18, 25. */
+export function isVigilNight(day: number): boolean {
+  return getWeekdayNumber(day) === 4;
+}
+
 export function getDayOfWeek(day: number): string {
   const labels = ['', '周一', '周二', '周三', '周四', '周五', '周六', '周日'];
   return labels[getWeekdayNumber(day)];

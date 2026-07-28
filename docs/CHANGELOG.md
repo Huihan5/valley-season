@@ -1,5 +1,34 @@
 # Valley Season — Changelog
 
+## [2026-07-28] — v3 阶段 3.5：行动层
+
+CC_BRIEF v1.1 附录一新插入的一块，位置在阶段三之后、阶段四之前。
+
+### Fixed
+- **粮食 80 上限改为受 `storageCleared` 控制**。此前无条件截断，优秀线 90 不可达，结局三与 4A/4B 全部够不着
+- **阴雨天收割不再重复扣减**。`getHarvestYield()` 与选项生成两处只扣一次
+- **收割效率梯度接上了**。`toolsRepaired` / `toolsAndStorage` / `fullyPrepared` 此前无人写入，基础产出永远是 3
+- 金卢按 0.5 结算（GDD 5.4）。粮食 1.5/单位卖奇数必然产生小数，取整会破坏预算平衡
+
+### Added
+- `src/systems/EstateTaskSystem.ts` — 庄园事务七项（修农具、清理仓储、佃户会议、马厩屋顶、伴手礼赠玛格丽特/赠亨克、秋装）。清单是视图，点选仍是消耗时段的一次性行动
+- `src/components/common/EstateTaskList.tsx` — 左侧常驻清单，显示花费、前置与状态
+- `GameState.tenantTrust`（初始 -2，范围 -5 至 +5）。Day 10 请愿全修 +2 / 部分修 +1 / 拒绝 -1
+- 巡视农田（Day 1-9）与巡视林地（Day 1-14）：限时一次性，无产出
+- 采集蘑菇草药（计玛莎交谈）与果园采摘（佃户信任每次 +1，果园累计上限 +2，Day 15 后收益减半）
+- 伴手礼与秋装集齐后每次得体判定初始 +1（`getDecorumBonus`）
+- 草稿 3.5b 文本：办公室文书三变体、夜账三夜
+
+### Changed
+- 上午"处理办公室文书"从零效果改为与埃莱娜相处的场合，计一次有效交谈
+- 晚间"夜间审查账目"从零效果改为三次累计，第三次给 `clue_mot_handwriting`
+- 晚间炉堂按周四切换：周四是陪洛伦茨守夜（计交谈，首次额外行动性信任 +1），非周四是沉思（疲劳归零，不计信任）
+
+### Tests
+183 passed（新增 `EstateTaskSystem.test.ts` 28 项、`StorageCap.test.ts` 6 项）
+
+---
+
 ## [2026-07-28] — v3 阶段三：可重复文本迁入
 
 全部文本来自 `NARRATIVE_DRAFTS.md` 第 01、03 节与 4.9.2，逐字迁入，未改措辞。

@@ -5,18 +5,21 @@ import { nextPhase, isDemoComplete } from './systems/TimeSystem';
 import { applyDailyOperatingCost, clampResources } from './systems/ResourceSystem';
 import { getFreeChoices, getFixedEvent } from './systems/EventSystem';
 import { determineEnding, getEndingData } from './systems/EndingSystem';
-import { adjustActionTrust, adjustNobleTrust, adjustLordImpression, recordConversation } from './systems/RelationSystem';
+import {
+  adjustActionTrust, adjustNobleTrust, adjustLordImpression, adjustTenantTrust, recordConversation,
+} from './systems/RelationSystem';
 import { INITIAL_FLAGS } from './systems/FlagRegistry';
 import {
   getLocationBase, getWeatherLine, getAmbient, shouldPlayAmbient,
   getActionResult, getGreeting,
 } from './systems/SceneSystem';
-import { INITIAL_RESOURCES, INITIAL_RELATIONSHIPS } from './data/config';
+import { INITIAL_RESOURCES, INITIAL_RELATIONSHIPS, TENANT_TRUST_INITIAL } from './data/config';
 import { interpolate } from './utils/text';
 import ScenePanel from './components/ScenePanel';
 import StatusPanel from './components/StatusPanel';
 import ChoicePanel from './components/ChoicePanel';
 import NameInput from './components/common/NameInput';
+import EstateTaskList from './components/common/EstateTaskList';
 
 
 type Action =
@@ -72,6 +75,10 @@ function applyEffects(state: GameState, effects: ChoiceEffects): GameState {
     next = { ...next, lordImpression: adjustLordImpression(next.lordImpression, effects.lordImpression) };
   }
 
+  if (effects.tenantTrust) {
+    next = { ...next, tenantTrust: adjustTenantTrust(next.tenantTrust, effects.tenantTrust) };
+  }
+
   if (effects.flags) {
     next = { ...next, flags: { ...next.flags, ...effects.flags } };
   }
@@ -119,6 +126,7 @@ function createInitialState(): GameState {
     conversations: { gregor: 0, marta: 0, lena: 0, elke: 0, henk: 0, lorenz: 0 },
     nobleTrust: 0,
     lordImpression: 0,
+    tenantTrust: TENANT_TRUST_INITIAL,
     flags: { ...INITIAL_FLAGS },
     currentScene: 'default',
     lastResult: null,
@@ -262,6 +270,9 @@ export default function App() {
     <div className="h-screen bg-bg text-game-text flex flex-col overflow-hidden p-3 gap-3">
       {/* Main content: scene (left) + status (right) */}
       <div className="flex flex-1 gap-3 min-h-0">
+        <div className="w-48 shrink-0 hidden lg:block">
+          <EstateTaskList state={state} />
+        </div>
         <div className="flex-1 min-w-0">
           <ScenePanel state={state} />
         </div>

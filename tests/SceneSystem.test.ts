@@ -32,6 +32,7 @@ function makeState(overrides: Partial<GameState> = {}): GameState {
     conversations: { ...ZERO },
     nobleTrust: 0,
     lordImpression: 0,
+    tenantTrust: -2,
     flags: {},
     currentSceneText: '',
     currentScene: 'default',
@@ -224,12 +225,31 @@ describe('招呼语', () => {
 });
 
 describe('行动结果文本', () => {
-  it('holds three variants for each of the eight action kinds', () => {
+  const DRAFT_35_KINDS = [
+    'harvest', 'fell_timber', 'survey_fields', 'survey_forest',
+    'repair', 'forage', 'orchard', 'rest',
+  ];
+
+  it('holds three variants for each of the eight action kinds in draft 3.5', () => {
     const data = actionResults as Record<string, string[]>;
-    expect(Object.keys(data).length).toBe(8);
-    for (const [kind, variants] of Object.entries(data)) {
-      expect(variants.length, kind).toBe(3);
+    expect(Object.keys(data)).toEqual(expect.arrayContaining(DRAFT_35_KINDS));
+    for (const kind of DRAFT_35_KINDS) {
+      expect(data[kind].length, kind).toBe(3);
     }
+  });
+
+  it('holds the paperwork variants and the three sequential ledger nights (draft 3.5b)', () => {
+    const data = actionResults as Record<string, string[]>;
+    expect(data.office_paperwork.length).toBe(3);
+    for (const n of [1, 2, 3]) {
+      expect(data[`night_ledger_${n}`].length, `night ${n}`).toBe(1);
+    }
+    // The third night is the one that lands the fragment.
+    expect(data.night_ledger_3[0]).toContain('把自己占的地方越写越少');
+  });
+
+  it('has no text past the third ledger night, so the revelation is not replayed', () => {
+    expect(getActionResult('night_ledger_4', first)).toBe('');
   });
 
   it('substitutes the yield into the text', () => {

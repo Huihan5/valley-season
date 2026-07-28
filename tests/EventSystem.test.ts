@@ -16,6 +16,7 @@ function makeState(overrides: Partial<GameState> = {}): GameState {
     conversations: { gregor: 0, marta: 0, lena: 0, elke: 0, henk: 0, lorenz: 0 },
     nobleTrust: 0,
     lordImpression: 0,
+    tenantTrust: -2,
     flags: {},
     currentSceneText: '',
     currentScene: 'default',
