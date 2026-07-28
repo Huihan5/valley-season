@@ -1,5 +1,41 @@
 # Valley Season — Changelog
 
+## [2026-07-28] — v3 阶段四（下半）：集市日至 Day 30
+
+### Added
+- 集市日完整结构（草稿 4.9）：`src/data/scenes/market.json` + `SceneSystem` 的集市函数。上午抵达（三个幕次变体）→ 公务员遭遇 → 下午排队与流言 → 交易 → 归程
+- 公务员遭遇：Day 6 提莫西、Day 13 蒂埃里、Day 27 两人同场，各给一次公务员组判定
+- Day 27 街口（草稿 4.9.4）：全游戏的主题落点，选 C 写入 `admittedWantToStay`，不给任何数值
+- Day 15 拆为报告（日中）与实地（下午行动触发的连锁），`documentedStumps` 取代 `documentedSymbols`
+- 狩猎季 Day 18 至 21 全部重写，新增营地夜宴与营地清晨收获两个事件
+- Day 22 维特四档组装（草稿 4.11）。`FORCED_WEATHER` 让 Day 22 必为霜冻
+- Day 30 磨岭夜访（草稿 4.13）：按亨克信任分档，信任不足有专门的通用分支
+- `Choice.nextEvent` 现在也对自由行动生效：一个行动可以展开成一场戏
+
+### Changed
+- Day 23 来信改写为草稿 4.12 的三档加续签窗口。经纪人渠道改由 `brokerUnlocked` 把关，当天下午即开放，不再等到 Day 24
+- Day 30 上午与晚间改写。晚间按粮食是否达留任线分档，未达线才出现磨岭那条路
+- 集市流言改为进城时抽一次并记在当日 flag 上，交易过程中不再重抽
+- 狩猎季窗口收到 Day 18 至 21，Day 22 回到庄园
+- `EndingSystem` 的霍特曼链跟随证据改为 `documentedStumps` + `wynterRestated`（完整重写在阶段五）
+
+### Fixed
+- **事件分支正文此前从不显示**。`lastResult` 在有 `activeEvent` 时被 ScenePanel 藏起来，因此晚宴判定点的分支正文一句也看不到
+- 事件的 `onEnterEffects` 现在能决定自己的选项是否出现；选项全被过滤掉的事件按叙述型处理，不再卡死
+
+### Removed
+- `day7.json`、`day22_hunt_traveler.json`、`day22_traveler_estate.json`（v2 版本）
+- 晚间"翻查庄园旧档案"（林地符号调查链的最后一环）
+
+### Tests
+336 passed（新增 `MarketDay.test.ts` 27 项、`ForestBoundary.test.ts` 15 项、`HuntSeason.test.ts` 36 项、`Wynter.test.ts` 13 项、`Millridge.test.ts` 8 项）
+
+### 需要作者补写
+- **维特第二档的重述**（草稿 4.11）：需要 14 条碎片各一句压缩重述，草稿未写。当前第二档播放框架但没有重述段
+- **Day 30 的三十天回顾**（草稿 4.13）：草稿标为"系统按玩家的实际行为组装"，但"在马厩待过多少个晚上"这类项目在现有行动里没有对应计数。当前播放前后两段，中间的清单留空
+
+---
+
 ## [2026-07-28] — v3 阶段四（上半）：Day 0 至 Day 13
 
 文本全部来自 `NARRATIVE_DRAFTS_v1.1.md` 第 04 节，逐字迁入，未改措辞。
