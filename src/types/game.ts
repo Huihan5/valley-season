@@ -46,6 +46,8 @@ export interface Choice {
   advancesPhase?: boolean;
   /** Key into action_results.json — the narrative shown after the action resolves. */
   resultKind?: string;
+  /** Branch prose written for this one choice, shown once the event has resolved. */
+  resultText?: string;
   /** Placeholder values for that result text, e.g. the yield the player just brought in. */
   resultVars?: Record<string, string | number>;
 }
@@ -56,6 +58,18 @@ export interface TextInputSpec {
   label: string;
   placeholder: string;
   maxLength: number;
+}
+
+/**
+ * One screen of the Day 0 opening. The letter page is where the player signs;
+ * the rest are prose, grouped into the four acts of the journey.
+ */
+export interface OpeningPage {
+  id: string;
+  kind: 'letter' | 'scene';
+  act: string;
+  heading: string;
+  text: string;
 }
 
 export interface DialogueLine {
@@ -99,6 +113,8 @@ export interface GameState {
   weather: WeatherType;
   /** Signed by the player on the Day 0 guarantee letter; empty until then. */
   playerName: string;
+  /** Which page of the Day 0 opening is showing; null once the season has begun. */
+  openingPage: number | null;
   resources: Resources;
   fatigue: number;
   /** Action trust only. Effective trust adds the conversational layer — see RelationSystem. */

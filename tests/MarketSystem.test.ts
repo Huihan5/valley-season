@@ -20,6 +20,7 @@ function makeState(overrides: Partial<GameState> = {}): GameState {
     phase: 'afternoon',
     weather: 'sunny',
     playerName: '',
+    openingPage: null,
     resources: { grain: 40, guldmark: 30, timber: 25, renown: 0 },
     fatigue: 0,
     relationships: { ...ZERO },

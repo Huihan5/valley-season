@@ -9,6 +9,7 @@ import {
   adjustActionTrust, adjustNobleTrust, adjustLordImpression, adjustTenantTrust, recordConversation,
 } from './systems/RelationSystem';
 import { INITIAL_FLAGS } from './systems/FlagRegistry';
+import { getOpeningPage, nextOpeningPage } from './systems/OpeningSystem';
 import {
   getLocationBase, getWeatherLine, getAmbient, shouldPlayAmbient,
   getActionResult, getGreeting,
@@ -20,11 +21,13 @@ import StatusPanel from './components/StatusPanel';
 import ChoicePanel from './components/ChoicePanel';
 import NameInput from './components/common/NameInput';
 import EstateTaskList from './components/common/EstateTaskList';
+import OpeningSequence from './components/OpeningSequence';
 
 
 type Action =
   | { type: 'MAKE_CHOICE'; choiceId: string }
   | { type: 'SET_PLAYER_NAME'; name: string }
+  | { type: 'ADVANCE_OPENING' }
   | { type: 'ADVANCE_DAY_EVENT' };
 
 /**
@@ -120,6 +123,7 @@ function createInitialState(): GameState {
     phase,
     weather,
     playerName: '',
+    openingPage: 0,
     resources: { ...INITIAL_RESOURCES },
     fatigue: 0,
     relationships: { ...INITIAL_RELATIONSHIPS },
@@ -190,7 +194,14 @@ function gameReducer(state: GameState, action: Action): GameState {
     case 'SET_PLAYER_NAME': {
       const name = action.name.trim();
       if (!name) return state;
+      // During the opening the letter is still on screen — signing does not turn the page.
+      if (state.openingPage !== null) return { ...state, playerName: name };
       return buildStateForPhase({ ...state, playerName: name });
+    }
+
+    case 'ADVANCE_OPENING': {
+      if (state.openingPage === null) return state;
+      return { ...state, openingPage: nextOpeningPage(state.openingPage) };
     }
 
     case 'ADVANCE_DAY_EVENT': {
@@ -265,6 +276,19 @@ export default function App() {
   useEffect(() => {
     document.title = `河谷季 · 第${state.day}日`;
   }, [state.day]);
+
+  const openingPage = state.openingPage === null ? null : getOpeningPage(state.openingPage);
+  if (openingPage) {
+    return (
+      <OpeningSequence
+        page={openingPage}
+        index={state.openingPage as number}
+        playerName={state.playerName}
+        onSign={(name) => dispatch({ type: 'SET_PLAYER_NAME', name })}
+        onAdvance={() => dispatch({ type: 'ADVANCE_OPENING' })}
+      />
+    );
+  }
 
   return (
     <div className="h-screen bg-bg text-game-text flex flex-col overflow-hidden p-3 gap-3">
