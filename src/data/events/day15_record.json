@@ -1,0 +1,31 @@
+{
+  "id": "day15_record",
+  "day": 15,
+  "phase": "afternoon",
+  "forced": true,
+  "activationFlag": "visitedBoundary",
+  "advancesPhase": true,
+  "title": "北面林地",
+  "sceneText": "你可以把这些记下来。",
+  "choices": [
+    {
+      "id": "record_stumps",
+      "text": "记录树桩位置、断面尺寸、集材道走向",
+      "effects": {
+        "flags": { "documentedStumps": true },
+        "nextScene": "forest",
+        "logEntry": "你把树桩、尺寸和集材道的走向画在了一块桦树皮上。"
+      },
+      "resultText": "你没有带纸。你用炭在一块桦树皮的内面上画。\n\n十一个树桩的位置，大概的间距，集材道的走向，还有蒂埃里报的那几个数字，三十二、三十五、三十八，以及申报上限三十。\n\n蒂埃里在旁边看着你画。\n\n“您画得挺准。”他说，“就是比例不对。”\n\n他蹲下来，用手指在树皮空白处补了两笔，一条线代表溪，一个叉代表溪改道之前的位置。\n\n“这个您回去自己对着地图看。”他说，“我不能给您卷宗，但地图是公开的。”\n\n你把那块树皮带回了庄园，夹在办公室的一本旧册子里。"
+    },
+    {
+      "id": "record_remember",
+      "text": "记在心里，先去处理地界纠纷本身",
+      "effects": {
+        "nextScene": "forest",
+        "logEntry": "你没有记，你觉得这些东西你忘不掉。"
+      },
+      "resultText": "你觉得记不记下来无所谓，这些东西你都看见了，忘不掉。\n\n回程的路上你把数字在心里过了两遍。三十二，三十五，三十八。上限三十。\n\n三天之后你想不起来是三十八还是三十六。\n\n那两个数字的区别是四棵树还是两棵树。"
+    }
+  ]
+}

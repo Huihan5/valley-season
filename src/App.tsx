@@ -184,6 +184,11 @@ function gameReducer(state: GameState, action: Action): GameState {
         return advancesPhase ? advancePhase(next) : buildStateForPhase(next);
       }
 
+      // An action can open onto a scene — riding out to the north woods is one
+      // action, but what you find there takes several beats to get through.
+      const opened = chainedEvent(next, choice.nextEvent);
+      if (opened) return enterEvent(next, opened);
+
       // Free choices cost a phase unless they are steps within one (market trades).
       return (choice.advancesPhase ?? true) ? advancePhase(next) : buildStateForPhase(next);
     }

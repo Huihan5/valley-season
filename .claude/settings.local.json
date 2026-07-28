@@ -113,7 +113,11 @@
       "Bash(awk 'NR>=2560 && NR<=2800 {print NR\": \"$0}' C:/Users/Lenovo/Documents/Claude/Projects/valley-season/updates0728/NARRATIVE_DRAFTS_v1.1.md)",
       "Bash(awk 'NR>=2800 && NR<=3020 {print NR\": \"$0}' C:/Users/Lenovo/Documents/Claude/Projects/valley-season/updates0728/NARRATIVE_DRAFTS_v1.1.md)",
       "Bash(node -e \"const d=require\\('./src/data/scenes/rumors.json'\\); console.log\\(Object.keys\\(d\\)\\); console.log\\(JSON.stringify\\(d.intro\\).slice\\(0,200\\)\\); console.log\\(Object.entries\\(d\\).filter\\(\\([k,v]\\)=>Array.isArray\\(v\\)\\).map\\(\\([k,v]\\)=>k+':'+v.length\\).join\\(', '\\)\\)\")",
-      "Bash(sed -i \"s|import { getMarketTradeResult, getMarketReturn, getMarketNoTrade } from './SceneSystem';|import { getMarketArrival, getMarketTradeResult, getMarketReturn, getMarketNoTrade } from './SceneSystem';|\" src/systems/EventSystem.ts)"
+      "Bash(sed -i \"s|import { getMarketTradeResult, getMarketReturn, getMarketNoTrade } from './SceneSystem';|import { getMarketArrival, getMarketTradeResult, getMarketReturn, getMarketNoTrade } from './SceneSystem';|\" src/systems/EventSystem.ts)",
+      "Bash(awk 'NR>=2166 && NR<=2360 {print NR\": \"$0}' C:/Users/Lenovo/Documents/Claude/Projects/valley-season/updates0728/NARRATIVE_DRAFTS_v1.1.md)",
+      "Bash(sed -i \"s/import day15Data from '..\\\\/data\\\\/events\\\\/day15.json';/import day15Data from '..\\\\/data\\\\/events\\\\/day15.json';\\\\nimport day15Stumps from '..\\\\/data\\\\/events\\\\/day15_stumps.json';\\\\nimport day15Record from '..\\\\/data\\\\/events\\\\/day15_record.json';/\" src/systems/EventSystem.ts)",
+      "Bash(sed -i \"s/^  day12Data, day15Data,$/  day12Data, day15Data, day15Stumps, day15Record,/\" src/systems/EventSystem.ts)",
+      "Bash(sed -i \"s|^import { getFixedEvent, getFreeChoices } from '../src/systems/EventSystem';$|import { getFixedEvent, getFreeChoices, getEventById } from '../src/systems/EventSystem';\\\\nimport { determineEnding } from '../src/systems/EndingSystem';|\" tests/EventSystem.test.ts)"
     ]
   }
 }

@@ -17,12 +17,12 @@ export function determineEnding(state: GameState): EndingId {
 
   const deepTrustCount = Object.values(relationships).filter(v => v >= 3).length;
 
-  // 霍特曼 chain: all four nodes must be completed
-  // Note: travelerDialogueCorrect set by Day 22 event (not yet written)
+  // 霍特曼 chain. v3 retired the woodland symbols and the night spent researching
+  // them; the evidence is now the stumps and what 蒂埃里 measured on them. This
+  // whole determination is rewritten in Stage 5 — see docs/V3_BUILD_BRIEF.md.
   const hartmannChainComplete = !!(
     flags.investigatedLedger &&
-    flags.documentedSymbols &&
-    flags.researchedSymbols &&
+    flags.documentedStumps &&
     flags.travelerDialogueCorrect
   );
 

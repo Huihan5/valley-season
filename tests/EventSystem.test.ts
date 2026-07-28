@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { getFixedEvent, getFreeChoices } from '../src/systems/EventSystem';
+import { getFixedEvent, getFreeChoices, getEventById } from '../src/systems/EventSystem';
+import { determineEnding } from '../src/systems/EndingSystem';
 import { GameState } from '../src/types/game';
 
 // ── Helpers ────────────────────────────────────────────────────────────────
@@ -491,17 +492,13 @@ describe('getFreeChoices — evening choices', () => {
     expect(after.map(c => c.id)).toContain('visit_chapel');
   });
 
-  it('research_symbols absent without documentedSymbols flag', () => {
-    const choices = getFreeChoices(makeState({ phase: 'evening' }));
-    expect(choices.find(c => c.id === 'research_symbols')).toBeUndefined();
-  });
-
-  it('research_symbols appears after documentedSymbols set', () => {
-    const choices = getFreeChoices(makeState({
-      phase: 'evening',
-      flags: { documentedSymbols: true },
-    }));
-    expect(choices.find(c => c.id === 'research_symbols')).toBeDefined();
+  it('no longer offers the night spent researching woodland symbols', () => {
+    // v3 retired the symbols entirely: the evidence in the north woods is the
+    // stumps, their diameters, and the direction the skid road runs.
+    for (const flags of [{}, { documentedSymbols: true }, { documentedStumps: true }]) {
+      const choices = getFreeChoices(makeState({ phase: 'evening', flags }));
+      expect(choices.find(c => c.id === 'research_symbols')).toBeUndefined();
+    }
   });
 });
 
@@ -528,9 +525,9 @@ describe('Critical path — 霍特曼 investigation (Ending 5)', () => {
     expect(report?.effects?.renown).toBe(-1);
   });
 
-  it('Day 15 event exists and has documentedSymbols choice', () => {
-    const event = getFixedEvent(15, 'afternoon', makeState({ day: 15 }));
-    const choice = event?.choices?.find(c => c.effects?.flags?.documentedSymbols);
+  it('Day 15 records stumps rather than symbols', () => {
+    const record = getEventById('day15_record', makeState({ day: 15 }));
+    const choice = record?.choices?.find(c => c.effects?.flags?.documentedStumps);
     expect(choice).toBeDefined();
   });
 
@@ -541,13 +538,18 @@ describe('Critical path — 霍特曼 investigation (Ending 5)', () => {
     expect(correctChoice?.requiresFlag).toBe('documentedSymbols');
   });
 
-  it('research_symbols evening choice sets researchedSymbols flag', () => {
-    const choices = getFreeChoices(makeState({
-      phase: 'evening',
-      flags: { documentedSymbols: true },
+  it('no longer needs a night of archive research to complete the chain', () => {
+    // The chain is 账本 → 树桩 → 维特. Stage 5 rewrites the determination entirely.
+    const reached = determineEnding(makeState({
+      day: 30,
+      resources: { grain: 80, guldmark: 20, timber: 5, renown: 3 },
+      flags: {
+        investigatedLedger: true,
+        documentedStumps: true,
+        travelerDialogueCorrect: true,
+      },
     }));
-    const research = choices.find(c => c.id === 'research_symbols');
-    expect(research?.effects?.flags?.researchedSymbols).toBe(true);
+    expect(reached).toBe('ending5');
   });
 });
 

@@ -42,6 +42,8 @@ import day11Echo from '../data/events/day11_echo.json';
 import day13Echo from '../data/events/day13_echo.json';
 import day12Data from '../data/events/day12.json';
 import day15Data from '../data/events/day15.json';
+import day15Stumps from '../data/events/day15_stumps.json';
+import day15Record from '../data/events/day15_record.json';
 import day18Data from '../data/events/day18.json';
 import day18HuntArrival from '../data/events/day18_hunt_arrival.json';
 import day19HuntRide from '../data/events/day19_hunt_ride.json';
@@ -60,7 +62,7 @@ const FIXED_EVENTS = [
   day7Arrival, day7Hartmann, day7Departure, day7Return,
   day6Timothy,
   day8Echo, day10Data, day11Echo, day13Echo, day13Thierry,
-  day12Data, day15Data,
+  day12Data, day15Data, day15Stumps, day15Record,
   day27Officers, day27StreetCorner,
   day18Data, day18HuntArrival,
   day19HuntRide,
@@ -179,6 +181,27 @@ function processEcho(event: EventData, state: GameState): EventData {
   return { ...event, sceneText: [event.sceneText, tail].filter(Boolean).join('\n\n') };
 }
 
+// Day 15: having already met 蒂埃里 at the market changes what the old survey
+// note means — the disputed stream stops being a line in a file and becomes the
+// one he told you about.
+function processForestReport(event: EventData, state: GameState): EventData {
+  const layer = event.variants?.[state.flags.met_thierry ? 'met' : 'unmet'] ?? '';
+  return { ...event, sceneText: [event.sceneText, layer].filter(Boolean).join('\n\n') };
+}
+
+// The site itself. Having walked the woods before Day 14 is the only way to know
+// the cut is new; 蒂埃里 supplies the technical reading, the player supplies the date.
+function processStumps(event: EventData, state: GameState): EventData {
+  const v = event.variants ?? {};
+  const sceneText = [
+    event.sceneText,
+    state.flags.surveyedForest ? v.surveyed : '',
+    v.road,
+    state.flags.met_thierry ? v.met : v.unmet,
+  ].filter(Boolean).join('\n\n');
+  return { ...event, sceneText };
+}
+
 // Day 22 evening: show full estate encounter if player missed hunt,
 // or a brief follow-up if they already met the traveler at the hunt.
 function processDay22Estate(event: EventData, state: GameState): EventData {
@@ -286,6 +309,8 @@ function process(raw: EventData, state: GameState): EventData {
 
   if (event.id === 'day7_dinner_return') return processDinnerReturn(event, state);
   if (event.id === 'day8_echo' || event.id === 'day11_echo') return processEcho(event, state);
+  if (event.id === 'day15_forest_report') return processForestReport(event, state);
+  if (event.id === 'day15_stumps') return processStumps(event, state);
   if (event.id === 'day10_petition') return processDay10(event, state);
   if (event.id === 'day12_audit') return processDay12(event, state);
   if (event.id === 'day22_traveler_estate') return processDay22Estate(event, state);
@@ -611,6 +636,25 @@ export function getFreeChoices(state: GameState): Choice[] {
       });
     }
 
+    // 北面林地: the tenant's message comes at midday, and going out to look at
+    // what he could not describe costs the afternoon it interrupts.
+    if (flags.forestReportReceived && !flags.visitedBoundary) {
+      choices.push({
+        id: 'visit_boundary',
+        text: '前往北面林地查看',
+        description: '1 时段',
+        effects: {
+          fatigue: 1,
+          flags: { visitedBoundary: true },
+          nextScene: 'forest',
+          logEntry: '你往北面林地走了一趟。',
+        },
+        nextEvent: 'day15_stumps',
+        disabled: exhausted,
+        disabledReason: exhausted ? '你过于疲惫' : undefined,
+      });
+    }
+
     choices.push({
       id: 'talk_marta',
       text: '和玛莎聊聊',
@@ -727,22 +771,6 @@ export function getFreeChoices(state: GameState): Choice[] {
       // Only the first three nights have text; past that the ledger has said its piece.
       resultKind: `night_ledger_${ledgerNights + 1}`,
     });
-
-    if (flags.documentedSymbols) {
-      choices.push({
-        id: 'research_symbols',
-        text: '翻查庄园旧档案',
-        description: '林地橡树上的符号或许在霍特曼的旧文件里有记载',
-        effects: {
-          fatigue: 1,
-          flags: { researchedSymbols: true },
-          nextScene: 'office',
-          logEntry: '你在灯下翻查旧档案，寻找关于林地符号的线索。霍特曼的文件里有一页被撕去了——撕痕很整齐，像是被人有意为之。',
-        },
-        disabled: exhausted,
-        disabledReason: exhausted ? '你过于疲惫' : undefined,
-      });
-    }
 
     // 洛伦茨 keeps vigil at the manor forge-hall on Thursdays. Any other night the
     // room is empty, so sitting there is meditation and counts for nothing with him.
