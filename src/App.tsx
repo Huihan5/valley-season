@@ -4,7 +4,7 @@ import { generateWeather } from './systems/WeatherSystem';
 import { nextPhase, isDemoComplete } from './systems/TimeSystem';
 import { applyDailyOperatingCost, clampResources } from './systems/ResourceSystem';
 import { getFreeChoices, getFixedEvent, getEventById, getDayEndEffects } from './systems/EventSystem';
-import { determineEnding, getEndingData } from './systems/EndingSystem';
+import { determineEnding, getEndingData, composeEnding, EndingId } from './systems/EndingSystem';
 import {
   adjustActionTrust, adjustNobleTrust, adjustLordImpression, adjustTenantTrust, recordConversation,
 } from './systems/RelationSystem';
@@ -241,12 +241,11 @@ function advancePhase(state: GameState): GameState {
 
   if (isDemoComplete(newDay)) {
     const endingId = determineEnding(state);
-    const ending = getEndingData(endingId);
     return {
       ...state,
       demoComplete: true,
       endingId,
-      currentSceneText: ending.text,
+      currentSceneText: composeEnding(state, endingId),
       currentChoices: [],
     };
   }
@@ -334,8 +333,8 @@ export default function App() {
       {state.demoComplete && state.endingId ? (
         <div className="bg-bg-card border border-gold-dim rounded-sm px-5 py-3 flex items-center justify-between">
           <div>
-            <span className="text-gold font-serif text-sm">{getEndingData(state.endingId as Parameters<typeof getEndingData>[0]).title}</span>
-            <span className="text-game-text/60 text-xs ml-3">{getEndingData(state.endingId as Parameters<typeof getEndingData>[0]).subtitle}</span>
+            <span className="text-gold font-serif text-sm">{getEndingData(state.endingId as EndingId).title}</span>
+            <span className="text-game-text/60 text-xs ml-3">{getEndingData(state.endingId as EndingId).subtitle}</span>
           </div>
           <button
             onClick={() => window.location.reload()}

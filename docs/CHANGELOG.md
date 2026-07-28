@@ -1,5 +1,31 @@
 # Valley Season — Changelog
 
+## [2026-07-28] — v3 阶段五：调查系统与结局
+
+### Added
+- `src/systems/ClueSystem.ts` — 庄园内组的七条碎片按信任档位交付（草稿 2.1 至 2.5）。没有搜寻机制，是四个人各自决定管事值不值得告诉，一次说一件
+- `src/data/dialogue/fragments.json` — 九段碎片正文逐字迁入，另含选项文本与日志句
+- 格雷格三条按顺序解锁（事实 → 修正 → 材料），玛莎与埃莱娜各自开一次口、把最重的一句留到信任 4
+- 洛伦茨的两段挂在炉堂拜访上，不做成独立行动。他的"那个问题"与 Day 21 猎场版本互斥，先触发者生效
+- 三组计数 `getClueGroups` / `hasAllClueGroups` / `isPositionLineComplete`，一律按 flag 前缀数，加一条碎片不用改计数逻辑
+- `EndingSystem` 重写：五个结局改为 `ending1/2/3/4a/4b`，判定优先级按 GDD 10.1 与 brief 阶段五
+- `composeEnding()` 按状态组装条件性文本：结局一的马厩屋顶、结局二与三的领主印象措辞、结局三与 4B 的 `admittedWantToStay` 分岔、4A 的埃莱娜是否到场、`tookHenkDeal` 追加段
+- 尾声「路德维希的三天」只用于结局三、4A、4B，差别只在他三天里做了什么
+- `tests/ClueSystem.test.ts`（22）与 `tests/EndingSystem.test.ts`（30）。全套 388 个测试
+
+### Changed
+- Day 21 猎场那棵树补上 GDD 5.5 指定的洛伦茨行动性信任 +1。不补他永远到不了 4，信任 4 那一段是死内容
+- 结局判定不再读 `investigatedLedger + documentedStumps + wynterRestated` 这条阶段四的临时接线。`tests/EventSystem.test.ts` 中对应的一条断言随之更新为结局二
+- 结局"高效的机器"删除，v2 的 `ending5` 拆为 4A 与 4B
+- 领主印象 ≥ 1 在留任线下浮 2 点（73 = 冬季口粮 60 + 税 13，一点富余也没有）。作者定
+
+### [DECISION NEEDED]
+- 4A/4B 同时满足结局三条件时的「圣火节镜像段落」草稿里没有对应正文，已留 `festival_mirror` 空槽
+- 4A 的 `tookHenkDeal` 追加段草稿里只写了 4B 与结局三的版本
+- 格雷格与埃莱娜的行动性信任来源缺失，导致三条碎片在真实对局里拿不到，**结局 4B 不可达**。详见 `V3_PROGRESS.md` 阶段五遗留项
+
+---
+
 ## [2026-07-28] — v3 阶段四（下半）：集市日至 Day 30
 
 ### Added

@@ -154,6 +154,8 @@ export const ENDING3_DEEP_TRUST_COUNT = 3; // … held by at least this many NPC
 // from 75 is 73, which is winter rations 60 plus the tax 13 and nothing spare.
 export const LORD_IMPRESSION_MARGIN_MIN = 1;
 export const RETAIN_MARGIN = 2;
+// 埃莱娜 stays away from the rites unless she has decided about the player.
+export const LENA_RITES_TRUST = 4;
 
 // ── 非资源行动 (GDD ch.5.4) ─────────────────────────────────────────────────
 // The two surveys are one-shot and expire: their whole use is preparing for one event.

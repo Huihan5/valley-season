@@ -536,8 +536,10 @@ describe('Critical path — 霍特曼 investigation (Ending 5)', () => {
     expect(carrying?.onEnterEffects?.flags?.wynterRestated).toBe(true);
   });
 
-  it('no longer needs a night of archive research to complete the chain', () => {
-    // The chain is 账本 → 树桩 → 维特. Stage 5 rewrites the determination entirely.
+  it('no longer routes the ending through a chain of investigation flags', () => {
+    // Stage 5 retired the 账本 → 树桩 → 维特 chain as a determination input. Doing
+    // all three and reaching the 留任线 gets the player kept on, nothing more —
+    // the truth endings are counted off the clue groups (see EndingSystem.test).
     const reached = determineEnding(makeState({
       day: 30,
       resources: { grain: 80, guldmark: 20, timber: 5, renown: 3 },
@@ -547,7 +549,7 @@ describe('Critical path — 霍特曼 investigation (Ending 5)', () => {
         wynterRestated: true,
       },
     }));
-    expect(reached).toBe('ending5');
+    expect(reached).toBe('ending2');
   });
 });
 
