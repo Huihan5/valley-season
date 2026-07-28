@@ -140,37 +140,46 @@ describe('getFixedEvent — activationFlag', () => {
 // ── processDay12: 凯斯勒 audit branching ──────────────────────────────────
 
 describe('getFixedEvent — Day 12 processDay12', () => {
-  it('with investigatedLedger: first choice gets renown bonus', () => {
-    const event = getFixedEvent(
-      12, 'morning',
-      makeState({ day: 12, flags: { investigatedLedger: true } })
-    );
-    expect(event?.choices?.[0].effects?.renown).toBe(2);
-    expect(event?.choices?.[0].description).toContain('有备而来');
+  const audit = (flags: Record<string, boolean>) =>
+    getFixedEvent(12, 'afternoon', makeState({ day: 12, flags }));
+
+  it('tells the player they noticed, when they did', () => {
+    for (const flag of ['investigatedLedger', 'reportedLedger']) {
+      const event = audit({ [flag]: true });
+      expect(event?.sceneText, flag).toContain('你注意到了');
+      expect(event?.onEnterEffects?.renown, flag).toBeUndefined();
+      expect(event?.onEnterEffects?.flags?.auditResult, flag).toBe('clean');
+    }
   });
 
-  it('with reportedLedger: first choice description changes', () => {
-    const event = getFixedEvent(
-      12, 'morning',
-      makeState({ day: 12, flags: { reportedLedger: true } })
-    );
-    expect(event?.choices?.[0].description).toContain('凯斯勒');
-    expect(event?.choices?.[0].disabled).toBeFalsy();
+  it('costs a point of standing when the two months went unread', () => {
+    const event = audit({ deferredLedger: true });
+    expect(event?.sceneText).toContain('你没有注意到');
+    expect(event?.sceneText).toContain('我不是在指责你');
+    expect(event?.onEnterEffects?.renown).toBe(-1);
+    expect(event?.onEnterEffects?.flags?.auditResult).toBe('flagged');
   });
 
-  it('with deferredLedger: first choice disabled, third choice gets renown penalty', () => {
-    const event = getFixedEvent(
-      12, 'morning',
-      makeState({ day: 12, flags: { deferredLedger: true } })
-    );
-    expect(event?.choices?.[0].disabled).toBe(true);
-    expect(event?.choices?.[2].effects?.renown).toBe(-2);
+  it('treats never having opened the ledger the same as having deferred it', () => {
+    expect(audit({})?.onEnterEffects?.flags?.auditResult).toBe('flagged');
   });
 
-  it('with no ledger flags: choices unchanged from base', () => {
-    const event = getFixedEvent(12, 'morning', makeState({ day: 12 }));
-    expect(event?.choices?.[0].disabled).toBeFalsy();
-    expect(event?.choices?.[2].effects?.renown).not.toBe(-2);
+  it('greets him as a stranger unless the market already introduced them', () => {
+    expect(audit({})?.sceneText).toContain('没有寒暄');
+    expect(audit({})?.sceneText).not.toContain('我们见过');
+    expect(audit({ met_timothy: true })?.sceneText).toContain('集市那次');
+  });
+
+  it('pays the fragment only for the technical question', () => {
+    const choices = audit({})?.choices ?? [];
+    const withClue = choices.filter(c => c.effects?.flags?.clue_ofc_timothy_nature);
+    expect(withClue.map(c => c.id)).toEqual(['audit_nature']);
+  });
+
+  it('gives the officer judgment no microcopy at all (GDD 11.6)', () => {
+    for (const choice of audit({})?.choices ?? []) {
+      expect(choice.description, choice.id).toBeUndefined();
+    }
   });
 });
 
@@ -404,22 +413,17 @@ describe('getFreeChoices — afternoon choices', () => {
     }
   });
 
-  it('shows lorenz choice only after meeting at dinner and opening the forge-hall', () => {
+  it('shows the lorenz choice only once Day 4 has opened the forge-hall', () => {
+    // 谷火神殿 is gone in v3, and the dinner is no longer where you meet him:
+    // he walks you into the manor's own forge-hall on Day 4, and not before.
     const without = getFreeChoices(makeState({ phase: 'afternoon' }));
     expect(without.find(c => c.id === 'visit_lorenz')).toBeUndefined();
 
-    // 谷火神殿 is gone in v3 — he comes to the manor's forge-hall, which Day 4 opens.
-    const dinnerOnly = getFreeChoices(makeState({
+    const opened = getFreeChoices(makeState({
       phase: 'afternoon',
-      flags: { metLorenzAtDinner: true },
+      flags: { unlockForgeChapel: true },
     }));
-    expect(dinnerOnly.find(c => c.id === 'visit_lorenz')).toBeUndefined();
-
-    const with_ = getFreeChoices(makeState({
-      phase: 'afternoon',
-      flags: { metLorenzAtDinner: true, unlockForgeChapel: true },
-    }));
-    expect(with_.find(c => c.id === 'visit_lorenz')).toBeDefined();
+    expect(opened.find(c => c.id === 'visit_lorenz')).toBeDefined();
   });
 
   it('broker choices absent before Day 24', () => {

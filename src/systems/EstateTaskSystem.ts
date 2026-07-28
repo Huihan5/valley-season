@@ -8,6 +8,7 @@ import {
   TENANT_MEETING_MIN_TRUST,
   HARVEST_YIELD,
 } from '../data/config';
+import { getEffectiveTenantTrust } from './RelationSystem';
 
 /**
  * 庄园事务 — the one-off preparations from GDD ch.5.4.
@@ -73,7 +74,7 @@ const SPECS: TaskSpec[] = [
     doneFlag: 'fullyPrepared',
     requires: (s) => {
       if (!s.flags.storageCleared) return '需先清理仓储';
-      if (s.tenantTrust < TENANT_MEETING_MIN_TRUST) return `佃户整体信任需 ≥ ${TENANT_MEETING_MIN_TRUST}`;
+      if (getEffectiveTenantTrust(s) < TENANT_MEETING_MIN_TRUST) return `佃户整体信任需 ≥ ${TENANT_MEETING_MIN_TRUST}`;
       return null;
     },
   },

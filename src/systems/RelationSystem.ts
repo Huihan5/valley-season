@@ -10,6 +10,7 @@ import {
   LORD_IMPRESSION_MAX,
   TENANT_TRUST_MIN,
   TENANT_TRUST_MAX,
+  MARTA_TENANT_SWING,
 } from '../data/config';
 
 /**
@@ -88,6 +89,17 @@ export function getTrustTier(value: number): TrustTier {
 
 export function getTrustTierFor(state: GameState, npc: NpcId): TrustTier {
   return getTrustTier(getTrust(state, npc));
+}
+
+/**
+ * 佃户整体信任 as the tenants actually hold it. 玛莎 cooks for them and speaks
+ * for them, so where she stands shifts the whole household by a point either
+ * way (GDD 5.5). The stored value never moves; what she is worth is added here.
+ */
+export function getEffectiveTenantTrust(state: GameState): number {
+  const marta = getTrust(state, 'marta');
+  const martaShift = marta >= MARTA_TENANT_SWING ? 1 : marta <= -MARTA_TENANT_SWING ? -1 : 0;
+  return clamp(state.tenantTrust + martaShift, TENANT_TRUST_MIN, TENANT_TRUST_MAX);
 }
 
 /** How many NPCs have reached at least this much trust — used by the ending check. */

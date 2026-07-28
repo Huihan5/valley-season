@@ -1,9 +1,9 @@
 import { useReducer, useEffect } from 'react';
-import { GameState, Choice, ChoiceEffects, NpcId } from './types/game';
+import { GameState, Choice, ChoiceEffects, EventData, NpcId } from './types/game';
 import { generateWeather } from './systems/WeatherSystem';
 import { nextPhase, isDemoComplete } from './systems/TimeSystem';
 import { applyDailyOperatingCost, clampResources } from './systems/ResourceSystem';
-import { getFreeChoices, getFixedEvent } from './systems/EventSystem';
+import { getFreeChoices, getFixedEvent, getEventById, getDayEndEffects } from './systems/EventSystem';
 import { determineEnding, getEndingData } from './systems/EndingSystem';
 import {
   adjustActionTrust, adjustNobleTrust, adjustLordImpression, adjustTenantTrust, recordConversation,
@@ -94,16 +94,24 @@ function filterChoicesByFlags(choices: Choice[], flags: GameState['flags']): Cho
   return choices.filter(c => !c.requiresFlag || flags[c.requiresFlag]);
 }
 
+function chainedEvent(state: GameState, id: string | undefined): EventData | null {
+  return id ? getEventById(id, state) : null;
+}
+
+/** Put an event on screen: its own text, its own choices, its arrival effects. */
+function enterEvent(state: GameState, event: EventData): GameState {
+  const withEvent = { ...state, activeEvent: event, eventResolved: false };
+  return {
+    ...applyEffects(withEvent, event.onEnterEffects ?? {}),
+    currentSceneText: interpolate(event.sceneText, state),
+    currentChoices: filterChoicesByFlags(event.choices ?? [], state.flags),
+  };
+}
+
 function buildStateForPhase(state: GameState): GameState {
   const event = getFixedEvent(state.day, state.phase, state);
   if (event && !state.flags[`event_done_${event.id}`]) {
-    const withEvent = { ...state, activeEvent: event, eventResolved: false };
-    const choices: Choice[] = filterChoicesByFlags(event.choices ?? [], state.flags);
-    return {
-      ...applyEffects(withEvent, event.onEnterEffects ?? {}),
-      currentSceneText: interpolate(event.sceneText, state),
-      currentChoices: choices,
-    };
+    return enterEvent(state, event);
   }
 
   const free = { ...state, activeEvent: null, eventResolved: false };
@@ -186,6 +194,11 @@ function gameReducer(state: GameState, action: Action): GameState {
         // Insert events cost nothing; a choice may still charge a phase for itself.
         const advancesPhase = choice.advancesPhase ?? state.activeEvent.advancesPhase ?? false;
         next = { ...next, flags: { ...next.flags, [doneFlag]: true }, activeEvent: null };
+
+        // A chained scene keeps going: the phase is charged once, at the end.
+        const chained = chainedEvent(next, choice.nextEvent ?? state.activeEvent.next);
+        if (chained) return enterEvent(next, chained);
+
         return advancesPhase ? advancePhase(next) : buildStateForPhase(next);
       }
 
@@ -221,6 +234,10 @@ function gameReducer(state: GameState, action: Action): GameState {
         ...next,
         log: [...next.log, { day: state.day, phase: state.phase, text: logText }],
       };
+
+      const chained = chainedEvent(next, state.activeEvent?.next);
+      if (chained) return enterEvent(next, chained);
+
       return advances ? advancePhase(next) : buildStateForPhase(next);
     }
 
@@ -247,6 +264,18 @@ function advancePhase(state: GameState): GameState {
   let next: GameState = { ...state, day: newDay, phase: newPhase };
 
   if (isDayChange) {
+    // Some days present a bill on their way out — see getDayEndEffects.
+    const closing = getDayEndEffects(state);
+    if (closing) {
+      const closed = applyEffects(state, closing);
+      next = {
+        ...next,
+        resources: closed.resources,
+        flags: closed.flags,
+        log: [...next.log, { day: state.day, phase: 'evening', text: closing.logEntry ?? '' }],
+      };
+    }
+
     const weather = generateWeather(newDay);
     // A new day starts back at the manor, with yesterday's result cleared away.
     next = { ...next, weather, currentScene: 'default', lastResult: null };

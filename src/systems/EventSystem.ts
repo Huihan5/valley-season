@@ -1,4 +1,4 @@
-import { GameState, Choice, DayPhase, EventData, EventTiming } from '../types/game';
+import { GameState, Choice, ChoiceEffects, DayPhase, EventData, EventTiming } from '../types/game';
 import { canHarvest, canFellTimber } from './WeatherSystem';
 import {
   getHarvestYield, getTimberYield, getYieldTierLabel,
@@ -11,17 +11,27 @@ import {
   getGrainRevenue, getTimberRevenue, getTimberUnitPrice, getSellLots,
 } from './MarketSystem';
 import { getEstateTaskChoices } from './EstateTaskSystem';
+import { getDinnerDecorum, getDinnerSettlement, getDinnerAbsenceEffects } from './NobleSystem';
+import { getTrust } from './RelationSystem';
 import {
   MARKET_TRANSPORT_CAP, MARKET_GRAIN_PRICE,
   OUTING_FATIGUE, MARKET_TRADE_FATIGUE,
+  DINNER_DAY, PETITION_INFORMED_TRUST, ECHO_DECOROUS_AT,
   SURVEY_FIELDS_LAST_DAY, SURVEY_FOREST_LAST_DAY,
   ORCHARD_FULL_YIELD_LAST_DAY, NIGHT_LEDGER_CLUE_AT,
 } from '../data/config';
 
 import day1Data from '../data/events/day1.json';
 import day3Data from '../data/events/day3.json';
-import day7Data from '../data/events/day7.json';
+import day4Data from '../data/events/day4.json';
+import day7Arrival from '../data/events/day7_dinner_arrival.json';
+import day7Hartmann from '../data/events/day7_dinner_hartmann.json';
+import day7Departure from '../data/events/day7_dinner_departure.json';
+import day7Return from '../data/events/day7_dinner_return.json';
+import day8Echo from '../data/events/day8_echo.json';
 import day10Data from '../data/events/day10.json';
+import day11Echo from '../data/events/day11_echo.json';
+import day13Echo from '../data/events/day13_echo.json';
 import day12Data from '../data/events/day12.json';
 import day15Data from '../data/events/day15.json';
 import day18Data from '../data/events/day18.json';
@@ -38,7 +48,9 @@ import day30Morning from '../data/events/day30_morning.json';
 import day30Evening from '../data/events/day30_evening.json';
 
 const FIXED_EVENTS = [
-  day1Data, day3Data, day7Data, day10Data,
+  day1Data, day3Data, day4Data,
+  day7Arrival, day7Hartmann, day7Departure, day7Return,
+  day8Echo, day10Data, day11Echo, day13Echo,
   day12Data, day15Data,
   day18Data, day18HuntArrival,
   day19HuntRide,
@@ -72,34 +84,89 @@ export function eventAdvancesPhase(event: EventData): boolean {
 
 // ── Per-event post-processors ──────────────────────────────────────────────
 
+// Day 12: 提莫西 reads the same two months the player either read on Day 3 or
+// did not. Missing them is not an accusation, but it does cost standing, and it
+// is what the Day 13 echo is made of.
 function processDay12(event: EventData, state: GameState): EventData {
-  if (!event.choices) return event;
-  const choices = event.choices.map(c => ({ ...c, effects: { ...c.effects } }));
+  const v = event.variants ?? {};
+  const noticed = !!(state.flags.investigatedLedger || state.flags.reportedLedger);
 
-  if (state.flags.investigatedLedger) {
-    choices[0] = {
-      ...choices[0],
-      description: '你已整理好证据，可以从容作答。有备而来的陈述更有分量。',
-      effects: { ...choices[0].effects, renown: 2 },
+  const sceneText = [
+    event.sceneText,
+    state.flags.met_timothy ? v.met_before : v.first_meeting,
+    v.body,
+    noticed ? v.noticed : v.missed,
+    v.closing,
+  ].filter(Boolean).join('\n\n');
+
+  return {
+    ...event,
+    sceneText,
+    onEnterEffects: {
+      ...event.onEnterEffects,
+      ...(noticed ? {} : { renown: -1 }),
+      flags: {
+        ...event.onEnterEffects?.flags,
+        auditResult: noticed ? 'clean' : 'flagged',
+        ...(noticed ? {} : { auditFlagged: true }),
+      },
+    },
+  };
+}
+
+// The ride home is where the evening is settled: three judgment points, plus
+// whatever the player wore, decide 贵族信任 and standing in one stroke.
+function processDinnerReturn(event: EventData, state: GameState): EventData {
+  const decorum = getDinnerDecorum(state);
+  return {
+    ...event,
+    onEnterEffects: { ...event.onEnterEffects, ...getDinnerSettlement(decorum) },
+  };
+}
+
+// Day 10: whether the player can rank five families by need depends on having
+// walked the fields or having talked to 玛莎. Without that, three of five is a
+// guess, and the tenants can tell it was a guess (GDD 5.5, drafts 4.6).
+function processDay10(event: EventData, state: GameState): EventData {
+  const informed = getTrust(state, 'marta') >= PETITION_INFORMED_TRUST || !!state.flags.surveyedFields;
+  const layer = event.variants?.[informed ? 'informed' : 'uninformed'] ?? '';
+  const choices = (event.choices ?? []).map(choice => {
+    if (choice.id !== 'repair_partial') return choice;
+    return {
+      ...choice,
+      effects: {
+        ...choice.effects,
+        ...(informed ? { renown: 1, tenantTrust: 1 } : {}),
+        flags: { ...choice.effects?.flags, petitionFairness: informed ? 'fair' : 'unfair' },
+      },
+      resultText: event.variants?.[informed ? 'partial_fair' : 'partial_unfair'],
     };
-  } else if (state.flags.reportedLedger) {
-    choices[0] = {
-      ...choices[0],
-      description: '你已向男爵报告过异常。凯斯勒或许已知情——主动开口比被追问更好。',
-    };
-  } else if (state.flags.deferredLedger) {
-    choices[0] = {
-      ...choices[0],
-      disabled: true,
-      disabledReason: '你没有调查过这些账目，无从解释。',
-    };
-    choices[2] = {
-      ...choices[2],
-      description: '争取时间——但你没有更多可以准备的了，而凯斯勒对拖延很敏感。',
-      effects: { ...choices[2].effects, renown: -2 },
-    };
+  });
+
+  return {
+    ...event,
+    sceneText: [event.sceneText, layer].filter(Boolean).join('\n\n'),
+    choices,
+  };
+}
+
+/**
+ * The three echoes. Yesterday's decision comes back the next morning as
+ * something a person does — a dried fruit pressed into your hand, a laugh that
+ * stops when you walk in — rather than as a number moving on a panel.
+ */
+function processEcho(event: EventData, state: GameState): EventData {
+  const v = event.variants ?? {};
+  let tail = '';
+
+  if (event.id === 'day8_echo') {
+    tail = Number(state.flags.dinnerPerformance ?? 0) >= ECHO_DECOROUS_AT ? v.decorous : v.graceless;
+  } else if (event.id === 'day11_echo') {
+    const fairness = String(state.flags.petitionFairness ?? 'unfair');
+    tail = v[fairness] ?? v.unfair;
   }
-  return { ...event, choices };
+
+  return { ...event, sceneText: [event.sceneText, tail].filter(Boolean).join('\n\n') };
 }
 
 // Day 22 evening: show full estate encounter if player missed hunt,
@@ -198,16 +265,40 @@ export function getFixedEvent(day: number, phase: DayPhase, state: GameState): E
 
   if (found.activationFlag && !state.flags[found.activationFlag]) return null;
 
-  // Timing is the authority once an event declares it; phase and cost follow from it.
-  const raw: EventData = found.timing
-    ? { ...found, phase: eventPhase(found), advancesPhase: eventAdvancesPhase(found) }
-    : found;
+  return process(found, state);
+}
 
-  if (raw.id === 'day12_audit') return processDay12(raw, state);
-  if (raw.id === 'day22_traveler_estate') return processDay22Estate(raw, state);
-  if (raw.id === 'day23_lords_letter') return processDay23(raw, state);
-  if (raw.id === 'day30_evening') return processDay30(raw, state);
-  return raw;
+function process(raw: EventData, state: GameState): EventData {
+  // Timing is the authority once an event declares it; phase and cost follow from it.
+  const event: EventData = raw.timing
+    ? { ...raw, phase: eventPhase(raw), advancesPhase: eventAdvancesPhase(raw) }
+    : raw;
+
+  if (event.id === 'day7_dinner_return') return processDinnerReturn(event, state);
+  if (event.id === 'day8_echo' || event.id === 'day11_echo') return processEcho(event, state);
+  if (event.id === 'day10_petition') return processDay10(event, state);
+  if (event.id === 'day12_audit') return processDay12(event, state);
+  if (event.id === 'day22_traveler_estate') return processDay22Estate(event, state);
+  if (event.id === 'day23_lords_letter') return processDay23(event, state);
+  if (event.id === 'day30_evening') return processDay30(event, state);
+  return event;
+}
+
+/**
+ * What a day charges the player for on its way out. Right now only the dinner:
+ * an invitation you did not answer is answered anyway, by your absence.
+ */
+export function getDayEndEffects(state: GameState): ChoiceEffects | null {
+  if (state.day === DINNER_DAY && !state.flags.attendedDinner && !state.flags.dinnerMissed) {
+    return getDinnerAbsenceEffects();
+  }
+  return null;
+}
+
+/** The next beat of a chained scene, looked up by id rather than by the clock. */
+export function getEventById(id: string, state: GameState): EventData | null {
+  const found = FIXED_EVENTS.find(e => e.id === id);
+  return found ? process(found, state) : null;
 }
 
 // Trading happens inside the afternoon at the market: each sale keeps the phase open
@@ -499,6 +590,21 @@ export function getFreeChoices(state: GameState): Choice[] {
   // ── Afternoon-only ───────────────────────────────────────────────────────
 
   if (phase === 'afternoon') {
+    // 棘墙晚宴: an outing that takes the afternoon to get there and the whole
+    // evening once you have. Not going is a choice too, and it costs standing.
+    if (day === DINNER_DAY && !flags.attendedDinner) {
+      choices.push({
+        id: 'attend_dinner',
+        text: '前往棘墙庄园赴宴',
+        description: '2 时段（下午与晚间）',
+        effects: {
+          flags: { attendedDinner: true },
+          nextScene: 'default',
+          logEntry: '你换了衣服，骑马去了棘墙庄园。',
+        },
+      });
+    }
+
     choices.push({
       id: 'talk_marta',
       text: '和玛莎聊聊',
@@ -523,22 +629,20 @@ export function getFreeChoices(state: GameState): Choice[] {
       },
     });
 
-    // v3: 谷火神殿 is no longer a place you can go. 洛伦茨 comes to the manor's forge-hall,
-    // which itself only opens after the Day 4 hearth-feeding.
-    if (flags.metLorenzAtDinner && flags.unlockForgeChapel) {
+    // v3: 谷火神殿 is no longer a place you can go. 洛伦茨 works the manor's own
+    // forge-hall, which opens once he has walked you into it on Day 4. The afternoon
+    // call is his working day and pays conversational trust only — the fragments
+    // belong to the Thursday vigil (brief appendix 六).
+    if (flags.unlockForgeChapel) {
       choices.push({
         id: 'visit_lorenz',
         text: '去炉堂见洛伦茨',
-        description: flags.lorenzFirstVisitDone
-          ? '洛伦茨总是有时间说几句话'
-          : '晚宴上他欲言又止，今天也许能说完那半句话',
+        description: '1 时段 · 计一次与洛伦茨的交谈',
         effects: {
           conversationWith: 'lorenz',
           flags: { lorenzFirstVisitDone: true },
           nextScene: 'forge_chapel',
-          logEntry: flags.lorenzFirstVisitDone
-            ? '洛伦茨在炉堂接待了你。你们在炉膛边又坐了一会儿。'
-            : '洛伦茨在炉堂接待了你。他泡了两杯茶，先喝了很长时间才开口。"霍特曼在走之前来找过我，"他说，"他烧了一些东西。我没有拦他。"',
+          logEntry: '你去炉堂找洛伦茨说了一会儿话。',
         },
       });
     }

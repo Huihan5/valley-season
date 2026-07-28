@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { GameState, EventData } from '../src/types/game';
-import { getFixedEvent, eventPhase, eventAdvancesPhase } from '../src/systems/EventSystem';
+import { getFixedEvent, getFreeChoices, eventPhase, eventAdvancesPhase } from '../src/systems/EventSystem';
 import day1 from '../src/data/events/day1.json';
 import day3 from '../src/data/events/day3.json';
 
@@ -130,3 +130,35 @@ describe('Day 3 · 账本的裂缝', () => {
 function byIdOf(event: EventData, id: string) {
   return event.choices?.find(c => c.id === id);
 }
+
+describe('Day 4 · 添柴', () => {
+  const event = getFixedEvent(4, 'afternoon', makeState({ day: 4, phase: 'afternoon' })) as EventData;
+
+  it('is the one who walks you into the forge-hall, and costs nothing', () => {
+    expect(event.id).toBe('day4_hearth');
+    expect(event.advancesPhase).toBe(false);
+    expect(event.choices).toBeNull();
+  });
+
+  it('opens the room and records that you have met him', () => {
+    expect(event.onEnterEffects?.flags).toEqual({ met_lorenz: true, unlockForgeChapel: true });
+  });
+
+  it('lets him tell the player about Thursday in his own words', () => {
+    expect(event.sceneText).toContain('每周四晚上我在这儿守夜');
+    expect(event.sceneText).toContain('也可以不来');
+  });
+
+  it('keeps the sacred institutional: someone comes and feeds the fire', () => {
+    expect(event.sceneText).toContain('就是让炉子知道换人了');
+  });
+
+  it('gates the forge-hall until he has opened it', () => {
+    const before = getFreeChoices(makeState({ day: 3, phase: 'evening' })).map(c => c.id);
+    expect(before).not.toContain('visit_chapel');
+    const after = getFreeChoices(makeState({
+      day: 4, phase: 'evening', flags: { unlockForgeChapel: true },
+    })).map(c => c.id);
+    expect(after).toContain('visit_chapel');
+  });
+});

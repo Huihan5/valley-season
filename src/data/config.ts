@@ -64,7 +64,34 @@ export const TENANT_TRUST_INITIAL = -2;
 export const TENANT_TRUST_MIN = -5;
 export const TENANT_TRUST_MAX = 5;
 export const TENANT_MEETING_MIN_TRUST = 0;
+// 玛莎 knows which of the five families is worst off; so does anyone who walked
+// the fields. Either one opens the Day 10 petition's information layer.
+export const PETITION_INFORMED_TRUST = 2;
 export const ORCHARD_TENANT_TRUST_CAP = 2; // the orchard alone cannot carry it further
+// 玛莎 at ±4 moves the whole household one point with her (GDD ch.5.5).
+export const MARTA_TENANT_SWING = 4;
+
+// ── 贵族信任的三次机会 (GDD ch.5.5) ─────────────────────────────────────────
+// The judging is deliberately lenient: two 得体 out of three unlocks 玛格丽特's
+// fragment, so a player is allowed to misread any one of the three occasions.
+// Which answer counts as 得体 at the dinner — the drafts mark these in §4.5.
+export const DINNER_DECORUM_ANSWERS: Record<string, string> = {
+  dinnerPick1: 'C',
+  dinnerPick2: 'C',
+  dinnerPick3: 'B',
+};
+// Indexed by 得体 count, 0 through 3.
+export const DINNER_SETTLEMENT = [
+  { nobleTrust: 0, renown: -1 },
+  { nobleTrust: 0, renown: 0 },
+  { nobleTrust: 1, renown: 1 },
+  { nobleTrust: 1, renown: 2 },
+];
+// Two 得体 out of three is what the manor hears about the next morning.
+export const ECHO_DECOROUS_AT = 2;
+// Staying home costs a point of standing and burns one of the three chances.
+export const DINNER_ABSENT_RENOWN = -1;
+export const DINNER_DAY = 7;
 
 // ── 非资源行动 (GDD ch.5.4) ─────────────────────────────────────────────────
 // The two surveys are one-shot and expire: their whole use is preparing for one event.

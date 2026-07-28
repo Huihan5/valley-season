@@ -104,7 +104,11 @@
       "Bash(mv src/data/events/day0_opening.json src/data/opening.json)",
       "Bash(sed -i 's/^      \"description\": \"\",\\\\n//' src/data/events/day3.json)",
       "Bash(sed -i \"s/getFixedEvent\\(3, 'morning', makeState\\({ day: 3 }\\)\\)/getFixedEvent\\(3, 'afternoon', makeState\\({ day: 3 }\\)\\)/g\" tests/EventSystem.test.ts)",
-      "Bash(python -)"
+      "Bash(python -)",
+      "Bash(awk 'NR>=4365 && NR<=4464 {print NR\": \"$0}' C:/Users/Lenovo/Documents/Claude/Projects/valley-season/updates0728/NARRATIVE_DRAFTS_v1.1.md)",
+      "Bash(awk 'NR>=1728 && NR<=1955 {print NR\": \"$0}' C:/Users/Lenovo/Documents/Claude/Projects/valley-season/updates0728/NARRATIVE_DRAFTS_v1.1.md)",
+      "Bash(rm src/data/events/day7.json)",
+      "Bash(awk 'NR>=1951 && NR<=2170 {print NR\": \"$0}' C:/Users/Lenovo/Documents/Claude/Projects/valley-season/updates0728/NARRATIVE_DRAFTS_v1.1.md)"
     ]
   }
 }

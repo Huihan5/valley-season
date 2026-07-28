@@ -52,6 +52,8 @@ export interface Choice {
   resultKind?: string;
   /** Branch prose written for this one choice, shown once the event has resolved. */
   resultText?: string;
+  /** Continue the scene at this event instead of returning to the day. */
+  nextEvent?: string;
   /** Placeholder values for that result text, e.g. the yield the player just brought in. */
   resultVars?: Record<string, string | number>;
 }
@@ -108,7 +110,18 @@ export interface EventData {
   onEnterEffects?: ChoiceEffects;
   activationFlag?: string;
   advancesPhase?: boolean;
+  /**
+   * The next beat of the same scene. A dinner is one outing but several
+   * decisions; the phase is charged once, at the end of the chain.
+   */
+  next?: string;
   textInput?: TextInputSpec;
+  /**
+   * Prose blocks the event's processor chooses between — the information layer
+   * a petition opens up, the tier a conversation lands in. Content stays here;
+   * only the choosing lives in the system.
+   */
+  variants?: Record<string, string>;
   letterOpening?: string;
   letterParagraphs?: ConditionalParagraph[];
   letterClosing?: string;
