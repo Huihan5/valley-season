@@ -1,6 +1,8 @@
 import { WeatherType } from '../types/game';
 import { WEATHER_POOLS, FORCED_WEATHER } from '../data/config';
-import ui from '../data/ui.json';
+import DATA from '../data';
+
+const ui = DATA.ui;
 
 function getPool(day: number): Record<string, number> {
   if (day <= 10) return WEATHER_POOLS.early;

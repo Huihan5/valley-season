@@ -1,5 +1,7 @@
 import { FATIGUE_TIRED_THRESHOLD, FATIGUE_EXHAUSTED_THRESHOLD } from '../data/config';
-import ui from '../data/ui.json';
+import DATA from '../data';
+
+const ui = DATA.ui;
 
 export type FatigueStatus = 'normal' | 'tired' | 'exhausted';
 

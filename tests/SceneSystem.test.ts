@@ -12,11 +12,11 @@ import {
   getMarketRumours,
 } from '../src/systems/SceneSystem';
 import { ACT_TWO_START, ACT_THREE_START } from '../src/data/config';
-import locations from '../src/data/scenes/locations.json';
-import greetings from '../src/data/dialogue/greetings.json';
-import weatherLines from '../src/data/scenes/weather_lines.json';
-import actionResults from '../src/data/scenes/action_results.json';
-import ambient from '../src/data/scenes/ambient.json';
+import locations from '../src/data/zh/scenes/locations.json';
+import greetings from '../src/data/zh/dialogue/greetings.json';
+import weatherLines from '../src/data/zh/scenes/weather_lines.json';
+import actionResults from '../src/data/zh/scenes/action_results.json';
+import ambient from '../src/data/zh/scenes/ambient.json';
 
 const ZERO: Record<NpcId, number> = { gregor: 0, marta: 0, elena: 0, marguerite: 0, henk: 0, lorenz: 0 };
 

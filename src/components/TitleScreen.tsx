@@ -1,6 +1,9 @@
 import { SaveSummary } from '../systems/SaveSystem';
 import { formatMoment } from '../systems/TimeSystem';
-import ui from '../data/ui.json';
+import DATA from '../data';
+import { LOCALES, LOCALE_NAMES, getLocale, setLocale } from '../data/locale';
+
+const ui = DATA.ui;
 
 const T = ui.titleScreen;
 
@@ -20,6 +23,7 @@ interface Props {
  */
 export default function TitleScreen({ auto, hasManualSaves, onNew, onContinue, onOpenSaves }: Props) {
   const resumable = auto && !auto.finished;
+  const locale = getLocale();
 
   return (
     <div className="h-screen bg-bg text-game-text flex flex-col items-center justify-center gap-10 p-6">
@@ -58,6 +62,23 @@ export default function TitleScreen({ auto, hasManualSaves, onNew, onContinue, o
             {T.loadSave}
           </button>
         )}
+
+        {/* Changing language reloads: the text is wired in at module load, and the
+            season is on the autosave, so there is nothing to lose by starting over
+            with the other half of the data layer. */}
+        <div className="flex justify-center gap-4 pt-2">
+          {LOCALES.map((code) => (
+            <button
+              key={code}
+              onClick={() => code !== locale && setLocale(code)}
+              className={`text-xs font-serif transition-colors ${
+                code === locale ? 'text-gold cursor-default' : 'text-game-dim hover:text-cream'
+              }`}
+            >
+              {LOCALE_NAMES[code]}
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );

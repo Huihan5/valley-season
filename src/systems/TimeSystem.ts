@@ -1,7 +1,9 @@
 import { DayPhase } from '../types/game';
 import { DEMO_MAX_DAYS } from '../data/config';
-import ui from '../data/ui.json';
+import DATA from '../data';
 import { fill } from '../utils/text';
+
+const ui = DATA.ui;
 
 export const PHASE_ORDER: DayPhase[] = ['morning', 'afternoon', 'evening'];
 

@@ -5,11 +5,7 @@ import {
   RANDOM_EVENT_CHANCE, RANDOM_EVENT_CHANCE_WITH_FIXED, RANDOM_EVENT_CHANCE_QUIET,
   RANDOM_EVENT_QUIET_DAYS, RANDOM_EVENT_WINDOWS,
 } from '../data/config';
-import lostOx from '../data/events/random/random_lost_ox.json';
-import toolPedlar from '../data/events/random/random_tool_pedlar.json';
-import forgeCityMerchant from '../data/events/random/random_forge_city_merchant.json';
-import well from '../data/events/random/random_well.json';
-import quietDay from '../data/events/random/random_quiet_day.json';
+import DATA from '../data';
 
 /**
  * The random pool (GDD ch.8.2). Five events, not twenty-five: every one of them
@@ -21,8 +17,10 @@ import quietDay from '../data/events/random/random_quiet_day.json';
  * this file decides; what happens inside the event is in src/data/events/random/.
  */
 
+const R = DATA.randomEvents;
+
 const RANDOM_EVENTS = [
-  lostOx, toolPedlar, forgeCityMerchant, well, quietDay,
+  R.lostOx, R.toolPedlar, R.forgeCityMerchant, R.well, R.quietDay,
 ] as unknown as EventData[];
 
 /** Reasons an event would make no sense today, beyond the calendar. */

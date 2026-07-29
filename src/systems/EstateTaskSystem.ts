@@ -8,9 +8,11 @@ import {
   TENANT_MEETING_MIN_TRUST,
   HARVEST_YIELD,
 } from '../data/config';
-import actions from '../data/actions.json';
+import DATA from '../data';
 import { fill } from '../utils/text';
 import { getEffectiveTenantTrust } from './RelationSystem';
+
+const actions = DATA.actions;
 
 const TEXT = actions.estateTasks;
 

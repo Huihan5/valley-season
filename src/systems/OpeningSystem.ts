@@ -1,5 +1,7 @@
 import { OpeningPage } from '../types/game';
-import openingData from '../data/opening.json';
+import DATA from '../data';
+
+const openingData = DATA.opening;
 
 export const OPENING_PAGES = (openingData.pages ?? []) as OpeningPage[];
 

@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import { LogEntry } from '../../types/game';
 import { PHASE_LABELS, dayName } from '../../systems/TimeSystem';
-import ui from '../../data/ui.json';
+import DATA from '../../data';
 import { fill } from '../../utils/text';
+
+const ui = DATA.ui;
 
 /**
  * The record, which used to show the last four lines and let everything older

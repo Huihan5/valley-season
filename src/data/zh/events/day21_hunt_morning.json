@@ -1,0 +1,34 @@
+{
+  "id": "day21_hunt_morning",
+  "day": 21,
+  "phase": "morning",
+  "forced": true,
+  "advancesPhase": true,
+  "activationFlag": "campOvernight",
+  "title": "营地清晨",
+  "sceneText": "帐篷布透着冷光。你在营地醒来，骨头比在床上睡要僵得多。\n\n篝火已经熄了，剩下灰烬和几个还在睡的侍从。远处有鸟叫。马那边有动静。\n\n亨克已经起来了，站在林边喝着什么热的，背对着营地。\n\n你昨晚说的那句话，今天早上没有人提。",
+  "choices": [
+    {
+      "id": "camp_stay",
+      "text": "留下，参加今日猎场",
+      "description": "疲劳 +1",
+      "advancesPhase": false,
+      "effects": {
+        "fatigue": 1,
+        "flags": { "huntAttendedDay21": true, "huntAttendedDay21Continued": true },
+        "nextScene": "forest",
+        "logEntry": "你留在营地，跟着队伍走了今天的路线。"
+      },
+      "nextEvent": "day21_camp_harvest"
+    },
+    {
+      "id": "camp_return",
+      "text": "向亨克道别，返回庄园",
+      "effects": {
+        "nextScene": "default",
+        "logEntry": "你向亨克道别，骑马回了枫径。"
+      },
+      "resultText": "你去跟亨克道别。\n\n他正在跟两个人说今天走哪条路，看见你过来，把话停下。\n\n“这就走？”\n\n你说庄园那边压着事。\n\n“行。”他说，“昨天您留下来了，这就够意思了。”\n\n他说的是真心话。他拍了拍你的肩，然后转回去继续说他的路线。\n\n回程的路上有霜。马走得比来的时候慢。\n\n你到庄园的时候上午已经过去了大半。田里的人早就出去了，玛莎在厨房，看见你回来点了点头，没有问狩猎的事。\n\n下午你还有一个时段。"
+    }
+  ]
+}

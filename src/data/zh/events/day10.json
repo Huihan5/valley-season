@@ -1,0 +1,54 @@
+{
+  "id": "day10_petition",
+  "day": 10,
+  "timing": "midday",
+  "forced": true,
+  "title": "佃户请愿",
+  "sceneText": "他们来的时候你正在办公室。\n\n来了五个人，他们站在庭院里等着有人出来。为首的是个六十多岁的男人，老文德，你在田里见过他两次。他手里拿着一张纸。\n\n纸上是五户人家的名字，下面是五个签名，其中三个是画的记号。\n\n“屋顶和牛棚。”老文德说，“去年就报过了。霍特曼先生记下来了，本子上应该有。”\n\n他说这句话的时候没有怨气。他只是在陈述一件他确认过的事实。\n\n你回到办公室翻那本待办清单，翻到了。上面确实写着，日期是去年十一月。字迹工整。后面没有任何后续记录。",
+  "variants": {
+    "informed": "你知道这五户的情况不一样。\n\n老文德家的屋顶漏了两年，但他家只有两口人，一间房还能住。\n\n磨坊边上那户是公共牛棚，塌了一角，现在全村的牛挤在剩下的一半里。牛病了会传染。\n\n有一户是个独居的老妇人，她的房子其实还能撑一个冬天，但撑不过两个。\n\n剩下两户损坏最轻，人口最多。",
+    "uninformed": "名单上只有五个名字。你不知道哪一家最急。",
+    "partial_fair": "你说了修哪三户，以及为什么。\n\n没有人反对。老文德点了点头，说牛棚那个确实最要紧。另外两户里有一个人张了张嘴，最后什么也没说。\n\n“剩下的呢？”老文德问。\n\n你说等秋收结束。\n\n“行。”他说，“您记着就行。”\n\n他把纸留下了，放在门廊的石台上。",
+    "partial_unfair": "你说了修哪三户。\n\n有一瞬间没有人说话。\n\n然后老文德说好，谢谢您。他说得比刚才客气。\n\n他们走了之后，那张纸还留在门廊的石台上，被风吹到了地上。"
+  },
+  "choices": [
+    {
+      "id": "repair_all",
+      "text": "五户全修",
+      "description": "40 金卢 · 10 木材",
+      "effects": {
+        "guldmark": -40,
+        "timber": -10,
+        "renown": 2,
+        "relationships": { "marta": 1 },
+        "tenantTrust": 2,
+        "flags": { "repairedAllHousing": true, "petitionResolved": true, "petitionFairness": "full" },
+        "logEntry": "你批准了五户全修。"
+      },
+      "resultText": "老文德把那张纸收回去，折了两折，放进口袋。\n\n“谢谢您。”他说。然后他们就走了，没有多留。\n\n当天下午，玛莎在厨房里比平时话少。你路过的时候她正在跟另外两个人说话，看见你就停了。\n\n你听见的最后半句是“……总算有人”。"
+    },
+    {
+      "id": "repair_partial",
+      "text": "先修最急的三户",
+      "description": "24 金卢 · 6 木材",
+      "effects": {
+        "guldmark": -24,
+        "timber": -6,
+        "flags": { "repairedPartialHousing": true, "petitionResolved": true },
+        "logEntry": "你选了三户先修。"
+      }
+    },
+    {
+      "id": "repair_none",
+      "text": "今年的秋收结束之后再说",
+      "effects": {
+        "renown": -2,
+        "relationships": { "marta": -1 },
+        "tenantTrust": -1,
+        "flags": { "deniedHousingPetition": true, "petitionResolved": true, "petitionFairness": "none" },
+        "logEntry": "你把请愿推到了秋收之后。"
+      },
+      "resultText": "老文德看了你一会儿。\n\n“行。”他说。\n\n他把那张纸折起来收好，转身走了。其余四个人跟着他走。整个过程没有一个人再说话。\n\n那天晚上厨房熄灯比平常早。"
+    }
+  ]
+}

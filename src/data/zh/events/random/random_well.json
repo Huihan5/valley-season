@@ -1,0 +1,33 @@
+{
+  "id": "random_well",
+  "day": 0,
+  "forced": true,
+  "timing": "midday",
+  "title": "淘井",
+  "sceneText": "玛莎说厨房的水这两天有点浑。\n\n井是庄园自己的，在庭院东北角。上一次淘是哪一年，没有人记得。",
+  "choices": [
+    {
+      "id": "well_hire",
+      "text": "从村里请人来淘",
+      "description": "4 金卢",
+      "effects": {
+        "guldmark": -4,
+        "logEntry": "你从村里请了人来淘井。"
+      },
+      "resultText": "请来的是村里两个人，下去了半天，捞上来一堆东西，烂掉的木桶片、几块石头、一只鞋。\n\n“这鞋在里头有年头了。”其中一个说。\n\n玛莎看了一眼那只鞋，说了句什么，回厨房了。\n\n第二天的水清了。"
+    },
+    {
+      "id": "well_self",
+      "text": "自己带人下去弄",
+      "description": "1 时段",
+      "advancesPhase": true,
+      "effects": {
+        "relationships": {
+          "marta": 1
+        },
+        "logEntry": "你自己下井淘了一个下午。"
+      },
+      "resultText": "你自己带了两个人下去。\n\n井底比你以为的深，也比你以为的冷。你在下面待了一个多钟头，捞上来一堆东西，烂掉的木桶片、几块石头、一只鞋。\n\n上来的时候玛莎在井边站着，手里端着一碗热的。\n\n“喝了。”她说。\n\n你喝了。她看着你喝完，把碗收走，一句别的话都没有说。\n\n第二天的水清了。"
+    }
+  ]
+}

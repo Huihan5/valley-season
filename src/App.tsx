@@ -13,8 +13,7 @@ import { INITIAL_FLAGS } from './systems/FlagRegistry';
 import { getOpeningPage, nextOpeningPage } from './systems/OpeningSystem';
 import { composeScene, getActionResult, getGreeting } from './systems/SceneSystem';
 import { INITIAL_RESOURCES, INITIAL_RELATIONSHIPS, TENANT_TRUST_INITIAL } from './data/config';
-import ui from './data/ui.json';
-import lines from './data/system_lines.json';
+import DATA from './data';
 import { interpolate, fill } from './utils/text';
 import ScenePanel from './components/ScenePanel';
 import StatusPanel from './components/StatusPanel';
@@ -29,6 +28,8 @@ import {
   writeSlot, readSlot, clearSlot, readSlotSummary, listManualSlots,
 } from './systems/SaveSystem';
 
+const ui = DATA.ui;
+const lines = DATA.systemLines;
 
 type Action =
   | { type: 'MAKE_CHOICE'; choiceId: string }
@@ -342,7 +343,6 @@ function advancePhase(state: GameState): GameState {
 
   return buildStateForPhase(next);
 }
-
 
 export default function App() {
   const [state, dispatch] = useReducer(gameReducer, undefined, createInitialState);

@@ -1,13 +1,15 @@
 import { GameState, Choice, DayPhase, NpcId } from '../types/game';
 import { getTrust } from './RelationSystem';
 import { countFlagsWithPrefix, CLUE_PREFIXES } from './FlagRegistry';
-import actions from '../data/actions.json';
+import DATA from '../data';
 import {
   FRAGMENT_TRUST, LORENZ_FRAGMENT_TRUST, LORENZ_WHY_TRUST,
   CLUE_ESTATE_REQUIRED, CLUE_OFFICER_REQUIRED, CLUE_NOBLE_REQUIRED,
   POSITION_LINE_COMPLETE,
 } from '../data/config';
-import fragmentsData from '../data/dialogue/fragments.json';
+
+const actions = DATA.actions;
+const fragmentsData = DATA.dialogue.fragments;
 
 /**
  * The estate's own fragments (GDD ch.9.1). Nobody searches for these and there is

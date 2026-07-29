@@ -1,0 +1,114 @@
+{
+  "phase": {
+    "morning": "Morning",
+    "afternoon": "Afternoon",
+    "evening": "Evening"
+  },
+  "dayNames": [
+    "",
+    "Day One", "Day Two", "Day Three", "Day Four", "Day Five",
+    "Day Six", "Day Seven", "Day Eight", "Day Nine", "Day Ten",
+    "Day Eleven", "Day Twelve", "Day Thirteen", "Day Fourteen", "Day Fifteen",
+    "Day Sixteen", "Day Seventeen", "Day Eighteen", "Day Nineteen", "Day Twenty",
+    "Day Twenty-One", "Day Twenty-Two", "Day Twenty-Three", "Day Twenty-Four", "Day Twenty-Five",
+    "Day Twenty-Six", "Day Twenty-Seven", "Day Twenty-Eight", "Day Twenty-Nine", "Day Thirty"
+  ],
+  "dayNameFallback": "Day {day}",
+  "moment": "{day} · {phase}",
+  "weekdays": ["", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+  "weather": {
+    "sunny": "Clear",
+    "cloudy": "Cloudy",
+    "rainy": "Rain",
+    "frost": "Frost",
+    "fog": "Fog"
+  },
+  "fatigue": {
+    "overworked": "Spent",
+    "tired": "Tired",
+    "fresh": "Rested",
+    "forcedRest": "Tomorrow morning goes to rest",
+    "penalty": "Every action −1"
+  },
+  "npc": {
+    "gregor": "Gregor",
+    "marta": "Martha",
+    "elena": "Elena",
+    "marguerite": "Baroness Marguerite",
+    "henk": "Baron Henk",
+    "lorenz": "Master Lorenz"
+  },
+  "yieldTier": {
+    "meagre": "meagre",
+    "fair": "fair",
+    "rich": "heavy"
+  },
+  "resources": {
+    "grain": "Grain",
+    "guldmark": "Guldmark",
+    "timber": "Timber",
+    "renown": "Renown",
+    "unit": "units",
+    "guldmarkAmount": "{n} guldmark"
+  },
+  "statusPanel": {
+    "estate": "Maplegate",
+    "marketDay": "Market Day",
+    "resourcesHeading": "— Resources —",
+    "statusHeading": "— Condition —",
+    "standingHeading": "— Standing —",
+    "relationsHeading": "— Relations —",
+    "nobleTrust": "Noble trust",
+    "lordImpression": "Lord's regard",
+    "purseEmpty": "The account is empty.",
+    "purseLow": "Not enough on the account for tomorrow's running costs."
+  },
+  "choicePanel": {
+    "heading": "— Choices —"
+  },
+  "logDrawer": {
+    "heading": "— Record —",
+    "collapse": "Close ↓",
+    "expand": "{n} entries ↑"
+  },
+  "scenePanel": {
+    "saves": "Saves"
+  },
+  "estateTaskList": {
+    "heading": "Estate business",
+    "outstanding": "{n} outstanding",
+    "done": "Done"
+  },
+  "titleScreen": {
+    "title": "Valley Season",
+    "titleRoman": "河谷季",
+    "subtitle": "The Duchy of Valewisp · Maplegate Estate · Thirty Days",
+    "continue": "Continue",
+    "newSeason": "A New Season",
+    "loadSave": "Load a Save"
+  },
+  "saveMenu": {
+    "heading": "— Saves —",
+    "close": "Close",
+    "slots": ["Save One", "Save Two", "Save Three"],
+    "summary": "{moment}　{savedAt}",
+    "dateLocale": "en-GB",
+    "finished": "Finished",
+    "empty": "Empty",
+    "overwrite": "Overwrite",
+    "save": "Save",
+    "load": "Load",
+    "delete": "Delete"
+  },
+  "opening": {
+    "signatureLabel": "Signature of the Guaranteed Party",
+    "signaturePrompt": "Write your name",
+    "sign": "Sign"
+  },
+  "app": {
+    "documentTitle": "Valley Season",
+    "documentTitleInSeason": "Valley Season · Day {day}",
+    "restart": "Begin Again",
+    "continue": "Continue →"
+  }
+}

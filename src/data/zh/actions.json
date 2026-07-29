@@ -1,0 +1,190 @@
+{
+  "common": {
+    "onePhase": "1 时段",
+    "noYield": "1 时段 · 无产出",
+    "tooTired": "你过于疲惫",
+    "tooTiredRest": "你过于疲惫，需要先休息"
+  },
+  "harvest": {
+    "text": "前往农田收割",
+    "estimate": "预计收割 {tier}",
+    "rainedOut": "阴雨天气，田地泥泞，收割效率极低",
+    "log": "你在{phase}收割了农田，收上来 {n} 单位。"
+  },
+  "fellTimber": {
+    "text": "前往林地采伐",
+    "rainedOut": "阴雨天，林地工作暂停",
+    "brokePromise": "预计采伐 {tier} · 你说过就到二十单位 · 格雷格信任 {trust}",
+    "overruns": "预计采伐 {tier} · 超出本季额度 · 声望 {renown}",
+    "pastQuota": "预计采伐 {tier} · 已超出本季额度",
+    "withinQuota": "预计采伐 {tier}，本季额度还剩 {n} 单位",
+    "log": "你在林地采伐了 {n} 单位木材。",
+    "rainBlocked": "雨天无法采伐"
+  },
+  "forage": {
+    "text": "去林地采集蘑菇草药",
+    "description": "1 时段 · {n} 金卢 · 计一次与玛莎的交谈",
+    "log": "你采了一趟，换了 {n} 金卢。"
+  },
+  "orchard": {
+    "text": "去果园采摘",
+    "description": "1 时段 · {n} 金卢",
+    "tenantBonus": " · 佃户整体信任 +1",
+    "overripe": "（果子过熟，收益减半）",
+    "log": "你在果园摘了一趟，换了 {n} 金卢。"
+  },
+  "office": {
+    "text": "处理办公室文书",
+    "description": "1 时段 · 计一次与埃莱娜的交谈",
+    "log": "你在办公室处理了一上午的文书。"
+  },
+  "surveyFields": {
+    "text": "巡视农田",
+    "log": "你把每一块地都走了一遍。"
+  },
+  "surveyForest": {
+    "text": "巡视林地",
+    "log": "你在林地里走了一趟，把看见的都记下来了。"
+  },
+  "deepLedger": {
+    "text": "深查账目付款记录",
+    "description": "那笔规律性的“杂项维护费”——你还没查清楚是付给谁的",
+    "log": "你在账簿里追查那笔不明支出的去向。数字本身不说谎，但它们被记录的方式说了很多。"
+  },
+  "market": {
+    "go": "前往集市（{weekday}）",
+    "goDescription": "往返占用上午与下午两个时段，单次运力上限 {cap} 单位",
+    "goLog": "你出发前往河谷城集市。",
+    "goTooTired": "你过于疲惫，无力出城",
+    "sellGrain": "出售粮食 {n} 单位",
+    "sellGrainDescription": "{revenue} 金卢（{price} 金卢/单位）",
+    "sellGrainLog": "你在集市卖出 {n} 单位粮食，换得 {revenue} 金卢。",
+    "sellTimber": "出售木材 {n} 单位",
+    "sellTimberDescription": "{revenue} 金卢（{price} 金卢/单位）",
+    "sellTimberLog": "你在集市卖出 {n} 单位木材，换得 {revenue} 金卢。",
+    "capacityLeft": "马车还能装 {n} 单位（单次运力上限 {cap}）",
+    "capacityFull": "马车已装满（单次运力上限 {cap}）",
+    "finishSold": "装车返程",
+    "finishIdle": "什么都不做",
+    "finishDescription": "今日已出手 {n} 单位。{capacity}",
+    "finishSoldLog": "你结清了今天的账，把空车赶回枫径。",
+    "finishIdleLog": "你在集市转了一圈，没有交易。"
+  },
+  "hunt": {
+    "text": "出席今日猎场",
+    "description": "2 时段 · 疲劳 +{n}",
+    "log": "你骑马前往公国猎场，加入今日的狩猎队伍。",
+    "tooTired": "你过于疲惫，无法出席猎场"
+  },
+  "dinner": {
+    "text": "前往棘墙庄园赴宴",
+    "description": "2 时段（下午与晚间）",
+    "log": "你换了衣服，骑马去了棘墙庄园。"
+  },
+  "boundary": {
+    "text": "前往北面林地查看",
+    "log": "你往北面林地走了一趟。"
+  },
+  "talkMarta": {
+    "text": "和玛莎聊聊",
+    "description": "了解庄园内部动态，玛莎知道所有事",
+    "descriptionOpen": "玛莎最近话比以前多了——这是信任的表现",
+    "log": "你和玛莎在厨房聊了一会儿。"
+  },
+  "talkGregor": {
+    "text": "去马厩找格雷格",
+    "description": "1 时段 · 不计信任",
+    "log": "你去马厩和格雷格待了一段时间。"
+  },
+  "helpHorses": {
+    "text": "去马厩搭把手",
+    "description": "1 时段 · 计一次与格雷格的交谈",
+    "log": "你在马厩跟着格雷格干了半天活。"
+  },
+  "visitLorenz": {
+    "text": "去炉堂见洛伦茨",
+    "description": "1 时段 · 计一次与洛伦茨的交谈",
+    "log": "你去炉堂找洛伦茨说了一会儿话。"
+  },
+  "chapel": {
+    "vigilText": "去炉堂陪洛伦茨守夜",
+    "text": "前往庄园炉堂",
+    "vigilDescription": "1 时段 · 计一次与洛伦茨的交谈",
+    "description": "1 时段 · 疲劳归零",
+    "vigilLog": "你在炉堂陪洛伦茨守了一夜的火。",
+    "log": "你在庄园炉堂守火冥想了片刻。"
+  },
+  "reviewAccounts": {
+    "text": "夜间审查账目",
+    "description": "1 时段 · 疲劳 +1 · 无产出",
+    "log": "你在灯下审查了账目到深夜。"
+  },
+  "rest": {
+    "text": "早点休息",
+    "description": "消除所有疲劳，明天精力充沛",
+    "log": "你早早休息了。"
+  },
+  "broker": {
+    "grainToGold": {
+      "text": "以粮换钱（经纪人渠道）",
+      "description": "消耗6粮食 + 1木材，换取4金卢（应急汇率偏低）",
+      "descriptionShort": "消耗6粮食 + 1木材，换取4金卢——当前储备不足",
+      "log": "你通过驻地经纪人进行了应急换算，以粮食换取了金卢。包装和运费从木材里扣了一部分。",
+      "shortGrain": "粮食不足（需要6单位）",
+      "shortTimber": "木材不足（需要1单位）"
+    },
+    "timberToGold": {
+      "text": "以木换钱（经纪人渠道）",
+      "description": "消耗3木材，换取3金卢（木材加工后折价出售）",
+      "descriptionShort": "消耗3木材，换取3金卢——当前储备不足",
+      "log": "你通过驻地经纪人将木材折价出售。价格远不如集市，但眼下也只有这条路了。",
+      "shortTimber": "木材不足（需要3单位）"
+    },
+    "timberToGrain": {
+      "text": "以木换粮（经纪人渠道）",
+      "description": "消耗2木材 + 1金卢，换取7粮食（邻庄调运，效率尚可）",
+      "descriptionShort": "消耗2木材 + 1金卢，换取7粮食——当前储备不足",
+      "log": "你通过经纪人从邻庄调运了一批粮食。运费以金卢结清，木材用于抵扣部分货款。",
+      "shortTimber": "木材不足（需要2单位）",
+      "shortGuldmark": "金卢不足（需要1单位）"
+    }
+  },
+  "estateTasks": {
+    "repairTools": {
+      "label": "修农具",
+      "effect": "收割 {from}→{to}"
+    },
+    "clearStorage": {
+      "label": "清理仓储",
+      "effect": "解除储存上限，收割 {from}→{to}",
+      "needsTools": "需先修农具"
+    },
+    "tenantMeeting": {
+      "label": "召开佃户会议",
+      "effect": "收割 {from}→{to}",
+      "needsStorage": "需先清理仓储",
+      "needsTrust": "佃户整体信任需 ≥ {n}"
+    },
+    "repairStable": {
+      "label": "修缮马厩屋顶",
+      "effect": "格雷格信任 +1"
+    },
+    "giftMarguerite": {
+      "label": "河谷城风尚伴手礼（赠玛格丽特）",
+      "effect": "玛格丽特信任 +1"
+    },
+    "giftHenk": {
+      "label": "河谷城风尚伴手礼（赠亨克）",
+      "effect": "亨克信任 +1"
+    },
+    "attire": {
+      "label": "瓦莱维斯普秋装",
+      "effect": "声望 +1"
+    },
+    "costGuldmark": "{n} 金卢",
+    "costTimber": "{n} 木材",
+    "shortGuldmark": "金卢不足（需 {n}）",
+    "shortTimber": "木材不足（需 {n}）",
+    "log": "{label}。{summary}"
+  }
+}

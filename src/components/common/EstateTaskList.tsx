@@ -1,7 +1,9 @@
 import { GameState } from '../../types/game';
 import { getEstateTasks } from '../../systems/EstateTaskSystem';
-import ui from '../../data/ui.json';
+import DATA from '../../data';
 import { fill } from '../../utils/text';
+
+const ui = DATA.ui;
 
 const T = ui.estateTaskList;
 

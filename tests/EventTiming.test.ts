@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import { GameState, EventData } from '../src/types/game';
 import { getFixedEvent, getFreeChoices, eventPhase, eventAdvancesPhase } from '../src/systems/EventSystem';
-import day1 from '../src/data/events/day1.json';
-import day3 from '../src/data/events/day3.json';
+import day1 from '../src/data/zh/events/day1.json';
+import day3 from '../src/data/zh/events/day3.json';
 
 function makeState(overrides: Partial<GameState> = {}): GameState {
   return {

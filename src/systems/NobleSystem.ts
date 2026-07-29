@@ -4,7 +4,9 @@ import {
   DINNER_DECORUM_ANSWERS, DINNER_SETTLEMENT, DINNER_ABSENT_RENOWN,
   HUNT_OPENING_DECOROUS,
 } from '../data/config';
-import lines from '../data/system_lines.json';
+import DATA from '../data';
+
+const lines = DATA.systemLines;
 
 /**
  * 贵族信任 is decided at three occasions, of which the Thornwall dinner is the

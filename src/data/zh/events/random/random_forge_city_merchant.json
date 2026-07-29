@@ -1,0 +1,33 @@
+{
+  "id": "random_forge_city_merchant",
+  "day": 0,
+  "forced": true,
+  "timing": "dusk",
+  "title": "铸都来的行商",
+  "sceneText": "傍晚有人敲门，是个从铸都来的行商，赶路赶到天黑，问能不能借住一夜。\n\n这一带的规矩是让住。",
+  "variants": {
+    "stay_head": "玛莎多做了一个人的饭，没有问你。\n\n晚上他在厨房坐了一会儿，说了些路上的事。他从铸都出来走了六天，路上过了三个公国。",
+    "stay_tail": "第二天早上他走的时候留下了一小包东西给玛莎，盐，铸都那边的细盐。她收下了。"
+  },
+  "choices": [
+    {
+      "id": "merchant_stay",
+      "text": "让他住下",
+      "effects": {
+        "relationships": {
+          "marta": 1
+        },
+        "logEntry": "你留了一个铸都来的行商住一夜。"
+      }
+    },
+    {
+      "id": "merchant_refuse",
+      "text": "婉拒",
+      "effects": {
+        "renown": -1,
+        "logEntry": "一个铸都来的行商问能不能借住，你说不方便。"
+      },
+      "resultText": "你说庄园里现在不方便。\n\n他没有争，道了谢就走了。他往河谷城的方向去，那还有一个多钟头的路，天已经黑了。\n\n玛莎在厨房门口看着他走。她什么也没说。\n\n第二天早上你听说他昨晚在磨岭那边住下了。"
+    }
+  ]
+}

@@ -1,7 +1,9 @@
 import { OpeningPage } from '../types/game';
 import { OPENING_PAGES, requiresSignature, signLetter } from '../systems/OpeningSystem';
 import NameInput from './common/NameInput';
-import ui from '../data/ui.json';
+import DATA from '../data';
+
+const ui = DATA.ui;
 
 const SIGNATURE_SPEC = {
   target: 'playerName' as const,

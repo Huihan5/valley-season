@@ -1,5 +1,7 @@
 import { Choice } from '../../types/game';
-import ui from '../../data/ui.json';
+import DATA from '../../data';
+
+const ui = DATA.ui;
 
 interface Props {
   choices: Choice[];

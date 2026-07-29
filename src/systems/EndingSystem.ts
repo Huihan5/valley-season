@@ -8,7 +8,9 @@ import {
   ENDING3_DEEP_TRUST, ENDING3_DEEP_TRUST_COUNT,
   NOBLE_TRUST_ENDING3_MIN, ELENA_RITES_TRUST,
 } from '../data/config';
-import endingsData from '../data/endings/endings.json';
+import DATA from '../data';
+
+const endingsData = DATA.endings.endings;
 
 export type EndingId = 'ending1' | 'ending2' | 'ending3' | 'ending4a' | 'ending4b';
 

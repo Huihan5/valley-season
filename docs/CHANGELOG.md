@@ -1,5 +1,27 @@
 # Valley Season — Changelog
 
+## [2026-07-30] — 阶段八票二：平行 zh / en 目录与语言开关
+
+### Added
+- `src/data/zh/**` 与 `src/data/en/**`，54 个 JSON 各一份，形状完全一致。`en` 目前是 `zh` 的逐字拷贝，正文由票三逐文件替换
+- `src/data/zh/index.ts` 导出整包并 `export type Bundle = typeof bundle`；`src/data/en/index.ts` 声明为 `const bundle: Bundle`，**漏译一个键是编译错误**，不是屏幕上的一个洞
+- `src/data/locale.ts` — locale 存 `localStorage`，切换后 `location.reload()`。**不进 `GameState`**：它是外壳设置不是季节的一部分，放进去要把 `SAVE_VERSION` 顶到 2，而且同一个存档会被锁在一种语言上
+- `src/data/index.ts` — 按 locale 选一份导出。两份都静态 import：全部正文两种语言加起来约 90KB，比一张立绘还小，换来所有系统不必为读一句话变成 async
+- 标题页底部的语言开关（中文 / English）。阶段七留的位置正好用上，没有动结构
+- `tests/Localization.test.ts` — 五条：键集合相同、数组长度相同、占位符集合相同、`\n\n` 段落数相同、`id` / `resultKind` / `activationFlag` 这类标识符两边一字不差。TypeScript 管得了少一个键，管不了少一行数组或者把 `{playerName}` 连着句子一起译了，而后者正是翻译真会犯的错
+
+### Changed
+- 24 个系统与组件改为从 `../data` 读整包。`EventSystem` 的 36 条事件 import 收成一句 `const E = DATA.events`，事件的**播放顺序仍然留在系统里**（`FIXED_EVENTS` 表），语言包只是一张 key → 数据的映射
+- 测试里 7 处直接 import 的 JSON 改指 `src/data/zh/`。测试断言的是中文，指向 zh 是准确的而不是碰巧
+- **第一个真译的文件：`en/ui.json`**。三十个日名拼成 `Day One`…`Day Thirty`（中文也是 `第一日` 不是 `第1日`，这个郑重是有意的）；产出档位 meagre / fair / heavy（heavy 是英语农事里现成的说法）；疲劳 Spent / Tired / Rested；常驻三人用名，另外三人带称谓（Baroness Marguerite / Baron Henk / Master Lorenz），与中文栏一致；`dateLocale` 从 `zh-CN` 改 `en-GB`
+
+### Notes
+- 浏览器验证：切到 English，标题页与右栏全英文，正文与选项仍是中文——因为那些 en 文件还是拷贝。**这正好证明了包是真的换了**，不是悄悄回退到 zh
+- 中文存档在英文界面下照常读出（`Day Six · Afternoon`），因为 locale 不在存档里
+- 485 个测试全绿，`tsc --noEmit` 干净
+
+---
+
 ## [2026-07-30] — 阶段八票一：面向玩家的字符串迁出代码
 
 ### Added

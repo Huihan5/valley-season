@@ -10,13 +10,15 @@ import {
   MARKET_RUMOURS_MAX,
 } from '../data/config';
 
-import locationsData from '../data/scenes/locations.json';
-import weatherLines from '../data/scenes/weather_lines.json';
-import actionResults from '../data/scenes/action_results.json';
-import ambientData from '../data/scenes/ambient.json';
-import rumoursData from '../data/scenes/rumors.json';
-import marketData from '../data/scenes/market.json';
-import greetingsData from '../data/dialogue/greetings.json';
+import DATA from '../data';
+
+const locationsData = DATA.scenes.locations;
+const weatherLines = DATA.scenes.weatherLines;
+const actionResults = DATA.scenes.actionResults;
+const ambientData = DATA.scenes.ambient;
+const rumoursData = DATA.scenes.rumors;
+const marketData = DATA.scenes.market;
+const greetingsData = DATA.dialogue.greetings;
 
 /**
  * Scene text is assembled in layers (GDD ch.13.1): a location base that shifts by act,

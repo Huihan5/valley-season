@@ -6,7 +6,9 @@ import { getTrust, getKnownNpcs } from '../../systems/RelationSystem';
 import {
   GRAIN_EXCELLENT_THRESHOLD, NOBLE_TRUST_MAX, LORD_IMPRESSION_MAX, DAILY_GULDMARK_COST,
 } from '../../data/config';
-import ui from '../../data/ui.json';
+import DATA from '../../data';
+
+const ui = DATA.ui;
 
 /** Section headings sit one step brighter than body dim (PlaytestFeedback 2.h.ii). */
 const SECTION_LABEL = 'text-cream-dim text-xs tracking-wider mb-2';

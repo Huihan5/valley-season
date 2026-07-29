@@ -1,0 +1,29 @@
+{
+  "id": "random_lost_ox",
+  "day": 0,
+  "forced": true,
+  "timing": "midday",
+  "title": "走丢的牛",
+  "sceneText": "中午有人跑来说，西边那家的牛不见了一头。\n\n那是他们家的耕牛，不是庄园的。但这一带的地是连着的，牛丢了，找起来要过好几家的田。",
+  "choices": [
+    {
+      "id": "ox_search",
+      "text": "派两个人去找",
+      "description": "1 时段",
+      "advancesPhase": true,
+      "effects": {
+        "renown": 1,
+        "logEntry": "你派了两个人去找西边那家走丢的牛。"
+      },
+      "resultText": "傍晚找回来了。牛在北面林地边上啃草，好好的。\n\n那家人来道谢，说了很多遍。你说不用。\n\n这件事在三天之内传遍了所有的佃户家。"
+    },
+    {
+      "id": "ox_decline",
+      "text": "让他们自己找",
+      "effects": {
+        "logEntry": "西边那家走丢了一头牛，你让他们自己找。"
+      },
+      "resultText": "他们自己找了一整天。傍晚牛自己回来了，牛认得回家的路。\n\n第二天你在田里看见那家人，他们跟你打了招呼，态度和平时一样。\n\n什么也没有发生。"
+    }
+  ]
+}

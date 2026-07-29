@@ -22,9 +22,11 @@ import {
   ORCHARD_FULL_YIELD_LAST_DAY,
   ORCHARD_TENANT_TRUST_CAP,
 } from '../data/config';
-import ui from '../data/ui.json';
-import lines from '../data/system_lines.json';
+import DATA from '../data';
 import { fill } from '../utils/text';
+
+const ui = DATA.ui;
+const lines = DATA.systemLines;
 
 /**
  * Action buttons show a band, not a number (PlaytestFeedback 4.b) — the exact figure

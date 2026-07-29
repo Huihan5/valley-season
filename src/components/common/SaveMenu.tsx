@@ -1,7 +1,9 @@
 import { SaveSummary, ManualSlot, MANUAL_SLOTS } from '../../systems/SaveSystem';
 import { formatMoment } from '../../systems/TimeSystem';
-import ui from '../../data/ui.json';
+import DATA from '../../data';
 import { fill } from '../../utils/text';
+
+const ui = DATA.ui;
 
 const T = ui.saveMenu;
 

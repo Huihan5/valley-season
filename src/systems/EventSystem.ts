@@ -37,66 +37,33 @@ import {
   ORCHARD_FULL_YIELD_LAST_DAY, NIGHT_LEDGER_CLUE_AT,
   HORSE_CARE_TRUST_AT, OFFICE_FOLIO_AT, TIMBER_RESTRAINT_AT,
 } from '../data/config';
-import actions from '../data/actions.json';
-import ui from '../data/ui.json';
-import lines from '../data/system_lines.json';
+import DATA from '../data';
 import { fill } from '../utils/text';
 
-/** Every label, microcopy line and log sentence an action writes lives here. */
-const A = actions;
+const ui = DATA.ui;
+const lines = DATA.systemLines;
 
-import day1Data from '../data/events/day1.json';
-import day3Data from '../data/events/day3.json';
-import day4Data from '../data/events/day4.json';
-import day6Timothy from '../data/events/day6_timothy.json';
-import day13Thierry from '../data/events/day13_thierry.json';
-import day27Officers from '../data/events/day27_officers.json';
-import day27StreetCorner from '../data/events/day27_street_corner.json';
-import day7Arrival from '../data/events/day7_dinner_arrival.json';
-import day7Hartmann from '../data/events/day7_dinner_hartmann.json';
-import day7Departure from '../data/events/day7_dinner_departure.json';
-import day7Return from '../data/events/day7_dinner_return.json';
-import day8Echo from '../data/events/day8_echo.json';
-import day10Data from '../data/events/day10.json';
-import day11Echo from '../data/events/day11_echo.json';
-import day13Echo from '../data/events/day13_echo.json';
-import day12Officer from '../data/events/day12_officer.json';
-import timberRestraint from '../data/events/timber_restraint.json';
-import officeFolio from '../data/events/office_folio.json';
-import day12Data from '../data/events/day12.json';
-import day15Data from '../data/events/day15.json';
-import day15Stumps from '../data/events/day15_stumps.json';
-import day15Record from '../data/events/day15_record.json';
-import day18Data from '../data/events/day18.json';
-import day18HuntArrival from '../data/events/day18_hunt_arrival.json';
-import day19HuntRide from '../data/events/day19_hunt_ride.json';
-import day20HuntStag from '../data/events/day20_hunt_stag.json';
-import day20HuntOvernight from '../data/events/day20_hunt_overnight.json';
-import day20CampBanquet from '../data/events/day20_camp_banquet.json';
-import day21CampHarvest from '../data/events/day21_camp_harvest.json';
-import day21HuntMorning from '../data/events/day21_hunt_morning.json';
-import day21HuntLorenz from '../data/events/day21_hunt_lorenz.json';
-import day22Wynter from '../data/events/day22.json';
-import day23Data from '../data/events/day23.json';
-import day30Morning from '../data/events/day30_morning.json';
-import day30Evening from '../data/events/day30_evening.json';
-import day30Millridge from '../data/events/day30_millridge.json';
+/** Every label, microcopy line and log sentence an action writes lives here. */
+const A = DATA.actions;
+
+/** The scheduled events by name; the order they play in is the table below. */
+const E = DATA.events;
 
 const FIXED_EVENTS = [
-  day1Data, day3Data, day4Data,
-  day7Arrival, day7Hartmann, day7Departure, day7Return,
-  day6Timothy,
-  day8Echo, day10Data, day11Echo, day13Echo, day13Thierry,
-  day12Data, day12Officer, day15Data, day15Stumps, day15Record,
-  timberRestraint, officeFolio,
-  day27Officers, day27StreetCorner,
-  day18Data, day18HuntArrival,
-  day19HuntRide,
-  day20HuntStag, day20HuntOvernight, day20CampBanquet,
-  day21HuntMorning, day21CampHarvest, day21HuntLorenz,
-  day22Wynter,
-  day23Data,
-  day30Morning, day30Evening, day30Millridge,
+  E.day1, E.day3, E.day4,
+  E.day7DinnerArrival, E.day7DinnerHartmann, E.day7DinnerDeparture, E.day7DinnerReturn,
+  E.day6Timothy,
+  E.day8Echo, E.day10, E.day11Echo, E.day13Echo, E.day13Thierry,
+  E.day12, E.day12Officer, E.day15, E.day15Stumps, E.day15Record,
+  E.timberRestraint, E.officeFolio,
+  E.day27Officers, E.day27StreetCorner,
+  E.day18, E.day18HuntArrival,
+  E.day19HuntRide,
+  E.day20HuntStag, E.day20HuntOvernight, E.day20CampBanquet,
+  E.day21HuntMorning, E.day21CampHarvest, E.day21HuntLorenz,
+  E.day22,
+  E.day23,
+  E.day30Morning, E.day30Evening, E.day30Millridge,
 ] as unknown as EventData[];
 
 // ── Timing ─────────────────────────────────────────────────────────────────

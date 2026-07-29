@@ -1,7 +1,9 @@
 import { GameState } from '../../types/game';
 import { PHASE_LABELS, dayName } from '../../systems/TimeSystem';
 import LogDrawer from './LogDrawer';
-import ui from '../../data/ui.json';
+import DATA from '../../data';
+
+const ui = DATA.ui;
 
 interface Props {
   state: GameState;

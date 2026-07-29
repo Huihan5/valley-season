@@ -1,0 +1,35 @@
+{
+  "id": "day21_camp_harvest",
+  "day": 21,
+  "phase": "morning",
+  "forced": true,
+  "advancesPhase": true,
+  "activationFlag": "huntAttendedDay21Continued",
+  "title": "猎场的收获",
+  "sceneText": "今天的路线在营地西边，坡缓，林子稀。\n\n大猎物的机会昨天已经用掉了，那头鹿之后，队伍今天走的是小东西。野兔、雉鸡、鹧鸪，以及运气好的话，一两只从谷地上来的野鸭。\n\n这种猎法不需要什么排场。人散开，走得慢，蒂埃里在坡上某个位置，偶尔喊一声，队伍就往某个方向偏一点。\n\n你打到了一些东西。\n\n中午清点的时候，管事们把各自的收获归到一起。有人替你数了数。",
+  "choices": [
+    {
+      "id": "harvest_sell",
+      "text": "就地折价，换成现钱",
+      "effects": {
+        "guldmark": 6,
+        "flags": { "huntBagSold": true },
+        "nextScene": "forest",
+        "logEntry": "你把今天的收获就地折了现钱。"
+      },
+      "resultText": "收猎物的是个从河谷城来的贩子，秤很准，价钱也说得干脆。他数了数，报了个数字，你觉得还行。\n\n钱当场结清。他把你那份东西装进筐里，跟别人的堆在一起。"
+    },
+    {
+      "id": "harvest_carry_home",
+      "text": "带回庄园",
+      "effects": {
+        "relationships": { "marta": 1 },
+        "tenantTrust": 1,
+        "flags": { "huntBagCarriedHome": true },
+        "nextScene": "default",
+        "logEntry": "你把今天的收获带回了枫径。"
+      },
+      "resultText": "你说要带回去。\n\n旁边一个别家的管事看了你一眼，那种“哦，还有人这么办”的眼神。他们大多是折成钱的，带回去要处理，处理要人手，不如现钱省事。\n\n傍晚回到庄园之后，玛莎在厨房门口接过那个口袋，打开看了一眼。\n\n“野兔。”她说，“三只。”\n\n她把口袋提起来掂了掂，又打开看了一次。\n\n“还有雉鸡。”\n\n她没有说谢谢。她转身进厨房，一边走一边开始喊人。\n\n那天晚上厨房的灯亮到很晚。第二天中午佃户们吃的东西和平时不一样。"
+    }
+  ]
+}
