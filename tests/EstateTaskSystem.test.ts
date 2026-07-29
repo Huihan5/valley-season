@@ -8,7 +8,6 @@ import {
   HARVEST_YIELD,
   TENANT_TRUST_INITIAL,
   SURVEY_FIELDS_LAST_DAY,
-  SURVEY_FOREST_LAST_DAY,
   ORCHARD_FULL_YIELD_LAST_DAY,
   NIGHT_LEDGER_CLUE_AT,
 } from '../src/data/config';
@@ -140,19 +139,25 @@ describe('microcopy is mechanical, never narrated (GDD 11.6)', () => {
 });
 
 describe('the two surveys', () => {
-  it('are offered early and expire on their own schedules', () => {
+  it('closes the fields window on its own schedule', () => {
     const inWindow = getFreeChoices(makeState({ day: SURVEY_FIELDS_LAST_DAY })).map(c => c.id);
     expect(inWindow).toContain('survey_fields');
 
     const fieldsGone = getFreeChoices(makeState({ day: SURVEY_FIELDS_LAST_DAY + 1 })).map(c => c.id);
     expect(fieldsGone).not.toContain('survey_fields');
-    expect(fieldsGone).toContain('survey_forest');
-
-    const bothGone = getFreeChoices(makeState({ day: SURVEY_FOREST_LAST_DAY + 1 })).map(c => c.id);
-    expect(bothGone).not.toContain('survey_forest');
   });
 
-  it('are one-shot — doing one retires it', () => {
+  it('keeps the woods open all season, because the woods keep changing', () => {
+    for (const day of [1, 15, 28]) {
+      expect(getFreeChoices(makeState({ day })).map(c => c.id), String(day))
+        .toContain('survey_forest');
+    }
+    // Walking them again is the whole point; only the fields survey retires.
+    expect(getFreeChoices(makeState({ flags: { surveyedForest: true } })).map(c => c.id))
+      .toContain('survey_forest');
+  });
+
+  it('retires the fields survey once it is done', () => {
     const done = getFreeChoices(makeState({ flags: { surveyedFields: true } })).map(c => c.id);
     expect(done).not.toContain('survey_fields');
   });

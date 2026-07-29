@@ -5,6 +5,7 @@ import {
   getClueGroups, hasAllClueGroups, isPositionLineComplete,
 } from '../src/systems/ClueSystem';
 import { getFreeChoices } from '../src/systems/EventSystem';
+import { TIMBER_OVERRUN_RENOWN, TIMBER_BROKEN_PROMISE_TRUST } from '../src/data/config';
 
 const ZERO: Record<NpcId, number> = { gregor: 0, marta: 0, elena: 0, marguerite: 0, henk: 0, lorenz: 0 };
 
@@ -283,5 +284,71 @@ describe('去马厩搭把手 is the route that carries 格雷格 to 4', () => {
       flags: { clue_pos_horses_intact: true, clue_pos_horse_returned: true },
     });
     expect(getAvailableFragments(worked).map(f => f.key)).toEqual(['gregor_condition']);
+  });
+});
+
+describe('the woods keep a record of what was taken out of them', () => {
+  const fell = (felled: number) =>
+    getFreeChoices(makeState({ phase: 'morning', weather: 'sunny', flags: { timberFelled: felled } }))
+      .find(c => c.id === 'fell_timber');
+  const survey = (felled: number) =>
+    getFreeChoices(makeState({ phase: 'morning', flags: { timberFelled: felled } }))
+      .find(c => c.id === 'survey_forest');
+
+  it('reads the four bands off what has been cut', () => {
+    expect(survey(0)?.resultKind).toBe('survey_forest_0');
+    expect(survey(9)?.resultKind).toBe('survey_forest_0');
+    expect(survey(10)?.resultKind).toBe('survey_forest_1');
+    expect(survey(15)?.resultKind).toBe('survey_forest_2');
+    expect(survey(20)?.resultKind).toBe('survey_forest_3');
+    expect(survey(30)?.resultKind).toBe('survey_forest_3');
+  });
+
+  it('lets the player cut past the allowance, and prices it up front', () => {
+    // 25 is the decree's line. It is not a wall.
+    const over = fell(24);
+    expect(over?.disabled).toBe(false);
+    expect(over?.effects?.renown).toBe(TIMBER_OVERRUN_RENOWN);
+    expect(over?.description).toContain('超出本季额度');
+    // Charged once, not per load.
+    const again = getFreeChoices(makeState({
+      phase: 'morning', weather: 'sunny',
+      flags: { timberFelled: 30, timberOverrun: true },
+    })).find(c => c.id === 'fell_timber');
+    expect(again?.effects?.renown).toBeUndefined();
+    // …but the button stops claiming there is allowance left, which would read as a wall.
+    expect(again?.description).toContain('已超出本季额度');
+    expect(again?.description).not.toContain('还剩');
+  });
+
+  it('does not charge the overrun before the line is actually crossed', () => {
+    expect(fell(10)?.effects?.renown).toBeUndefined();
+    expect(fell(10)?.description).toContain('本季额度还剩');
+  });
+
+  it('opens 格雷格 at twenty units, once', () => {
+    expect(fell(17)?.nextEvent).toBe('timber_restraint');
+    expect(fell(10)?.nextEvent).toBeUndefined();
+    const answered = getFreeChoices(makeState({
+      phase: 'morning', weather: 'sunny',
+      flags: { timberFelled: 19, timberRestraintAnswered: true },
+    })).find(c => c.id === 'fell_timber');
+    expect(answered?.nextEvent).toBeUndefined();
+  });
+
+  it('takes the point back and one more for cutting after saying you would not', () => {
+    const broken = getFreeChoices(makeState({
+      phase: 'morning', weather: 'sunny',
+      flags: { timberFelled: 20, timberRestraintAnswered: true, respectedLand: true },
+    })).find(c => c.id === 'fell_timber');
+    expect(broken?.effects?.relationships).toEqual({ gregor: TIMBER_BROKEN_PROMISE_TRUST });
+    expect(broken?.effects?.flags?.respectedLand).toBe(false);
+    expect(broken?.description).toContain('你说过就到二十单位');
+    // He does not get to be disappointed twice.
+    const after = getFreeChoices(makeState({
+      phase: 'morning', weather: 'sunny',
+      flags: { timberFelled: 23, timberRestraintAnswered: true, brokeLandPromise: true },
+    })).find(c => c.id === 'fell_timber');
+    expect(after?.effects?.relationships).toBeUndefined();
   });
 });

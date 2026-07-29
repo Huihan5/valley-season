@@ -4,7 +4,7 @@ import {
 import { canHarvest, canFellTimber } from './WeatherSystem';
 import {
   getHarvestYield, getTimberYield, getYieldTierLabel,
-  getTimberFelled, getTimberQuotaLeft,
+  getTimberFelled, getTimberQuotaLeft, getForestTier,
   getForageYield, getOrchardYield, getOrchardTenantGain, getOrchardTenantTotal,
 } from './ResourceSystem';
 import { isMarketDay, isVigilNight, getDayOfWeek } from './TimeSystem';
@@ -32,7 +32,8 @@ import {
   WYNTER_PARTIAL_ACCOUNT, WYNTER_FULL_ACCOUNT, POSITION_LINE_COMPLETE,
   GRAIN_RETAIN_THRESHOLD, GRAIN_EXCELLENT_THRESHOLD, LETTER_GOOD_GULDMARK,
   ELENA_QUILTS_TRUST, MILLRIDGE_TRUST, MILLRIDGE_CASH, MILLRIDGE_TIMBER, MILLRIDGE_SPRING_SEED,
-  SURVEY_FIELDS_LAST_DAY, SURVEY_FOREST_LAST_DAY,
+  SURVEY_FIELDS_LAST_DAY, TIMBER_SEASON_QUOTA,
+  TIMBER_OVERRUN_RENOWN, TIMBER_BROKEN_PROMISE_TRUST,
   ORCHARD_FULL_YIELD_LAST_DAY, NIGHT_LEDGER_CLUE_AT,
   HORSE_CARE_TRUST_AT, OFFICE_FOLIO_AT, TIMBER_RESTRAINT_AT,
 } from '../data/config';
@@ -620,30 +621,49 @@ export function getFreeChoices(state: GameState): Choice[] {
 
     const timberGain = canFellTimber(weather) ? getTimberYield(state) : 0;
     const quotaLeft = getTimberQuotaLeft(state);
+    const felledAfter = getTimberFelled(state) + timberGain;
+    // The allowance is a line, not a wall (GDD 5.4). Crossing it is priced up front
+    // so that going over is a decision rather than an accident.
+    const overruns = felledAfter > TIMBER_SEASON_QUOTA && !flags.timberOverrun;
+    // Taking the wood after telling him you would not. He is in the stable; the
+    // load has to go past him.
+    const breaksPromise = !!flags.respectedLand;
     choices.push({
       id: 'fell_timber',
       text: '前往林地采伐',
-      description: canFellTimber(weather)
-        ? `预计采伐 ${getYieldTierLabel(timberGain)}，本季额度还剩 ${quotaLeft} 单位`
-        : '阴雨天，林地工作暂停',
+      description: !canFellTimber(weather)
+        ? '阴雨天，林地工作暂停'
+        : breaksPromise
+          ? `预计采伐 ${getYieldTierLabel(timberGain)} · 你说过就到二十单位 · 格雷格信任 ${TIMBER_BROKEN_PROMISE_TRUST}`
+          : overruns
+            ? `预计采伐 ${getYieldTierLabel(timberGain)} · 超出本季额度 · 声望 ${TIMBER_OVERRUN_RENOWN}`
+            // Past the line the allowance stops being the useful number. Saying
+            // "0 left" would read as a wall, and it is not one.
+            : quotaLeft <= 0
+              ? `预计采伐 ${getYieldTierLabel(timberGain)} · 已超出本季额度`
+              : `预计采伐 ${getYieldTierLabel(timberGain)}，本季额度还剩 ${quotaLeft} 单位`,
       effects: {
         timber: timberGain,
         fatigue: 1,
+        ...(overruns ? { renown: TIMBER_OVERRUN_RENOWN } : {}),
+        ...(breaksPromise ? { relationships: { gregor: TIMBER_BROKEN_PROMISE_TRUST } } : {}),
         nextScene: 'forest',
-        flags: { timberFelled: getTimberFelled(state) + timberGain },
+        flags: {
+          timberFelled: felledAfter,
+          ...(overruns ? { timberOverrun: true } : {}),
+          // The promise is spent either way: he does not get to be disappointed twice.
+          ...(breaksPromise ? { respectedLand: false, brokeLandPromise: true } : {}),
+        },
         logEntry: `你在林地采伐了 ${timberGain} 单位木材。`,
       },
       resultKind: 'fell_timber',
       resultVars: { n: timberGain, r: Math.max(0, quotaLeft - timberGain) },
       // Crossing 20 is where he stops counting and says the thing about sixty years.
-      ...(getTimberFelled(state) + timberGain >= TIMBER_RESTRAINT_AT
-        && !flags.timberRestraintAnswered
+      ...(felledAfter >= TIMBER_RESTRAINT_AT && !flags.timberRestraintAnswered
         ? { nextEvent: 'timber_restraint' }
         : {}),
-      disabled: !canFellTimber(weather) || exhausted || quotaLeft <= 0,
-      disabledReason: quotaLeft <= 0
-        ? '本季采伐额度已用尽'
-        : !canFellTimber(weather) ? '雨天无法采伐' : exhausted ? '你过于疲惫' : undefined,
+      disabled: !canFellTimber(weather) || exhausted,
+      disabledReason: !canFellTimber(weather) ? '雨天无法采伐' : exhausted ? '你过于疲惫' : undefined,
     });
   }
 
@@ -732,22 +752,23 @@ export function getFreeChoices(state: GameState): Choice[] {
       });
     }
 
-    if (!flags.surveyedForest && day <= SURVEY_FOREST_LAST_DAY) {
-      choices.push({
-        id: 'survey_forest',
-        text: '巡视林地',
-        description: '1 时段 · 无产出',
-        effects: {
-          fatigue: 1,
-          flags: { surveyedForest: true },
-          nextScene: 'forest',
-          logEntry: '你在林地里走了一趟，把看见的都记下来了。',
-        },
-        resultKind: 'survey_forest',
-        disabled: exhausted,
-        disabledReason: exhausted ? '你过于疲惫' : undefined,
-      });
-    }
+    // Unlike the fields, this one repeats and never expires: the woods change as
+    // they are cut, and going to look before deciding is the point of it. The
+    // first walk is still what lets Day 15 tell a fresh stump from an old one.
+    choices.push({
+      id: 'survey_forest',
+      text: '巡视林地',
+      description: '1 时段 · 无产出',
+      effects: {
+        fatigue: 1,
+        flags: { surveyedForest: true },
+        nextScene: 'forest',
+        logEntry: '你在林地里走了一趟，把看见的都记下来了。',
+      },
+      resultKind: `survey_forest_${getForestTier(state)}`,
+      disabled: exhausted,
+      disabledReason: exhausted ? '你过于疲惫' : undefined,
+    });
 
     if (flags.investigatedLedger && !flags.foundLedgerSource && day < 12) {
       choices.push({
@@ -859,12 +880,14 @@ export function getFreeChoices(state: GameState): Choice[] {
       },
     });
 
+    // He tells you where you stand and changes nothing by it. Talking to 格雷格
+    // is worth exactly what he thinks talking is worth; the work is what counts.
     choices.push({
       id: 'talk_gregor',
       text: '去马厩找格雷格',
-      description: '他在庄园里待了三十年，但话不多',
+      description: '1 时段 · 不计信任',
       effects: {
-        conversationWith: 'gregor',
+        greetingFrom: 'gregor',
         nextScene: 'stable',
         logEntry: '你去马厩和格雷格待了一段时间。',
       },

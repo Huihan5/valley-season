@@ -412,12 +412,24 @@ describe('getFreeChoices — afternoon choices', () => {
   });
 
   it('talking counts a conversation instead of handing out action trust', () => {
+    const marta = getFreeChoices(makeState({ phase: 'afternoon' }))
+      .find(c => c.id === 'talk_marta');
+    expect(marta?.effects?.conversationWith).toBe('marta');
+    expect(marta?.effects?.relationships).toBeUndefined();
+  });
+
+  it('gives 格雷格 a greeting and nothing else — he decides by the work', () => {
     const choices = getFreeChoices(makeState({ phase: 'afternoon' }));
-    for (const id of ['talk_marta', 'talk_gregor']) {
-      const choice = choices.find(c => c.id === id);
-      expect(choice?.effects?.conversationWith).toBeDefined();
-      expect(choice?.effects?.relationships).toBeUndefined();
-    }
+    const talk = choices.find(c => c.id === 'talk_gregor');
+    // He will tell you where you stand. Being told does not move it.
+    expect(talk?.effects?.greetingFrom).toBe('gregor');
+    expect(talk?.effects?.conversationWith).toBeUndefined();
+    expect(talk?.effects?.relationships).toBeUndefined();
+    expect(talk?.description).toBe('1 时段 · 不计信任');
+
+    // The stable work is the only thing that counts with him.
+    const work = choices.find(c => c.id === 'help_horses');
+    expect(work?.effects?.conversationWith).toBe('gregor');
   });
 
   it('shows the lorenz choice only once Day 4 has opened the forge-hall', () => {

@@ -3,7 +3,5 @@ dist/
 .env
 *.local
 
-# Working folder for in-progress design material (v3 narrative drafts etc.)
-updates0727/
-updates0728/
-updates0729/
+# Design source material — drafts, GDD revisions, art. Not for publication.
+design-drafts/

@@ -156,7 +156,11 @@
       "Bash(awk 'NR>=4970 && NR<=4990 {printf \"%d| %s\\\\n\", NR, substr\\($0,1,46\\)}' updates0729/NARRATIVE_DRAFTS_v1.2.md)",
       "Bash(awk 'NR>=5220 && NR<=5266 {printf \"%d| %s\\\\n\", NR, substr\\($0,1,44\\)}' updates0729/NARRATIVE_DRAFTS_v1.2.md)",
       "Bash(awk 'NR>=5500 && NR<=5530 {printf \"%d| %s\\\\n\", NR, substr\\($0,1,44\\)}' updates0729/NARRATIVE_DRAFTS_v1.2.md)",
-      "Bash(awk 'NR>=4176 && NR<=4200 {printf \"%d| %s\\\\n\", NR, substr\\($0,1,54\\)}' updates0729/NARRATIVE_DRAFTS_v1.2.md)"
+      "Bash(awk 'NR>=4176 && NR<=4200 {printf \"%d| %s\\\\n\", NR, substr\\($0,1,54\\)}' updates0729/NARRATIVE_DRAFTS_v1.2.md)",
+      "Bash(mkdir -p design-drafts)",
+      "Bash(mv updates0728 *)",
+      "Bash(cp -r updates0728 design-drafts/)",
+      "Bash(cp -r updates0729 design-drafts/)"
     ]
   }
 }

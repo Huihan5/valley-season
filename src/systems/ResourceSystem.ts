@@ -12,7 +12,7 @@ import {
   YIELD_TIER_MEAGRE_MAX,
   YIELD_TIER_FAIR_MAX,
   TIMBER_SEASON_QUOTA,
-  TIMBER_RESTRAINT_AT,
+  FOREST_STATE_TIERS,
   FORAGE_YIELD_RANGE,
   ORCHARD_YIELD_RANGE,
   ORCHARD_FULL_YIELD_LAST_DAY,
@@ -67,15 +67,17 @@ export function getTimberFelled(state: GameState): number {
 
 /**
  * The season's allowance is 25 by the decree, which is written for the whole
- * north district rather than for this slope. A player who stops at 20 gives up
- * five units for good — the cap moves down with the decision (drafts 3.5c).
+ * north district rather than for this slope. It is not a wall: the player can
+ * cut past it, and the valley notices (GDD 5.4).
  */
-export function getTimberQuota(state: GameState): number {
-  return state.flags.respectedLand ? TIMBER_RESTRAINT_AT : TIMBER_SEASON_QUOTA;
+export function getTimberQuotaLeft(state: GameState): number {
+  return Math.max(0, TIMBER_SEASON_QUOTA - getTimberFelled(state));
 }
 
-export function getTimberQuotaLeft(state: GameState): number {
-  return Math.max(0, getTimberQuota(state) - getTimberFelled(state));
+/** What the woods look like now, as a band rather than a number. */
+export function getForestTier(state: GameState): number {
+  const felled = getTimberFelled(state);
+  return FOREST_STATE_TIERS.filter(edge => felled >= edge).length;
 }
 
 /** 未达留任线 / 留任线 / 优秀线 — the two numbers a player can work out for themselves (GDD ch.5.4). */

@@ -22,6 +22,12 @@ export interface ChoiceEffects {
   relationships?: Partial<Record<NpcId, number>>;
   /** Conversational trust — counts one effective conversation with this NPC. */
   conversationWith?: NpcId;
+  /**
+   * Whose greeting to show without counting it. Seeing someone is not the same as
+   * an effective conversation: 格雷格 will tell you where you stand and change
+   * nothing by it, because he does not decide about people by talking to them.
+   */
+  greetingFrom?: NpcId;
   nobleTrust?: number;
   lordImpression?: number;
   tenantTrust?: number;

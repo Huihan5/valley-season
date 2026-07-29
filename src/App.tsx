@@ -153,8 +153,9 @@ function gameReducer(state: GameState, action: Action): GameState {
         result = choice.resultText;
       } else if (choice.resultKind) {
         result = getActionResult(choice.resultKind, Math.random, choice.resultVars);
-      } else if (effects.conversationWith) {
-        result = getGreeting(next, effects.conversationWith, Math.random);
+      } else if (effects.conversationWith || effects.greetingFrom) {
+        const npc = (effects.conversationWith ?? effects.greetingFrom) as NpcId;
+        result = getGreeting(next, npc, Math.random);
       }
       next = {
         ...next,

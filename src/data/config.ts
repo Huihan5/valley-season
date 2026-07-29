@@ -160,7 +160,6 @@ export const ELENA_RITES_TRUST = 4;
 // ── 非资源行动 (GDD ch.5.4) ─────────────────────────────────────────────────
 // The two surveys are one-shot and expire: their whole use is preparing for one event.
 export const SURVEY_FIELDS_LAST_DAY = 9;   // prepares the Day 10 petition
-export const SURVEY_FOREST_LAST_DAY = 14;  // prepares the Day 15 boundary
 export const FORAGE_YIELD_RANGE = [2, 3];  // 金卢
 export const ORCHARD_YIELD_RANGE = [2, 5]; // 金卢
 export const ORCHARD_FULL_YIELD_LAST_DAY = 15; // after this the fruit is on the ground
@@ -174,6 +173,12 @@ export const HORSE_CARE_TRUST_AT = 3;
 export const OFFICE_FOLIO_AT = 2;
 // Where he stops counting and starts talking about sixty years (drafts 3.5c).
 export const TIMBER_RESTRAINT_AT = 20;
+// Felling past the season's allowance is possible and expensive (GDD 5.4).
+export const TIMBER_OVERRUN_RENOWN = -3;
+// Taking the wood after telling him you would not: the point back, and one more.
+export const TIMBER_BROKEN_PROMISE_TRUST = -2;
+// What the woods look like, by units taken this season. Four bands, no advice.
+export const FOREST_STATE_TIERS = [10, 15, 20];
 
 // Two-tier grain thresholds (GDD ch.5.4 / 10.1).
 // Below 留任线 → dismissed. 留任线 to 优秀线 → ending 2 at best. 优秀线 and above → ending 3 / 4A / 4B eligible.

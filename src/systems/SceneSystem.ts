@@ -148,6 +148,17 @@ export function getActionResult(
     const { intro, lines } = getMarketRumours(rng);
     return [intro, ...lines].join('\n\n');
   }
+  // Walking the woods ends on what they look like now, which is not a number.
+  if (kind.startsWith('survey_forest_')) {
+    const tier = Number(kind.slice('survey_forest_'.length));
+    return [pick(RESULTS.survey_forest, rng), RESULTS.forest_state?.[tier]]
+      .filter(Boolean).join('\n\n');
+  }
+  // The third afternoon in the stable carries an extra beat on the end of it.
+  if (kind === 'stable_help_third') {
+    return [pick(RESULTS.stable_help, rng), RESULTS.stable_help_third?.[0]]
+      .filter(Boolean).join('\n\n');
+  }
   const template = pick(RESULTS[kind] ?? [], rng);
   if (!template) return '';
   return Object.entries(vars).reduce(
