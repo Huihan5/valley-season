@@ -408,9 +408,11 @@ PlaytestFeedback 1.e：Day 19 下午的文本里出现"Day 15 那天"，出戏�
 
 那份文档**本身就是英文写的**，参考作者是 Sebald 与 Pamuk，本来读的也是英译本，所以目标语域直接可用。而且它已经带了**英文的宗教术语对照表**——Forge-keeper、Forge-chapel、tempering / annealing、Codex of Fires、the Hearth、flaw / reforging、core / inner metal——那是英译最难的一块，现成的。NPC 声音表也是英文的。
 
-它真正的问题是**人名是 v2 的**：表里还写着 `Lena (女仆)` 与 `Baroness Elke`，阶段一已经改成 elena / marguerite；`The Traveler` 那一行的学者身份在 v3 也退役了。举例句子则都是中文的（枫径大道那段、洛伦茨那句、玛莎的「你别跟我绕弯子」、亨克的「我有个想法——」），英文样句要随翻译推进补上。
+**名字已在 2026-07-30 更新完毕**（经作者批准，见 CHANGELOG）：声音表全部换成 GDD ch.12 的名字并给出中英对照，维特那一行的错误描述改掉了（他不知道玩家不知道的事），路德维希不再标「letters only」。
 
-**改 `docs/` 需要作者批准**，所以阶段八第一件事是拿这个名字更新去问作者，不要自己动。
+**仍有一个缺口**：蒂埃里不在声音表里，而他在 v3 有大量台词（Day 13 / 15 / 19 / 27）。GDD 4.x 有他的描述，补一行不难，但要作者点头。
+
+举例句子仍是中文的（枫径大道那段、洛伦茨那句、玛莎的「你别跟我绕弯子」、亨克的「我有个想法——」），英文样句随翻译推进补上。
 
 ### 三 · 架构：建议走平行目录 + 启动时定语言
 
@@ -506,12 +508,12 @@ Epic 建议名：`Valley Season v3 rebuild`。合计 35 SP。
 
 ### 阶段八 · 中英双语（估 12 SP）
 
-| Summary | SP |
-|---|---|
-| `[v3] Refresh the v2 names in STYLE_GUIDE.md (needs author sign-off)` | 1 |
-| `[v3] Extract the 225 player-facing strings out of code into the data layer` | 3 |
-| `[v3] Parallel zh/en data dirs, locale in localStorage, switch on the title screen` | 2 |
-| `[v3] Translate src/data narrative to English (45k CJK chars)` | 6 |
+| Summary | SP | 状态 |
+|---|---|---|
+| `[v3] Refresh the v2 names in STYLE_GUIDE.md` | 1 | 已完成 |
+| `[v3] Extract the 225 player-facing strings out of code into the data layer` | 3 | 待做 |
+| `[v3] Parallel zh/en data dirs, locale in localStorage, switch on the title screen` | 2 | 待做 |
+| `[v3] Translate src/data narrative to English (45k CJK chars)` | 6 | 待做 |
 
 ---
 

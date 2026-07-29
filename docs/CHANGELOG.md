@@ -1,5 +1,19 @@
 # Valley Season — Changelog
 
+## [2026-07-30] — STYLE_GUIDE 的 v2 名字更新（经作者批准）
+
+### Changed
+- `docs/STYLE_GUIDE.md` 的 NPC 声音表全部改为 GDD ch.12 的名字，并给出中英对照（双语建设要用这一对）：`Lena` → `Elena Rosendale 埃莱娜`、`Baroness Elke` → `Marguerite de Thornwall 玛格丽特男爵夫人`、`Marta` → `Martha Cresswell 玛莎`、`Inspektor Kessler` → `Inspector Kessler 提莫西·凯斯勒`、`The Traveler` → `Wynter 维特`，其余补上姓氏
+- **维特那一行的性格描述是错的**，不只是名字。原文写「Asks questions that reveal he knows too much」，但 GDD 4.5 与 9.6 明写他不认识霍特曼、不提供任何玩家未持有的信息，只把已有的碎片按因果顺序重述。改为对应的描述并标了出处
+- **路德维希不再是「letters only」**。v3 里他在开场（铸都十五分钟）与每个结局的尾声都出场，改为「letters, the opening, the epilogue」
+- 洛伦茨那节的 `炉匠` 改为 `匠师`，与已入库文本一致（`src/data` 里 匠师 四处、炉匠 零处）。术语表仍保留两者，与 GDD 11.3 一致
+- 洛伦茨的例句里混写的 `Hartmann` 改为 `霍特曼`；场景结构那节的 `Maple Avenue` 改为 `枫径大道`（GDD ch.12 没有给这条路的英文，不自造）
+
+### Notes
+- **未加蒂埃里那一行。** 他在 v3 有大量台词（Day 13 / 15 / 19 / 27）却不在声音表里，是个真实的缺口。GDD 4.x 已经描述了他（从容、慷慨、乐观，有天然的松弛感，工作上有些懒散但关键时候不掉链子），照抄一行不难，但往设计文档里加一个角色仍然是作者的事，等点头
+
+---
+
 ## [2026-07-30] — 阶段八开工须知（压缩前写入）
 
 ### Notes
