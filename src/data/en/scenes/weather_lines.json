@@ -1,37 +1,37 @@
 {
   "sunny": [
-    "天是干净的。光落在什么上面就把什么照亮，不留余地。",
-    "太阳今天有力气。到了下午，被晒过的石头摸上去还是温的。",
-    "空气干燥，远处的丘陵线清楚得能数出上面有几棵树。",
-    "影子的边缘很硬。这样的日子在十月不多了。",
-    "阳光是斜的，颜色偏黄，落在地上像一层薄薄的蜜。"
+    "The sky is clean. Whatever the light falls on it lights all the way, sparing nothing.",
+    "The sun has strength today. By afternoon the stone it has been standing on is still warm to the hand.",
+    "The air is dry. The line of the far hills is clear enough to count the trees along it.",
+    "The edges of the shadows are hard. There are not many days like this left in October.",
+    "The light comes in at an angle, yellowed, and lies on the ground like a thin coat of honey."
   ],
   "cloudy": [
-    "云层压得低，光是均匀的，没有影子。",
-    "天色像被水稀释过，看不出时辰。",
-    "风从西边来。云走得比风慢。",
-    "光线平淡，所有颜色都退了一档。",
-    "天上白得没有层次。这种天气最适合干活，因为它不催你，也不阻拦你。"
+    "The cloud is low and the light is even. Nothing casts a shadow.",
+    "The sky looks watered down. There is no telling the hour from it.",
+    "The wind comes from the west. The cloud moves slower than the wind.",
+    "The light is flat. Every colour has dropped a step.",
+    "The sky is white without depth. It is the best weather for work, because it neither hurries you nor stands in your way."
   ],
   "rainy": [
-    "雨下了一整天，不大，但没有停过。",
-    "水从屋檐连成一条线落下来，地上已经砸出了坑。",
-    "空气里全是湿土的味道。走过的地方留下脚印，很快又被填平。",
-    "雨声盖住了庄园里其他所有的声音。",
-    "衣服贴在身上，怎么烤都干不透。"
+    "It has rained all day, not hard, and has not once stopped.",
+    "Water comes off the eaves in a single line and has beaten pits into the ground below.",
+    "The air is all wet earth. Footprints fill in behind you almost as fast as you leave them.",
+    "The sound of the rain covers every other sound on the estate.",
+    "Cloth clings to the skin. No amount of drying at the fire gets it all the way dry."
   ],
   "frost": [
-    "早上出门，草上有一层白。踩上去有声音。",
-    "呼吸变成了看得见的东西。",
-    "水槽边缘结了一圈薄冰，中午才化。",
-    "空气冷而清，吸进去有点疼。",
-    "昨夜的霜把最后几片叶子打了下来。地面比树上更有颜色。"
+    "Out in the morning, there is a coat of white on the grass. It makes a sound underfoot.",
+    "Breath has turned into something you can see.",
+    "A ring of thin ice around the trough. It does not go until midday.",
+    "The air is cold and clean and hurts a little going in.",
+    "Last night’s frost took down the last of the leaves. There is more colour on the ground now than in the trees."
   ],
   "fog": [
-    "雾从河面上来，把庄园围在中间。二十步以外什么都看不见。",
-    "声音在雾里传得很远，但听不出方向。",
-    "雾水沾在头发和睫毛上，比雨更细。",
-    "太阳在雾后面是一个没有边缘的白点。",
-    "雾要到中午才散。散的时候是从上面开始的。"
+    "The fog comes up off the river and closes around the estate. Twenty paces out there is nothing to see.",
+    "Sound carries a long way in fog, and gives away no direction.",
+    "The wet of it settles on hair and eyelashes, finer than rain.",
+    "Behind the fog the sun is a white spot with no edge.",
+    "The fog will not lift until midday. When it lifts, it goes from the top down."
   ]
 }

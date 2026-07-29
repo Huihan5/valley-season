@@ -1,10 +1,10 @@
 {
-  "arrival": "你到达了枫径庄园。",
-  "continue": "继续。",
-  "exhaustedMorning": "你过于疲惫，整个上午都无法工作。",
-  "dinnerMissed": "棘墙庄园的晚宴你没有去。第二天庄园里没有人提起这件事。",
-  "millridgeShortOfTrust": "你在磨岭开了口，但你们还没到那个份上。",
-  "insolvencyDismissed": "男爵的人上午到了，带来半张纸：即日起停止支付，三日内交接。",
-  "insolvencyTenantsLeaving": "又是一天没有结出去一笔钱。田里的人比昨天少。",
-  "insolvencyRenownSpending": "又是一天没有结出去一笔钱。这种事在河谷传得很快。"
+  "arrival": "You arrived at Maplegate.",
+  "continue": "It went on.",
+  "exhaustedMorning": "You were too worn out to work. The whole morning went.",
+  "dinnerMissed": "You did not go to the dinner at Thornwall. The next day nobody on the estate mentioned it.",
+  "millridgeShortOfTrust": "You asked, at Millridge. The two of you are not on those terms yet.",
+  "insolvencyDismissed": "The Baron’s man came in the morning with half a sheet of paper: payment stops today, hand over within three days.",
+  "insolvencyTenantsLeaving": "Another day and not one account settled. There were fewer people in the fields than yesterday.",
+  "insolvencyRenownSpending": "Another day and not one account settled. Word of a thing like that travels fast in the valley."
 }

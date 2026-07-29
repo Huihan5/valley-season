@@ -4,6 +4,11 @@
     "afternoon": "Afternoon",
     "evening": "Evening"
   },
+  "phaseInline": {
+    "morning": "morning",
+    "afternoon": "afternoon",
+    "evening": "evening"
+  },
   "dayNames": [
     "",
     "Day One", "Day Two", "Day Three", "Day Four", "Day Five",

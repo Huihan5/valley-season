@@ -4,6 +4,11 @@
     "afternoon": "下午",
     "evening": "晚间"
   },
+  "phaseInline": {
+    "morning": "上午",
+    "afternoon": "下午",
+    "evening": "晚间"
+  },
   "dayNames": [
     "",
     "第一日", "第二日", "第三日", "第四日", "第五日",

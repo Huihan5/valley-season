@@ -602,7 +602,8 @@ export function getFreeChoices(state: GameState): Choice[] {
         fatigue: 1,
         nextScene: 'fields',
         logEntry: fill(A.harvest.log, {
-          phase: phase === 'morning' ? ui.phase.morning : ui.phase.afternoon,
+          // Mid-sentence, so not the panel's capitalised label.
+          phase: phase === 'morning' ? ui.phaseInline.morning : ui.phaseInline.afternoon,
           n: grainGain,
         }),
       },
