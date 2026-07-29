@@ -1,4 +1,5 @@
 import { FATIGUE_TIRED_THRESHOLD, FATIGUE_EXHAUSTED_THRESHOLD } from '../data/config';
+import ui from '../data/ui.json';
 
 export type FatigueStatus = 'normal' | 'tired' | 'exhausted';
 
@@ -18,13 +19,13 @@ export function resetFatigue(): number {
 
 export function getFatigueLabel(fatigue: number): string {
   const status = getFatigueStatus(fatigue);
-  if (status === 'exhausted') return '过劳';
-  if (status === 'tired') return '疲惫';
-  return '精力充沛';
+  if (status === 'exhausted') return ui.fatigue.overworked;
+  if (status === 'tired') return ui.fatigue.tired;
+  return ui.fatigue.fresh;
 }
 
 export function getFatigueEffect(fatigue: number): string | null {
-  if (fatigue >= FATIGUE_EXHAUSTED_THRESHOLD) return '次日上午强制休息';
-  if (fatigue >= FATIGUE_TIRED_THRESHOLD) return '所有行动效率 -1';
+  if (fatigue >= FATIGUE_EXHAUSTED_THRESHOLD) return ui.fatigue.forcedRest;
+  if (fatigue >= FATIGUE_TIRED_THRESHOLD) return ui.fatigue.penalty;
   return null;
 }

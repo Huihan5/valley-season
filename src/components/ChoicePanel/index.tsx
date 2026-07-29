@@ -1,4 +1,5 @@
 import { Choice } from '../../types/game';
+import ui from '../../data/ui.json';
 
 interface Props {
   choices: Choice[];
@@ -22,7 +23,7 @@ export default function ChoicePanel({ choices, onChoice, locked = false }: Props
 
   return (
     <div className={frame}>
-      <p className="text-cream-dim text-xs tracking-wider mb-3 shrink-0">— 选择 —</p>
+      <p className="text-cream-dim text-xs tracking-wider mb-3 shrink-0">{ui.choicePanel.heading}</p>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 overflow-y-auto pr-1 content-start">
         {choices.map((choice) => (
           <button

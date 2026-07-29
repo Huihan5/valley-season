@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { LogEntry } from '../../types/game';
 import { PHASE_LABELS, dayName } from '../../systems/TimeSystem';
+import ui from '../../data/ui.json';
+import { fill } from '../../utils/text';
 
 /**
  * The record, which used to show the last four lines and let everything older
@@ -29,9 +31,9 @@ export default function LogDrawer({ log }: { log: LogEntry[] }) {
         onClick={() => setOpen(!open)}
         className="w-full flex items-center justify-between px-5 py-2 hover:bg-bg-hover transition-colors"
       >
-        <span className="text-cream-dim text-xs tracking-wider">— 记录 —</span>
+        <span className="text-cream-dim text-xs tracking-wider">{ui.logDrawer.heading}</span>
         <span className="text-game-dim text-xs">
-          {open ? '收起 ↓' : `共 ${log.length} 条 ↑`}
+          {open ? ui.logDrawer.collapse : fill(ui.logDrawer.expand, { n: log.length })}
         </span>
       </button>
       <div

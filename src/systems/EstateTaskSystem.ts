@@ -8,7 +8,11 @@ import {
   TENANT_MEETING_MIN_TRUST,
   HARVEST_YIELD,
 } from '../data/config';
+import actions from '../data/actions.json';
+import { fill } from '../utils/text';
 import { getEffectiveTenantTrust } from './RelationSystem';
+
+const TEXT = actions.estateTasks;
 
 /**
  * 庄园事务 — the one-off preparations from GDD ch.5.4.
@@ -53,59 +57,70 @@ interface TaskSpec {
 const SPECS: TaskSpec[] = [
   {
     id: 'task_repair_tools',
-    label: '修农具',
-    effect: `收割 ${HARVEST_YIELD.unprepared}→${HARVEST_YIELD.toolsRepaired}`,
+    label: TEXT.repairTools.label,
+    effect: fill(TEXT.repairTools.effect, {
+      from: HARVEST_YIELD.unprepared,
+      to: HARVEST_YIELD.toolsRepaired,
+    }),
     guldmark: REPAIR_TOOLS_COST,
     doneFlag: 'toolsRepaired',
   },
   {
     id: 'task_clear_storage',
-    label: '清理仓储',
-    effect: `解除储存上限，收割 ${HARVEST_YIELD.toolsRepaired}→${HARVEST_YIELD.toolsAndStorage}`,
+    label: TEXT.clearStorage.label,
+    effect: fill(TEXT.clearStorage.effect, {
+      from: HARVEST_YIELD.toolsRepaired,
+      to: HARVEST_YIELD.toolsAndStorage,
+    }),
     guldmark: CLEAR_STORAGE_COST,
     doneFlag: 'storageCleared',
-    requires: (s) => (s.flags.toolsRepaired ? null : '需先修农具'),
+    requires: (s) => (s.flags.toolsRepaired ? null : TEXT.clearStorage.needsTools),
   },
   {
     id: 'task_tenant_meeting',
-    label: '召开佃户会议',
-    effect: `收割 ${HARVEST_YIELD.toolsAndStorage}→${HARVEST_YIELD.fullyPrepared}`,
+    label: TEXT.tenantMeeting.label,
+    effect: fill(TEXT.tenantMeeting.effect, {
+      from: HARVEST_YIELD.toolsAndStorage,
+      to: HARVEST_YIELD.fullyPrepared,
+    }),
     guldmark: 0,
     doneFlag: 'fullyPrepared',
     requires: (s) => {
-      if (!s.flags.storageCleared) return '需先清理仓储';
-      if (getEffectiveTenantTrust(s) < TENANT_MEETING_MIN_TRUST) return `佃户整体信任需 ≥ ${TENANT_MEETING_MIN_TRUST}`;
+      if (!s.flags.storageCleared) return TEXT.tenantMeeting.needsStorage;
+      if (getEffectiveTenantTrust(s) < TENANT_MEETING_MIN_TRUST) {
+        return fill(TEXT.tenantMeeting.needsTrust, { n: TENANT_MEETING_MIN_TRUST });
+      }
       return null;
     },
   },
   {
     id: 'task_repair_stable',
-    label: '修缮马厩屋顶',
-    effect: '格雷格信任 +1',
+    label: TEXT.repairStable.label,
+    effect: TEXT.repairStable.effect,
     guldmark: REPAIR_STABLE_COST.guldmark,
     timber: REPAIR_STABLE_COST.timber,
     doneFlag: 'repairedStableRoof',
   },
   {
     id: 'task_gift_marguerite',
-    label: '河谷城风尚伴手礼（赠玛格丽特）',
-    effect: '玛格丽特信任 +1',
+    label: TEXT.giftMarguerite.label,
+    effect: TEXT.giftMarguerite.effect,
     guldmark: GIFT_COST,
     doneFlag: 'boughtGift',
     recipient: 'marguerite',
   },
   {
     id: 'task_gift_henk',
-    label: '河谷城风尚伴手礼（赠亨克）',
-    effect: '亨克信任 +1',
+    label: TEXT.giftHenk.label,
+    effect: TEXT.giftHenk.effect,
     guldmark: GIFT_COST,
     doneFlag: 'boughtGift',
     recipient: 'henk',
   },
   {
     id: 'task_attire',
-    label: '瓦莱维斯普秋装',
-    effect: '声望 +1',
+    label: TEXT.attire.label,
+    effect: TEXT.attire.effect,
     guldmark: ATTIRE_COST,
     doneFlag: 'boughtAttire',
   },
@@ -114,9 +129,9 @@ const SPECS: TaskSpec[] = [
 const REPAIR_TASKS = new Set(['task_repair_tools', 'task_clear_storage', 'task_repair_stable']);
 
 function describe(spec: TaskSpec): string {
-  const parts = ['1 时段'];
-  if (spec.guldmark) parts.push(`${spec.guldmark} 金卢`);
-  if (spec.timber) parts.push(`${spec.timber} 木材`);
+  const parts = [actions.common.onePhase];
+  if (spec.guldmark) parts.push(fill(TEXT.costGuldmark, { n: spec.guldmark }));
+  if (spec.timber) parts.push(fill(TEXT.costTimber, { n: spec.timber }));
   parts.push(spec.effect);
   return parts.join(' · ');
 }
@@ -136,10 +151,10 @@ export function getEstateTasks(state: GameState): EstateTask[] {
         blockedReason = gate;
       } else if (state.resources.guldmark < spec.guldmark) {
         status = 'blocked';
-        blockedReason = `金卢不足（需 ${spec.guldmark}）`;
+        blockedReason = fill(TEXT.shortGuldmark, { n: spec.guldmark });
       } else if (state.resources.timber < timber) {
         status = 'blocked';
-        blockedReason = `木材不足（需 ${timber}）`;
+        blockedReason = fill(TEXT.shortTimber, { n: timber });
       }
     }
 
@@ -174,7 +189,7 @@ export function getEstateTaskChoices(state: GameState): Choice[] {
         ...(task.id === 'task_attire' ? { renown: 1 } : {}),
         ...(task.id === 'task_repair_stable' ? { relationships: { gregor: 1 } } : {}),
         flags: { [task.doneFlag]: true },
-        logEntry: `${task.label}。${task.summary}`,
+        logEntry: fill(TEXT.log, { label: task.label, summary: task.summary }),
       },
       // The three physical repairs share the 维修 result text; the two purchases do not.
       ...(REPAIR_TASKS.has(task.id)

@@ -1,5 +1,9 @@
 import { GameState } from '../../types/game';
 import { getEstateTasks } from '../../systems/EstateTaskSystem';
+import ui from '../../data/ui.json';
+import { fill } from '../../utils/text';
+
+const T = ui.estateTaskList;
 
 interface Props {
   state: GameState;
@@ -17,8 +21,8 @@ export default function EstateTaskList({ state }: Props) {
   return (
     <div className="flex flex-col h-full bg-bg-card border border-game-border rounded-sm overflow-hidden">
       <div className="px-3 py-2.5 border-b border-game-border flex items-baseline justify-between">
-        <span className="text-gold-dim font-serif text-xs tracking-widest">庄园事务</span>
-        <span className="text-game-dim text-[10px]">{outstanding} 项未办</span>
+        <span className="text-gold-dim font-serif text-xs tracking-widest">{T.heading}</span>
+        <span className="text-game-dim text-[10px]">{fill(T.outstanding, { n: outstanding })}</span>
       </div>
 
       <div className="flex-1 overflow-y-auto px-3 py-2 space-y-2">
@@ -37,7 +41,7 @@ export default function EstateTaskList({ state }: Props) {
             <p className={`text-[10px] leading-snug pl-4 ${
               task.status === 'blocked' ? 'text-rust/70' : 'text-game-dim'
             }`}>
-              {task.status === 'done' ? '已完成'
+              {task.status === 'done' ? T.done
                 : task.status === 'blocked' ? task.blockedReason
                   : task.summary}
             </p>

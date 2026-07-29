@@ -1,11 +1,12 @@
 import { OpeningPage } from '../types/game';
 import { OPENING_PAGES, requiresSignature, signLetter } from '../systems/OpeningSystem';
 import NameInput from './common/NameInput';
+import ui from '../data/ui.json';
 
 const SIGNATURE_SPEC = {
   target: 'playerName' as const,
-  label: '被担保人签署',
-  placeholder: '写下你的名字',
+  label: ui.opening.signatureLabel,
+  placeholder: ui.opening.signaturePrompt,
   maxLength: 12,
 };
 
@@ -70,7 +71,7 @@ export default function OpeningSequence({ page, index, playerName, onSign, onAdv
               onClick={onAdvance}
               className="px-8 py-2.5 border border-gold-dim text-cream font-serif text-sm rounded-sm hover:bg-bg-hover hover:border-gold transition-all"
             >
-              继续 →
+              {ui.app.continue}
             </button>
           </div>
         )}

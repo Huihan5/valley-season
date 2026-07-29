@@ -1,0 +1,114 @@
+{
+  "phase": {
+    "morning": "上午",
+    "afternoon": "下午",
+    "evening": "晚间"
+  },
+  "dayNames": [
+    "",
+    "第一日", "第二日", "第三日", "第四日", "第五日",
+    "第六日", "第七日", "第八日", "第九日", "第十日",
+    "第十一日", "第十二日", "第十三日", "第十四日", "第十五日",
+    "第十六日", "第十七日", "第十八日", "第十九日", "第二十日",
+    "第二十一日", "第二十二日", "第二十三日", "第二十四日", "第二十五日",
+    "第二十六日", "第二十七日", "第二十八日", "第二十九日", "第三十日"
+  ],
+  "dayNameFallback": "第{day}日",
+  "moment": "{day} · {phase}",
+  "weekdays": ["", "周一", "周二", "周三", "周四", "周五", "周六", "周日"],
+  "weather": {
+    "sunny": "晴天",
+    "cloudy": "多云",
+    "rainy": "阴雨",
+    "frost": "霜冻",
+    "fog": "大雾"
+  },
+  "fatigue": {
+    "overworked": "过劳",
+    "tired": "疲惫",
+    "fresh": "精力充沛",
+    "forcedRest": "次日上午强制休息",
+    "penalty": "所有行动效率 -1"
+  },
+  "npc": {
+    "gregor": "格雷格",
+    "marta": "玛莎",
+    "elena": "埃莱娜",
+    "marguerite": "玛格丽特男爵夫人",
+    "henk": "亨克男爵",
+    "lorenz": "洛伦茨匠师"
+  },
+  "yieldTier": {
+    "meagre": "微薄",
+    "fair": "尚可",
+    "rich": "丰厚"
+  },
+  "resources": {
+    "grain": "粮食",
+    "guldmark": "金卢",
+    "timber": "木材",
+    "renown": "声望",
+    "unit": "单位",
+    "guldmarkAmount": "{n} 金卢"
+  },
+  "statusPanel": {
+    "estate": "枫径庄园",
+    "marketDay": "集市日",
+    "resourcesHeading": "— 资源 —",
+    "statusHeading": "— 状态 —",
+    "standingHeading": "— 处境 —",
+    "relationsHeading": "— 关系 —",
+    "nobleTrust": "贵族信任",
+    "lordImpression": "领主印象",
+    "purseEmpty": "账上已经空了。",
+    "purseLow": "账上不够明天的日常开销。"
+  },
+  "choicePanel": {
+    "heading": "— 选择 —"
+  },
+  "logDrawer": {
+    "heading": "— 记录 —",
+    "collapse": "收起 ↓",
+    "expand": "共 {n} 条 ↑"
+  },
+  "scenePanel": {
+    "saves": "存档"
+  },
+  "estateTaskList": {
+    "heading": "庄园事务",
+    "outstanding": "{n} 项未办",
+    "done": "已完成"
+  },
+  "titleScreen": {
+    "title": "河谷季",
+    "titleRoman": "VALLEY SEASON",
+    "subtitle": "瓦莱维斯普公国 · 枫径庄园 · 三十天",
+    "continue": "继续",
+    "newSeason": "新的一季",
+    "loadSave": "读取存档"
+  },
+  "saveMenu": {
+    "heading": "— 存档 —",
+    "close": "关闭",
+    "slots": ["存档一", "存档二", "存档三"],
+    "summary": "{moment}　{savedAt}",
+    "dateLocale": "zh-CN",
+    "finished": "已结束",
+    "empty": "空",
+    "overwrite": "覆盖",
+    "save": "存入",
+    "load": "读取",
+    "delete": "删除"
+  },
+  "opening": {
+    "signatureLabel": "被担保人签署",
+    "signaturePrompt": "写下你的名字",
+    "sign": "签字"
+  },
+  "app": {
+    "documentTitle": "河谷季 · Valley Season",
+    "documentTitleInSeason": "河谷季 · 第{day}日",
+    "restart": "重新开始",
+    "continue": "继续 →"
+  }
+}

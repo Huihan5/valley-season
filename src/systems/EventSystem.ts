@@ -37,6 +37,13 @@ import {
   ORCHARD_FULL_YIELD_LAST_DAY, NIGHT_LEDGER_CLUE_AT,
   HORSE_CARE_TRUST_AT, OFFICE_FOLIO_AT, TIMBER_RESTRAINT_AT,
 } from '../data/config';
+import actions from '../data/actions.json';
+import ui from '../data/ui.json';
+import lines from '../data/system_lines.json';
+import { fill } from '../utils/text';
+
+/** Every label, microcopy line and log sentence an action writes lives here. */
+const A = actions;
 
 import day1Data from '../data/events/day1.json';
 import day3Data from '../data/events/day3.json';
@@ -437,7 +444,7 @@ function processMillridge(event: EventData, state: GameState): EventData {
     // He does not refuse. He explains the account, and gives you a coin for the horse.
     return {
       ...choice,
-      effects: { ...choice.effects, guldmark: 1, logEntry: '你在磨岭开了口，但你们还没到那个份上。' },
+      effects: { ...choice.effects, guldmark: 1, logEntry: lines.millridgeShortOfTrust },
       resultText: event.variants?.short_of_trust,
     };
   });
@@ -544,13 +551,16 @@ function getMarketAfternoonChoices(state: GameState): Choice[] {
   for (const lot of getSellLots(resources.grain, capacityLeft)) {
     choices.push({
       id: `market_sell_grain_${lot}`,
-      text: `出售粮食 ${lot} 单位`,
-      description: `${getGrainRevenue(lot)} 金卢（${MARKET_GRAIN_PRICE} 金卢/单位）`,
+      text: fill(A.market.sellGrain, { n: lot }),
+      description: fill(A.market.sellGrainDescription, {
+        revenue: getGrainRevenue(lot),
+        price: MARKET_GRAIN_PRICE,
+      }),
       effects: {
         grain: -lot,
         guldmark: getGrainRevenue(lot),
         ...tradeEffects(lot),
-        logEntry: `你在集市卖出 ${lot} 单位粮食，换得 ${getGrainRevenue(lot)} 金卢。`,
+        logEntry: fill(A.market.sellGrainLog, { n: lot, revenue: getGrainRevenue(lot) }),
       },
       resultText: getMarketTradeResult('market_grain', state),
       advancesPhase: false,
@@ -560,13 +570,16 @@ function getMarketAfternoonChoices(state: GameState): Choice[] {
   for (const lot of getSellLots(resources.timber, capacityLeft)) {
     choices.push({
       id: `market_sell_timber_${lot}`,
-      text: `出售木材 ${lot} 单位`,
-      description: `${getTimberRevenue(state, lot)} 金卢（${timberPrice} 金卢/单位）`,
+      text: fill(A.market.sellTimber, { n: lot }),
+      description: fill(A.market.sellTimberDescription, {
+        revenue: getTimberRevenue(state, lot),
+        price: timberPrice,
+      }),
       effects: {
         timber: -lot,
         guldmark: getTimberRevenue(state, lot),
         ...tradeEffects(lot),
-        logEntry: `你在集市卖出 ${lot} 单位木材，换得 ${getTimberRevenue(state, lot)} 金卢。`,
+        logEntry: fill(A.market.sellTimberLog, { n: lot, revenue: getTimberRevenue(state, lot) }),
       },
       resultText: getMarketTradeResult('market_timber', state),
       advancesPhase: false,
@@ -574,20 +587,20 @@ function getMarketAfternoonChoices(state: GameState): Choice[] {
   }
 
   const capacityNote = capacityLeft > 0
-    ? `马车还能装 ${capacityLeft} 单位（单次运力上限 ${MARKET_TRANSPORT_CAP}）`
-    : `马车已装满（单次运力上限 ${MARKET_TRANSPORT_CAP}）`;
+    ? fill(A.market.capacityLeft, { n: capacityLeft, cap: MARKET_TRANSPORT_CAP })
+    : fill(A.market.capacityFull, { cap: MARKET_TRANSPORT_CAP });
 
   // Coming home empty is not a wasted trip: you now know what things go for.
   const sold = soldSoFar > 0;
   choices.push({
     id: 'market_finish',
-    text: sold ? '装车返程' : '什么都不做',
-    description: sold ? `今日已出手 ${soldSoFar} 单位。${capacityNote}` : undefined,
+    text: sold ? A.market.finishSold : A.market.finishIdle,
+    description: sold
+      ? fill(A.market.finishDescription, { n: soldSoFar, capacity: capacityNote })
+      : undefined,
     effects: {
       nextScene: 'default',
-      logEntry: sold
-        ? '你结清了今天的账，把空车赶回枫径。'
-        : '你在集市转了一圈，没有交易。',
+      logEntry: sold ? A.market.finishSoldLog : A.market.finishIdleLog,
     },
     resultText: [sold ? '' : getMarketNoTrade(), getMarketReturn(sold)].filter(Boolean).join('\n\n'),
   });
@@ -613,20 +626,23 @@ export function getFreeChoices(state: GameState): Choice[] {
     const grainGain = getHarvestYield(state);
     choices.push({
       id: 'harvest',
-      text: '前往农田收割',
+      text: A.harvest.text,
       description: canHarvest(weather)
-        ? `预计收割 ${getYieldTierLabel(grainGain)}`
-        : '阴雨天气，田地泥泞，收割效率极低',
+        ? fill(A.harvest.estimate, { tier: getYieldTierLabel(grainGain) })
+        : A.harvest.rainedOut,
       effects: {
         grain: grainGain,
         fatigue: 1,
         nextScene: 'fields',
-        logEntry: `你在${phase === 'morning' ? '上午' : '下午'}收割了农田，收上来 ${grainGain} 单位。`,
+        logEntry: fill(A.harvest.log, {
+          phase: phase === 'morning' ? ui.phase.morning : ui.phase.afternoon,
+          n: grainGain,
+        }),
       },
       resultKind: 'harvest',
       resultVars: { n: grainGain },
       disabled: exhausted,
-      disabledReason: exhausted ? '你过于疲惫，需要先休息' : undefined,
+      disabledReason: exhausted ? A.common.tooTiredRest : undefined,
     });
 
     const timberGain = canFellTimber(weather) ? getTimberYield(state) : 0;
@@ -640,18 +656,24 @@ export function getFreeChoices(state: GameState): Choice[] {
     const breaksPromise = !!flags.respectedLand;
     choices.push({
       id: 'fell_timber',
-      text: '前往林地采伐',
+      text: A.fellTimber.text,
       description: !canFellTimber(weather)
-        ? '阴雨天，林地工作暂停'
+        ? A.fellTimber.rainedOut
         : breaksPromise
-          ? `预计采伐 ${getYieldTierLabel(timberGain)} · 你说过就到二十单位 · 格雷格信任 ${TIMBER_BROKEN_PROMISE_TRUST}`
+          ? fill(A.fellTimber.brokePromise, {
+            tier: getYieldTierLabel(timberGain), trust: TIMBER_BROKEN_PROMISE_TRUST,
+          })
           : overruns
-            ? `预计采伐 ${getYieldTierLabel(timberGain)} · 超出本季额度 · 声望 ${TIMBER_OVERRUN_RENOWN}`
+            ? fill(A.fellTimber.overruns, {
+              tier: getYieldTierLabel(timberGain), renown: TIMBER_OVERRUN_RENOWN,
+            })
             // Past the line the allowance stops being the useful number. Saying
             // "0 left" would read as a wall, and it is not one.
             : quotaLeft <= 0
-              ? `预计采伐 ${getYieldTierLabel(timberGain)} · 已超出本季额度`
-              : `预计采伐 ${getYieldTierLabel(timberGain)}，本季额度还剩 ${quotaLeft} 单位`,
+              ? fill(A.fellTimber.pastQuota, { tier: getYieldTierLabel(timberGain) })
+              : fill(A.fellTimber.withinQuota, {
+                tier: getYieldTierLabel(timberGain), n: quotaLeft,
+              }),
       effects: {
         timber: timberGain,
         fatigue: 1,
@@ -664,7 +686,7 @@ export function getFreeChoices(state: GameState): Choice[] {
           // The promise is spent either way: he does not get to be disappointed twice.
           ...(breaksPromise ? { respectedLand: false, brokeLandPromise: true } : {}),
         },
-        logEntry: `你在林地采伐了 ${timberGain} 单位木材。`,
+        logEntry: fill(A.fellTimber.log, { n: timberGain }),
       },
       resultKind: 'fell_timber',
       resultVars: { n: timberGain, r: Math.max(0, quotaLeft - timberGain) },
@@ -673,7 +695,9 @@ export function getFreeChoices(state: GameState): Choice[] {
         ? { nextEvent: 'timber_restraint' }
         : {}),
       disabled: !canFellTimber(weather) || exhausted,
-      disabledReason: !canFellTimber(weather) ? '雨天无法采伐' : exhausted ? '你过于疲惫' : undefined,
+      disabledReason: !canFellTimber(weather)
+        ? A.fellTimber.rainBlocked
+        : exhausted ? A.common.tooTired : undefined,
     });
   }
 
@@ -687,39 +711,40 @@ export function getFreeChoices(state: GameState): Choice[] {
     const forageYield = getForageYield(state);
     choices.push({
       id: 'forage',
-      text: '去林地采集蘑菇草药',
-      description: `1 时段 · ${forageYield} 金卢 · 计一次与玛莎的交谈`,
+      text: A.forage.text,
+      description: fill(A.forage.description, { n: forageYield }),
       effects: {
         guldmark: forageYield,
         fatigue: 1,
         conversationWith: 'marta',
         nextScene: 'forest',
-        logEntry: `你采了一趟，换了 ${forageYield} 金卢。`,
+        logEntry: fill(A.forage.log, { n: forageYield }),
       },
       resultKind: 'forage',
       resultVars: { n: forageYield },
       disabled: exhausted,
-      disabledReason: exhausted ? '你过于疲惫' : undefined,
+      disabledReason: exhausted ? A.common.tooTired : undefined,
     });
 
     const orchardYield = getOrchardYield(state);
     const orchardCapped = getOrchardTenantGain(state) === 0;
     choices.push({
       id: 'orchard',
-      text: '去果园采摘',
-      description: `1 时段 · ${orchardYield} 金卢${orchardCapped ? '' : ' · 佃户整体信任 +1'}`
-        + (day > ORCHARD_FULL_YIELD_LAST_DAY ? '（果子过熟，收益减半）' : ''),
+      text: A.orchard.text,
+      description: fill(A.orchard.description, { n: orchardYield })
+        + (orchardCapped ? '' : A.orchard.tenantBonus)
+        + (day > ORCHARD_FULL_YIELD_LAST_DAY ? A.orchard.overripe : ''),
       effects: {
         guldmark: orchardYield,
         fatigue: 1,
         tenantTrust: getOrchardTenantGain(state),
         flags: { orchardTenantGained: getOrchardTenantTotal(state) + getOrchardTenantGain(state) },
         nextScene: 'fields',
-        logEntry: `你在果园摘了一趟，换了 ${orchardYield} 金卢。`,
+        logEntry: fill(A.orchard.log, { n: orchardYield }),
       },
       resultKind: 'orchard',
       disabled: exhausted,
-      disabledReason: exhausted ? '你过于疲惫' : undefined,
+      disabledReason: exhausted ? A.common.tooTired : undefined,
     });
   }
 
@@ -731,14 +756,14 @@ export function getFreeChoices(state: GameState): Choice[] {
     const findsFolio = officeVisits === OFFICE_FOLIO_AT && !flags.folioAnswered;
     choices.push({
       id: 'visit_office',
-      text: '处理办公室文书',
-      description: '1 时段 · 计一次与埃莱娜的交谈',
+      text: A.office.text,
+      description: A.office.description,
       effects: {
         fatigue: 0,
         conversationWith: 'elena',
         flags: { officeWorkCount: officeVisits },
         nextScene: 'office',
-        logEntry: '你在办公室处理了一上午的文书。',
+        logEntry: A.office.log,
       },
       resultKind: 'office_paperwork',
       ...(findsFolio ? { nextEvent: 'office_folio' } : {}),
@@ -748,17 +773,17 @@ export function getFreeChoices(state: GameState): Choice[] {
     if (!flags.surveyedFields && day <= SURVEY_FIELDS_LAST_DAY) {
       choices.push({
         id: 'survey_fields',
-        text: '巡视农田',
-        description: '1 时段 · 无产出',
+        text: A.surveyFields.text,
+        description: A.common.noYield,
         effects: {
           fatigue: 1,
           flags: { surveyedFields: true },
           nextScene: 'fields',
-          logEntry: '你把每一块地都走了一遍。',
+          logEntry: A.surveyFields.log,
         },
         resultKind: 'survey_fields',
         disabled: exhausted,
-        disabledReason: exhausted ? '你过于疲惫' : undefined,
+        disabledReason: exhausted ? A.common.tooTired : undefined,
       });
     }
 
@@ -767,32 +792,32 @@ export function getFreeChoices(state: GameState): Choice[] {
     // first walk is still what lets Day 15 tell a fresh stump from an old one.
     choices.push({
       id: 'survey_forest',
-      text: '巡视林地',
-      description: '1 时段 · 无产出',
+      text: A.surveyForest.text,
+      description: A.common.noYield,
       effects: {
         fatigue: 1,
         flags: { surveyedForest: true },
         nextScene: 'forest',
-        logEntry: '你在林地里走了一趟，把看见的都记下来了。',
+        logEntry: A.surveyForest.log,
       },
       resultKind: `survey_forest_${getForestTier(state)}`,
       disabled: exhausted,
-      disabledReason: exhausted ? '你过于疲惫' : undefined,
+      disabledReason: exhausted ? A.common.tooTired : undefined,
     });
 
     if (flags.investigatedLedger && !flags.foundLedgerSource && day < 12) {
       choices.push({
         id: 'deep_investigate_ledger',
-        text: '深查账目付款记录',
-        description: '那笔规律性的"杂项维护费"——你还没查清楚是付给谁的',
+        text: A.deepLedger.text,
+        description: A.deepLedger.description,
         effects: {
           fatigue: 1,
           flags: { deepInvestigatedLedger: true },
           nextScene: 'office',
-          logEntry: '你在账簿里追查那笔不明支出的去向。数字本身不说谎，但它们被记录的方式说了很多。',
+          logEntry: A.deepLedger.log,
         },
         disabled: exhausted,
-        disabledReason: exhausted ? '你过于疲惫' : undefined,
+        disabledReason: exhausted ? A.common.tooTired : undefined,
       });
     }
 
@@ -801,8 +826,8 @@ export function getFreeChoices(state: GameState): Choice[] {
     if (isMarketDay(day) && !flags[`visitedMarket_day${day}`]) {
       choices.push({
         id: 'go_to_market',
-        text: `前往集市（${getDayOfWeek(day)}）`,
-        description: `往返占用上午与下午两个时段，单次运力上限 ${MARKET_TRANSPORT_CAP} 单位`,
+        text: fill(A.market.go, { weekday: getDayOfWeek(day) }),
+        description: fill(A.market.goDescription, { cap: MARKET_TRANSPORT_CAP }),
         effects: {
           fatigue: OUTING_FATIGUE,
           flags: {
@@ -812,11 +837,11 @@ export function getFreeChoices(state: GameState): Choice[] {
             [rumoursFlagKey(day)]: encodeRumours(drawRumours(Math.random)),
           },
           nextScene: 'market',
-          logEntry: '你出发前往河谷城集市。',
+          logEntry: A.market.goLog,
         },
         resultText: getMarketArrival(state),
         disabled: exhausted,
-        disabledReason: exhausted ? '你过于疲惫，无力出城' : undefined,
+        disabledReason: exhausted ? A.market.goTooTired : undefined,
       });
     }
 
@@ -826,16 +851,16 @@ export function getFreeChoices(state: GameState): Choice[] {
     if (inHuntSeason && day >= 19 && day <= HUNT_LAST_DAY && !flags[`huntAttendedDay${day}`]) {
       choices.push({
         id: `attend_hunt_day${day}`,
-        text: '出席今日猎场',
-        description: `2 时段 · 疲劳 +${OUTING_FATIGUE}`,
+        text: A.hunt.text,
+        description: fill(A.hunt.description, { n: OUTING_FATIGUE }),
         effects: {
           fatigue: OUTING_FATIGUE,
           flags: { [`huntAttendedDay${day}`]: true },
           nextScene: 'forest',
-          logEntry: '你骑马前往公国猎场，加入今日的狩猎队伍。',
+          logEntry: A.hunt.log,
         },
         disabled: exhausted,
-        disabledReason: exhausted ? '你过于疲惫，无法出席猎场' : undefined,
+        disabledReason: exhausted ? A.hunt.tooTired : undefined,
       });
     }
   }
@@ -848,12 +873,12 @@ export function getFreeChoices(state: GameState): Choice[] {
     if (day === DINNER_DAY && !flags.attendedDinner) {
       choices.push({
         id: 'attend_dinner',
-        text: '前往棘墙庄园赴宴',
-        description: '2 时段（下午与晚间）',
+        text: A.dinner.text,
+        description: A.dinner.description,
         effects: {
           flags: { attendedDinner: true },
           nextScene: 'default',
-          logEntry: '你换了衣服，骑马去了棘墙庄园。',
+          logEntry: A.dinner.log,
         },
       });
     }
@@ -863,30 +888,30 @@ export function getFreeChoices(state: GameState): Choice[] {
     if (flags.forestReportReceived && !flags.visitedBoundary) {
       choices.push({
         id: 'visit_boundary',
-        text: '前往北面林地查看',
-        description: '1 时段',
+        text: A.boundary.text,
+        description: A.common.onePhase,
         effects: {
           fatigue: 1,
           flags: { visitedBoundary: true },
           nextScene: 'forest',
-          logEntry: '你往北面林地走了一趟。',
+          logEntry: A.boundary.log,
         },
         nextEvent: 'day15_stumps',
         disabled: exhausted,
-        disabledReason: exhausted ? '你过于疲惫' : undefined,
+        disabledReason: exhausted ? A.common.tooTired : undefined,
       });
     }
 
     choices.push({
       id: 'talk_marta',
-      text: '和玛莎聊聊',
+      text: A.talkMarta.text,
       description: flags.repairedAllHousing
-        ? '玛莎最近话比以前多了——这是信任的表现'
-        : '了解庄园内部动态，玛莎知道所有事',
+        ? A.talkMarta.descriptionOpen
+        : A.talkMarta.description,
       effects: {
         conversationWith: 'marta',
         nextScene: 'kitchen',
-        logEntry: '你和玛莎在厨房聊了一会儿。',
+        logEntry: A.talkMarta.log,
       },
     });
 
@@ -894,12 +919,12 @@ export function getFreeChoices(state: GameState): Choice[] {
     // is worth exactly what he thinks talking is worth; the work is what counts.
     choices.push({
       id: 'talk_gregor',
-      text: '去马厩找格雷格',
-      description: '1 时段 · 不计信任',
+      text: A.talkGregor.text,
+      description: A.talkGregor.description,
       effects: {
         greetingFrom: 'gregor',
         nextScene: 'stable',
-        logEntry: '你去马厩和格雷格待了一段时间。',
+        logEntry: A.talkGregor.log,
       },
     });
 
@@ -913,13 +938,13 @@ export function getFreeChoices(state: GameState): Choice[] {
       const extra = getLorenzChapelExtra(state);
       choices.push({
         id: 'visit_lorenz',
-        text: '去炉堂见洛伦茨',
-        description: '1 时段 · 计一次与洛伦茨的交谈',
+        text: A.visitLorenz.text,
+        description: A.visitLorenz.description,
         effects: {
           conversationWith: 'lorenz',
           flags: { lorenzFirstVisitDone: true, ...extra?.flags },
           nextScene: 'forge_chapel',
-          logEntry: extra?.logEntry ?? '你去炉堂找洛伦茨说了一会儿话。',
+          logEntry: extra?.logEntry ?? A.visitLorenz.log,
         },
         ...(extra ? { resultText: extra.resultText } : {}),
       });
@@ -929,49 +954,53 @@ export function getFreeChoices(state: GameState): Choice[] {
     if (flags.brokerUnlocked && day <= 30) {
       choices.push({
         id: 'broker_grain_to_gold',
-        text: '以粮换钱（经纪人渠道）',
+        text: A.broker.grainToGold.text,
         description: resources.grain >= 6 && resources.timber >= 1
-          ? '消耗6粮食 + 1木材，换取4金卢（应急汇率偏低）'
-          : '消耗6粮食 + 1木材，换取4金卢——当前储备不足',
+          ? A.broker.grainToGold.description
+          : A.broker.grainToGold.descriptionShort,
         effects: {
           grain: -6,
           guldmark: 4,
           timber: -1,
-          logEntry: '你通过驻地经纪人进行了应急换算，以粮食换取了金卢。包装和运费从木材里扣了一部分。',
+          logEntry: A.broker.grainToGold.log,
         },
         disabled: resources.grain < 6 || resources.timber < 1,
-        disabledReason: resources.grain < 6 ? '粮食不足（需要6单位）' : '木材不足（需要1单位）',
+        disabledReason: resources.grain < 6
+          ? A.broker.grainToGold.shortGrain
+          : A.broker.grainToGold.shortTimber,
       });
 
       choices.push({
         id: 'broker_timber_to_gold',
-        text: '以木换钱（经纪人渠道）',
+        text: A.broker.timberToGold.text,
         description: resources.timber >= 3
-          ? '消耗3木材，换取3金卢（木材加工后折价出售）'
-          : '消耗3木材，换取3金卢——当前储备不足',
+          ? A.broker.timberToGold.description
+          : A.broker.timberToGold.descriptionShort,
         effects: {
           timber: -3,
           guldmark: 3,
-          logEntry: '你通过驻地经纪人将木材折价出售。价格远不如集市，但眼下也只有这条路了。',
+          logEntry: A.broker.timberToGold.log,
         },
         disabled: resources.timber < 3,
-        disabledReason: '木材不足（需要3单位）',
+        disabledReason: A.broker.timberToGold.shortTimber,
       });
 
       choices.push({
         id: 'broker_timber_to_grain',
-        text: '以木换粮（经纪人渠道）',
+        text: A.broker.timberToGrain.text,
         description: resources.timber >= 2 && resources.guldmark >= 1
-          ? '消耗2木材 + 1金卢，换取7粮食（邻庄调运，效率尚可）'
-          : '消耗2木材 + 1金卢，换取7粮食——当前储备不足',
+          ? A.broker.timberToGrain.description
+          : A.broker.timberToGrain.descriptionShort,
         effects: {
           timber: -2,
           grain: 7,
           guldmark: -1,
-          logEntry: '你通过经纪人从邻庄调运了一批粮食。运费以金卢结清，木材用于抵扣部分货款。',
+          logEntry: A.broker.timberToGrain.log,
         },
         disabled: resources.timber < 2 || resources.guldmark < 1,
-        disabledReason: resources.timber < 2 ? '木材不足（需要2单位）' : '金卢不足（需要1单位）',
+        disabledReason: resources.timber < 2
+          ? A.broker.timberToGrain.shortTimber
+          : A.broker.timberToGrain.shortGuldmark,
       });
     }
   }
@@ -985,14 +1014,14 @@ export function getFreeChoices(state: GameState): Choice[] {
     const earns = cared === HORSE_CARE_TRUST_AT;
     choices.push({
       id: 'help_horses',
-      text: '去马厩搭把手',
-      description: '1 时段 · 计一次与格雷格的交谈',
+      text: A.helpHorses.text,
+      description: A.helpHorses.description,
       effects: {
         conversationWith: 'gregor',
         ...(earns ? { relationships: { gregor: 1 } } : {}),
         flags: { horseCareCount: cared },
         nextScene: 'stable',
-        logEntry: '你在马厩跟着格雷格干了半天活。',
+        logEntry: A.helpHorses.log,
       },
       // The third time he takes a second brush down off the rack.
       resultKind: earns ? 'stable_help_third' : 'stable_help',
@@ -1015,8 +1044,8 @@ export function getFreeChoices(state: GameState): Choice[] {
     const ledgerKind = Math.min(ledgerNights + 1, NIGHT_LEDGER_CLUE_AT + 1);
     choices.push({
       id: 'review_accounts',
-      text: '夜间审查账目',
-      description: '1 时段 · 疲劳 +1 · 无产出',
+      text: A.reviewAccounts.text,
+      description: A.reviewAccounts.description,
       effects: {
         fatigue: 1,
         flags: {
@@ -1024,7 +1053,7 @@ export function getFreeChoices(state: GameState): Choice[] {
           ...(ledgerNights + 1 === NIGHT_LEDGER_CLUE_AT ? { clue_mot_handwriting: true } : {}),
         },
         nextScene: 'office',
-        logEntry: '你在灯下审查了账目到深夜。',
+        logEntry: A.reviewAccounts.log,
       },
       resultKind: `night_ledger_${ledgerKind}`,
     });
@@ -1037,22 +1066,20 @@ export function getFreeChoices(state: GameState): Choice[] {
       const extra = vigil ? getLorenzChapelExtra(state) : null;
       choices.push({
         id: 'visit_chapel',
-        text: vigil ? '去炉堂陪洛伦茨守夜' : '前往庄园炉堂',
-        description: vigil
-          ? '1 时段 · 计一次与洛伦茨的交谈'
-          : '1 时段 · 疲劳归零',
+        text: vigil ? A.chapel.vigilText : A.chapel.text,
+        description: vigil ? A.chapel.vigilDescription : A.chapel.description,
         effects: vigil
           ? {
             conversationWith: 'lorenz',
             ...(flags.satVigilWithLorenz ? {} : { relationships: { lorenz: 1 } }),
             flags: { satVigilWithLorenz: true, ...extra?.flags },
             nextScene: 'forge_chapel',
-            logEntry: extra?.logEntry ?? '你在炉堂陪洛伦茨守了一夜的火。',
+            logEntry: extra?.logEntry ?? A.chapel.vigilLog,
           }
           : {
             fatigue: -99,
             nextScene: 'forge_chapel',
-            logEntry: '你在庄园炉堂守火冥想了片刻。',
+            logEntry: A.chapel.log,
           },
         ...(extra ? { resultText: extra.resultText } : {}),
       });
@@ -1060,12 +1087,12 @@ export function getFreeChoices(state: GameState): Choice[] {
 
     choices.push({
       id: 'rest',
-      text: '早点休息',
-      description: '消除所有疲劳，明天精力充沛',
+      text: A.rest.text,
+      description: A.rest.description,
       effects: {
         fatigue: -99,
         nextScene: 'default',
-        logEntry: '你早早休息了。',
+        logEntry: A.rest.log,
       },
       resultKind: 'rest',
     });

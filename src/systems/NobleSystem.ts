@@ -4,6 +4,7 @@ import {
   DINNER_DECORUM_ANSWERS, DINNER_SETTLEMENT, DINNER_ABSENT_RENOWN,
   HUNT_OPENING_DECOROUS,
 } from '../data/config';
+import lines from '../data/system_lines.json';
 
 /**
  * 贵族信任 is decided at three occasions, of which the Thornwall dinner is the
@@ -51,6 +52,6 @@ export function getDinnerAbsenceEffects(): ChoiceEffects {
   return {
     renown: DINNER_ABSENT_RENOWN,
     flags: { dinnerMissed: true, dinnerPerformance: 0 },
-    logEntry: '棘墙庄园的晚宴你没有去。第二天庄园里没有人提起这件事。',
+    logEntry: lines.dinnerMissed,
   };
 }

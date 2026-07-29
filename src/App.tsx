@@ -13,7 +13,9 @@ import { INITIAL_FLAGS } from './systems/FlagRegistry';
 import { getOpeningPage, nextOpeningPage } from './systems/OpeningSystem';
 import { composeScene, getActionResult, getGreeting } from './systems/SceneSystem';
 import { INITIAL_RESOURCES, INITIAL_RELATIONSHIPS, TENANT_TRUST_INITIAL } from './data/config';
-import { interpolate } from './utils/text';
+import ui from './data/ui.json';
+import lines from './data/system_lines.json';
+import { interpolate, fill } from './utils/text';
 import ScenePanel from './components/ScenePanel';
 import StatusPanel from './components/StatusPanel';
 import ChoicePanel from './components/ChoicePanel';
@@ -234,8 +236,8 @@ function gameReducer(state: GameState, action: Action): GameState {
       let next = { ...state, flags: { ...state.flags, [doneFlag]: true }, activeEvent: null };
       // Day 1 arrival gets a specific log entry; other narrative events log their title
       const logText = eventId === 'day1_arrival'
-        ? '你到达了枫径庄园。'
-        : state.activeEvent?.title ?? '继续。';
+        ? lines.arrival
+        : state.activeEvent?.title ?? lines.continue;
       next = {
         ...next,
         log: [...next.log, { day: state.day, phase: state.phase, text: logText }],
@@ -325,7 +327,7 @@ function advancePhase(state: GameState): GameState {
       next = {
         ...next,
         fatigue: 0,
-        log: [...next.log, { day: newDay, phase: 'morning', text: '你过于疲惫，整个上午都无法工作。' }],
+        log: [...next.log, { day: newDay, phase: 'morning', text: lines.exhaustedMorning }],
       };
       next = { ...next, phase: 'afternoon' };
     }
@@ -371,7 +373,9 @@ export default function App() {
     : null;
 
   useEffect(() => {
-    document.title = atTitle ? '河谷季 · Valley Season' : `河谷季 · 第${state.day}日`;
+    document.title = atTitle
+      ? ui.app.documentTitle
+      : fill(ui.app.documentTitleInSeason, { day: state.day });
   }, [state.day, atTitle]);
 
   const startNewSeason = () => {
@@ -485,7 +489,7 @@ export default function App() {
             onClick={backToTitle}
             className="px-10 py-3 bg-gold-dim border border-gold text-bg font-serif text-base rounded-sm hover:bg-gold transition-all"
           >
-            重新开始
+            {ui.app.restart}
           </button>
         </div>
       ) : pendingInput ? (
@@ -501,7 +505,7 @@ export default function App() {
             onClick={() => dispatch({ type: 'ADVANCE_DAY_EVENT' })}
             className="px-8 py-2.5 border border-gold-dim text-cream font-serif text-sm rounded-sm hover:bg-bg-hover hover:border-gold transition-all"
           >
-            继续 →
+            {ui.app.continue}
           </button>
         </div>
       ) : (

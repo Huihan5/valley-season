@@ -22,15 +22,18 @@ import {
   ORCHARD_FULL_YIELD_LAST_DAY,
   ORCHARD_TENANT_TRUST_CAP,
 } from '../data/config';
+import ui from '../data/ui.json';
+import lines from '../data/system_lines.json';
+import { fill } from '../utils/text';
 
 /**
  * Action buttons show a band, not a number (PlaytestFeedback 4.b) — the exact figure
  * is revealed in the result text once the work is done.
  */
 export function getYieldTierLabel(amount: number): string {
-  if (amount <= YIELD_TIER_MEAGRE_MAX) return '微薄';
-  if (amount <= YIELD_TIER_FAIR_MAX) return '尚可';
-  return '丰厚';
+  if (amount <= YIELD_TIER_MEAGRE_MAX) return ui.yieldTier.meagre;
+  if (amount <= YIELD_TIER_FAIR_MAX) return ui.yieldTier.fair;
+  return ui.yieldTier.rich;
 }
 
 /**
@@ -155,7 +158,7 @@ export function getInsolvencyEffects(
       renown: 0,
       tenantTrust: 0,
       dismissed: true,
-      logEntry: '男爵的人上午到了，带来半张纸：即日起停止支付，三日内交接。',
+      logEntry: lines.insolvencyDismissed,
     };
   }
 
@@ -164,7 +167,7 @@ export function getInsolvencyEffects(
       renown: 0,
       tenantTrust: INSOLVENCY_TENANT_PER_DAY,
       dismissed: false,
-      logEntry: '又是一天没有结出去一笔钱。田里的人比昨天少。',
+      logEntry: lines.insolvencyTenantsLeaving,
     };
   }
 
@@ -172,7 +175,7 @@ export function getInsolvencyEffects(
     renown: INSOLVENCY_RENOWN_PER_DAY,
     tenantTrust: 0,
     dismissed: false,
-    logEntry: '又是一天没有结出去一笔钱。这种事在河谷传得很快。',
+    logEntry: lines.insolvencyRenownSpending,
   };
 }
 
@@ -199,5 +202,5 @@ export function applyHarvestWeather(resources: Resources, weather: WeatherType):
 }
 
 export function formatGuldmark(value: number): string {
-  return `${value} 金卢`;
+  return fill(ui.resources.guldmarkAmount, { n: value });
 }

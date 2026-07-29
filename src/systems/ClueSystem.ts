@@ -1,6 +1,7 @@
 import { GameState, Choice, DayPhase, NpcId } from '../types/game';
 import { getTrust } from './RelationSystem';
 import { countFlagsWithPrefix, CLUE_PREFIXES } from './FlagRegistry';
+import actions from '../data/actions.json';
 import {
   FRAGMENT_TRUST, LORENZ_FRAGMENT_TRUST, LORENZ_WHY_TRUST,
   CLUE_ESTATE_REQUIRED, CLUE_OFFICER_REQUIRED, CLUE_NOBLE_REQUIRED,
@@ -108,7 +109,7 @@ export function getFragmentChoices(state: GameState): Choice[] {
     return {
       id: `fragment_${spec.key}`,
       text: entry.label ?? '',
-      description: '1 时段',
+      description: actions.common.onePhase,
       effects: {
         conversationWith: spec.npc,
         flags: spec.flag ? { [spec.flag]: true } : undefined,

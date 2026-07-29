@@ -1,5 +1,6 @@
 import { WeatherType } from '../types/game';
 import { WEATHER_POOLS, FORCED_WEATHER } from '../data/config';
+import ui from '../data/ui.json';
 
 function getPool(day: number): Record<string, number> {
   if (day <= 10) return WEATHER_POOLS.early;
@@ -24,13 +25,7 @@ export function generateWeather(day: number, seed?: number): WeatherType {
   return 'cloudy';
 }
 
-export const WEATHER_LABELS: Record<WeatherType, string> = {
-  sunny: '晴天',
-  cloudy: '多云',
-  rainy: '阴雨',
-  frost: '霜冻',
-  fog: '大雾',
-};
+export const WEATHER_LABELS: Record<WeatherType, string> = ui.weather;
 
 export const WEATHER_ICONS: Record<WeatherType, string> = {
   sunny: '☀',

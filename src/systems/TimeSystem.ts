@@ -1,31 +1,22 @@
 import { DayPhase } from '../types/game';
 import { DEMO_MAX_DAYS } from '../data/config';
+import ui from '../data/ui.json';
+import { fill } from '../utils/text';
 
 export const PHASE_ORDER: DayPhase[] = ['morning', 'afternoon', 'evening'];
 
-export const PHASE_LABELS: Record<DayPhase, string> = {
-  morning: '上午',
-  afternoon: '下午',
-  evening: '晚间',
-};
+export const PHASE_LABELS: Record<DayPhase, string> = ui.phase;
 
-export const DAY_NAMES = [
-  '', // 1-indexed
-  '第一日', '第二日', '第三日', '第四日', '第五日',
-  '第六日', '第七日', '第八日', '第九日', '第十日',
-  '第十一日', '第十二日', '第十三日', '第十四日', '第十五日',
-  '第十六日', '第十七日', '第十八日', '第十九日', '第二十日',
-  '第二十一日', '第二十二日', '第二十三日', '第二十四日', '第二十五日',
-  '第二十六日', '第二十七日', '第二十八日', '第二十九日', '第三十日',
-];
+/** 1-indexed; slot 0 is a blank so a day number indexes straight in. */
+export const DAY_NAMES = ui.dayNames;
 
 export function dayName(day: number): string {
-  return DAY_NAMES[day] ?? `第${day}日`;
+  return DAY_NAMES[day] ?? fill(ui.dayNameFallback, { day });
 }
 
 /** 第五日 · 下午 — the one way a moment in the season is written. */
 export function formatMoment(day: number, phase: DayPhase): string {
-  return `${dayName(day)} · ${PHASE_LABELS[phase]}`;
+  return fill(ui.moment, { day: dayName(day), phase: PHASE_LABELS[phase] });
 }
 
 export function nextPhase(day: number, phase: DayPhase): { day: number; phase: DayPhase; newDay: boolean } {
@@ -52,8 +43,7 @@ export function isVigilNight(day: number): boolean {
 }
 
 export function getDayOfWeek(day: number): string {
-  const labels = ['', '周一', '周二', '周三', '周四', '周五', '周六', '周日'];
-  return labels[getWeekdayNumber(day)];
+  return ui.weekdays[getWeekdayNumber(day)];
 }
 
 export function isDemoComplete(day: number): boolean {

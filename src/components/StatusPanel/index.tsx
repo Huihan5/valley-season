@@ -6,18 +6,13 @@ import { getTrust, getKnownNpcs } from '../../systems/RelationSystem';
 import {
   GRAIN_EXCELLENT_THRESHOLD, NOBLE_TRUST_MAX, LORD_IMPRESSION_MAX, DAILY_GULDMARK_COST,
 } from '../../data/config';
+import ui from '../../data/ui.json';
 
 /** Section headings sit one step brighter than body dim (PlaytestFeedback 2.h.ii). */
 const SECTION_LABEL = 'text-cream-dim text-xs tracking-wider mb-2';
 
-const NPC_NAMES: Record<NpcId, string> = {
-  gregor: '格雷格',
-  marta: '玛莎',
-  elena: '埃莱娜',
-  marguerite: '玛格丽特男爵夫人',
-  henk: '亨克男爵',
-  lorenz: '洛伦茨匠师',
-};
+const NPC_NAMES: Record<NpcId, string> = ui.npc;
+const T = ui.statusPanel;
 
 interface Props {
   state: GameState;
@@ -45,7 +40,7 @@ export default function StatusPanel({ state }: Props) {
       {/* Date & Weather */}
       <div className="px-4 py-3 border-b border-game-border">
         <div className="flex items-center justify-between mb-1">
-          <span className="text-cream font-serif text-base">枫径庄园</span>
+          <span className="text-cream font-serif text-base">{T.estate}</span>
           <span className="text-game-dim text-xs">{getDayOfWeek(day)}</span>
         </div>
         <div className="flex items-center gap-2">
@@ -53,7 +48,7 @@ export default function StatusPanel({ state }: Props) {
           <span className="text-game-text text-sm">{WEATHER_LABELS[weather]}</span>
           {marketDay && (
             <span className="ml-auto text-xs text-amber border border-amber/40 rounded px-1.5 py-0.5">
-              集市日
+              {T.marketDay}
             </span>
           )}
         </div>
@@ -61,24 +56,24 @@ export default function StatusPanel({ state }: Props) {
 
       {/* Resources */}
       <div className="px-4 py-3 border-b border-game-border">
-        <p className={SECTION_LABEL}>— 资源 —</p>
+        <p className={SECTION_LABEL}>{T.resourcesHeading}</p>
         <div className="space-y-2">
-          <ResourceRow icon="🌾" label="粮食" value={resources.grain} unit="单位" target={GRAIN_EXCELLENT_THRESHOLD} />
-          <ResourceRow icon="🪙" label="金卢" value={resources.guldmark} unit="" warnBelow={15} />
-          <ResourceRow icon="🪵" label="木材" value={resources.timber} unit="单位" warnBelow={5} />
-          <ResourceRow icon="⭐" label="声望" value={resources.renown} unit="" showSign />
+          <ResourceRow icon="🌾" label={ui.resources.grain} value={resources.grain} unit={ui.resources.unit} target={GRAIN_EXCELLENT_THRESHOLD} />
+          <ResourceRow icon="🪙" label={ui.resources.guldmark} value={resources.guldmark} unit="" warnBelow={15} />
+          <ResourceRow icon="🪵" label={ui.resources.timber} value={resources.timber} unit={ui.resources.unit} warnBelow={5} />
+          <ResourceRow icon="⭐" label={ui.resources.renown} value={resources.renown} unit="" showSign />
         </div>
         {/* An empty purse used to pass in silence (PlaytestFeedback 4.a.iii). */}
         {resources.guldmark < DAILY_GULDMARK_COST && (
           <p className="text-rust text-xs mt-2 leading-snug">
-            {resources.guldmark === 0 ? '账上已经空了。' : '账上不够明天的日常开销。'}
+            {resources.guldmark === 0 ? T.purseEmpty : T.purseLow}
           </p>
         )}
       </div>
 
       {/* Fatigue */}
       <div className="px-4 py-3 border-b border-game-border">
-        <p className={SECTION_LABEL}>— 状态 —</p>
+        <p className={SECTION_LABEL}>{T.statusHeading}</p>
         <div className="flex items-center justify-between">
           <span className="text-game-text text-sm">{getFatigueLabel(fatigue)}</span>
           <span className="text-game-dim text-xs">{fatigue}/5</span>
@@ -98,16 +93,16 @@ export default function StatusPanel({ state }: Props) {
 
       {/* Standing: the two axes that are not renown */}
       <div className="px-4 py-3 border-b border-game-border">
-        <p className={SECTION_LABEL}>— 处境 —</p>
+        <p className={SECTION_LABEL}>{T.standingHeading}</p>
         <div className="space-y-1.5">
-          <PipRow label="贵族信任" value={nobleTrust} max={NOBLE_TRUST_MAX} />
-          <PipRow label="领主印象" value={lordImpression} max={LORD_IMPRESSION_MAX} />
+          <PipRow label={T.nobleTrust} value={nobleTrust} max={NOBLE_TRUST_MAX} />
+          <PipRow label={T.lordImpression} value={lordImpression} max={LORD_IMPRESSION_MAX} />
         </div>
       </div>
 
       {/* Relationships — only the people the player has actually met (2.h) */}
       <div className="px-4 py-3 flex-1 overflow-y-auto">
-        <p className={SECTION_LABEL}>— 关系 —</p>
+        <p className={SECTION_LABEL}>{T.relationsHeading}</p>
         <div className="space-y-2.5">
           {getKnownNpcs(state, Object.keys(NPC_NAMES) as NpcId[]).map((npc) => {
             const val = getTrust(state, npc);

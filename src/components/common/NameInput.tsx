@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { TextInputSpec } from '../../types/game';
+import ui from '../../data/ui.json';
 
 interface Props {
   spec: TextInputSpec;
@@ -42,7 +43,7 @@ export default function NameInput({ spec, onSubmit }: Props) {
               : 'border-game-border text-game-dim cursor-not-allowed opacity-50'
             }`}
         >
-          签字
+          {ui.opening.sign}
         </button>
       </div>
     </form>

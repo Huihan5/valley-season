@@ -1,6 +1,7 @@
 import { GameState } from '../../types/game';
 import { PHASE_LABELS, dayName } from '../../systems/TimeSystem';
 import LogDrawer from './LogDrawer';
+import ui from '../../data/ui.json';
 
 interface Props {
   state: GameState;
@@ -29,7 +30,7 @@ export default function ScenePanel({ state, onOpenSaves }: Props) {
           onClick={onOpenSaves}
           className="ml-auto text-game-dim text-xs hover:text-cream transition-colors shrink-0"
         >
-          存档
+          {ui.scenePanel.saves}
         </button>
       </div>
 
