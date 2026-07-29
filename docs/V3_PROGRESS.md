@@ -386,25 +386,52 @@ PlaytestFeedback 1.e：Day 19 下午的文本里出现"Day 15 那天"，出戏�
 
 ---
 
-## 阶段八开工须知 · 中英双语
+## 阶段八开工须知 · 中英双语（2026-07-30 写入，压缩前）
 
-作者已定：**英文正文由施工方直接译**（中文是 v1 粗版，作者后续还会调），动笔前先读 `/humanizer` skill。这一阶段做完算 alpha。
+作者已定：**英文正文由施工方直接译**，中文是 v1 粗版、作者后续还会调，所以不必等中文定稿。动笔前先读 `/humanizer` skill。这一阶段做完算 alpha。
 
-**盘过的量**（2026-07-30）：
+### 一 · 量
 
 | 位置 | 量 |
 |---|---|
-| `src/data` 正文 | 51 个 JSON，**45,009 个汉字** |
-| 代码里面向玩家的中文字符串 | **218 处**（`EventSystem` 109、`TimeSystem` 40、`EstateTaskSystem` 22、`StatusPanel` 16、其余零散） |
+| `src/data` 正文 | 51 个 JSON，**45,002 个汉字** |
+| 代码里的中文字符串字面量 | **225 处** |
+| 组件里的 JSX 文本节点 | 另有若干（标题页六处、`— 选择 —`、`— 记录 —` 这类），扫描字面量时抓不到 |
 
-那 218 处本来就违反内容与逻辑分离，抽到数据层是还旧债，不是为双语额外付的成本。
+正文按目录分：事件 23,503、场景层 8,343、结局 6,368、对话 3,494、开场 3,294。
 
-**专名不用现造**：GDD ch.12 已有完整对照表，人物 13 条、地名机构 16 条（`Maplegate Estate` / `Valehold` / `Forgehold` / `Thornwall` / `Millridge` 那一套）。
+最大的十个文件：`endings/endings.json` 6368、`opening.json` 3294、`scenes/locations.json` 2743、`dialogue/fragments.json` 2250、`scenes/action_results.json` 2066、`events/day22.json` 1601、`events/day27_street_corner.json` 1391、`events/day30_millridge.json` 1256、`dialogue/greetings.json` 1244、`events/day18_hunt_arrival.json` 1166。余下 41 个文件合计约 21,600。
 
-**两条要先立的规矩**：
+代码里那 225 处按文件：`EventSystem` 109（选项文本、小字、日志句，最脏的一批）、`TimeSystem` 41（`PHASE_LABELS`、`DAY_NAMES` 三十条、星期八条）、`EstateTaskSystem` 22、`StatusPanel` 16、`SaveMenu` 7、`ResourceSystem` 7、`App` 5、`FatigueSystem` 5、`WeatherSystem` 5，其余零散。**这批本来就违反内容与逻辑分离，抽到数据层是还旧债，不是为双语额外付的成本。**
 
-1. **英文走弯引号（U+201C/U+201D），不是全角。** 阶段六那次归一是中文专用的，`quote-normalise` 那套脚本不能直接套在英文文件上
-2. `STYLE_GUIDE.md` 是按中文写的。英文得另立一份对照的声音说明——不然「控制、精确、冷色调」这几个词在英文里会被翻成完全不同的句子密度
+### 二 · `STYLE_GUIDE.md` 不需要重写（此前记错了）
+
+那份文档**本身就是英文写的**，参考作者是 Sebald 与 Pamuk，本来读的也是英译本，所以目标语域直接可用。而且它已经带了**英文的宗教术语对照表**——Forge-keeper、Forge-chapel、tempering / annealing、Codex of Fires、the Hearth、flaw / reforging、core / inner metal——那是英译最难的一块，现成的。NPC 声音表也是英文的。
+
+它真正的问题是**人名是 v2 的**：表里还写着 `Lena (女仆)` 与 `Baroness Elke`，阶段一已经改成 elena / marguerite；`The Traveler` 那一行的学者身份在 v3 也退役了。举例句子则都是中文的（枫径大道那段、洛伦茨那句、玛莎的「你别跟我绕弯子」、亨克的「我有个想法——」），英文样句要随翻译推进补上。
+
+**改 `docs/` 需要作者批准**，所以阶段八第一件事是拿这个名字更新去问作者，不要自己动。
+
+### 三 · 架构：建议走平行目录 + 启动时定语言
+
+`src/systems` 现在是四十多条静态 import（`import day1Data from '../data/events/day1.json'`）。三种做法：
+
+1. **平行目录** `src/data/zh/**` 与 `src/data/en/**`，JSON 形状完全一致 ← **推荐**
+2. 每个键塞成 `{ "zh": "...", "en": "..." }`，文件数不变但每个消费点都要改
+3. 英文做成覆盖层，读取时再合并
+
+选 1 的理由：形状一致意味着翻译是逐文件的对照工作，QA 时两边可以直接结构比对，漏译一个键会立刻显形。做法 2 会把每个事件文件变成中英交错，作者以后调中文正文要在英文中间穿行。
+
+**语言在启动时定，切换语言重载页面**：locale 存在 `localStorage`（独立于存档），标题页切换后 `location.reload()`。这样所有静态 import 可以保留（模块层按 locale 选一份），不必把四十多个 import 改成运行时查表。**locale 不要放进 `GameState`**——它是外壳设置不是季节的一部分，放进去就得把 `SAVE_VERSION` 顶到 2，而且同一个存档会被锁死在一种语言上。
+
+### 四 · 翻译时的硬约束
+
+- **`{playerName}` 是唯一的占位符**（`src/utils/text.ts`），英文里要原样保留，别翻译、别改大小写
+- **段落用 `\n\n` 分隔，而且是承重的**。`composeEnding` 与 `SceneSystem` 会把多个文本块用 `\n\n` 拼起来，组件靠 `whitespace-pre-line` 渲染。翻译时段落数可以不等于中文，但**每个 variant 块必须仍是一个能独立站住的段落组**，不能把两块之间的空行吃掉
+- **变体块是拼出来的，不是整段读的**。`endings.json` 一个结局由 `text` + 若干 `variants` 组装，翻译要按块译，不要合并成一篇
+- **英文走弯引号 “ ” 与 ’**，不是全角。阶段六那套 `quote-normalise` 脚本是中文专用的，**不能套在英文文件上**
+- **专名查 GDD ch.12**，人物 13 条、地名机构 16 条（`Maplegate Estate` / `Valehold` / `Forgehold` / `Thornwall` / `Millridge`）。作者要求英文版全英文，包括人名
+- 事件 JSON 里的 `id`、`flags` 键、`resultKind`、`activationFlag` **全部不动**，那些是英文标识符不是文本
 
 ---
 
@@ -477,14 +504,14 @@ Epic 建议名：`Valley Season v3 rebuild`。合计 35 SP。
 | `[v3] Save system: autosave plus three manual slots` | 2 | 已完成 |
 | `[v3] Title screen as the entry point` | 1 | 已完成 |
 
-### 阶段八 · 中英双语（估 12 SP，未拆细）
+### 阶段八 · 中英双语（估 12 SP）
 
 | Summary | SP |
 |---|---|
-| `[v3] Extract the 218 player-facing strings out of code into the data layer` | 3 |
-| `[v3] Locale layer and language switch on the title screen` | 2 |
+| `[v3] Refresh the v2 names in STYLE_GUIDE.md (needs author sign-off)` | 1 |
+| `[v3] Extract the 225 player-facing strings out of code into the data layer` | 3 |
+| `[v3] Parallel zh/en data dirs, locale in localStorage, switch on the title screen` | 2 |
 | `[v3] Translate src/data narrative to English (45k CJK chars)` | 6 |
-| `[v3] English typography rules and an EN voice guide` | 1 |
 
 ---
 

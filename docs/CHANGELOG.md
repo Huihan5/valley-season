@@ -1,5 +1,14 @@
 # Valley Season — Changelog
 
+## [2026-07-30] — 阶段八开工须知（压缩前写入）
+
+### Notes
+- `V3_PROGRESS.md` 新增「阶段八开工须知」：量的盘点（正文 45,002 汉字 / 51 文件、代码内 225 处中文串，都按文件列了）、架构建议（平行 `zh` / `en` 目录 + locale 存 `localStorage` + 切换重载，locale **不进 `GameState`**）、翻译时的六条硬约束
+- **更正一条昨天的错判**：`STYLE_GUIDE.md` 本身就是英文写的，参考作者 Sebald 与 Pamuk 读的也是英译本，而且已经带了英文的宗教术语对照表（Forge-keeper / tempering / Codex of Fires / the Hearth）——英译最难的一块是现成的，不需要另立一份英文声音说明
+- 该文档真正的问题是**人名停在 v2**：`Lena (女仆)`、`Baroness Elke` 都是阶段一改掉的名字，`The Traveler` 的学者身份在 v3 也退役了。改 `docs/` 需要作者批准，列为阶段八第一张票
+
+---
+
 ## [2026-07-30] — 阶段七：解雇线收紧 + 存档系统
 
 ### Added
