@@ -7,18 +7,23 @@ interface Props {
 }
 
 export default function ChoicePanel({ choices, onChoice, locked = false }: Props) {
+  // The box keeps its height whatever the day offers (PlaytestFeedback 2.g): a
+  // market afternoon with nine choices must not push the record up the screen,
+  // and a single 继续 must not let it drop. Overflow scrolls inside the box.
+  const frame = 'bg-bg-card border border-game-border rounded-sm px-4 py-3 h-52 flex flex-col';
+
   if (choices.length === 0) {
     return (
-      <div className="bg-bg-card border border-game-border rounded-sm px-5 py-4 flex items-center justify-center">
+      <div className={`${frame} items-center justify-center`}>
         <span className="text-game-dim text-sm italic">…</span>
       </div>
     );
   }
 
   return (
-    <div className="bg-bg-card border border-game-border rounded-sm px-4 py-3">
-      <p className="text-game-dim text-xs tracking-wider mb-3">— 选择 —</p>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+    <div className={frame}>
+      <p className="text-cream-dim text-xs tracking-wider mb-3 shrink-0">— 选择 —</p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 overflow-y-auto pr-1 content-start">
         {choices.map((choice) => (
           <button
             key={choice.id}

@@ -1,6 +1,7 @@
 import { GameState } from '../../types/game';
 import { PHASE_LABELS } from '../../systems/TimeSystem';
 import { DAY_NAMES } from '../../systems/TimeSystem';
+import LogDrawer from './LogDrawer';
 
 interface Props {
   state: GameState;
@@ -26,35 +27,25 @@ export default function ScenePanel({ state }: Props) {
         )}
       </div>
 
-      {/* What just happened, then where you now are */}
+      {/* What just happened, then where you now are. The prose keeps a reading
+          measure of its own rather than running the full width of the panel
+          (PlaytestFeedback 2.a). */}
       <div className="flex-1 overflow-y-auto px-5 py-4 space-y-4">
         {/* What just happened stays on screen even when the next beat is an event:
             a chained scene's branch prose is the lead-in to the beat that follows. */}
         {lastResult && (
-          <div className="border-l-2 border-gold-dim pl-4">
+          <div className="border-l-2 border-gold-dim pl-4 max-w-[46rem]">
             <p className="text-cream font-serif text-sm leading-relaxed whitespace-pre-line">
               {lastResult}
             </p>
           </div>
         )}
-        <p className="text-game-text font-serif text-sm leading-relaxed whitespace-pre-line">
+        <p className="text-game-text font-serif text-sm leading-relaxed whitespace-pre-line max-w-[46rem]">
           {currentSceneText}
         </p>
       </div>
 
-      {/* Log — last 4 entries */}
-      {log.length > 0 && (
-        <div className="border-t border-game-border px-5 py-3 space-y-1">
-          <p className="text-game-dim text-xs tracking-wider mb-2">— 记录 —</p>
-          {log.slice(-4).map((entry, i) => (
-            <p key={i} className="text-game-dim text-xs font-serif">
-              <span className="text-gold-dim">{DAY_NAMES[entry.day] ?? `第${entry.day}日`} {PHASE_LABELS[entry.phase]}</span>
-              {'　'}
-              {entry.text}
-            </p>
-          ))}
-        </div>
-      )}
+      <LogDrawer log={log} />
     </div>
   );
 }

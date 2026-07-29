@@ -10,6 +10,8 @@ import {
   adjustLordImpression,
   getTrustTier,
   countTrustAtLeast,
+  isNpcKnown,
+  getKnownNpcs,
 } from '../src/systems/RelationSystem';
 
 const ZERO: Record<NpcId, number> = { gregor: 0, marta: 0, elena: 0, marguerite: 0, henk: 0, lorenz: 0 };
@@ -133,5 +135,42 @@ describe('countTrustAtLeast', () => {
     });
     // gregor 3, marta 2+1, elena 2+1 → three NPCs at ≥3
     expect(countTrustAtLeast(state, 3)).toBe(3);
+  });
+});
+
+// ── 右栏的人是一个个来的 (PlaytestFeedback 2.h) ─────────────────────────────
+
+describe('isNpcKnown', () => {
+  const ORDER: NpcId[] = ['gregor', 'marta', 'elena', 'marguerite', 'henk', 'lorenz'];
+
+  it('starts the season with the three who live here', () => {
+    expect(getKnownNpcs(makeState(), ORDER)).toEqual(['gregor', 'marta', 'elena']);
+  });
+
+  it('adds 洛伦茨 when the forge-hall opens', () => {
+    const state = makeState({ flags: { unlockForgeChapel: true } });
+    expect(isNpcKnown(state, 'lorenz')).toBe(true);
+    expect(isNpcKnown(state, 'henk')).toBe(false);
+  });
+
+  it('adds both nobles at the dinner', () => {
+    const state = makeState({ flags: { attendedDinner: true } });
+    expect(isNpcKnown(state, 'henk')).toBe(true);
+    expect(isNpcKnown(state, 'marguerite')).toBe(true);
+  });
+
+  it('adds them in hunt season for a player who skipped the dinner', () => {
+    const state = makeState({ flags: { dinnerMissed: true, huntAttendedDay18: true } });
+    expect(isNpcKnown(state, 'henk')).toBe(true);
+  });
+
+  it('falls back on any trust or conversation already on the books', () => {
+    expect(isNpcKnown(makeState({ relationships: { ...ZERO, marguerite: 1 } }), 'marguerite')).toBe(true);
+    expect(isNpcKnown(makeState({ conversations: { ...ZERO, henk: 1 } }), 'henk')).toBe(true);
+  });
+
+  it('keeps the order it was given', () => {
+    const state = makeState({ flags: { unlockForgeChapel: true, attendedDinner: true } });
+    expect(getKnownNpcs(state, ORDER)).toEqual(ORDER);
   });
 });

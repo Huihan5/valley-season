@@ -102,6 +102,34 @@ export function getEffectiveTenantTrust(state: GameState): number {
   return clamp(state.tenantTrust + martaShift, TENANT_TRUST_MIN, TENANT_TRUST_MAX);
 }
 
+/**
+ * Whether the player has met this person yet (PlaytestFeedback 2.h). A name in the
+ * right-hand column before you have laid eyes on its owner is a list of people you
+ * are expected to manage; the estate is supposed to arrive one person at a time.
+ *
+ * The three who live here are at the gate on Day 1. 洛伦茨 comes with the
+ * forge-hall on Day 4. The two nobles are met at the Thorn Wall dinner, or in
+ * hunt season if the dinner was skipped — or, failing both, by whatever gift or
+ * errand first put their name on the ledger.
+ */
+const RESIDENTS: NpcId[] = ['gregor', 'marta', 'elena'];
+
+const MET_BY_FLAG: Partial<Record<NpcId, string[]>> = {
+  lorenz: ['unlockForgeChapel'],
+  marguerite: ['attendedDinner', 'huntAttendedDay18'],
+  henk: ['attendedDinner', 'huntAttendedDay18'],
+};
+
+export function isNpcKnown(state: GameState, npc: NpcId): boolean {
+  if (RESIDENTS.includes(npc)) return true;
+  if (MET_BY_FLAG[npc]?.some(flag => !!state.flags[flag])) return true;
+  return (state.conversations[npc] ?? 0) > 0 || (state.relationships[npc] ?? 0) !== 0;
+}
+
+export function getKnownNpcs(state: GameState, order: NpcId[]): NpcId[] {
+  return order.filter(npc => isNpcKnown(state, npc));
+}
+
 /** How many NPCs have reached at least this much trust — used by the ending check. */
 export function countTrustAtLeast(state: GameState, threshold: number): number {
   return (Object.keys(state.relationships) as NpcId[])

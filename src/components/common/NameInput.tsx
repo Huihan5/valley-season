@@ -20,9 +20,9 @@ export default function NameInput({ spec, onSubmit }: Props) {
         e.preventDefault();
         if (trimmed) onSubmit(trimmed);
       }}
-      className="bg-bg-card border border-game-border rounded-sm px-4 py-3"
+      className="bg-bg-card border border-game-border rounded-sm px-4 py-3 h-52 flex flex-col justify-center"
     >
-      <p className="text-game-dim text-xs tracking-wider mb-3">— {spec.label} —</p>
+      <p className="text-cream-dim text-xs tracking-wider mb-3">— {spec.label} —</p>
       <div className="flex items-end gap-3">
         <input
           autoFocus

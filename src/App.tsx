@@ -345,26 +345,31 @@ export default function App() {
       </div>
 
       {/* Choice panel (bottom) */}
+      {/* The bottom slot keeps one height whatever is in it, so nothing above it
+          moves between an event and a market afternoon (PlaytestFeedback 2.g). */}
       {state.demoComplete && state.endingId ? (
-        <div className="bg-bg-card border border-gold-dim rounded-sm px-5 py-3 flex items-center justify-between">
-          <div>
-            <span className="text-gold font-serif text-sm">{getEndingData(state.endingId as EndingId).title}</span>
-            <span className="text-game-text/60 text-xs ml-3">{getEndingData(state.endingId as EndingId).subtitle}</span>
+        <div className="bg-bg-card border border-gold-dim rounded-sm px-5 py-4 h-52 shrink-0 flex flex-col items-center justify-center gap-4">
+          <div className="text-center">
+            <p className="text-gold font-serif text-lg">{getEndingData(state.endingId as EndingId).title}</p>
+            <p className="text-game-text text-sm mt-1">{getEndingData(state.endingId as EndingId).subtitle}</p>
           </div>
+          {/* 4.g.v: the way back to Day 1 was a whisper in the corner. */}
           <button
             onClick={() => window.location.reload()}
-            className="px-5 py-2 border border-gold-dim text-cream font-serif text-sm rounded-sm hover:bg-bg-hover hover:border-gold transition-all"
+            className="px-10 py-3 bg-gold-dim border border-gold text-bg font-serif text-base rounded-sm hover:bg-gold transition-all"
           >
             重新开始
           </button>
         </div>
       ) : pendingInput ? (
-        <NameInput
-          spec={pendingInput}
-          onSubmit={(name) => dispatch({ type: 'SET_PLAYER_NAME', name })}
-        />
+        <div className="shrink-0">
+          <NameInput
+            spec={pendingInput}
+            onSubmit={(name) => dispatch({ type: 'SET_PLAYER_NAME', name })}
+          />
+        </div>
       ) : isNarrativeOnly ? (
-        <div className="bg-bg-card border border-game-border rounded-sm px-4 py-3 flex justify-center">
+        <div className="bg-bg-card border border-game-border rounded-sm px-4 py-3 h-52 shrink-0 flex items-center justify-center">
           <button
             onClick={() => dispatch({ type: 'ADVANCE_DAY_EVENT' })}
             className="px-8 py-2.5 border border-gold-dim text-cream font-serif text-sm rounded-sm hover:bg-bg-hover hover:border-gold transition-all"
@@ -373,7 +378,7 @@ export default function App() {
           </button>
         </div>
       ) : (
-        <div key={`${state.day}-${state.phase}`} className="choices-enter">
+        <div key={`${state.day}-${state.phase}`} className="choices-enter shrink-0">
           <ChoicePanel
             choices={state.currentChoices}
             onChoice={(id) => dispatch({ type: 'MAKE_CHOICE', choiceId: id })}

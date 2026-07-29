@@ -24,7 +24,9 @@ export default {
         frost: '#7a9aaa',
         game: {
           text: '#d4c8b0',
-          dim: '#8a7e6a',
+          // Lifted from #8a7e6a: microcopy and section labels sat under 4:1 against
+          // the card and read as disabled text (PlaytestFeedback 2.h.ii).
+          dim: '#9c8f78',
           bright: '#f0e8d8',
           border: '#3a3530',
           'border-light': '#4a4540',

@@ -16,7 +16,7 @@
 | 3.5 | 行动层（CC_BRIEF v1.1 附录一新增） | 已完成 |
 | 4 | 事件改造与新增 | 已完成 |
 | 5 | 调查系统与结局 | 已完成 |
-| 6 | PlaytestFeedback 收尾、随机事件池、引号归一 | 进行中：票一 / 三 / 四 已完成，票二（UI）待做 |
+| 6 | PlaytestFeedback 收尾、随机事件池、引号归一 | 已完成（遗留一项待作者决定：金卢归零的惩罚） |
 
 ---
 
@@ -298,8 +298,17 @@ GDD 3.3 给炉堂列了四件事：沉思、线索整理、恢复体力、与洛
 
 四张票，合计 6 SP。**阶段一至五全部完成**，416 个测试为绿，工作树与 origin/main 同步。
 
-> **进度（7-29 晚）**：票一、票三、票四已完成，只剩票二（UI）。三票的结论见 CHANGELOG；下面的原文保留，因为票二要用它那张分诊表。
+> **进度（7-29 晚）**：四张票全部完成，结论见 CHANGELOG。下面的原文保留作为分诊记录。
 > 票一实际只改动一处（狩猎季请柬），扫库确认其余日期表述早已是历法制。
+> 票二里 4.g.iv 经核对已被阶段四的重写解决；4.a.iii 只做了提示，**惩罚需要作者定**（见下）。
+
+### 阶段六唯一的遗留：金卢归零之后怎么办
+
+GDD ch.5 只有一句「30 天总运营消耗 60，若无收入则 30 天后为 -10，破产」，没有规则。目前 `clampResources` 把金卢在 0 处截断，归零之后不欠债、不扣任何东西，玩家可以一路空着账走到第三十日。
+
+已做的是提示：低于每日开销时资源栏下方出一行，归零时写「账上已经空了。」。
+
+要不要有惩罚、惩罚是什么（佃户信任下滑？声望下滑？某些行动不可选？还是就让它只是难看），需要作者定。定了之后是一张小票，改 `ResourceSystem` 与 `config.ts` 各一处。
 
 ### 票一 · 日期改为真实历法（1 SP）
 
@@ -412,7 +421,7 @@ Epic 建议名：`Valley Season v3 rebuild`。合计 35 SP。
 | Summary | SP | 状态 |
 |---|---|---|
 | `[v3] Convert date references to real calendar dates (Day X = Oct X)` | 1 | 已完成 |
-| `[v3] Remaining PlaytestFeedback UI items` | 2 | 待做 |
+| `[v3] Remaining PlaytestFeedback UI items` | 2 | 已完成（金卢归零的惩罚待作者定） |
 | `[v3] Random event pool: five events, 30/10/50% window` | 2 | 已完成 |
 | `[v3] Normalise all quotation marks in src/data to full-width` | 1 | 已完成 |
 

@@ -2,8 +2,13 @@ import { GameState, NpcId } from '../../types/game';
 import { WEATHER_LABELS, WEATHER_ICONS } from '../../systems/WeatherSystem';
 import { getFatigueLabel, getFatigueEffect } from '../../systems/FatigueSystem';
 import { getDayOfWeek, isMarketDay } from '../../systems/TimeSystem';
-import { getTrust } from '../../systems/RelationSystem';
-import { GRAIN_EXCELLENT_THRESHOLD, NOBLE_TRUST_MAX, LORD_IMPRESSION_MAX } from '../../data/config';
+import { getTrust, getKnownNpcs } from '../../systems/RelationSystem';
+import {
+  GRAIN_EXCELLENT_THRESHOLD, NOBLE_TRUST_MAX, LORD_IMPRESSION_MAX, DAILY_GULDMARK_COST,
+} from '../../data/config';
+
+/** Section headings sit one step brighter than body dim (PlaytestFeedback 2.h.ii). */
+const SECTION_LABEL = 'text-cream-dim text-xs tracking-wider mb-2';
 
 const NPC_NAMES: Record<NpcId, string> = {
   gregor: '格雷格',
@@ -56,18 +61,24 @@ export default function StatusPanel({ state }: Props) {
 
       {/* Resources */}
       <div className="px-4 py-3 border-b border-game-border">
-        <p className="text-game-dim text-xs tracking-wider mb-2">— 资源 —</p>
+        <p className={SECTION_LABEL}>— 资源 —</p>
         <div className="space-y-2">
           <ResourceRow icon="🌾" label="粮食" value={resources.grain} unit="单位" target={GRAIN_EXCELLENT_THRESHOLD} />
           <ResourceRow icon="🪙" label="金卢" value={resources.guldmark} unit="" warnBelow={15} />
           <ResourceRow icon="🪵" label="木材" value={resources.timber} unit="单位" warnBelow={5} />
           <ResourceRow icon="⭐" label="声望" value={resources.renown} unit="" showSign />
         </div>
+        {/* An empty purse used to pass in silence (PlaytestFeedback 4.a.iii). */}
+        {resources.guldmark < DAILY_GULDMARK_COST && (
+          <p className="text-rust text-xs mt-2 leading-snug">
+            {resources.guldmark === 0 ? '账上已经空了。' : '账上不够明天的日常开销。'}
+          </p>
+        )}
       </div>
 
       {/* Fatigue */}
       <div className="px-4 py-3 border-b border-game-border">
-        <p className="text-game-dim text-xs tracking-wider mb-2">— 状态 —</p>
+        <p className={SECTION_LABEL}>— 状态 —</p>
         <div className="flex items-center justify-between">
           <span className="text-game-text text-sm">{getFatigueLabel(fatigue)}</span>
           <span className="text-game-dim text-xs">{fatigue}/5</span>
@@ -87,18 +98,18 @@ export default function StatusPanel({ state }: Props) {
 
       {/* Standing: the two axes that are not renown */}
       <div className="px-4 py-3 border-b border-game-border">
-        <p className="text-game-dim text-xs tracking-wider mb-2">— 处境 —</p>
+        <p className={SECTION_LABEL}>— 处境 —</p>
         <div className="space-y-1.5">
           <PipRow label="贵族信任" value={nobleTrust} max={NOBLE_TRUST_MAX} />
           <PipRow label="领主印象" value={lordImpression} max={LORD_IMPRESSION_MAX} />
         </div>
       </div>
 
-      {/* Relationships */}
+      {/* Relationships — only the people the player has actually met (2.h) */}
       <div className="px-4 py-3 flex-1 overflow-y-auto">
-        <p className="text-game-dim text-xs tracking-wider mb-2">— 关系 —</p>
+        <p className={SECTION_LABEL}>— 关系 —</p>
         <div className="space-y-2.5">
-          {(Object.keys(NPC_NAMES) as NpcId[]).map((npc) => {
+          {getKnownNpcs(state, Object.keys(NPC_NAMES) as NpcId[]).map((npc) => {
             const val = getTrust(state, npc);
             return (
               <div key={npc}>
