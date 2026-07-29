@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { LogEntry } from '../../types/game';
-import { PHASE_LABELS, DAY_NAMES } from '../../systems/TimeSystem';
+import { PHASE_LABELS, dayName } from '../../systems/TimeSystem';
 
 /**
  * The record, which used to show the last four lines and let everything older
@@ -41,7 +41,7 @@ export default function LogDrawer({ log }: { log: LogEntry[] }) {
         {shown.map((entry, i) => (
           <p key={open ? i : log.length - shown.length + i} className="text-game-dim text-xs font-serif">
             <span className="text-gold-dim">
-              {DAY_NAMES[entry.day] ?? `第${entry.day}日`} {PHASE_LABELS[entry.phase]}
+              {dayName(entry.day)} {PHASE_LABELS[entry.phase]}
             </span>
             {'　'}
             {entry.text}

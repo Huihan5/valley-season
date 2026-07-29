@@ -19,6 +19,15 @@ export const DAY_NAMES = [
   '第二十六日', '第二十七日', '第二十八日', '第二十九日', '第三十日',
 ];
 
+export function dayName(day: number): string {
+  return DAY_NAMES[day] ?? `第${day}日`;
+}
+
+/** 第五日 · 下午 — the one way a moment in the season is written. */
+export function formatMoment(day: number, phase: DayPhase): string {
+  return `${dayName(day)} · ${PHASE_LABELS[phase]}`;
+}
+
 export function nextPhase(day: number, phase: DayPhase): { day: number; phase: DayPhase; newDay: boolean } {
   const idx = PHASE_ORDER.indexOf(phase);
   if (idx < PHASE_ORDER.length - 1) {

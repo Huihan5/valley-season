@@ -17,6 +17,8 @@
 | 4 | 事件改造与新增 | 已完成 |
 | 5 | 调查系统与结局 | 已完成 |
 | 6 | PlaytestFeedback 收尾、随机事件池、引号归一 | 已完成 |
+| 7 | 解雇线收紧 + 存档系统 | 已完成 |
+| 8 | 中英双语 | 未开始（见「阶段八开工须知」） |
 
 ---
 
@@ -302,15 +304,19 @@ GDD 3.3 给炉堂列了四件事：沉思、线索整理、恢复体力、与洛
 > 票一实际只改动一处（狩猎季请柬），扫库确认其余日期表述早已是历法制。
 > 票二里 4.g.iv 经核对已被阶段四的重写解决；4.a.iii 只做了提示，**惩罚需要作者定**（见下）。
 
-### 金卢归零之后（作者 7-29 已裁定，已实装）
+### 金卢归零之后（作者 7-29 裁定，7-30 收紧解雇线，已实装）
 
 GDD ch.5 只有一句「30 天总运营消耗 60，若无收入则 30 天后为 -10，破产」。作者补的规则是三级下滑，每日运营扣款之后结算一次：
 
 | 条件 | 后果 |
 |---|---|
-| 金卢 = 0 | 声望每日 -1，直到再有钱 |
-| 金卢 = 0 且声望 ≤ -10 | 佃户整体信任每日 -1 |
-| 金卢 = 0 且声望、佃户信任都到下限 | 结局一提前发生，游戏当场结束 |
+| 金卢 = 0 且声望 ≥ 1 | 声望每日 -1 |
+| 金卢 = 0 且声望 ≤ 0 且佃户信任 ≥ 1 | 佃户整体信任每日 -1 |
+| 金卢 = 0 且声望 ≤ 0 且佃户信任 ≤ 0 | 结局一提前发生，游戏当场结束 |
+
+**解雇线是 0，不是两条轴各自的下限。** 7-29 那版用 `RENOWN_MIN`(-10) 与 `TENANT_TRUST_MIN`(-5)，空账到被开除要十三天，实际只在极端局面发生。
+
+注意 **`TENANT_TRUST_INITIAL = -2`**：佃户那半个条件开局即成立，Day 10 请愿全修也只拉回 0，仍然 ≤ 0。所以实际规则是「账上一空，只要声望不是正的，当天就走」——挣来的声望是唯一能垫的东西。声望的范围仍是 GDD ch.5.4 的 -10 至 +10，没有动（上限也动不得，结局三要求 ≥ 8）。
 
 实装在 `ResourceSystem.getInsolvencyEffects` 与 `App` 的每日结算里，数值在 `config.ts`。
 
@@ -367,6 +373,38 @@ PlaytestFeedback 1.e：Day 19 下午的文本里出现"Day 15 那天"，出戏�
 **做法**：解析 JSON、遍历字符串值、在每个字符串内按出现顺序成对替换（奇数次为左引号，偶数次为右引号）、写回。**不要用文本级正则**——JSON 里的引号是 `\"`，正则会把结构一起改坏。只动 `src/data`，不碰代码里的字符串字面量。
 
 替换之后必然有测试断言失败（断言里写着直引号），照常更新断言，不要删。
+
+---
+
+## 阶段七 · 存档（已完成，2026-07-30）
+
+`SaveSystem.ts` + `TitleScreen.tsx` + `SaveMenu.tsx`。要点写在 CHANGELOG，这里只留两条后来会绊人的：
+
+**`SAVE_VERSION` 是给 `GameState` 形状变化用的。** 往 `GameState` 里加删字段、改字段含义，就把它 +1，旧档会被拒绝而不是猜着读。**只加旗标不用动它**——`unpackSave` 已经把读到的 flags 铺在 `INITIAL_FLAGS` 上面。
+
+**标题页是阶段八语言开关的地方。** 现在只有三个按钮（继续 / 新的一季 / 读取存档），语言切换加在同一列即可，不需要再动结构。
+
+---
+
+## 阶段八开工须知 · 中英双语
+
+作者已定：**英文正文由施工方直接译**（中文是 v1 粗版，作者后续还会调），动笔前先读 `/humanizer` skill。这一阶段做完算 alpha。
+
+**盘过的量**（2026-07-30）：
+
+| 位置 | 量 |
+|---|---|
+| `src/data` 正文 | 51 个 JSON，**45,009 个汉字** |
+| 代码里面向玩家的中文字符串 | **218 处**（`EventSystem` 109、`TimeSystem` 40、`EstateTaskSystem` 22、`StatusPanel` 16、其余零散） |
+
+那 218 处本来就违反内容与逻辑分离，抽到数据层是还旧债，不是为双语额外付的成本。
+
+**专名不用现造**：GDD ch.12 已有完整对照表，人物 13 条、地名机构 16 条（`Maplegate Estate` / `Valehold` / `Forgehold` / `Thornwall` / `Millridge` 那一套）。
+
+**两条要先立的规矩**：
+
+1. **英文走弯引号（U+201C/U+201D），不是全角。** 阶段六那次归一是中文专用的，`quote-normalise` 那套脚本不能直接套在英文文件上
+2. `STYLE_GUIDE.md` 是按中文写的。英文得另立一份对照的声音说明——不然「控制、精确、冷色调」这几个词在英文里会被翻成完全不同的句子密度
 
 ---
 
@@ -430,6 +468,23 @@ Epic 建议名：`Valley Season v3 rebuild`。合计 35 SP。
 | `[v3] Remaining PlaytestFeedback UI items` | 2 | 已完成 |
 | `[v3] Random event pool: five events, 30/10/50% window` | 2 | 已完成 |
 | `[v3] Normalise all quotation marks in src/data to full-width` | 1 | 已完成 |
+
+### 阶段七 · Save/load（4 SP）
+
+| Summary | SP | 状态 |
+|---|---|---|
+| `[v3] Tighten the insolvency dismissal lines to zero` | 1 | 已完成 |
+| `[v3] Save system: autosave plus three manual slots` | 2 | 已完成 |
+| `[v3] Title screen as the entry point` | 1 | 已完成 |
+
+### 阶段八 · 中英双语（估 12 SP，未拆细）
+
+| Summary | SP |
+|---|---|
+| `[v3] Extract the 218 player-facing strings out of code into the data layer` | 3 |
+| `[v3] Locale layer and language switch on the title screen` | 2 |
+| `[v3] Translate src/data narrative to English (45k CJK chars)` | 6 |
+| `[v3] English typography rules and an EN voice guide` | 1 |
 
 ---
 

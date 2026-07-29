@@ -6,9 +6,10 @@ import {
   GRAIN_STORAGE_CAP_UNCLEARED,
   RENOWN_MIN,
   RENOWN_MAX,
-  TENANT_TRUST_MIN,
   INSOLVENCY_RENOWN_PER_DAY,
   INSOLVENCY_TENANT_PER_DAY,
+  INSOLVENCY_DISMISS_RENOWN,
+  INSOLVENCY_DISMISS_TENANT,
   FATIGUE_TIRED_THRESHOLD,
   GRAIN_RETAIN_THRESHOLD,
   GRAIN_EXCELLENT_THRESHOLD,
@@ -132,9 +133,13 @@ export interface InsolvencyEffects {
  *
  * The order is deliberate. The valley finds out first — an estate that cannot
  * settle with the smith and the flour cart is talked about within the week — and
- * only when there is no reputation left to lose do the people who live here start
- * to go. When both have bottomed out and the account is still empty, the season
- * ends early: nothing is left to manage.
+ * only once there is no standing left do the people who live here start to go.
+ *
+ * Both lines are 0 rather than the axes' own floors (作者 2026-07-30): standing
+ * earned earlier in the season is what buys the days, and when there is none the
+ * season ends the same morning. 佃户整体信任 starts at -2, so that half of the
+ * test is already true on Day 1 — an empty account is only survivable for a
+ * steward the valley thinks well of.
  */
 export function getInsolvencyEffects(
   resources: Resources,
@@ -142,15 +147,15 @@ export function getInsolvencyEffects(
 ): InsolvencyEffects | null {
   if (resources.guldmark > 0) return null;
 
-  const renownSpent = resources.renown <= RENOWN_MIN;
-  const tenantsSpent = tenantTrust <= TENANT_TRUST_MIN;
+  const renownSpent = resources.renown <= INSOLVENCY_DISMISS_RENOWN;
+  const tenantsSpent = tenantTrust <= INSOLVENCY_DISMISS_TENANT;
 
   if (renownSpent && tenantsSpent) {
     return {
       renown: 0,
       tenantTrust: 0,
       dismissed: true,
-      logEntry: '磨岭转来一张便条：即日起停止支付，三日内交接。',
+      logEntry: '男爵的人上午到了，带来半张纸：即日起停止支付，三日内交接。',
     };
   }
 

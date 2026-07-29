@@ -1,13 +1,13 @@
 import { GameState } from '../../types/game';
-import { PHASE_LABELS } from '../../systems/TimeSystem';
-import { DAY_NAMES } from '../../systems/TimeSystem';
+import { PHASE_LABELS, dayName } from '../../systems/TimeSystem';
 import LogDrawer from './LogDrawer';
 
 interface Props {
   state: GameState;
+  onOpenSaves: () => void;
 }
 
-export default function ScenePanel({ state }: Props) {
+export default function ScenePanel({ state, onOpenSaves }: Props) {
   const { day, phase, activeEvent, currentSceneText, lastResult, log } = state;
 
   return (
@@ -15,7 +15,7 @@ export default function ScenePanel({ state }: Props) {
       {/* Header */}
       <div className="px-5 py-3 border-b border-game-border flex items-center gap-3">
         <span className="text-gold font-serif text-sm tracking-widest">
-          {DAY_NAMES[day] ?? `第${day}日`}
+          {dayName(day)}
         </span>
         <span className="text-game-dim text-xs">·</span>
         <span className="text-game-dim text-xs">{PHASE_LABELS[phase]}</span>
@@ -25,6 +25,12 @@ export default function ScenePanel({ state }: Props) {
             <span className="text-amber text-xs font-serif">{activeEvent.title}</span>
           </>
         )}
+        <button
+          onClick={onOpenSaves}
+          className="ml-auto text-game-dim text-xs hover:text-cream transition-colors shrink-0"
+        >
+          存档
+        </button>
       </div>
 
       {/* What just happened, then where you now are. The prose keeps a reading

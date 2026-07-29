@@ -47,10 +47,14 @@ export const TIMBER_SEASON_QUOTA = 25;
 export const DAILY_GULDMARK_COST = 2;
 
 // ── 账上空了之后 (作者裁定 2026-07-29；GDD ch.5 只写到「破产」二字) ─────────
-// 三级下滑。付不出钱先是外面知道，声望每天掉一点；声望掉到底了，住在这里的
-// 人才开始走，佃户信任每天掉一点；两样都到底而账上仍然是空的，男爵不等期限。
+// 三级下滑。付不出钱先是外面知道，声望每天掉一点；声望不再是正的，住在这里的
+// 人才开始走，佃户信任每天掉一点；两样都归零而账上仍然是空的，男爵不等期限。
 export const INSOLVENCY_RENOWN_PER_DAY = -1;
 export const INSOLVENCY_TENANT_PER_DAY = -1;
+// 解雇线是 0 而不是两条轴各自的下限（作者 2026-07-30 定）。挣来的名声可以垫
+// 几天，垫完就没有了；佃户信任开局本来就是 -2，所以这一条开局即成立。
+export const INSOLVENCY_DISMISS_RENOWN = 0;
+export const INSOLVENCY_DISMISS_TENANT = 0;
 
 // Storage cap until the barn is cleared out; clearing lifts it entirely (GDD ch.5.4).
 export const GRAIN_STORAGE_CAP_UNCLEARED = 80;

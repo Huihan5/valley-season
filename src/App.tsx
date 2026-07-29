@@ -1,4 +1,4 @@
-import { useReducer, useEffect } from 'react';
+import { useReducer, useEffect, useState, useCallback } from 'react';
 import { GameState, Choice, ChoiceEffects, EventData, NpcId } from './types/game';
 import { generateWeather } from './systems/WeatherSystem';
 import { nextPhase, isDemoComplete } from './systems/TimeSystem';
@@ -20,13 +20,21 @@ import ChoicePanel from './components/ChoicePanel';
 import NameInput from './components/common/NameInput';
 import EstateTaskList from './components/common/EstateTaskList';
 import OpeningSequence from './components/OpeningSequence';
+import TitleScreen from './components/TitleScreen';
+import SaveMenu from './components/common/SaveMenu';
+import {
+  AUTO_SLOT, ManualSlot, SaveSummary,
+  writeSlot, readSlot, clearSlot, readSlotSummary, listManualSlots,
+} from './systems/SaveSystem';
 
 
 type Action =
   | { type: 'MAKE_CHOICE'; choiceId: string }
   | { type: 'SET_PLAYER_NAME'; name: string }
   | { type: 'ADVANCE_OPENING' }
-  | { type: 'ADVANCE_DAY_EVENT' };
+  | { type: 'ADVANCE_DAY_EVENT' }
+  | { type: 'LOAD_STATE'; state: GameState }
+  | { type: 'RESET' };
 
 function applyEffects(state: GameState, effects: ChoiceEffects): GameState {
   let next = { ...state };
@@ -239,6 +247,14 @@ function gameReducer(state: GameState, action: Action): GameState {
       return advances ? advancePhase(next) : buildStateForPhase(next);
     }
 
+    // A save is a whole state, so loading one is not a merge — it is the season
+    // the player left, put back exactly as it was.
+    case 'LOAD_STATE':
+      return action.state;
+
+    case 'RESET':
+      return createInitialState();
+
     default:
       return state;
   }
@@ -329,6 +345,22 @@ function advancePhase(state: GameState): GameState {
 export default function App() {
   const [state, dispatch] = useReducer(gameReducer, undefined, createInitialState);
 
+  // Where the player is in the shell, which is not part of the season and so is
+  // not saved: a refresh puts them back at the title with the season intact.
+  const [atTitle, setAtTitle] = useState(true);
+  const [savesOpen, setSavesOpen] = useState(false);
+  const [autoSave, setAutoSave] = useState<SaveSummary | null>(() => readSlotSummary(AUTO_SLOT));
+  const [manualSaves, setManualSaves] = useState<(SaveSummary | null)[]>(() => listManualSlots());
+
+  const refreshManualSaves = useCallback(() => setManualSaves(listManualSlots()), []);
+
+  // The autosave follows every change, including the ones inside an event: the
+  // season should survive a closed tab at any point in it, not only at bedtime.
+  useEffect(() => {
+    if (atTitle) return;
+    writeSlot(AUTO_SLOT, state);
+  }, [state, atTitle]);
+
   // An event with nothing to decide gets a "继续" — either because it never had
   // choices, or because none of them apply to this playthrough.
   const isNarrativeOnly = state.activeEvent !== null && state.currentChoices.length === 0;
@@ -339,8 +371,74 @@ export default function App() {
     : null;
 
   useEffect(() => {
-    document.title = `河谷季 · 第${state.day}日`;
-  }, [state.day]);
+    document.title = atTitle ? '河谷季 · Valley Season' : `河谷季 · 第${state.day}日`;
+  }, [state.day, atTitle]);
+
+  const startNewSeason = () => {
+    clearSlot(AUTO_SLOT);
+    setAutoSave(null);
+    dispatch({ type: 'RESET' });
+    setAtTitle(false);
+  };
+
+  const continueSeason = () => {
+    const saved = readSlot(AUTO_SLOT);
+    if (!saved) return;
+    dispatch({ type: 'LOAD_STATE', state: saved });
+    setAtTitle(false);
+  };
+
+  const loadManual = (slot: ManualSlot) => {
+    const saved = readSlot(slot);
+    if (!saved) return;
+    dispatch({ type: 'LOAD_STATE', state: saved });
+    setSavesOpen(false);
+    setAtTitle(false);
+  };
+
+  const saveManual = (slot: ManualSlot) => {
+    writeSlot(slot, state);
+    refreshManualSaves();
+  };
+
+  const deleteManual = (slot: ManualSlot) => {
+    clearSlot(slot);
+    refreshManualSaves();
+  };
+
+  // Back to the title, and the autosave goes with the season it belonged to —
+  // otherwise 继续 would offer to continue an ending.
+  const backToTitle = () => {
+    clearSlot(AUTO_SLOT);
+    setAutoSave(null);
+    dispatch({ type: 'RESET' });
+    setSavesOpen(false);
+    setAtTitle(true);
+  };
+
+  if (atTitle) {
+    return (
+      <>
+        <TitleScreen
+          auto={autoSave}
+          hasManualSaves={manualSaves.some(Boolean)}
+          onNew={startNewSeason}
+          onContinue={continueSeason}
+          onOpenSaves={() => setSavesOpen(true)}
+        />
+        {savesOpen && (
+          <SaveMenu
+            slots={manualSaves}
+            canSave={false}
+            onSave={saveManual}
+            onLoad={loadManual}
+            onDelete={deleteManual}
+            onClose={() => setSavesOpen(false)}
+          />
+        )}
+      </>
+    );
+  }
 
   const openingPage = state.openingPage === null ? null : getOpeningPage(state.openingPage);
   if (openingPage) {
@@ -363,7 +461,10 @@ export default function App() {
           <EstateTaskList state={state} />
         </div>
         <div className="flex-1 min-w-0">
-          <ScenePanel state={state} />
+          <ScenePanel
+            state={state}
+            onOpenSaves={() => { refreshManualSaves(); setSavesOpen(true); }}
+          />
         </div>
         <div className="w-64 shrink-0">
           <StatusPanel state={state} />
@@ -381,7 +482,7 @@ export default function App() {
           </div>
           {/* 4.g.v: the way back to Day 1 was a whisper in the corner. */}
           <button
-            onClick={() => window.location.reload()}
+            onClick={backToTitle}
             className="px-10 py-3 bg-gold-dim border border-gold text-bg font-serif text-base rounded-sm hover:bg-gold transition-all"
           >
             重新开始
@@ -410,6 +511,17 @@ export default function App() {
             onChoice={(id) => dispatch({ type: 'MAKE_CHOICE', choiceId: id })}
           />
         </div>
+      )}
+
+      {savesOpen && (
+        <SaveMenu
+          slots={manualSaves}
+          canSave
+          onSave={saveManual}
+          onLoad={loadManual}
+          onDelete={deleteManual}
+          onClose={() => setSavesOpen(false)}
+        />
       )}
     </div>
   );
