@@ -11,6 +11,7 @@ import {
 } from '../data/config';
 
 import DATA from '../data';
+import { fill } from '../utils/text';
 
 const locationsData = DATA.scenes.locations;
 const weatherLines = DATA.scenes.weatherLines;
@@ -98,8 +99,11 @@ export function getLocationBase(state: GameState, sceneKey: string): string {
   }
 
   // A few lines open with the place name themselves ("农田已经安静了。"). Those keep
-  // their own opening rather than being announced twice.
-  return body.startsWith(entry.label) ? body : `${entry.label}。${body}`;
+  // their own opening rather than being announced twice. The join is punctuation,
+  // and punctuation is a property of the language, so it lives in the data.
+  return body.startsWith(entry.label)
+    ? body
+    : fill(DATA.ui.sceneLabel, { label: entry.label, body });
 }
 
 export function countClues(state: GameState): number {

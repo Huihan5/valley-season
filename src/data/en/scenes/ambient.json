@@ -1,31 +1,31 @@
 {
   "fields": [
-    "割麦的时候有人在唱。\n\n不是表演，是干活的节奏，一句拉得很长，然后是镰刀过去的声音，然后是下一句。唱的人在最远那一头，你听不清词。\n\n别的几个人偶尔接一句。接得不齐。",
-    "收割过的地上有鸟。十几只，在麦茬之间走来走去，啄掉下来的谷粒。\n\n它们不怕人。你从边上走过去，它们只是往旁边挪了两步。",
-    "早上霜化的时候，整片田在冒白气。\n\n不是雾，是从地里往上走的。太阳一出来它就开始散，散得很快，你看着它散完只用了一刻钟。"
+    "Someone sings while the wheat is cut.\n\nNot a performance. It is the rhythm of the work: one line drawn out long, then the sound of the sickle going through, then the next line. Whoever it is stands at the far end, and you cannot make out the words.\n\nA few of the others come in now and then. Not together.",
+    "There are birds on the cut ground. A dozen or so, walking about between the stubble, taking up the grain that fell.\n\nThey are not afraid of people. You go along the edge and they move two steps aside, no more.",
+    "When the frost goes in the morning the whole field steams white.\n\nIt is not fog. It comes up out of the ground. The moment the sun is out it starts to go, and it goes fast; you watch it finish inside a quarter of an hour."
   ],
   "forest": [
-    "你在一条倒木上看见一排蘑菇。\n\n十几个，大小依次排开，长在同一条线上，那是树倒下去的时候朝上的那一面。\n\n你没有采。你看了一会儿就走了。",
-    "林子里很远的地方有一只鹿。\n\n它站着，头转过来，看了你几秒钟。你也没有动。\n\n然后它走了。不是跑，是走的，它不认为你需要它跑。",
-    "风从坡上下来的时候，整片林子的声音是从高处往低处走的。\n\n先是树冠，然后是中层，然后才到你脚边的落叶。\n\n一次风要走三四秒钟。"
+    "You find a row of mushrooms along a fallen trunk.\n\nA dozen of them, graded by size, all on one line: the side that was facing up when the tree went down.\n\nYou do not pick them. You look a while and walk on.",
+    "There is a deer a long way off among the trees.\n\nIt stands, turns its head, watches you for some seconds. You do not move either.\n\nThen it goes. Not at a run. It walks. It does not consider you worth running from.",
+    "When the wind comes down off the slope the sound of the whole wood travels from high to low.\n\nThe crowns first, then the middle, and only then the dead leaves at your feet.\n\nOne gust takes three or four seconds to get through."
   ],
   "stable": [
-    "那匹栗色的把头搭在了你肩上。\n\n它对进来的每一个人都这样。格雷格说它小时候是这样跟人要东西吃的，后来没人给了，但这个动作留下来了。\n\n它的呼吸很重，很热。",
-    "夜里进马厩，八匹马都在。\n\n没有一匹醒着，但你能听见它们呼吸，八个不同的节奏，慢慢地对不上，又慢慢地对上。\n\n你在门口站了一会儿才走。"
+    "The chestnut rests its head on your shoulder.\n\nIt does this to everyone who comes in. Gregor says it was how it asked for food when it was young; after a while nobody gave it any, but the gesture stayed.\n\nIts breath is heavy, and hot.",
+    "You go into the stable at night and all eight are there.\n\nNot one of them awake, but you can hear them breathing. Eight different rhythms, drifting slowly out of one another and slowly back.\n\nYou stand in the doorway a while before you go."
   ],
   "kitchen": [
-    "玛莎在教一个佃户家的女孩切东西。\n\n那孩子十二三岁，握刀的姿势不对。玛莎没有纠正她，她只是把自己的手放慢了三倍，让那孩子看着。\n\n切了半个钟头之后那孩子自己改了过来。",
-    "厨房窗玻璃上的水汽在冬天来之前就已经开始积了。\n\n有人在上面画过东西，一个歪的房子，一匹马。画得很低，是小孩的高度。\n\n玛莎擦窗户的时候会绕开那一块。"
+    "Martha is teaching a tenant’s girl to cut.\n\nThe child is twelve or thirteen and holds the knife wrong. Martha does not correct her. She only slows her own hands to a third of their speed and lets the girl watch.\n\nHalf an hour of cutting later the girl has fixed it herself.",
+    "The kitchen window has begun to hold its condensation well before winter.\n\nSomebody has drawn on it. A crooked house, a horse. Low down, at a child’s height.\n\nWhen Martha wipes the windows she goes around that part."
   ],
   "forge_chapel": [
-    "你进去的时候有人在里面睡着了。\n\n一个佃户，靠着墙坐着，头歪在肩膀上。他大概是路过进来暖一下，然后就睡了。\n\n炉膛的火在他脸上。\n\n你退出去，把门轻轻带上。"
+    "Somebody is asleep inside when you come in.\n\nA tenant, sitting against the wall, his head fallen onto his shoulder. He came in on his way past to get warm, most likely, and then went off.\n\nThe light of the hearth is on his face.\n\nYou back out and pull the door to, quietly."
   ],
   "default": [
-    "枫叶下得像下雪。\n\n不是一片一片，是一阵风过来就下一层。石板路上很快积到看不见石头，走上去有声音。\n\n你走到大道中间停下来，回头看了一眼。\n\n没有人在看你。",
-    "埃莱娜在院子里晒被子。\n\n晒过太阳的被子有一种味道，你说不出那是什么味道，但你知道你小时候闻过。\n\n她把每一床都拍了三下。",
-    "傍晚没有风的时候，烟囱的烟是直着往上走的。\n\n一直走到很高，才被上面的风带着往东偏过去。\n\n你在庭院里看着它。这一天已经没有别的事要做了。"
+    "The maple leaves come down like snow.\n\nNot one at a time. A gust arrives and lays another layer. The flagstones are covered soon enough that there is no stone to see, and it makes a sound to walk on.\n\nYou stop in the middle of the avenue and look back.\n\nNobody is watching you.",
+    "Elena is airing the quilts in the yard.\n\nA quilt that has been out in the sun has a smell to it. You could not say what the smell is, but you know you knew it as a child.\n\nShe beats each one three times.",
+    "When there is no wind at dusk the chimney smoke goes straight up.\n\nIt gets a long way up before the wind that lives up there takes it and leans it east.\n\nYou stand in the courtyard and watch. There is nothing else left in the day to do."
   ],
   "market": [
-    "广场边上有人在拉琴。\n\n一个老头，坐在小凳子上，琴放在膝盖上，不是提琴，是这一带的一种，箱子很扁。\n\n他面前没有帽子，也没有碗。他不是在讨钱，他就是在拉。\n\n走过的人有几个停下来听一会儿，然后走了。"
+    "Somebody is playing at the edge of the square.\n\nAn old man on a low stool, the instrument across his knees. Not a fiddle: one of the local kind, with a very flat body.\n\nThere is no hat in front of him and no bowl. He is not asking for money. He is playing.\n\nA few of the people going past stop and listen a while, then go."
   ]
 }

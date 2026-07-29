@@ -1,21 +1,21 @@
 {
-  "_note": "河谷城集市日。草稿 4.9.1 与 4.9.4，逐字迁入。下午的衔接段与流言在 rumors.json。",
+  "_note": "Market day at Valehold. Drafts 4.9.1 and 4.9.4, moved across verbatim. The afternoon linking passage and the rumours are in rumors.json.",
   "arrival": {
-    "act1": "河谷城比你想的小。\n\n主街从北门一直通到河边，走完不到二十分钟。石板路，两侧是两三层的石砌房屋，底层几乎都是店铺，二层的窗台上摆着还没收进去的花。集市摆在临河的广场上，从广场一直溢到旁边的两条巷子里。\n\n十月初的货还带着夏末的尾巴。最后一批李子，最后一茬豆子，装在浅口的木筐里堆得很高。旁边就是新下来的东西：核桃、南瓜、成筐的苹果，以及已经开始出现的腌菜坛子。\n\n空气里同时有三种味道，河水的湿气、牲口的味道、还有从某个方向飘过来的烤面包。\n\n没有人认识你。有人抬头看了你一眼，因为你是生面孔，但也仅此而已。",
-    "act2": "集市今天比上次满。\n\n收成到了顶峰，什么东西都堆得比一个星期前高。粮商的摊位前排着队，木材的堆场旁边停了四辆车。你听见有人在争一个价钱，声音很大，但两个人都在笑。\n\n苹果已经从“新下来的”变成了“到处都是”。有个摊主看见你走过，直接抓了一个塞给你，没有要钱的意思。\n\n这一次有人认出了你。你走过之后，有人转过头，跟旁边的人说了句什么。",
-    "act3": "广场上的东西少了，但摊位没少。\n\n卖鲜货的位置被腌渍和储备品占了：成排的坛子、熏好的肉、装在麻袋里的根菜、捆好的干柴。有一整片区域在卖圣火节要用的东西，新的炉钳、成束的引火柴、给孩子的红绳。\n\n空气冷得多了。呼出来的气在面前停一瞬才散。"
+    "act1": "Valehold is smaller than you had it in your head.\n\nThe main street runs from the north gate down to the river and takes under twenty minutes to walk. Flagstones, stone houses of two and three storeys along both sides, the ground floors almost all shops, flowers still out on the sills above. The market is held on the square by the river and spills off the square into the two lanes beside it.\n\nThe goods in early October still carry the tail end of summer. The last of the plums, the last picking of beans, heaped high in shallow wooden baskets. Beside them what has only just come in: walnuts, squash, apples by the basket, and the first of the pickling jars.\n\nThree smells at once in the air. The damp off the river, livestock, and bread baking somewhere you cannot place.\n\nNobody knows you. Someone looks up as you go past because your face is new, and that is all it comes to.",
+    "act2": "The market is fuller today than it was last time.\n\nThe harvest is at its height and everything is stacked higher than it stood a week ago. There is a queue at the grain merchant’s stall and four carts standing by the timber yard. You hear two men arguing over a price, loudly, and both of them are laughing.\n\nApples have gone from “just in” to “everywhere”. A stallholder sees you pass, takes one and puts it in your hand, with no thought of being paid.\n\nThis time somebody knows you. After you have gone by, a head turns and says something to the person beside it.",
+    "act3": "There is less on the square, and no fewer stalls.\n\nWhat sold fresh goods has gone over to preserves and stores: rows of jars, smoked meat, roots in sacks, firewood in bundles. A whole quarter of it is selling what the Feast of the Sacred Flame wants — new hearth tongs, kindling in sheaves, red cord for the children.\n\nThe air is much colder. Your breath hangs in front of you a moment before it goes."
   },
-  "act3Known": "你走过粮商的摊位，他朝你点了点头。他知道你今天来是要卖东西的。",
-  "act3Unknown": "你走过粮商的摊位。他看了一眼你的车，又看了一眼你，然后继续跟手上那位客人说话。这个月他没见过你。",
-  "arrivalTail": "粮商的摊位在广场东侧，木材的堆场在河边。你今天带来的东西全在车上。\n\n格雷格没有跟来。他把车赶到广场就回去了，他不喜欢城里。",
-  "sellGrain": "粮商把你带来的麦子倒出一捧，在手里搓开，又凑近看了看。\n\n“今年的成色可以。”他说，“北坡那边有几家的麦子发过芽，你们这边没有。”\n\n他报了个价。你可以点头，也可以站在那儿不说话，站着不说话是这一带讨价的方式，他会自己再报一次。\n\n秤是他的。称完之后他当场结钱，铜子和银子分两个布袋，数得很清楚。\n\n车上轻了。你把空麻袋叠起来放回车板底下。",
-  "sellTimber": "木材的堆场在河边，靠着码头。运出去的木料从这里装船。\n\n收木头的人绕着你的车走了一圈，用手背在断面上敲了两下，听声音。\n\n“北坡的橡木。”他说，“干得不错。”",
-  "sellTimberMillridge": "“磨岭那边说过您会来。”他补了一句，“价钱给您按四算。”\n\n你不知道亨克是什么时候跟他说的。",
-  "sellTimberPlain": "他报了市价，一分不多。",
-  "sellTimberTail": "卸货用了一会儿。木头一根一根滚下车板，落在堆场上发出闷响。",
-  "nothing": "你在广场上走了一圈。\n\n没有卖，也没有买。你看了粮价，看了木料的行情，听了几句话，然后就回来了。\n\n车上的东西还在车上。\n\n这一趟花掉了半天，但你现在知道行情了。下一次你会知道什么时候该出手。",
-  "returnOpen": "回程走的是来时的路，天已经开始暗了。",
-  "returnSold": "车上轻了很多。钱袋在内袋里，每过一个坑就响一下。",
-  "returnUnsold": "车上和来的时候一样重。",
-  "returnTail": "你在路上算了一遍今天的账。数字是对的，但你同时在想别的事情，今天听到的那些话里，有几句是你不该忘的。\n\n进庄园大门的时候，格雷格从马厩那边出来接车。他不问你卖了多少。他先看马。"
+  "act3Known": "You pass the grain merchant’s stall and he nods to you. He knows you have come today to sell.",
+  "act3Unknown": "You pass the grain merchant’s stall. He looks at your cart, then at you, then goes back to the customer he has in hand. He has not seen you this month.",
+  "arrivalTail": "The grain merchant’s stall is on the east side of the square and the timber yard is down by the river. Everything you brought today is on the cart.\n\nGregor did not come in with you. He drove the cart as far as the square and went back. He does not care for towns.",
+  "sellGrain": "The grain merchant pours out a handful of your wheat, rubs it open in his palm and puts his face close to it.\n\n“The quality is fair this year,” he says. “Some of the holdings on the north slope had theirs sprout. Yours did not.”\n\nHe names a price. You can nod, or you can stand there and say nothing. Standing there saying nothing is how haggling is done here; he will name another price himself.\n\nThe scales are his. He settles on the spot once it is weighed, copper and silver in two separate cloth bags, counted out plainly.\n\nThe cart is lighter. You fold the empty sacks and put them back under the boards.",
+  "sellTimber": "The timber yard is by the river, against the wharf. Wood going out of the valley is loaded onto boats here.\n\nThe buyer walks once round your cart and knocks twice on a cut face with the back of his hand, listening to it.\n\n“North slope oak,” he says. “Dried well.”",
+  "sellTimberMillridge": "“Millridge said you would be coming.” He adds: “I will make it four for you.”\n\nYou do not know when Henk spoke to him.",
+  "sellTimberPlain": "He names the market price and not a coin over.",
+  "sellTimberTail": "Unloading takes a while. The logs go off the boards one at a time and land in the yard with a dull sound.",
+  "nothing": "You walk once round the square.\n\nYou sell nothing and you buy nothing. You look at what grain is fetching, and what timber is fetching, and hear a few things said, and then you come back.\n\nWhat was on the cart is still on the cart.\n\nThe trip cost you half a day, and you know the prices now. Next time you will know when to sell.",
+  "returnOpen": "The road back is the road in, and the light has begun to go.",
+  "returnSold": "The cart is a great deal lighter. The purse rides in an inside pocket and speaks once at every rut.",
+  "returnUnsold": "The cart weighs what it weighed coming in.",
+  "returnTail": "You go through the day’s accounts once on the road. The numbers come out right, and you are thinking about something else at the same time: of the things said today, there are a few you had better not forget.\n\nAs you come in at the estate gate Gregor comes out from the stable to take the cart. He does not ask what you sold. He looks at the horses first."
 }

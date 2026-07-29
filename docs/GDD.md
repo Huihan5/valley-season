@@ -1187,6 +1187,7 @@ Day 30 是 10 月 30 日，圣火节在 11 月初，所以正常情况下结算�
 | 铸都 | Forgehold |
 | 河谷城 | Valehold |
 | 炽焰城 | Flaminhold |
+| 明光城 | Luminhold |
 | 枫径庄园 | Maplegate Estate |
 | 棘墙庄园 | Thornwall |
 | 磨岭庄园 | Millridge |
