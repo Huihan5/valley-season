@@ -1,73 +1,73 @@
 {
   "harvest": [
-    "你跟着下田。到中午的时候手上已经磨出了印子，你不是干这个的，但没有人指出来。\n\n收上来 {n} 单位。",
-    "今天下田的有十一个人。你负责的是记数和分配，谁去哪一块，什么时候换手。\n\n到傍晚清点，{n} 单位。老文德说照这个速度还行。",
-    "割到一半下起了毛毛雨，没有人停。雨不大，停下来反而更冷。\n\n{n} 单位。麦子有点潮，摊开晾了一夜。"
+    "You go down and work with them. By midday there are marks on your hands. This is not your trade, and nobody says so.\n\n{n} units in.",
+    "Eleven people in the fields today. Your part is the counting and the sorting out: who goes to which plot, and when they change over.\n\nCounted at dusk: {n} units. Old Wendt says that at this rate it will do.",
+    "Halfway through the cutting a fine rain starts and nobody stops. It is not much rain, and stopping only makes you colder.\n\n{n} units. The wheat is damp; it was spread out to dry overnight."
   ],
   "fell_timber": [
-    "三个人一组，你跟着最靠外那一组。斧子的声音在林子里传得很远，隔一会儿就有一棵倒下去的闷响。\n\n{n} 单位。今年的额度还剩 {r}。",
-    "你今天主要在做记号，哪些能砍，哪些不能。做记号比砍树累，因为砍错了就回不去了。\n\n{n} 单位。",
-    "拖木头的时候有一根卡在树根中间，四个人弄了半个钟头。\n\n{n} 单位。收工的时候天已经暗了。"
+    "Three to a team, and you go with the one furthest out. The sound of axes carries a long way in the woods, and every so often there is the dull noise of one going down.\n\n{n} units. {r} left of this year’s allowance.",
+    "Mostly you spend the day marking: which come down and which do not. Marking is more tiring than cutting, because there is no going back on a wrong one.\n\n{n} units.",
+    "One of the logs jammed among the roots on the way out and took four men half an hour.\n\n{n} units. It was dark by the time the work stopped."
   ],
   "survey_fields": [
-    "你把每一块地都走了一遍。哪块熟得快，哪块洼地积水，哪家的田埂塌了一角。\n\n你现在知道这些了。这不产生任何数字，但下一次做决定的时候你会用得上。",
-    "你在最东边那块地遇见两个佃户。他们停下来跟你说了几句，不是汇报，是聊天。他们说今年的天不如去年。\n\n你听完了。他们看起来有点意外你听完了。",
-    "沿着田埂走到头，回头看，整片地在你脚下铺开。\n\n你第一次看清楚这座庄园到底有多大。"
+    "You walk every plot of it. Which ripens fastest, which hollow holds water, whose bank has fallen away at a corner.\n\nYou know these things now. It produces no figure at all, and the next time you have to decide something you will use it.",
+    "You meet two tenants on the easternmost plot. They stop and say a few things to you. Not a report — talk. They say the weather this year is not what it was last year.\n\nYou hear them out. They look a little surprised that you heard them out.",
+    "You walk the bank to the end of it and turn round, and the whole of it lies out below you.\n\nFor the first time you see plainly how large this estate is."
   ],
   "survey_forest": [
-    "你走了北面那条路。树的间距、粗细、有没有病，你看不太懂，但你把看见的都记下来了。",
-    "林子里今天有雾。走出去一段之后你回头，庄园的方向什么都看不见。\n\n你在原地站了一会儿才继续走。",
-    "你在一处坡下发现了旧的采伐痕迹，不是今年的，断面已经黑了。至少两三年前。\n\n你记下了位置。"
+    "You take the north path. The spacing of the trees, the thickness of them, whether any are sick. You do not really know how to read it, but you write down what you see.",
+    "There is fog in the woods today. Some way in you look back, and there is nothing to see in the direction of the estate.\n\nYou stand where you are a while before you go on.",
+    "Below a slope you find old cutting. Not this year’s; the faces have gone black. Two or three years back at least.\n\nYou write down where."
   ],
   "forest_state": [
-    "林地里光进不来。树冠在头顶合上，走了一刻钟你还是看不见对面那道坡。脚下的落叶层踩下去很软，底下是去年的，再底下是前年的。",
-    "有几处地方现在是亮的。你在那些地方停了一下，树桩还新，锯口的颜色比树皮浅。林子还密，但已经看得出哪几趟是你砍的。",
-    "从这头能看见那头了。剩下的树之间隔得开，风穿过去不再有阻力。落叶层薄了很多，有几块地方直接露出了土。",
-    "这片坡现在是敞开的。站在中间能看见天，能看见对面那道梁，也能看见下雨的时候水会顺着哪几条沟走。土是松的，踩上去往下陷。"
+    "No light gets into the woods. The canopy closes overhead, and a quarter of an hour in you still cannot see the slope opposite. The leaf litter is soft underfoot: last year’s below it, and the year before that below that.",
+    "There are a few places with light in them now. You stop at them; the stumps are new and the saw cuts are paler than the bark. The wood is still thick, but you can make out which lines through it are yours.",
+    "You can see from this side to the other now. The trees that are left stand far enough apart that the wind goes through without resistance. The litter is much thinner, and in places the bare earth shows.",
+    "This slope is open now. Standing in the middle of it you can see the sky, and the ridge opposite, and which channels the water will take when it rains. The soil is loose and gives under your feet."
   ],
   "stable_help": [
-    "你去马厩帮忙。格雷格没有说要你做什么，他只是把一把刷子递过来，然后指了指最里面那一格。\n\n刷马比你以为的费力。顺着毛走，力道要匀，遇到打结的地方不能硬拉。\n\n干到一半你抬头，看见他在另一头看着你。他把视线移开了。",
-    "今天是清蹄。格雷格先做了一只给你看，把马腿抬起来夹在自己腿间，用弯钩顺着蹄叉往外掏。\n\n“别掏中间。”他说。\n\n就这三个字。你做了六只，中间那道沟一次都没碰。",
-    "你在换草料。旧的草要抖开看有没有霉，新的铺上去要压实但不能压死。\n\n这些没有人教你，你是看他做了三次自己记下来的。\n\n换完之后他过来看了一眼，什么也没说，把你放歪的那一捆扶正了。"
+    "You go to the stable to help. Gregor does not tell you what to do. He hands you a brush and points at the far stall.\n\nBrushing a horse is harder work than you thought. With the coat, even pressure, and where it has knotted you do not pull.\n\nHalfway through you look up and find him watching you from the other end. He looks away.",
+    "Today it is hooves. Gregor does one for you to watch, taking the leg up between his own knees and working the hook out along the frog.\n\n“Not the middle,” he says.\n\nThree words, and that is all of them. You do six, and you never once touch the cleft down the middle.",
+    "You are changing the bedding. The old straw has to be shaken out and looked over for mould, and the new goes down packed but not packed dead.\n\nNobody taught you this. You watched him do it three times and worked it out.\n\nWhen it is done he comes over and looks, says nothing, and straightens the one bundle you had put down crooked."
   ],
   "repair": [
-    "铁匠是从河谷城请来的，一天的工。你在旁边打下手，主要是递东西和付钱。\n\n{item} 修好了。",
-    "修这个比你以为的麻烦。拆开之后才发现里面还有一处坏的，多花了一笔。\n\n{item} 修好了。钱比预算多了一点。",
-    "格雷格过来看了一眼，说了两句话，然后就走了。按他说的做，果然顺得多。\n\n{item} 修好了。"
+    "The smith was brought out from Valehold for the day. You worked alongside him, which mostly meant handing things over and paying for them.\n\n{item} — done.",
+    "It was more trouble than you thought. Once it was open there was a second thing broken inside, and that cost more.\n\n{item} — done. It came to a little over what you had put aside.",
+    "Gregor came over, looked at it, said two sentences and went. Done his way it went a great deal easier.\n\n{item} — done."
   ],
   "forage": [
-    "林子边缘那一带，今年出得不错。玛莎认得这些东西，她给你画过一张简图。\n\n换了 {n} 金卢。",
-    "你采了一上午，回来给玛莎看。她挑出来一半，说另一半不能吃。\n\n剩下的换了 {n} 金卢。",
-    "今天出的不多。这个季节快过去了。\n\n{n} 金卢。"
+    "The strip along the edge of the woods has come up well this year. Martha knows these things; she drew you a rough chart of them once.\n\nTurned into {n} guldmark.",
+    "You gathered all morning and brought it back for Martha to look at. She picked out half and said the other half was not to be eaten.\n\nWhat was left made {n} guldmark.",
+    "Not much about today. The season for it is nearly over.\n\n{n} guldmark."
   ],
   "orchard": [
-    "果园好几年没有认真修过枝，果子小。但小果子甜。\n\n摘了一整个上午。",
-    "有两户佃户家的孩子来帮忙，摘完之后每人拿了几个走。你没有拦。",
-    "树太高的地方够不着，那些果子会自己落下来烂在地上。每年都是这样。\n\n玛莎说这不算浪费，落下的会烂进土里，明年结得更好。"
+    "The orchard has not been properly pruned in years and the fruit is small. Small fruit is sweet.\n\nYou picked all morning.",
+    "Children from two of the tenant households came to help, and each took a few away with them when it was done. You did not stop them.",
+    "What is too high cannot be reached, and that fruit comes down of itself and rots on the ground. It is like this every year.\n\nMartha says it is not waste. What falls rots into the soil, and next year the tree bears better."
   ],
   "office_paperwork": [
-    "一上午的文书。契约副本、佃户名册、去年的收成记录、几封没有回的信。\n\n埃莱娜进来过两次。第一次是送水，第二次是拿走该洗的东西。\n\n两次她都没有出声。",
-    "你在整理去年的存档。有一摞纸的边缘是齐的，不是自然齐的那种齐，是有人一张一张对过的。\n\n埃莱娜在窗边擦架子。你抬头的时候她刚好把头低下去。",
-    "文书做到一半，你发现桌上的墨水瓶被挪了位置，挪到了你右手更顺的地方。\n\n你没有让任何人挪它。"
+    "A morning of papers. Copies of contracts, the tenant roll, last year’s harvest record, several letters nobody ever answered.\n\nElena came in twice. The first time with water, the second to take away what needed washing.\n\nNeither time did she make a sound.",
+    "You are sorting last year’s files. One stack has an even edge — not the evenness a stack falls into, but the kind that comes of somebody squaring it sheet by sheet.\n\nElena is wiping the shelves by the window. When you look up she has just lowered her head.",
+    "Halfway through the papers you notice that the inkwell has been moved, to where your right hand comes to it more easily.\n\nYou did not ask anyone to move it."
   ],
   "night_ledger_1": [
-    "夜里的账本和白天不一样。\n\n白天你看的是数字对不对。夜里没有别的事，你就开始看别的，谁在哪一页写了批注，哪一笔改过又改回来，哪一个月的字比别的月份挤。\n\n霍特曼记了八年。八年是很多页。"
+    "The ledger at night is not the ledger by day.\n\nBy day you are looking at whether the figures come out. At night there is nothing else to be done, so you begin to look at other things. Who wrote a note in the margin, and on which page. Which entry was changed and then changed back. Which month is written tighter than the months around it.\n\nHartmann kept it for eight years. Eight years is a great many pages."
   ],
   "night_ledger_2": [
-    "你从最早的那一本开始往后翻。\n\n头几年的账很干净。分栏清楚，摘要写得完整，偶尔有一两处涂改，涂改的地方都签了小名。\n\n那时候他二十几岁。\n\n你翻到第四年的时候油灯需要添了。"
+    "You start at the earliest volume and work forward.\n\nThe first years are clean. The columns are clear, the summaries written out in full, and here and there a correction, every one of them initialled.\n\nHe was in his twenties then.\n\nBy the fourth year the lamp needs filling."
   ],
   "night_ledger_3": [
-    "你在找的东西不是数字。\n\n你把八年的账摊在桌上，按年份排开，每一本翻到同一个月份，十月，秋收。八个十月。\n\n前七个十月的字是一样的。工整，间距均匀，数字的笔画收得干净。\n\n第八个不一样。\n\n不是潦草。潦草你早就看出来了。\n\n是小。\n\n同样的格子，同样的栏位，字比前七年小了将近三分之一，挤在格子的左上角，右边空出来一大块。\n\n你把第七本和第八本并排放着看了很久。\n\n一个人的字要在什么情况下才会变小。\n\n不是手抖，不是眼花，笔画还是稳的，收笔还是干净的。\n\n他只是在把自己占的地方越写越少。"
+    "What you are looking for is not a figure.\n\nYou lay the eight years out on the desk in order and open every one of them at the same month. October. The harvest. Eight Octobers.\n\nThe first seven Octobers are written the same. Neat, evenly spaced, the strokes of the numbers finished off clean.\n\nThe eighth is not.\n\nIt is not careless. You would have seen careless long ago.\n\nIt is small.\n\nThe same ruled boxes, the same columns, and the writing nearly a third smaller than it was through the seven years before, crowded up into the top left of each box, with a wide space left empty at the right.\n\nYou set the seventh volume and the eighth side by side and look at them for a long time.\n\nWhat has to happen to a man before his handwriting gets smaller.\n\nIt is not a shaking hand and it is not failing eyes. The strokes are steady and the ends are still clean.\n\nHe was only taking up less and less room."
   ],
   "rest": [
-    "你今天什么也没做。\n\n睡到自然醒，下午在炉堂坐了两个钟头，晚上早早上了床。\n\n第二天早上起来，你发现自己已经很久没有睡足过了。",
-    "你在房间里待了一天。桌上那块浅色的长方形，你看了很久。",
-    "你在马厩坐了一下午。格雷格干他的活，你坐着。谁也没有说话。\n\n这一天什么都没有推进。你觉得还行。"
+    "You did nothing at all today.\n\nSlept until you woke, sat two hours in the forge-chapel in the afternoon, went to bed early.\n\nGetting up the next morning, you realise it has been a very long time since you last had enough sleep.",
+    "You stayed in your room the whole day. That pale rectangle on the desk. You looked at it a long while.",
+    "You sat in the stable all afternoon. Gregor did his work and you sat. Neither of you said anything.\n\nNothing at all moved forward today. You find you do not mind."
   ],
   "stable_help_third": [
-    "你干完准备走的时候，他从工具架上取下一把刷子递给你。\n\n不是他刚才用的那把，那把在他手里。这一把柄短一些，用得也更旧。\n\n“这把顺手。”他说。\n\n你接了。你不知道该说什么，他也没有等你说。\n\n第二天你再去的时候，那把刷子挂在门边的钩子上，位置和别的工具不一样，它单独挂着。"
+    "When you have finished and are about to go, he takes a brush down off the rack and holds it out to you.\n\nNot the one he was using; that one is in his hand. This one has a shorter handle and has been used longer.\n\n“This one sits better,” he says.\n\nYou take it. You do not know what to say, and he does not wait for you to say it.\n\nWhen you come back the next day the brush is on a hook by the door, hung apart from the other tools, on its own."
   ],
   "night_ledger_4": [
-    "你又坐了一晚上。\n\n八本账还是那八本账。你已经知道要看什么了，你看的不是数字，也不再是字迹。\n\n你只是在这儿坐着，翻着一个人写了八年的东西。\n\n油灯烧到一半的时候你合上了账本。\n\n这件事你已经看完了。"
+    "You sat with it another night.\n\nThe eight volumes are the same eight volumes. You know by now what there is to look for, and it is not the figures, and it is no longer the handwriting either.\n\nYou only sit here, turning the pages of what one man wrote over eight years.\n\nWhen the lamp is half burned down you close the ledger.\n\nYou have finished with this."
   ]
 }
