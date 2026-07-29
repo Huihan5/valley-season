@@ -120,7 +120,7 @@ function createInitialState(): GameState {
     resources: { ...INITIAL_RESOURCES },
     fatigue: 0,
     relationships: { ...INITIAL_RELATIONSHIPS },
-    conversations: { gregor: 0, marta: 0, lena: 0, elke: 0, henk: 0, lorenz: 0 },
+    conversations: { gregor: 0, marta: 0, elena: 0, marguerite: 0, henk: 0, lorenz: 0 },
     nobleTrust: 0,
     lordImpression: 0,
     tenantTrust: TENANT_TRUST_INITIAL,

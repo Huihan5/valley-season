@@ -3,7 +3,7 @@ import { GameState, EventData, NpcId } from '../src/types/game';
 import { getEventById } from '../src/systems/EventSystem';
 import { GRAIN_RETAIN_THRESHOLD, MILLRIDGE_CASH } from '../src/data/config';
 
-const ZERO: Record<NpcId, number> = { gregor: 0, marta: 0, lena: 0, elke: 0, henk: 0, lorenz: 0 };
+const ZERO: Record<NpcId, number> = { gregor: 0, marta: 0, elena: 0, marguerite: 0, henk: 0, lorenz: 0 };
 
 function makeState(henk: number, grain = 60): GameState {
   return {

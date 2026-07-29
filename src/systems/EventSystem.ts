@@ -22,6 +22,7 @@ import { getFragmentChoices, getLorenzChapelExtra } from './ClueSystem';
 import {
   getMarketArrival, getMarketTradeResult, getMarketReturn, getMarketNoTrade,
   drawRumours, encodeRumours, rumoursFlagKey,
+  isGregorAtStable,
 } from './SceneSystem';
 import {
   MARKET_TRANSPORT_CAP, MARKET_GRAIN_PRICE,
@@ -30,7 +31,7 @@ import {
   HUNT_FIRST_DAY, HUNT_LAST_DAY, LORENZ_FRAGMENT_TRUST, MARGUERITE_FRAGMENT_TRUST,
   WYNTER_PARTIAL_ACCOUNT, WYNTER_FULL_ACCOUNT, POSITION_LINE_COMPLETE,
   GRAIN_RETAIN_THRESHOLD, GRAIN_EXCELLENT_THRESHOLD, LETTER_GOOD_GULDMARK,
-  LENA_QUILTS_TRUST, MILLRIDGE_TRUST, MILLRIDGE_CASH, MILLRIDGE_TIMBER, MILLRIDGE_SPRING_SEED,
+  ELENA_QUILTS_TRUST, MILLRIDGE_TRUST, MILLRIDGE_CASH, MILLRIDGE_TIMBER, MILLRIDGE_SPRING_SEED,
   SURVEY_FIELDS_LAST_DAY, SURVEY_FOREST_LAST_DAY,
   ORCHARD_FULL_YIELD_LAST_DAY, NIGHT_LEDGER_CLUE_AT,
 } from '../data/config';
@@ -342,10 +343,10 @@ function processDay23(event: EventData, state: GameState): EventData {
 // She has not asked anyone whether that is still worth doing.
 function processDay30Morning(event: EventData, state: GameState): EventData {
   const v = event.variants ?? {};
-  const close = getTrust(state, 'lena') >= LENA_QUILTS_TRUST;
+  const close = getTrust(state, 'elena') >= ELENA_QUILTS_TRUST;
   return {
     ...event,
-    sceneText: [event.sceneText, close ? v.lena_close : v.lena_distant].filter(Boolean).join('\n\n'),
+    sceneText: [event.sceneText, close ? v.elena_close : v.elena_distant].filter(Boolean).join('\n\n'),
   };
 }
 
@@ -652,7 +653,7 @@ export function getFreeChoices(state: GameState): Choice[] {
       description: '1 时段 · 计一次与埃莱娜的交谈',
       effects: {
         fatigue: 0,
-        conversationWith: 'lena',
+        conversationWith: 'elena',
         nextScene: 'office',
         logEntry: '你在办公室处理了一上午的文书。',
       },
@@ -886,6 +887,26 @@ export function getFreeChoices(state: GameState): Choice[] {
         disabledReason: resources.timber < 2 ? '木材不足（需要2单位）' : '金卢不足（需要1单位）',
       });
     }
+  }
+
+  // 格雷格 does not judge people by what they say to him (GDD 5.5). Spending an
+  // afternoon on his work, once, is the second of his three trust routes and the
+  // one that carries him to 4 — where the cloth bundle is. No deadline: a player
+  // who works out in the third act that they should be in the stable is not too late.
+  if ((phase === 'afternoon' || phase === 'evening')
+    && !flags.helpedWithHorses && isGregorAtStable(state)) {
+    choices.push({
+      id: 'help_horses',
+      text: '去马厩搭把手',
+      description: '1 时段 · 无产出',
+      effects: {
+        relationships: { gregor: 1 },
+        flags: { helpedWithHorses: true },
+        nextScene: 'stable',
+        logEntry: '你在马厩跟着格雷格干了半天活。',
+      },
+      resultKind: 'stable_help',
+    });
   }
 
   // The estate's own fragments. They cost a phase like any other visit and appear

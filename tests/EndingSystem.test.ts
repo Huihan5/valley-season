@@ -7,7 +7,7 @@ import {
   GRAIN_RETAIN_THRESHOLD, GRAIN_EXCELLENT_THRESHOLD, RETAIN_MARGIN,
 } from '../src/data/config';
 
-const ZERO: Record<NpcId, number> = { gregor: 0, marta: 0, lena: 0, elke: 0, henk: 0, lorenz: 0 };
+const ZERO: Record<NpcId, number> = { gregor: 0, marta: 0, elena: 0, marguerite: 0, henk: 0, lorenz: 0 };
 
 /** Every group cleared, position line one short — the 4A shape. */
 const CLUES_4A: FlagMap = {
@@ -243,7 +243,7 @@ describe('结局 4A · what the player sees is all of it second-hand', () => {
     expect(distant).toContain('埃莱娜没有来');
 
     const present = text('ending4a', makeState({
-      flags: CLUES_4A, relationships: { ...ZERO, lena: 4 },
+      flags: CLUES_4A, relationships: { ...ZERO, elena: 4 },
     }));
     expect(present).toContain('站在人群最外面');
     expect(present).not.toContain('埃莱娜没有来');

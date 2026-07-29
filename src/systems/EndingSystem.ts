@@ -6,7 +6,7 @@ import {
   LORD_IMPRESSION_MARGIN_MIN, RETAIN_MARGIN,
   ENDING_TRUTH_MIN_RENOWN, ENDING3_RENOWN,
   ENDING3_DEEP_TRUST, ENDING3_DEEP_TRUST_COUNT,
-  NOBLE_TRUST_ENDING3_MIN, LENA_RITES_TRUST,
+  NOBLE_TRUST_ENDING3_MIN, ELENA_RITES_TRUST,
 } from '../data/config';
 import endingsData from '../data/endings/endings.json';
 
@@ -105,7 +105,7 @@ export function composeEnding(state: GameState, id: EndingId): string {
 
   if (id === 'ending4a') {
     parts.push(v.rites_open);
-    parts.push(getTrust(state, 'lena') >= LENA_RITES_TRUST ? v.lena_present : v.lena_absent);
+    parts.push(getTrust(state, 'elena') >= ELENA_RITES_TRUST ? v.elena_present : v.elena_absent);
     parts.push(v.rites_close, v.ludwig);
   }
 

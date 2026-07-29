@@ -1,6 +1,6 @@
 export type WeatherType = 'sunny' | 'cloudy' | 'rainy' | 'frost' | 'fog';
 export type DayPhase = 'morning' | 'afternoon' | 'evening';
-export type NpcId = 'gregor' | 'marta' | 'lena' | 'elke' | 'henk' | 'lorenz';
+export type NpcId = 'gregor' | 'marta' | 'elena' | 'marguerite' | 'henk' | 'lorenz';
 
 export interface Resources {
   grain: number;

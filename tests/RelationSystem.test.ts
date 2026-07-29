@@ -12,7 +12,7 @@ import {
   countTrustAtLeast,
 } from '../src/systems/RelationSystem';
 
-const ZERO: Record<NpcId, number> = { gregor: 0, marta: 0, lena: 0, elke: 0, henk: 0, lorenz: 0 };
+const ZERO: Record<NpcId, number> = { gregor: 0, marta: 0, elena: 0, marguerite: 0, henk: 0, lorenz: 0 };
 
 function makeState(overrides: Partial<GameState> = {}): GameState {
   return {
@@ -84,9 +84,9 @@ describe('conversational trust layer', () => {
 
   it('counts conversations one at a time', () => {
     let counts = { ...ZERO };
-    counts = recordConversation(counts, 'lena');
-    counts = recordConversation(counts, 'lena');
-    expect(counts.lena).toBe(2);
+    counts = recordConversation(counts, 'elena');
+    counts = recordConversation(counts, 'elena');
+    expect(counts.elena).toBe(2);
     expect(counts.marta).toBe(0);
   });
 
@@ -128,10 +128,10 @@ describe('trust tiers', () => {
 describe('countTrustAtLeast', () => {
   it('counts by effective trust, not action trust alone', () => {
     const state = makeState({
-      relationships: { ...ZERO, gregor: 3, marta: 2, lena: 2 },
-      conversations: { ...ZERO, marta: 3, lena: 3 },
+      relationships: { ...ZERO, gregor: 3, marta: 2, elena: 2 },
+      conversations: { ...ZERO, marta: 3, elena: 3 },
     });
-    // gregor 3, marta 2+1, lena 2+1 → three NPCs at ≥3
+    // gregor 3, marta 2+1, elena 2+1 → three NPCs at ≥3
     expect(countTrustAtLeast(state, 3)).toBe(3);
   });
 });

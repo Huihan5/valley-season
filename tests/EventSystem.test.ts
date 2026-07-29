@@ -14,8 +14,8 @@ function makeState(overrides: Partial<GameState> = {}): GameState {
     openingPage: null,
     resources: { grain: 50, guldmark: 30, timber: 10, renown: 3 },
     fatigue: 0,
-    relationships: { gregor: 0, marta: 0, lena: 0, elke: 0, henk: 0, lorenz: 0 },
-    conversations: { gregor: 0, marta: 0, lena: 0, elke: 0, henk: 0, lorenz: 0 },
+    relationships: { gregor: 0, marta: 0, elena: 0, marguerite: 0, henk: 0, lorenz: 0 },
+    conversations: { gregor: 0, marta: 0, elena: 0, marguerite: 0, henk: 0, lorenz: 0 },
     nobleTrust: 0,
     lordImpression: 0,
     tenantTrust: -2,
@@ -266,7 +266,7 @@ describe('getFixedEvent — Day 30', () => {
 
     const close = getFixedEvent(30, 'morning', makeState({
       day: 30,
-      relationships: { gregor: 0, marta: 0, lena: 4, elke: 0, henk: 0, lorenz: 0 },
+      relationships: { gregor: 0, marta: 0, elena: 4, marguerite: 0, henk: 0, lorenz: 0 },
     }));
     expect(close?.sceneText).toContain('要到十一月中旬才用得上');
   });

@@ -13,7 +13,7 @@ import {
   NIGHT_LEDGER_CLUE_AT,
 } from '../src/data/config';
 
-const ZERO: Record<NpcId, number> = { gregor: 0, marta: 0, lena: 0, elke: 0, henk: 0, lorenz: 0 };
+const ZERO: Record<NpcId, number> = { gregor: 0, marta: 0, elena: 0, marguerite: 0, henk: 0, lorenz: 0 };
 
 function makeState(overrides: Partial<GameState> = {}): GameState {
   return {
@@ -111,7 +111,7 @@ describe('gift and attire', () => {
 
   it('sends the trust to whoever was named at purchase', () => {
     const choices = getEstateTaskChoices(makeState());
-    expect(choices.find(c => c.id === 'task_gift_marguerite')?.effects?.relationships).toEqual({ elke: 1 });
+    expect(choices.find(c => c.id === 'task_gift_marguerite')?.effects?.relationships).toEqual({ marguerite: 1 });
     expect(choices.find(c => c.id === 'task_gift_henk')?.effects?.relationships).toEqual({ henk: 1 });
   });
 
@@ -201,7 +201,7 @@ describe('forage and orchard', () => {
 describe('the office and the night ledger', () => {
   it('makes paperwork time spent with Elena rather than nothing at all', () => {
     const office = getFreeChoices(makeState()).find(c => c.id === 'visit_office');
-    expect(office?.effects?.conversationWith).toBe('lena');
+    expect(office?.effects?.conversationWith).toBe('elena');
   });
 
   it('lands the handwriting fragment on the third night and not before', () => {

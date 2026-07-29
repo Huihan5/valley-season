@@ -6,7 +6,7 @@ import {
 } from '../src/systems/ClueSystem';
 import { getFreeChoices } from '../src/systems/EventSystem';
 
-const ZERO: Record<NpcId, number> = { gregor: 0, marta: 0, lena: 0, elke: 0, henk: 0, lorenz: 0 };
+const ZERO: Record<NpcId, number> = { gregor: 0, marta: 0, elena: 0, marguerite: 0, henk: 0, lorenz: 0 };
 
 function makeState(over: Partial<GameState> = {}): GameState {
   return {
@@ -89,18 +89,18 @@ describe('the two who each hold one thing back', () => {
 
   it('keeps both second pieces to the evening — neither is said over work', () => {
     expect(keysFor({ marta: 4 }, { clue_mot_martha_summer: true }, 'afternoon')).toEqual([]);
-    expect(keysFor({ lena: 4 }, { clue_mot_elena_papers: true }, 'afternoon')).toEqual([]);
-    expect(keysFor({ lena: 4 }, { clue_mot_elena_papers: true }, 'evening')).toEqual(['lena_burned']);
+    expect(keysFor({ elena: 4 }, { clue_mot_elena_papers: true }, 'afternoon')).toEqual([]);
+    expect(keysFor({ elena: 4 }, { clue_mot_elena_papers: true }, 'evening')).toEqual(['elena_burned']);
   });
 
   it('needs 埃莱娜 at 3 before she says anything at all', () => {
-    expect(keysFor({ lena: 2 })).toEqual([]);
-    expect(keysFor({ lena: 3 })).toEqual(['lena_papers']);
+    expect(keysFor({ elena: 2 })).toEqual([]);
+    expect(keysFor({ elena: 3 })).toEqual(['elena_papers']);
   });
 
   it('has her come to the office rather than be sought out', () => {
     const [choice] = getFragmentChoices(makeState({
-      relationships: { ...ZERO, lena: 4 },
+      relationships: { ...ZERO, elena: 4 },
       flags: { clue_mot_elena_papers: true },
     }));
     expect(choice.text).toBe('在办公室待到很晚');
@@ -111,9 +111,9 @@ describe('the two who each hold one thing back', () => {
 
 describe('the four lines run in parallel but one answer at a time each', () => {
   it('offers everyone who is ready, and only their next piece', () => {
-    expect(keysFor({ gregor: 4, marta: 4, lena: 4 }, {
+    expect(keysFor({ gregor: 4, marta: 4, elena: 4 }, {
       clue_pos_horses_intact: true, clue_mot_martha_summer: true,
-    })).toEqual(['gregor_returned', 'marta_lastwords', 'lena_papers']);
+    })).toEqual(['gregor_returned', 'marta_lastwords', 'elena_papers']);
   });
 
   it('costs a phase and counts as a conversation, but no fatigue', () => {
@@ -235,5 +235,47 @@ describe('the three groups are counted straight off the flag prefixes', () => {
     expect(getClueGroups(makeState({
       flags: { clue_pos_horses_intact: false, investigatedLedger: true },
     })).estate).toBe(0);
+  });
+});
+
+// ── 行动性信任 ──────────────────────────────────────────────────────────────
+
+describe('去马厩搭把手 is the route that carries 格雷格 to 4', () => {
+  const stableHelp = (over: Partial<GameState> = {}) =>
+    getFreeChoices(makeState({ phase: 'afternoon', ...over })).find(c => c.id === 'help_horses');
+
+  it('costs a phase, gives nothing back but the point', () => {
+    const choice = stableHelp();
+    expect(choice?.description).toBe('1 时段 · 无产出');
+    expect(choice?.effects?.relationships).toEqual({ gregor: 1 });
+    expect(choice?.effects?.fatigue).toBeUndefined();
+    expect(choice?.effects?.guldmark).toBeUndefined();
+  });
+
+  it('is offered in the afternoon and the evening, never in the morning', () => {
+    expect(stableHelp({ phase: 'evening' })).toBeDefined();
+    expect(stableHelp({ phase: 'morning' })).toBeUndefined();
+  });
+
+  it('happens once and does not come back', () => {
+    expect(stableHelp({ flags: { helpedWithHorses: true } })).toBeUndefined();
+  });
+
+  it('does not expire — the third act is not too late to start showing up', () => {
+    expect(stableHelp({ day: 28 })).toBeDefined();
+  });
+
+  it('disappears on the days he is not at the stable', () => {
+    expect(stableHelp({ day: 19, flags: { huntAttendedDay19: true } })).toBeUndefined();
+    expect(stableHelp({ flags: { gregorAway: true } })).toBeUndefined();
+  });
+
+  it('closes the gap: talk + roof + stable is exactly the 4 the bundle needs', () => {
+    const worked = makeState({
+      relationships: { ...ZERO, gregor: 2 },   // 修缮马厩屋顶 +1, 去马厩搭把手 +1
+      conversations: { ...ZERO, gregor: 6 },   // talk trust caps at +2
+      flags: { clue_pos_horses_intact: true, clue_pos_horse_returned: true },
+    });
+    expect(getAvailableFragments(worked).map(f => f.key)).toEqual(['gregor_condition']);
   });
 });

@@ -140,7 +140,8 @@
       "Bash(node -e \"const e=require\\('./src/data/endings/endings.json'\\); console.log\\(JSON.stringify\\(Object.keys\\(e\\)\\)\\); for\\(const k of Object.keys\\(e\\)\\){const v=e[k]; console.log\\('---',k, typeof v==='object'? JSON.stringify\\(Object.keys\\(v\\)\\):''\\)}\")",
       "Bash(node -e \"const g=require\\('./src/data/dialogue/greetings.json'\\); console.log\\(Object.keys\\(g\\)\\); console.log\\(Object.keys\\(g[Object.keys\\(g\\)[0]]\\)\\);\")",
       "Bash(npx vitest *)",
-      "Bash(node -e \"const e=require\\('./src/data/endings/endings.json'\\); for\\(const k of Object.keys\\(e\\)\\) console.log\\(k,'|',e[k].title,'|',e[k].subtitle\\);\")"
+      "Bash(node -e \"const e=require\\('./src/data/endings/endings.json'\\); for\\(const k of Object.keys\\(e\\)\\) console.log\\(k,'|',e[k].title,'|',e[k].subtitle\\);\")",
+      "Bash(node -e \"console.log\\(Object.keys\\(require\\('./src/data/scenes/action_results.json'\\)\\).join\\('  '\\)\\)\")"
     ]
   }
 }

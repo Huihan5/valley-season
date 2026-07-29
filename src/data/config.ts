@@ -14,8 +14,8 @@ export const INITIAL_RESOURCES = {
 export const INITIAL_RELATIONSHIPS = {
   gregor: 0,
   marta: 0,
-  lena: 0,
-  elke: 0,
+  elena: 0,
+  marguerite: 0,
   henk: 0,
   lorenz: 0,
 } as const;
@@ -103,7 +103,7 @@ export const HUNT_LAST_DAY = 21;
 // watching 蒂埃里 work are all 得体; only hiding at the edge of the camp is not.
 export const HUNT_OPENING_DECOROUS = ['A', 'B', 'C'];
 // 埃莱娜 only airs the winter quilts for a steward she expects to still be here.
-export const LENA_QUILTS_TRUST = 4;
+export const ELENA_QUILTS_TRUST = 4;
 
 // 磨岭 at night: what 亨克 is willing to do, by how far the player has got with him.
 export const MILLRIDGE_TRUST: Record<string, number> = {
@@ -137,8 +137,8 @@ export const FRAGMENT_TRUST = {
   gregor_condition: 4,
   marta_summer: 2,
   marta_lastwords: 4,
-  lena_papers: 3,
-  lena_burned: 4,
+  elena_papers: 3,
+  elena_burned: 4,
 } as const;
 
 // ── 结局判定 (GDD ch.9.1 / 10.1, V3_BUILD_BRIEF 阶段五) ──────────────────────
@@ -155,7 +155,7 @@ export const ENDING3_DEEP_TRUST_COUNT = 3; // … held by at least this many NPC
 export const LORD_IMPRESSION_MARGIN_MIN = 1;
 export const RETAIN_MARGIN = 2;
 // 埃莱娜 stays away from the rites unless she has decided about the player.
-export const LENA_RITES_TRUST = 4;
+export const ELENA_RITES_TRUST = 4;
 
 // ── 非资源行动 (GDD ch.5.4) ─────────────────────────────────────────────────
 // The two surveys are one-shot and expire: their whole use is preparing for one event.

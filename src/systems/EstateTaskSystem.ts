@@ -92,7 +92,7 @@ const SPECS: TaskSpec[] = [
     effect: '玛格丽特信任 +1',
     guldmark: GIFT_COST,
     doneFlag: 'boughtGift',
-    recipient: 'elke',
+    recipient: 'marguerite',
   },
   {
     id: 'task_gift_henk',

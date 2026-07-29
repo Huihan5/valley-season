@@ -18,7 +18,7 @@ import weatherLines from '../src/data/scenes/weather_lines.json';
 import actionResults from '../src/data/scenes/action_results.json';
 import ambient from '../src/data/scenes/ambient.json';
 
-const ZERO: Record<NpcId, number> = { gregor: 0, marta: 0, lena: 0, elke: 0, henk: 0, lorenz: 0 };
+const ZERO: Record<NpcId, number> = { gregor: 0, marta: 0, elena: 0, marguerite: 0, henk: 0, lorenz: 0 };
 
 function makeState(overrides: Partial<GameState> = {}): GameState {
   return {
@@ -196,7 +196,7 @@ describe('招呼语', () => {
 
   it('covers four residents across six tiers with two variants each', () => {
     const data = greetings as Record<string, Record<string, string[]>>;
-    expect(Object.keys(data).sort()).toEqual(['gregor', 'lena', 'lorenz', 'marta']);
+    expect(Object.keys(data).sort()).toEqual(['elena', 'gregor', 'lorenz', 'marta']);
     for (const [npc, tiers] of Object.entries(data)) {
       expect(Object.keys(tiers).sort(), npc).toEqual([...TIERS].sort());
       for (const [tier, lines] of Object.entries(tiers)) {

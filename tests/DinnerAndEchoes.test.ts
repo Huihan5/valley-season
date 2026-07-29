@@ -15,8 +15,8 @@ function makeState(overrides: Partial<GameState> = {}): GameState {
     openingPage: null,
     resources: { grain: 0, guldmark: 60, timber: 12, renown: 0 },
     fatigue: 0,
-    relationships: { gregor: 0, marta: 0, lena: 0, elke: 0, henk: 0, lorenz: 0 },
-    conversations: { gregor: 0, marta: 0, lena: 0, elke: 0, henk: 0, lorenz: 0 },
+    relationships: { gregor: 0, marta: 0, elena: 0, marguerite: 0, henk: 0, lorenz: 0 },
+    conversations: { gregor: 0, marta: 0, elena: 0, marguerite: 0, henk: 0, lorenz: 0 },
     nobleTrust: 0,
     lordImpression: 0,
     tenantTrust: -2,
@@ -133,7 +133,7 @@ describe('Day 10 · the petition rewards having walked the place', () => {
   const petition = (flags: FlagMap, marta = 0) =>
     getFixedEvent(10, 'afternoon', makeState({
       day: 10, phase: 'afternoon', flags,
-      relationships: { gregor: 0, marta, lena: 0, elke: 0, henk: 0, lorenz: 0 },
+      relationships: { gregor: 0, marta, elena: 0, marguerite: 0, henk: 0, lorenz: 0 },
     })) as EventData;
 
   it('shows only five names to a steward who never left the office', () => {

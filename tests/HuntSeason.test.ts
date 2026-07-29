@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { GameState, EventData, FlagMap, NpcId } from '../src/types/game';
 import { getFixedEvent, getFreeChoices, getEventById } from '../src/systems/EventSystem';
 
-const ZERO: Record<NpcId, number> = { gregor: 0, marta: 0, lena: 0, elke: 0, henk: 0, lorenz: 0 };
+const ZERO: Record<NpcId, number> = { gregor: 0, marta: 0, elena: 0, marguerite: 0, henk: 0, lorenz: 0 };
 
 function makeState(overrides: Partial<GameState> = {}): GameState {
   return {

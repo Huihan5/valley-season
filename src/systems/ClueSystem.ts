@@ -67,13 +67,13 @@ export const ESTATE_FRAGMENTS: FragmentSpec[] = [
     phases: ['evening'], scene: 'kitchen',
   },
   {
-    key: 'lena_papers', npc: 'lena', flag: 'clue_mot_elena_papers',
-    trust: FRAGMENT_TRUST.lena_papers, phases: ['afternoon', 'evening'], scene: 'default',
+    key: 'elena_papers', npc: 'elena', flag: 'clue_mot_elena_papers',
+    trust: FRAGMENT_TRUST.elena_papers, phases: ['afternoon', 'evening'], scene: 'default',
   },
   {
     // She comes to the office on her own. The player's action is staying up, not asking.
-    key: 'lena_burned', npc: 'lena', flag: 'clue_mot_elena_burned',
-    trust: FRAGMENT_TRUST.lena_burned, after: 'clue_mot_elena_papers',
+    key: 'elena_burned', npc: 'elena', flag: 'clue_mot_elena_burned',
+    trust: FRAGMENT_TRUST.elena_burned, after: 'clue_mot_elena_papers',
     phases: ['evening'], scene: 'office',
   },
 ];

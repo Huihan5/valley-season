@@ -8,8 +8,8 @@ import { GRAIN_EXCELLENT_THRESHOLD, NOBLE_TRUST_MAX, LORD_IMPRESSION_MAX } from 
 const NPC_NAMES: Record<NpcId, string> = {
   gregor: '格雷格',
   marta: '玛莎',
-  lena: '埃莱娜',
-  elke: '玛格丽特男爵夫人',
+  elena: '埃莱娜',
+  marguerite: '玛格丽特男爵夫人',
   henk: '亨克男爵',
   lorenz: '洛伦茨匠师',
 };
