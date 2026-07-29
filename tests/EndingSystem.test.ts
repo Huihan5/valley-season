@@ -312,3 +312,46 @@ describe('the epilogue belongs to the endings where the player is still here', (
     }
   });
 });
+
+// ── v3.2 补充：磨岭的储藏间与圣火节的镜像 ──────────────────────────────────
+
+describe('the 磨岭 storeroom follows the player into every ending', () => {
+  const fired = makeState({ resources: { grain: 40, guldmark: 0, timber: 0, renown: 0 } });
+  const withDeal = (s: GameState) => ({ ...s, flags: { ...s.flags, tookHenkDeal: true } });
+
+  it('says something different in each, and nothing without the deal', () => {
+    const cases: [EndingId, GameState, string][] = [
+      ['ending1', fired, '下一任会自己发现的'],
+      ['ending2', makeState(), '这间屋子的钥匙现在挂在你腰上'],
+      ['ending3', valleyState(), '会有人从磨岭过来，说一件很小的事'],
+      ['ending4a', makeState({ flags: CLUES_4A }), '磨岭的管事过来'],
+      ['ending4b', makeState({ flags: CLUES_4B }), '你把那一页翻过去了'],
+    ];
+    for (const [id, state, line] of cases) {
+      expect(text(id, withDeal(state)), id).toContain(line);
+      expect(text(id, state), id).not.toContain(line);
+    }
+  });
+});
+
+describe('the 圣火节 mirror plays only when both tests were passed', () => {
+  const bothState = (clues: FlagMap) => valleyState({ flags: clues });
+
+  it('gives 4A the table with one place nobody sits in', () => {
+    const both = text('ending4a', bothState(CLUES_4A));
+    expect(both).toContain('桌尾还有一副餐具，没有人坐');
+    expect(both).toContain('每年都摆');
+    expect(text('ending4a', makeState({ flags: CLUES_4A }))).not.toContain('桌尾还有一副餐具');
+  });
+
+  it('gives 4B two plates, one of them upstairs', () => {
+    const both = text('ending4b', bothState(CLUES_4B));
+    expect(both).toContain('桌上有两个盘子');
+    expect(text('ending4b', makeState({ flags: CLUES_4B }))).not.toContain('桌上有两个盘子');
+  });
+
+  it('still ends on 路德维希 after the mirror, not before it', () => {
+    const both = text('ending4b', bothState(CLUES_4B));
+    expect(both.indexOf('桌上有两个盘子')).toBeLessThan(both.indexOf('冬天就要来了'));
+  });
+});

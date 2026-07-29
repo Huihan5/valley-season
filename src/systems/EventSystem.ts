@@ -331,9 +331,20 @@ function processWynter(event: EventData, state: GameState): EventData {
       flags.wynterKnowsYouKnow = true;
     }
   } else if (clues >= WYNTER_PARTIAL_ACCOUNT) {
-    // The reordering itself is assembled from per-clue lines the drafts have
-    // not written yet; until they exist he says the order is wrong and stops.
-    parts.push(v.tier2_open, v.tier2_close);
+    // He does not repeat anything the player told him. He counts categories —
+    // some about time, one about a number, one about a visit, one about a horse
+    // — which is all a man who listened for half an hour can honestly give.
+    const has = (prefix: string) => countFlagsWithPrefix(state.flags, prefix) > 0;
+    parts.push(
+      v.tier2_open,
+      v.tier2_count,
+      has(CLUE_PREFIXES.motive) ? v.shape_motive : '',
+      has(CLUE_PREFIXES.officer) ? v.shape_officer : '',
+      has(CLUE_PREFIXES.noble) ? v.shape_noble : '',
+      has(CLUE_PREFIXES.position) ? v.shape_position : '',
+      v.tier2_cannot,
+      v.tier2_close,
+    );
   } else {
     parts.push(v.tier1);
   }

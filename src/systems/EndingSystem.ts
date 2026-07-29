@@ -100,7 +100,6 @@ export function composeEnding(state: GameState, id: EndingId): string {
   if (id === 'ending3') {
     parts.push(v.letter, v.marguerite_line, v.feast);
     parts.push(state.flags.admittedWantToStay ? v.admitted : v.unadmitted);
-    if (state.flags.tookHenkDeal) parts.push(v.henk);
   }
 
   if (id === 'ending4a') {
@@ -113,14 +112,17 @@ export function composeEnding(state: GameState, id: EndingId): string {
     parts.push(v.awake);
     parts.push(state.flags.admittedWantToStay ? v.admitted : v.unadmitted);
     parts.push(v.after, v.continued, v.ludwig);
-    if (state.flags.tookHenkDeal) parts.push(v.henk);
   }
 
-  // A player who found him and was taken in by the valley gets both. The mirrored
-  // 圣火节 passage for that case is not written yet — see docs/V3_PROGRESS.md.
+  // A player who found him and was also taken in by the valley gets that feast
+  // too, mirrored: the same table, with one place at it that no one sits in.
   if ((id === 'ending4a' || id === 'ending4b') && meetsEnding3(state)) {
     parts.push(v.festival_mirror);
   }
+
+  // The 磨岭 storeroom follows the player into every ending, saying something
+  // different in each. It is never commented on.
+  if (state.flags.tookHenkDeal) parts.push(v.henk);
 
   parts.push(...epilogue(id));
   return parts.filter(Boolean).join('\n\n');

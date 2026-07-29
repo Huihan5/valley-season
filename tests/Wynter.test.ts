@@ -132,3 +132,45 @@ describe('what v3 removed from him', () => {
     expect((getFixedEvent(22, 'evening', makeState()) as EventData).choices).toBeNull();
   });
 });
+
+// ── 第二档：他数的是形状，不是内容 ─────────────────────────────────────────
+
+describe('维特 tier two counts categories rather than repeating anything', () => {
+  const partial = scene;
+
+  it('names only the categories the player actually holds', () => {
+    // Three motive pieces and nothing else: he counts time, and stops.
+    const motiveOnly = partial({
+      clue_mot_martha_summer: true, clue_mot_handwriting: true, clue_mot_lorenz_question: true,
+    });
+    expect(motiveOnly).toContain('有几件是关于时间的');
+    expect(motiveOnly).not.toContain('关于一匹马的');
+    expect(motiveOnly).not.toContain('关于数目的');
+    expect(motiveOnly).not.toContain('关于一次拜访的');
+  });
+
+  it('adds the horse only when the position line has been started', () => {
+    const withHorse = partial({
+      clue_mot_martha_summer: true, clue_mot_handwriting: true, clue_pos_horses_intact: true,
+    });
+    expect(withHorse).toContain('还有一件是关于一匹马的');
+  });
+
+  it('admits he cannot tell whether it is one thing or three', () => {
+    const three = partial({
+      clue_mot_martha_summer: true, clue_ofc_timothy_person: true, clue_nob_marguerite: true,
+    });
+    expect(three).toContain('可能是一件事，也可能是三件事');
+    expect(three).toContain('您给我的不够我判断');
+    expect(three).toContain('缺的那几块，应该都在您认识的人手里');
+  });
+
+  it('never restates the content of a single fragment', () => {
+    const carrying = partial({
+      clue_mot_martha_summer: true, clue_mot_handwriting: true, clue_ofc_timothy_nature: true,
+    });
+    // The actual words 玛莎 and the ledger used stay with them.
+    expect(carrying).not.toContain('从夏天开始');
+    expect(carrying).not.toContain('越写越少');
+  });
+});
