@@ -171,14 +171,36 @@ describe('getFixedEvent — Day 12 processDay12', () => {
     expect(audit({ met_timothy: true })?.sceneText).toContain('集市那次');
   });
 
+  it('asks who filed the receipts before it asks anything of the steward', () => {
+    expect(audit({})?.sceneText).toContain('谁经手过这些收条');
+    expect(audit({})?.choices?.map(c => c.id))
+      .toEqual(['receipts_maid', 'receipts_mine', 'receipts_unknown']);
+    // The officer judgment moved to the second beat of the same scene.
+    expect(audit({})?.next).toBe('day12_officer');
+  });
+
+  it('charges a point for naming her, and nothing for either way of not', () => {
+    const byId = (id: string) => audit({})?.choices?.find(c => c.id === id);
+    expect(byId('receipts_maid')?.effects?.relationships).toEqual({ elena: -1 });
+    expect(byId('receipts_maid')?.effects?.flags?.exposedElena).toBe(true);
+    // A lie and a technicality are both protection; the cost differs, the flag does not.
+    expect(byId('receipts_mine')?.effects?.flags?.protectedElena).toBe(true);
+    expect(byId('receipts_unknown')?.effects?.flags?.protectedElena).toBe(true);
+    expect(byId('receipts_mine')?.effects?.relationships).toBeUndefined();
+  });
+
   it('pays the fragment only for the technical question', () => {
-    const choices = audit({})?.choices ?? [];
+    const choices = getEventById('day12_officer', makeState({ day: 12 }))?.choices ?? [];
     const withClue = choices.filter(c => c.effects?.flags?.clue_ofc_timothy_nature);
     expect(withClue.map(c => c.id)).toEqual(['audit_nature']);
   });
 
   it('gives the officer judgment no microcopy at all (GDD 11.6)', () => {
-    for (const choice of audit({})?.choices ?? []) {
+    const both = [
+      ...(audit({})?.choices ?? []),
+      ...(getEventById('day12_officer', makeState({ day: 12 }))?.choices ?? []),
+    ];
+    for (const choice of both) {
       expect(choice.description, choice.id).toBeUndefined();
     }
   });

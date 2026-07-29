@@ -168,6 +168,13 @@ export const ORCHARD_FULL_YIELD_LAST_DAY = 15; // after this the fruit is on the
 // Reviewing the ledger at night pays off only once it becomes a habit.
 export const NIGHT_LEDGER_CLUE_AT = 3;
 
+// 格雷格 counts, he does not listen. Three afternoons of his work, and the
+// paperwork read twice, are the two routes GDD 5.5 assigns without a mechanism.
+export const HORSE_CARE_TRUST_AT = 3;
+export const OFFICE_FOLIO_AT = 2;
+// Where he stops counting and starts talking about sixty years (drafts 3.5c).
+export const TIMBER_RESTRAINT_AT = 20;
+
 // Two-tier grain thresholds (GDD ch.5.4 / 10.1).
 // Below 留任线 → dismissed. 留任线 to 优秀线 → ending 2 at best. 优秀线 and above → ending 3 / 4A / 4B eligible.
 export const GRAIN_RETAIN_THRESHOLD = 75;    // 留任线：冬季口粮 60 + 税约 13

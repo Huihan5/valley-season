@@ -141,7 +141,17 @@
       "Bash(node -e \"const g=require\\('./src/data/dialogue/greetings.json'\\); console.log\\(Object.keys\\(g\\)\\); console.log\\(Object.keys\\(g[Object.keys\\(g\\)[0]]\\)\\);\")",
       "Bash(npx vitest *)",
       "Bash(node -e \"const e=require\\('./src/data/endings/endings.json'\\); for\\(const k of Object.keys\\(e\\)\\) console.log\\(k,'|',e[k].title,'|',e[k].subtitle\\);\")",
-      "Bash(node -e \"console.log\\(Object.keys\\(require\\('./src/data/scenes/action_results.json'\\)\\).join\\('  '\\)\\)\")"
+      "Bash(node -e \"console.log\\(Object.keys\\(require\\('./src/data/scenes/action_results.json'\\)\\).join\\('  '\\)\\)\")",
+      "Bash(cd \"C:/Users/Lenovo/Documents/Claude/Projects/valley-season\" && git show HEAD:docs/GDD.md > /tmp/gdd_local.md && diff /tmp/gdd_local.md updates0728/GDD_v3.1.md | head -40 && echo \"=== 本地版与 v3.1 的差异行数 ===\" && diff /tmp/gdd_local.md updates0728/GDD_v3.1.md | grep -c \"^[<>]\")",
+      "Bash(node -e \"const d=require\\('./src/data/events/day15_stumps.json'\\); console.log\\(JSON.stringify\\({id:d.id,day:d.day,phase:d.phase,forced:d.forced,activationFlag:d.activationFlag,advancesPhase:d.advancesPhase}\\)\\)\")",
+      "Bash(awk 'NR>=1026 && NR<=1062 {printf \"%d| %s\\\\n\", NR, $0}' updates0729/NARRATIVE_DRAFTS_v1.2.md)",
+      "Bash(awk 'NR>=1070 && NR<=1200 && \\(/^> [^*]/ || /^\\\\*\\\\*选/ || /^\\\\| [ABC] \\\\|/ || /^####/\\) {printf \"%d| %s\\\\n\", NR, substr\\($0,1,44\\)}' updates0729/NARRATIVE_DRAFTS_v1.2.md)",
+      "Bash(awk 'NR>=2300 && NR<=2400 && \\(/^> [^*]/ || /^\\\\| [ABC] \\\\|/ || /^\\\\*\\\\*/\\) {printf \"%d| %s\\\\n\", NR, substr\\($0,1,40\\)}' updates0729/NARRATIVE_DRAFTS_v1.2.md)",
+      "Bash(awk 'NR>=4765 && NR<=4840 && \\(/^> [^*]/ || /^\\\\*\\\\*/ || /^###/\\) {printf \"%d| %s\\\\n\", NR, substr\\($0,1,40\\)}' updates0729/NARRATIVE_DRAFTS_v1.2.md)",
+      "Bash(awk 'NR>=4770 && NR<=4836 && \\(/^\\\\*\\\\*/ || /^若/\\) {printf \"%d| %s\\\\n\", NR, substr\\($0,1,60\\)}' updates0729/NARRATIVE_DRAFTS_v1.2.md)",
+      "Bash(node -e \"const d=require\\('./src/data/events/day13_echo.json'\\); console.log\\(JSON.stringify\\({id:d.id,day:d.day,timing:d.timing,phase:d.phase,forced:d.forced,choices:d.choices,variants:Object.keys\\(d.variants||{}\\)},null,1\\)\\); console.log\\('scene:',d.sceneText\\)\")",
+      "Bash(awk 'NR>=4769 && NR<=4838 {printf \"%d| %s\\\\n\", NR, substr\\($0,1,50\\)}' updates0729/NARRATIVE_DRAFTS_v1.2.md)",
+      "Bash(node -e \"const d=require\\('./src/data/events/day13_echo.json'\\); console.log\\(JSON.stringify\\(Object.keys\\(d\\)\\), '| activationFlag =', d.activationFlag\\)\")"
     ]
   }
 }

@@ -249,8 +249,10 @@ describe('行动结果文本', () => {
     expect(data.night_ledger_3[0]).toContain('把自己占的地方越写越少');
   });
 
-  it('has no text past the third ledger night, so the revelation is not replayed', () => {
-    expect(getActionResult('night_ledger_4', first)).toBe('');
+  it('lets the fourth night be a fourth night, without replaying the revelation', () => {
+    const fourth = getActionResult('night_ledger_4', first);
+    expect(fourth).toContain('这件事你已经看完了');
+    expect(fourth).not.toContain('把自己占的地方越写越少');
   });
 
   it('substitutes the yield into the text', () => {

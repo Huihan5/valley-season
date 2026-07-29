@@ -205,8 +205,21 @@ describe('the three echoes come back the next morning', () => {
     expect(text('none')).toContain('有两个人没有到');
   });
 
-  it('only tidies the office when the audit found something', () => {
-    expect(echo(13, { auditFlagged: true })?.sceneText).toContain('削好的铅笔');
-    expect(echo(13, { auditResult: 'clean' })).toBeNull();
+  it('tidies the office only for a steward who kept her out of the record', () => {
+    expect(echo(13, { auditResult: 'clean', protectedElena: true })?.sceneText).toContain('削好的铅笔');
+    expect(echo(13, { auditResult: 'clean', exposedElena: true })?.sceneText).toContain('办公室今天没有人整理');
+  });
+
+  it('pays her the point here rather than on the day it was earned', () => {
+    expect(echo(13, { auditResult: 'clean', protectedElena: true })?.onEnterEffects?.relationships)
+      .toEqual({ elena: 1 });
+    // Exposing her already cost a point on Day 12; it is not charged twice.
+    expect(echo(13, { auditResult: 'clean', exposedElena: true })?.onEnterEffects?.relationships).toBeUndefined();
+  });
+
+  it('adds the relabelled pages only when the audit is still open', () => {
+    expect(echo(13, { auditResult: 'flagged', auditFlagged: true, protectedElena: true })?.sceneText)
+      .toContain('被人重新夹上了标签');
+    expect(echo(13, { auditResult: 'clean', protectedElena: true })?.sceneText).not.toContain('被人重新夹上了标签');
   });
 });

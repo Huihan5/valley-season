@@ -12,6 +12,7 @@ import {
   YIELD_TIER_MEAGRE_MAX,
   YIELD_TIER_FAIR_MAX,
   TIMBER_SEASON_QUOTA,
+  TIMBER_RESTRAINT_AT,
   FORAGE_YIELD_RANGE,
   ORCHARD_YIELD_RANGE,
   ORCHARD_FULL_YIELD_LAST_DAY,
@@ -64,8 +65,17 @@ export function getTimberFelled(state: GameState): number {
   return Number(state.flags.timberFelled ?? 0);
 }
 
+/**
+ * The season's allowance is 25 by the decree, which is written for the whole
+ * north district rather than for this slope. A player who stops at 20 gives up
+ * five units for good — the cap moves down with the decision (drafts 3.5c).
+ */
+export function getTimberQuota(state: GameState): number {
+  return state.flags.respectedLand ? TIMBER_RESTRAINT_AT : TIMBER_SEASON_QUOTA;
+}
+
 export function getTimberQuotaLeft(state: GameState): number {
-  return Math.max(0, TIMBER_SEASON_QUOTA - getTimberFelled(state));
+  return Math.max(0, getTimberQuota(state) - getTimberFelled(state));
 }
 
 /** 未达留任线 / 留任线 / 优秀线 — the two numbers a player can work out for themselves (GDD ch.5.4). */

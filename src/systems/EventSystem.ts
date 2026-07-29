@@ -34,6 +34,7 @@ import {
   ELENA_QUILTS_TRUST, MILLRIDGE_TRUST, MILLRIDGE_CASH, MILLRIDGE_TIMBER, MILLRIDGE_SPRING_SEED,
   SURVEY_FIELDS_LAST_DAY, SURVEY_FOREST_LAST_DAY,
   ORCHARD_FULL_YIELD_LAST_DAY, NIGHT_LEDGER_CLUE_AT,
+  HORSE_CARE_TRUST_AT, OFFICE_FOLIO_AT, TIMBER_RESTRAINT_AT,
 } from '../data/config';
 
 import day1Data from '../data/events/day1.json';
@@ -51,6 +52,9 @@ import day8Echo from '../data/events/day8_echo.json';
 import day10Data from '../data/events/day10.json';
 import day11Echo from '../data/events/day11_echo.json';
 import day13Echo from '../data/events/day13_echo.json';
+import day12Officer from '../data/events/day12_officer.json';
+import timberRestraint from '../data/events/timber_restraint.json';
+import officeFolio from '../data/events/office_folio.json';
 import day12Data from '../data/events/day12.json';
 import day15Data from '../data/events/day15.json';
 import day15Stumps from '../data/events/day15_stumps.json';
@@ -75,7 +79,8 @@ const FIXED_EVENTS = [
   day7Arrival, day7Hartmann, day7Departure, day7Return,
   day6Timothy,
   day8Echo, day10Data, day11Echo, day13Echo, day13Thierry,
-  day12Data, day15Data, day15Stumps, day15Record,
+  day12Data, day12Officer, day15Data, day15Stumps, day15Record,
+  timberRestraint, officeFolio,
   day27Officers, day27StreetCorner,
   day18Data, day18HuntArrival,
   day19HuntRide,
@@ -121,7 +126,8 @@ function processDay12(event: EventData, state: GameState): EventData {
     state.flags.met_timothy ? v.met_before : v.first_meeting,
     v.body,
     noticed ? v.noticed : v.missed,
-    v.closing,
+    // He asks who filed the receipts before he asks anything of the steward.
+    v.receipts,
   ].filter(Boolean).join('\n\n');
 
   return {
@@ -135,6 +141,29 @@ function processDay12(event: EventData, state: GameState): EventData {
         auditResult: noticed ? 'clean' : 'flagged',
         ...(noticed ? {} : { auditFlagged: true }),
       },
+    },
+  };
+}
+
+/**
+ * Day 13: whether the office was tidied this morning. She does not know what was
+ * said to the inspector, only that he never came to find her — and that is the
+ * whole of it (drafts 4.16). The point she is owed is paid here, not on Day 12.
+ */
+function processDay13Echo(event: EventData, state: GameState): EventData {
+  const v = event.variants ?? {};
+  const protectedHer = !!state.flags.protectedElena;
+  const auditOpen = !!state.flags.auditFlagged;
+
+  return {
+    ...event,
+    sceneText: [
+      protectedHer ? v.protected : v.exposed,
+      auditOpen ? v.audit_tail : '',
+    ].filter(Boolean).join('\n\n'),
+    onEnterEffects: {
+      ...event.onEnterEffects,
+      ...(protectedHer ? { relationships: { elena: 1 } } : {}),
     },
   };
 }
@@ -443,6 +472,7 @@ function process(raw: EventData, state: GameState): EventData {
   if (event.id === 'day18_hunt_arrival') return processHuntOpening(event, state);
   if (event.id === 'day19_hunt_ride') return processHuntRide(event, state);
   if (event.id === 'day21_hunt_lorenz') return processHuntLorenz(event, state);
+  if (event.id === 'day13_echo') return processDay13Echo(event, state);
   if (event.id === 'day10_petition') return processDay10(event, state);
   if (event.id === 'day12_audit') return processDay12(event, state);
   if (event.id === 'day22_wynter') return processWynter(event, state);
@@ -594,8 +624,15 @@ export function getFreeChoices(state: GameState): Choice[] {
       },
       resultKind: 'fell_timber',
       resultVars: { n: timberGain, r: Math.max(0, quotaLeft - timberGain) },
-      disabled: !canFellTimber(weather) || exhausted,
-      disabledReason: !canFellTimber(weather) ? '雨天无法采伐' : exhausted ? '你过于疲惫' : undefined,
+      // Crossing 20 is where he stops counting and says the thing about sixty years.
+      ...(getTimberFelled(state) + timberGain >= TIMBER_RESTRAINT_AT
+        && !flags.timberRestraintAnswered
+        ? { nextEvent: 'timber_restraint' }
+        : {}),
+      disabled: !canFellTimber(weather) || exhausted || quotaLeft <= 0,
+      disabledReason: quotaLeft <= 0
+        ? '本季采伐额度已用尽'
+        : !canFellTimber(weather) ? '雨天无法采伐' : exhausted ? '你过于疲惫' : undefined,
     });
   }
 
@@ -647,6 +684,10 @@ export function getFreeChoices(state: GameState): Choice[] {
 
   if (phase === 'morning') {
     // v3: the office is where 埃莱娜 is. There is no separate "go and talk to her".
+    // The second morning in the archive turns something up: a folio with a
+    // pressed sprig in it, and a decision about whether to ask her (drafts 3.5c).
+    const officeVisits = Number(flags.officeWorkCount ?? 0) + 1;
+    const findsFolio = officeVisits === OFFICE_FOLIO_AT && !flags.folioAnswered;
     choices.push({
       id: 'visit_office',
       text: '处理办公室文书',
@@ -654,10 +695,12 @@ export function getFreeChoices(state: GameState): Choice[] {
       effects: {
         fatigue: 0,
         conversationWith: 'elena',
+        flags: { officeWorkCount: officeVisits },
         nextScene: 'office',
         logEntry: '你在办公室处理了一上午的文书。',
       },
       resultKind: 'office_paperwork',
+      ...(findsFolio ? { nextEvent: 'office_folio' } : {}),
     });
 
     // 巡视是限时的一次性行动：用途只有对应的那一个事件，过期就不能再做。
@@ -889,23 +932,26 @@ export function getFreeChoices(state: GameState): Choice[] {
     }
   }
 
-  // 格雷格 does not judge people by what they say to him (GDD 5.5). Spending an
-  // afternoon on his work, once, is the second of his three trust routes and the
-  // one that carries him to 4 — where the cloth bundle is. No deadline: a player
-  // who works out in the third act that they should be in the stable is not too late.
-  if ((phase === 'afternoon' || phase === 'evening')
-    && !flags.helpedWithHorses && isGregorAtStable(state)) {
+  // 格雷格 does not judge people by what they say to him (GDD 5.5). Three
+  // afternoons of his work is the route that carries him to 4, where the cloth
+  // bundle is. No deadline: a player who works out in the third act that they
+  // should be in the stable is not too late.
+  if ((phase === 'afternoon' || phase === 'evening') && isGregorAtStable(state)) {
+    const cared = Number(flags.horseCareCount ?? 0) + 1;
+    const earns = cared === HORSE_CARE_TRUST_AT;
     choices.push({
       id: 'help_horses',
       text: '去马厩搭把手',
-      description: '1 时段 · 无产出',
+      description: '1 时段 · 计一次与格雷格的交谈',
       effects: {
-        relationships: { gregor: 1 },
-        flags: { helpedWithHorses: true },
+        conversationWith: 'gregor',
+        ...(earns ? { relationships: { gregor: 1 } } : {}),
+        flags: { horseCareCount: cared },
         nextScene: 'stable',
         logEntry: '你在马厩跟着格雷格干了半天活。',
       },
-      resultKind: 'stable_help',
+      // The third time he takes a second brush down off the rack.
+      resultKind: earns ? 'stable_help_third' : 'stable_help',
     });
   }
 
@@ -919,7 +965,10 @@ export function getFreeChoices(state: GameState): Choice[] {
     // Reading the ledger at night pays off only as a habit: the third night is the
     // one where eight Octobers laid side by side say something. This is the only
     // clue in the game that needs no NPC at all.
+    // Past the third night the ledger has said its piece; the player may keep
+    // sitting with it, and the text says so (drafts 3.5b).
     const ledgerNights = Number(flags.nightLedgerCount ?? 0);
+    const ledgerKind = Math.min(ledgerNights + 1, NIGHT_LEDGER_CLUE_AT + 1);
     choices.push({
       id: 'review_accounts',
       text: '夜间审查账目',
@@ -933,8 +982,7 @@ export function getFreeChoices(state: GameState): Choice[] {
         nextScene: 'office',
         logEntry: '你在灯下审查了账目到深夜。',
       },
-      // Only the first three nights have text; past that the ledger has said its piece.
-      resultKind: `night_ledger_${ledgerNights + 1}`,
+      resultKind: `night_ledger_${ledgerKind}`,
     });
 
     // 洛伦茨 keeps vigil at the manor forge-hall on Thursdays. Any other night the

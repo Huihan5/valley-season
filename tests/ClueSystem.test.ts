@@ -246,8 +246,8 @@ describe('去马厩搭把手 is the route that carries 格雷格 to 4', () => {
 
   it('costs a phase, gives nothing back but the point', () => {
     const choice = stableHelp();
-    expect(choice?.description).toBe('1 时段 · 无产出');
-    expect(choice?.effects?.relationships).toEqual({ gregor: 1 });
+    expect(choice?.description).toBe('1 时段 · 计一次与格雷格的交谈');
+    expect(choice?.effects?.conversationWith).toBe('gregor');
     expect(choice?.effects?.fatigue).toBeUndefined();
     expect(choice?.effects?.guldmark).toBeUndefined();
   });
@@ -257,8 +257,14 @@ describe('去马厩搭把手 is the route that carries 格雷格 to 4', () => {
     expect(stableHelp({ phase: 'morning' })).toBeUndefined();
   });
 
-  it('happens once and does not come back', () => {
-    expect(stableHelp({ flags: { helpedWithHorses: true } })).toBeUndefined();
+  it('pays the trust point on the third visit, not the first', () => {
+    expect(stableHelp()?.effects?.relationships).toBeUndefined();
+    expect(stableHelp({ flags: { horseCareCount: 1 } })?.effects?.relationships).toBeUndefined();
+    const third = stableHelp({ flags: { horseCareCount: 2 } });
+    expect(third?.effects?.relationships).toEqual({ gregor: 1 });
+    expect(third?.resultKind).toBe('stable_help_third');
+    // A fourth afternoon still counts as a visit, but he has said his piece.
+    expect(stableHelp({ flags: { horseCareCount: 3 } })?.effects?.relationships).toBeUndefined();
   });
 
   it('does not expire — the third act is not too late to start showing up', () => {
@@ -272,7 +278,7 @@ describe('去马厩搭把手 is the route that carries 格雷格 to 4', () => {
 
   it('closes the gap: talk + roof + stable is exactly the 4 the bundle needs', () => {
     const worked = makeState({
-      relationships: { ...ZERO, gregor: 2 },   // 修缮马厩屋顶 +1, 去马厩搭把手 +1
+      relationships: { ...ZERO, gregor: 2 },   // 修缮马厩屋顶 +1, 照顾马匹三次 +1
       conversations: { ...ZERO, gregor: 6 },   // talk trust caps at +2
       flags: { clue_pos_horses_intact: true, clue_pos_horse_returned: true },
     });
