@@ -257,6 +257,17 @@ export function readRumours(indices: number[]): string[] {
   return indices.map(i => RUMOUR_POOL[i]).filter(Boolean);
 }
 
+// The kingdom layer on its own, for the traveller who actually came from there.
+const KINGDOM_RUMOURS = (RUMOURS.kingdom as string[]) ?? [];
+
+export function drawKingdomRumour(rng: () => number): number {
+  return Math.floor(rng() * KINGDOM_RUMOURS.length);
+}
+
+export function readKingdomRumour(index: number): string {
+  return KINGDOM_RUMOURS[index] ?? '';
+}
+
 /** Rumour indices are stored on the day's flag as "3,17,25". */
 export function rumoursFlagKey(day: number): string {
   return `marketRumours_day${day}`;

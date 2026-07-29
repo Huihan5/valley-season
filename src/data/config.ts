@@ -263,6 +263,25 @@ export const MARKET_TRADE_FATIGUE = 1;  // 集市交易本身，每日一次
 export const ACT_TWO_START = 11;
 export const ACT_THREE_START = 23;
 
+// ── 随机事件池 (GDD ch.8.2) ─────────────────────────────────────────────────
+// 上午行动结束后判定一次，一天最多一个。三档概率互斥：当天本来就排了固定事件
+// 就降到一成，连着两天什么都没发生就升到五成，其余按基础值。
+export const RANDOM_EVENT_CHANCE = 0.3;
+export const RANDOM_EVENT_CHANCE_WITH_FIXED = 0.1;
+export const RANDOM_EVENT_CHANCE_QUIET = 0.5;
+export const RANDOM_EVENT_QUIET_DAYS = 2;
+
+// 每个事件自己的窗口（GDD ch.8.2，草稿 §06）。区间是一段日子，
+// days 是这几天当中的某一天：第三幕那一天只可能落在这四天里。
+export type RandomEventWindow = { from: number; to: number } | { days: number[] };
+export const RANDOM_EVENT_WINDOWS: Record<string, RandomEventWindow> = {
+  random_lost_ox: { from: 5, to: 17 },
+  random_tool_pedlar: { from: 5, to: 20 },
+  random_forge_city_merchant: { from: 11, to: 20 },
+  random_well: { from: 8, to: 29 },
+  random_quiet_day: { days: [24, 25, 28, 29] },
+};
+
 // ── 场景层 (GDD ch.13.1) ────────────────────────────────────────────────────
 // 闲笔 stay rare on purpose: two or three a week, never a reward, never a lead.
 export const AMBIENT_CHANCE = 0.18;

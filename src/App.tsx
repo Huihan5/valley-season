@@ -4,6 +4,7 @@ import { generateWeather } from './systems/WeatherSystem';
 import { nextPhase, isDemoComplete } from './systems/TimeSystem';
 import { applyDailyOperatingCost, clampResources } from './systems/ResourceSystem';
 import { getFreeChoices, getFixedEvent, getEventById, getDayEndEffects } from './systems/EventSystem';
+import { rollRandomEvent, getPendingRandomEvent, markEventDay } from './systems/RandomEventSystem';
 import { determineEnding, getEndingData, composeEnding, EndingId } from './systems/EndingSystem';
 import {
   adjustActionTrust, adjustNobleTrust, adjustLordImpression, adjustTenantTrust, recordConversation,
@@ -82,7 +83,12 @@ function chainedEvent(state: GameState, id: string | undefined): EventData | nul
 
 /** Put an event on screen: its own text, its own choices, its arrival effects. */
 function enterEvent(state: GameState, event: EventData): GameState {
-  const withEvent = { ...state, activeEvent: event, eventResolved: false };
+  const withEvent = {
+    ...state,
+    activeEvent: event,
+    eventResolved: false,
+    flags: markEventDay(state.flags, state.day),
+  };
   const entered = applyEffects(withEvent, event.onEnterEffects ?? {});
   return {
     ...entered,
@@ -94,7 +100,8 @@ function enterEvent(state: GameState, event: EventData): GameState {
 }
 
 function buildStateForPhase(state: GameState): GameState {
-  const event = getFixedEvent(state.day, state.phase, state);
+  // What was scheduled first, then whatever the day happened to bring.
+  const event = getFixedEvent(state.day, state.phase, state) ?? getPendingRandomEvent(state);
   if (event && !state.flags[`event_done_${event.id}`]) {
     return enterEvent(state, event);
   }
@@ -280,6 +287,13 @@ function advancePhase(state: GameState): GameState {
       };
       next = { ...next, phase: 'afternoon' };
     }
+  }
+
+  // 上午行动结束后判定 (GDD ch.8.2). Exhaustion eats the morning without excusing
+  // the day from having something happen in it, so the roll goes by the clock.
+  if (next.phase === 'afternoon') {
+    const rolled = rollRandomEvent(next, Math.random);
+    if (rolled) next = { ...next, flags: { ...next.flags, ...rolled } };
   }
 
   return buildStateForPhase(next);

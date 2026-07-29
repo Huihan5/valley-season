@@ -471,6 +471,16 @@ export function getFixedEvent(day: number, phase: DayPhase, state: GameState): E
   return process(found, state);
 }
 
+/**
+ * Whether the day carries a scheduled event at all. The random window narrows on
+ * such days: a day that already has something in it does not need another thing.
+ */
+export function hasFixedEventToday(state: GameState): boolean {
+  return FIXED_EVENTS.some(
+    e => e.day === state.day && (!e.activationFlag || !!state.flags[e.activationFlag])
+  );
+}
+
 function process(raw: EventData, state: GameState): EventData {
   // Timing is the authority once an event declares it; phase and cost follow from it.
   const event: EventData = raw.timing

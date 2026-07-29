@@ -16,7 +16,7 @@
 | 3.5 | 行动层（CC_BRIEF v1.1 附录一新增） | 已完成 |
 | 4 | 事件改造与新增 | 已完成 |
 | 5 | 调查系统与结局 | 已完成 |
-| 6 | PlaytestFeedback 收尾、随机事件池、引号归一 | 未开始（见「阶段六开工须知」） |
+| 6 | PlaytestFeedback 收尾、随机事件池、引号归一 | 进行中：票一 / 三 / 四 已完成，票二（UI）待做 |
 
 ---
 
@@ -298,6 +298,9 @@ GDD 3.3 给炉堂列了四件事：沉思、线索整理、恢复体力、与洛
 
 四张票，合计 6 SP。**阶段一至五全部完成**，416 个测试为绿，工作树与 origin/main 同步。
 
+> **进度（7-29 晚）**：票一、票三、票四已完成，只剩票二（UI）。三票的结论见 CHANGELOG；下面的原文保留，因为票二要用它那张分诊表。
+> 票一实际只改动一处（狩猎季请柬），扫库确认其余日期表述早已是历法制。
+
 ### 票一 · 日期改为真实历法（1 SP）
 
 PlaytestFeedback 1.e：Day 19 下午的文本里出现"Day 15 那天"，出戏。
@@ -404,14 +407,14 @@ Epic 建议名：`Valley Season v3 rebuild`。合计 35 SP。
 | `[v3] Rewrite ending determination; retire "The Efficient Machine"` | 2 |
 | `[v3] Conditional ending text and Ludwig epilogue` | 2 |
 
-### 阶段六 · Playtest fixes（3 SP）
+### 阶段六 · Playtest fixes（6 SP）
 
-| Summary | SP |
-|---|---|
-| `[v3] Convert date references to real calendar dates (Day X = Oct X)` | 1 |
-| `[v3] Remaining PlaytestFeedback UI items` | 2 |
-| `[v3] Random event pool: five events, 30/10/50% window` | 2 |
-| `[v3] Normalise all quotation marks in src/data to full-width` | 1 |
+| Summary | SP | 状态 |
+|---|---|---|
+| `[v3] Convert date references to real calendar dates (Day X = Oct X)` | 1 | 已完成 |
+| `[v3] Remaining PlaytestFeedback UI items` | 2 | 待做 |
+| `[v3] Random event pool: five events, 30/10/50% window` | 2 | 已完成 |
+| `[v3] Normalise all quotation marks in src/data to full-width` | 1 | 已完成 |
 
 ---
 

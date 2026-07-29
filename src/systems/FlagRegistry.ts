@@ -31,6 +31,17 @@ export const INITIAL_FLAGS: FlagMap = {
    * Written by: 亨克 arc (阶段四).
    */
   millridgeDealSigned: false,
+
+  /**
+   * 随机事件池的记账 (GDD ch.8.2)。一天只判定一次，判定结果挂在 randomEventPending
+   * 上等它的时点到来；lastEventDay 让「连续两天没有事发生」这句话可以被算出来。
+   * Written by: RandomEventSystem.
+   */
+  randomRolledDay: 0,
+  randomEventPending: '',
+  randomEventVariant: '',
+  randomEventRumour: 0,
+  lastEventDay: 0,
 };
 
 /**
