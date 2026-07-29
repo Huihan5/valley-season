@@ -84,6 +84,7 @@ Names follow GDD ch.12. Both forms are given here because the bilingual build ne
 | Henk van Millridge 亨克男爵 | Fast, enthusiastic, proposing | Warm-transactional | Always starts with "我有个想法——" |
 | Lorenz Halloway 洛伦茨匠师 | Soft, questioning, unhurried | Warm-neutral | Answers with questions. Forge metaphors. |
 | Inspector Kessler 提莫西·凯斯勒 (稽查官) | Flat, exact, temperature-less | Zero | Numbers. Percentages. No pleasantries. |
+| Thierry Vallant 蒂埃里 (林务官) | Loose and talkative, hands moving — then exact the moment it is about trees | Warm, with one cold beat available ("我就是公国") | Measures twice, then says the damning number lightly. Hands you the measurement, never the accusation. |
 | Wynter 维特 | Curious, too-specific | Ambiguous | Holds nothing the player does not already hold. He only puts it back in causal order (GDD 4.5, 9.6). |
 | Ludwig von Alder 路德维希 (letters, the opening, the epilogue) | Terse, precise, no warmth | Cold-efficient | A man who does not waste words. Forgehold-trained. |
 
