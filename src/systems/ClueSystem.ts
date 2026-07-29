@@ -158,6 +158,17 @@ export function getLorenzChapelExtra(state: GameState): ChapelExtra | null {
     };
   }
 
+  // He has already said it, wherever he said it. Once, and then the room goes
+  // back to being a room. The line is deliberately placeless so it reads the
+  // same whether the hunt or the forge-hall got there first.
+  if (state.flags.clue_mot_lorenz_question && !state.flags.lorenzAcknowledgedTold) {
+    return {
+      flags: { lorenzAcknowledgedTold: true },
+      resultText: FRAGMENTS.lorenz_already_told.text,
+      logEntry: FRAGMENTS.lorenz_already_told.log,
+    };
+  }
+
   return null;
 }
 

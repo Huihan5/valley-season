@@ -152,7 +152,9 @@ describe('洛伦茨 says his piece because the player came, not because they ask
       relationships: { ...ZERO, lorenz: 3 },
       flags: { clue_mot_lorenz_question: true },
     });
-    expect(getLorenzChapelExtra(told)).toBeNull();
+    const extra = getLorenzChapelExtra(told);
+    expect(extra?.resultText).not.toContain('他把这个活儿做得越好');
+    expect(extra?.flags.clue_mot_lorenz_question).toBeUndefined();
   });
 
   it('explains why he broke his own rule at trust 4, once, and gives no clue for it', () => {
@@ -168,7 +170,7 @@ describe('洛伦茨 says his piece because the player came, not because they ask
       relationships: { ...ZERO, lorenz: 5 },
       flags: { clue_mot_lorenz_question: true, lorenzExplainedWhy: true },
     });
-    expect(getLorenzChapelExtra(after)).toBeNull();
+    expect(getLorenzChapelExtra(after)?.resultText).not.toContain('我这一行不该靠猜');
   });
 
   it('rides the forge-hall visit rather than an action of its own', () => {
@@ -350,5 +352,29 @@ describe('the woods keep a record of what was taken out of them', () => {
       flags: { timberFelled: 23, timberRestraintAnswered: true, brokeLandPromise: true },
     })).find(c => c.id === 'fell_timber');
     expect(after?.effects?.relationships).toBeUndefined();
+  });
+});
+
+describe('洛伦茨 will not say the same thing twice', () => {
+  const chapel = (trust: number, flags: FlagMap) =>
+    getLorenzChapelExtra(makeState({ relationships: { ...ZERO, lorenz: trust }, flags }));
+
+  it('acknowledges having said it, once, from either direction', () => {
+    const told = chapel(3, { clue_mot_lorenz_question: true });
+    expect(told?.resultText).toContain('那件事我跟您说过了');
+    expect(told?.flags.lorenzAcknowledgedTold).toBe(true);
+    // Placeless on purpose: the hunt or the forge-hall may have got there first.
+    expect(told?.resultText).not.toContain('猎场');
+    expect(told?.resultText).not.toContain('炉堂');
+  });
+
+  it('goes back to an ordinary greeting after that', () => {
+    expect(chapel(3, { clue_mot_lorenz_question: true, lorenzAcknowledgedTold: true })).toBeNull();
+  });
+
+  it('never gets in front of the trust-4 piece', () => {
+    const why = chapel(4, { clue_mot_lorenz_question: true });
+    expect(why?.resultText).toContain('我这一行不该靠猜');
+    expect(why?.flags.lorenzAcknowledgedTold).toBeUndefined();
   });
 });
