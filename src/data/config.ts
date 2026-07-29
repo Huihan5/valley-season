@@ -46,6 +46,12 @@ export const TIMBER_SEASON_QUOTA = 25;
 // Daily guldmark operating cost (auto-deducted each morning)
 export const DAILY_GULDMARK_COST = 2;
 
+// ── 账上空了之后 (作者裁定 2026-07-29；GDD ch.5 只写到「破产」二字) ─────────
+// 三级下滑。付不出钱先是外面知道，声望每天掉一点；声望掉到底了，住在这里的
+// 人才开始走，佃户信任每天掉一点；两样都到底而账上仍然是空的，男爵不等期限。
+export const INSOLVENCY_RENOWN_PER_DAY = -1;
+export const INSOLVENCY_TENANT_PER_DAY = -1;
+
 // Storage cap until the barn is cleared out; clearing lifts it entirely (GDD ch.5.4).
 export const GRAIN_STORAGE_CAP_UNCLEARED = 80;
 

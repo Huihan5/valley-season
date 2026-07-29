@@ -6,6 +6,9 @@ import {
   GRAIN_STORAGE_CAP_UNCLEARED,
   RENOWN_MIN,
   RENOWN_MAX,
+  TENANT_TRUST_MIN,
+  INSOLVENCY_RENOWN_PER_DAY,
+  INSOLVENCY_TENANT_PER_DAY,
   FATIGUE_TIRED_THRESHOLD,
   GRAIN_RETAIN_THRESHOLD,
   GRAIN_EXCELLENT_THRESHOLD,
@@ -113,6 +116,59 @@ export function getTimberYield(state: GameState): number {
 
 export function applyDailyOperatingCost(resources: Resources): Resources {
   return { ...resources, guldmark: resources.guldmark - DAILY_GULDMARK_COST };
+}
+
+export interface InsolvencyEffects {
+  renown: number;
+  tenantTrust: number;
+  /** 男爵 does not wait for the term to run out. */
+  dismissed: boolean;
+  logEntry: string;
+}
+
+/**
+ * What an empty account costs, settled each morning after the day's operating
+ * cost is taken (作者裁定 2026-07-29).
+ *
+ * The order is deliberate. The valley finds out first — an estate that cannot
+ * settle with the smith and the flour cart is talked about within the week — and
+ * only when there is no reputation left to lose do the people who live here start
+ * to go. When both have bottomed out and the account is still empty, the season
+ * ends early: nothing is left to manage.
+ */
+export function getInsolvencyEffects(
+  resources: Resources,
+  tenantTrust: number,
+): InsolvencyEffects | null {
+  if (resources.guldmark > 0) return null;
+
+  const renownSpent = resources.renown <= RENOWN_MIN;
+  const tenantsSpent = tenantTrust <= TENANT_TRUST_MIN;
+
+  if (renownSpent && tenantsSpent) {
+    return {
+      renown: 0,
+      tenantTrust: 0,
+      dismissed: true,
+      logEntry: '磨岭转来一张便条：即日起停止支付，三日内交接。',
+    };
+  }
+
+  if (renownSpent) {
+    return {
+      renown: 0,
+      tenantTrust: INSOLVENCY_TENANT_PER_DAY,
+      dismissed: false,
+      logEntry: '又是一天没有结出去一笔钱。田里的人比昨天少。',
+    };
+  }
+
+  return {
+    renown: INSOLVENCY_RENOWN_PER_DAY,
+    tenantTrust: 0,
+    dismissed: false,
+    logEntry: '又是一天没有结出去一笔钱。这种事在河谷传得很快。',
+  };
 }
 
 /**

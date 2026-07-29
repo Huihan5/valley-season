@@ -2,7 +2,7 @@ import { useReducer, useEffect } from 'react';
 import { GameState, Choice, ChoiceEffects, EventData, NpcId } from './types/game';
 import { generateWeather } from './systems/WeatherSystem';
 import { nextPhase, isDemoComplete } from './systems/TimeSystem';
-import { applyDailyOperatingCost, clampResources } from './systems/ResourceSystem';
+import { applyDailyOperatingCost, clampResources, getInsolvencyEffects } from './systems/ResourceSystem';
 import { getFreeChoices, getFixedEvent, getEventById, getDayEndEffects } from './systems/EventSystem';
 import { rollRandomEvent, getPendingRandomEvent, markEventDay } from './systems/RandomEventSystem';
 import { determineEnding, getEndingData, composeEnding, EndingId } from './systems/EndingSystem';
@@ -278,6 +278,32 @@ function advancePhase(state: GameState): GameState {
     next = { ...next, weather, currentScene: 'default', lastResult: null };
     next = { ...next, resources: applyDailyOperatingCost(next.resources) };
     next = { ...next, resources: clampResources(next.resources, next.flags) };
+
+    // An empty account settles once a day, and it settles downward.
+    const insolvency = getInsolvencyEffects(next.resources, next.tenantTrust);
+    if (insolvency) {
+      next = applyEffects(next, {
+        renown: insolvency.renown,
+        tenantTrust: insolvency.tenantTrust,
+        logEntry: insolvency.logEntry,
+      });
+      next = {
+        ...next,
+        log: [...next.log, { day: newDay, phase: 'morning', text: insolvency.logEntry }],
+      };
+      if (insolvency.dismissed) {
+        const flags = { ...next.flags, dismissedEarly: true };
+        const dismissed = { ...next, flags };
+        return {
+          ...dismissed,
+          demoComplete: true,
+          endingId: 'ending1',
+          currentSceneText: composeEnding(dismissed, 'ending1'),
+          currentChoices: [],
+          activeEvent: null,
+        };
+      }
+    }
     // Exhausted: forced rest morning
     if (next.fatigue >= 5) {
       next = {

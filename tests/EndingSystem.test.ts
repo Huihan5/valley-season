@@ -355,3 +355,31 @@ describe('the 圣火节 mirror plays only when both tests were passed', () => {
     expect(both.indexOf('桌上有两个盘子')).toBeLessThan(both.indexOf('冬天就要来了'));
   });
 });
+
+// ── 提前解雇 (作者裁定 2026-07-29) ──────────────────────────────────────────
+
+describe('结局一提前发生', () => {
+  const broke = makeState({ resources: { grain: 40, guldmark: 0, timber: 0, renown: -10 } });
+  const early = { ...broke, flags: { dismissedEarly: true } };
+
+  it('drops the chancery letter, because nothing ever reached its expiry date', () => {
+    expect(text('ending1', early)).not.toContain('信是十一月一日到的');
+    expect(text('ending1', early)).not.toContain('届满');
+  });
+
+  it('says why instead: the estate stopped paying for anything', () => {
+    expect(text('ending1', early)).toContain('即日起停止支付');
+    expect(text('ending1', early)).toContain('这个秋天才过了一半');
+  });
+
+  it('still ends on the platform, so 格雷格 still gets his line', () => {
+    expect(text('ending1', early)).toContain('路上小心');
+    expect(text('ending1', { ...early, flags: { ...early.flags, repairedStableRoof: true } }))
+      .toContain('屋顶今年不漏了');
+  });
+
+  it('leaves the full-term ending alone', () => {
+    expect(text('ending1', broke)).toContain('信是十一月一日到的');
+    expect(text('ending1', broke)).not.toContain('即日起停止支付');
+  });
+});

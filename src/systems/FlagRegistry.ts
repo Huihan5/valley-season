@@ -37,6 +37,12 @@ export const INITIAL_FLAGS: FlagMap = {
    * 上等它的时点到来；lastEventDay 让「连续两天没有事发生」这句话可以被算出来。
    * Written by: RandomEventSystem.
    */
+  /**
+   * 账上空了、声望与佃户信任都到下限之后，男爵不等期限。结局一提前发生，
+   * 用的是另一段正文（没有文秘室的信）。Written by: App 的每日结算。
+   */
+  dismissedEarly: false,
+
   randomRolledDay: 0,
   randomEventPending: '',
   randomEventVariant: '',

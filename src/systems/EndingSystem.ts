@@ -85,7 +85,12 @@ function epilogue(id: EndingId): string[] {
 export function composeEnding(state: GameState, id: EndingId): string {
   const ending = ENDINGS[id];
   const v = ending.variants ?? {};
-  const parts: (string | undefined)[] = [ending.text];
+
+  // Dismissed before the term ran out: no chancery letter, because the chancery
+  // only handles expiry dates and this did not get that far. Same ending, a
+  // different exit — the maples have not even turned yet.
+  const opening = id === 'ending1' && state.flags.dismissedEarly ? v.early : ending.text;
+  const parts: (string | undefined)[] = [opening];
 
   if (id === 'ending1') {
     // 格雷格 drives you to the station either way. Only one of you has a reason
