@@ -5,31 +5,31 @@
   "forced": true,
   "advancesPhase": true,
   "activationFlag": "huntAttendedDay21Continued",
-  "title": "猎场的收获",
-  "sceneText": "今天的路线在营地西边，坡缓，林子稀。\n\n大猎物的机会昨天已经用掉了，那头鹿之后，队伍今天走的是小东西。野兔、雉鸡、鹧鸪，以及运气好的话，一两只从谷地上来的野鸭。\n\n这种猎法不需要什么排场。人散开，走得慢，蒂埃里在坡上某个位置，偶尔喊一声，队伍就往某个方向偏一点。\n\n你打到了一些东西。\n\n中午清点的时候，管事们把各自的收获归到一起。有人替你数了数。",
+  "title": "What the Hunt Brings In",
+  "sceneText": "Today’s line runs west of the camp, easy slope, thin woods.\n\nThe chance at big game was spent yesterday; after that stag, today the field is out for small things. Hare, pheasant, partridge, and with luck a duck or two come up from the bottoms.\n\nThis kind of hunting needs no ceremony. The men spread out and go slowly. Thierry is somewhere up the slope, and now and then he calls, and the field leans a little in one direction.\n\nYou take a few things.\n\nWhen it is counted at midday the stewards put their bags together. Somebody counts yours for you.",
   "choices": [
     {
       "id": "harvest_sell",
-      "text": "就地折价，换成现钱",
+      "text": "Sell it on the spot for coin",
       "effects": {
         "guldmark": 6,
         "flags": { "huntBagSold": true },
         "nextScene": "forest",
-        "logEntry": "你把今天的收获就地折了现钱。"
+        "logEntry": "You sold today’s bag on the spot for coin."
       },
-      "resultText": "收猎物的是个从河谷城来的贩子，秤很准，价钱也说得干脆。他数了数，报了个数字，你觉得还行。\n\n钱当场结清。他把你那份东西装进筐里，跟别人的堆在一起。"
+      "resultText": "The man buying game has come out from Valehold. His scales are accurate and he names his price without fuss. He counts it, gives you a figure, and you find it fair enough.\n\nHe settles on the spot. Your share goes into a basket with everyone else’s."
     },
     {
       "id": "harvest_carry_home",
-      "text": "带回庄园",
+      "text": "Take it back to the estate",
       "effects": {
         "relationships": { "marta": 1 },
         "tenantTrust": 1,
         "flags": { "huntBagCarriedHome": true },
         "nextScene": "default",
-        "logEntry": "你把今天的收获带回了枫径。"
+        "logEntry": "You carried today’s bag back to Maplegate."
       },
-      "resultText": "你说要带回去。\n\n旁边一个别家的管事看了你一眼，那种“哦，还有人这么办”的眼神。他们大多是折成钱的，带回去要处理，处理要人手，不如现钱省事。\n\n傍晚回到庄园之后，玛莎在厨房门口接过那个口袋，打开看了一眼。\n\n“野兔。”她说，“三只。”\n\n她把口袋提起来掂了掂，又打开看了一次。\n\n“还有雉鸡。”\n\n她没有说谢谢。她转身进厨房，一边走一边开始喊人。\n\n那天晚上厨房的灯亮到很晚。第二天中午佃户们吃的东西和平时不一样。"
+      "resultText": "You say you will take it back.\n\nA steward from another house glances at you — the look that means, so there are still people who do it that way. Most of them take the coin. Carrying it home means it has to be dealt with, and dealing with it takes hands, and coin is simpler.\n\nWhen you get back at dusk Martha takes the sack at the kitchen door and opens it to look.\n\n“Hare,” she says. “Three.”\n\nShe lifts the sack to weigh it in her hand and opens it a second time.\n\n“And pheasant.”\n\nShe does not thank you. She turns and goes into the kitchen, calling for people before she is through the door.\n\nThe kitchen light burned very late that night. What the tenants ate at midday the next day was not what they usually eat."
     }
   ]
 }

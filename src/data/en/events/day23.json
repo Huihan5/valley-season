@@ -3,15 +3,15 @@
   "day": 23,
   "timing": "dawn",
   "forced": true,
-  "title": "公爵文秘室来信",
-  "sceneText": "送信的人一大早就来了，不是使者，是公国的邮差，他每周三来这一带一次。\n\n信封上是文秘室的印，不是公爵本人的。",
+  "title": "A Letter from the Ducal Chancery",
+  "sceneText": "The letter comes first thing. Not a courier — the duchy’s postman, who covers this part of the valley once a week, on Wednesdays.\n\nThe seal on the envelope is the chancery’s, not the Duke’s own.",
   "variants": {
-    "good": "枫径庄园管事台鉴：\n\n兹据本季北辖区各庄园申报进度汇总，贵庄园秋收及税赋预备情况列为如常。本季应缴税赋将于十月三十日按最终收成核定。",
-    "fair": "枫径庄园管事台鉴：\n\n兹据本季北辖区各庄园申报进度汇总，贵庄园秋收进度低于本区平均。特此提示注意冬季口粮与税赋之预备。",
-    "poor": "枫径庄园管事台鉴：\n\n兹据本季北辖区各庄园申报进度汇总，贵庄园秋收进度显著落后。本室已将此情况抄送庄园领主。",
-    "renewal": "另附：贵庄园现役临时居留及劳务担保书（编号 VS-18-0947）将于本年十月三十日届满。如需续签，应于届满前七日内提交担保人重新签署之文件。逾期未提交者，依《基本法》第十四章，须于届满后七日内离境。\n\n瓦莱维斯普公国文秘室\n\n十月二十二日",
-    "after": "你把信看了两遍。\n\n第二段和第一段没有关系，那是另一件事，只是写在同一张纸上，因为发信的是同一个办公室。\n\n十月三十日。\n\n你到现在为止一直把那个数字当成一个工作期限，收成要交，账要平，庄园要过冬。\n\n它同时是另一个东西的期限。\n\n你在办公室坐了一会儿。窗外格雷格正在把两匹马牵出来，田里已经能看见霜化之后留下的深色印子。\n\n还有八天。",
-    "broker": "当天下午，一个从河谷城来的人递了张条子进来，姓名没有写，只写了“愿以物易物，价随行就市，可上门”。\n\n这一带每年这个时候都有这种人。他们不去集市，他们直接找快到期限的庄园。\n\n汇率比集市差。但他们上门，不占用你的时间。"
+    "good": "To the Steward of Maplegate Estate.\n\nPursuant to this season’s summary of declared progress from the estates of the northern district, the autumn harvest and the preparation of dues at your estate are entered as ordinary. Dues payable this season will be assessed against the final harvest on the thirtieth of October.",
+    "fair": "To the Steward of Maplegate Estate.\n\nPursuant to this season’s summary of declared progress from the estates of the northern district, the autumn harvest at your estate stands below the average for the district. Attention is directed to the provision of winter rations and of dues.",
+    "poor": "To the Steward of Maplegate Estate.\n\nPursuant to this season’s summary of declared progress from the estates of the northern district, the autumn harvest at your estate is markedly in arrears. This office has forwarded a copy of the same to the lord of the estate.",
+    "renewal": "Appended: the temporary residence and labour guarantee presently in force at your estate (no. VS-18-0947) expires on the thirtieth of October of this year. Should renewal be required, a document freshly signed by the guarantor must be submitted not later than seven days before expiry. Where no submission is made within that time, the holder is required under Chapter Fourteen of the Basic Law to depart the territory within seven days of expiry.\n\nChancery of the Duchy of Valewisp\n\nThe twenty-second of October",
+    "after": "You read the letter twice.\n\nThe second part has nothing to do with the first. It is another matter altogether, written on the same sheet only because the same office sent it.\n\nThe thirtieth of October.\n\nUntil now you have been treating that number as a deadline for work. The harvest to be handed over, the books to balance, the estate to be got through the winter.\n\nIt is the deadline for something else at the same time.\n\nYou sit in the office a while. Out of the window Gregor is leading two horses out, and in the fields you can see the dark patches the frost leaves behind when it melts.\n\nEight days.",
+    "broker": "That afternoon a man up from Valehold sends a note in. There is no name on it, only: “Willing to trade in kind, prices as the market goes, will call at the house.”\n\nThere are men like this in the valley every year at this time. They do not go to market. They go straight to the estates whose terms are nearly up.\n\nThe rate is worse than the market. But they come to you, and they cost you none of your time."
   },
   "onEnterEffects": {
     "flags": { "lordsLetterRead": true, "brokerUnlocked": true, "renewalWindowOpen": true }

@@ -3,23 +3,23 @@
   "day": 0,
   "forced": true,
   "advancesPhase": false,
-  "title": "夹在册页之间的东西",
-  "sceneText": "你在翻去年的存档，翻到一本没有编号的册子。\n\n那不是账。里面夹着一些零散的东西:两张收据、一份契约的抄件、几张写了一半的便条。\n\n便条的字迹是霍特曼的。\n\n你翻到中间的时候，从册页之间滑出来一样东西。\n\n一小片干枯的植物。压得很平，颜色已经褪成了浅褐，边缘完整，那是被人小心夹进去的，不是偶然掉进去的。\n\n你把它拿起来对着光看。\n\n这本册子在这间屋子里。这间屋子由埃莱娜打扫。而这个东西被夹在册页之间的方式，说明夹它的人希望它平整地留在那儿。",
+  "title": "Something Pressed Between the Leaves",
+  "sceneText": "Going through last year’s files, you come to a folio with no number on it.\n\nIt is not accounts. There are loose things inside it: two receipts, a copy of a contract, several notes written half through.\n\nThe hand on the notes is Hartmann’s.\n\nWhen you reach the middle, something slides out from between the leaves.\n\nA small sprig of a dried plant. Pressed very flat, the colour gone to pale brown, the edges whole. It was put in there carefully. It did not fall in by chance.\n\nYou hold it up to the light.\n\nThis folio is in this room. This room is cleaned by Elena. And the way the thing has been laid between the leaves says that whoever laid it there wanted it to stay flat.",
   "choices": [
     {
       "id": "folio_ask",
-      "text": "找她问清楚",
+      "text": "Go and ask her about it",
       "effects": {
         "flags": {
           "folioAnswered": true
         },
-        "logEntry": "你拿那片东西去问了埃莱娜。"
+        "logEntry": "You took the sprig to Elena and asked about it."
       },
-      "resultText": "你在下午找到她，把那片东西给她看。\n\n她看了一眼，说她不知道。\n\n“打扫的时候没有动过里面的东西。”她说，“册子我只擦过封面。”\n\n她说的可能是真的。你没有办法判断。\n\n她说完之后等了几秒，你没有再问，她就走了。\n\n那本册子第二天还在原来的位置，一页都没有动过。"
+      "resultText": "You find her in the afternoon and show her the sprig.\n\nShe looks at it once and says she does not know.\n\n“I do not move what is inside when I clean,” she says. “With the folio I only wipe the cover.”\n\nWhat she says may well be true. You have no way to tell.\n\nWhen she has said it she waits a few seconds. You do not ask anything more, and she goes.\n\nThe folio was still in the same place the next day, with not a page moved."
     },
     {
       "id": "folio_replace",
-      "text": "放回原处",
+      "text": "Put it back where it was",
       "effects": {
         "relationships": {
           "elena": 1
@@ -28,9 +28,9 @@
           "folioAnswered": true,
           "respectedElena": true
         },
-        "logEntry": "你把那片东西放回了原来那两页之间。"
+        "logEntry": "You put the sprig back between the same two pages."
       },
-      "resultText": "你把它放回原来那两页之间，位置对齐，然后合上册子，放回架子上。\n\n你把册子放回去的时候，位置比原来往里推了半寸，你不希望别人一眼看见你动过它。\n\n这件事你没有跟任何人提。\n\n三天之后你路过那个架子，那本册子还在那儿。\n\n位置被人往外拉回了半寸。"
+      "resultText": "You lay it back between the same two pages, squared to where it was, then close the folio and put it back on the shelf.\n\nWhen you put it back you push it in half an inch further than it stood, because you would rather nobody saw at a glance that you had touched it.\n\nYou mention it to nobody.\n\nThree days later you go past that shelf. The folio is still there.\n\nSomebody has drawn it back out half an inch."
     }
   ]
 }

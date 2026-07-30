@@ -4,42 +4,42 @@
   "phase": "afternoon",
   "forced": true,
   "advancesPhase": false,
-  "title": "税务审计",
-  "sceneText": "他合上账本，开始整理硬皮夹。这件事到此为止，他要走了。",
+  "title": "The Tax Audit",
+  "sceneText": "He closes the ledger and begins putting his hard folder in order. That is the end of it; he is leaving.",
   "choices": [
     {
       "id": "audit_lunch",
-      "text": "时间也不早了，留下吃个午饭吧",
+      "text": "It is getting late — stay and have some lunch",
       "effects": {
         "flags": {
           "timothyDay12": "A"
         },
-        "logEntry": "你留凯斯勒吃午饭，他没有留下。"
+        "logEntry": "You asked Kessler to stay for lunch. He did not stay."
       },
-      "resultText": "“不必。”他说，“我在城里吃。”\n\n他把硬皮夹夹在腋下，动作没有停顿。你意识到这句话他今年可能已经说过几十次了，每一个庄园的管事都请他吃饭，而每一顿饭都会让他之后写的东西变得不好写。\n\n“下个季度我还会来。”他说完就走了。"
+      "resultText": "“No need,” he says. “I eat in town.”\n\nHe puts the folder under his arm without breaking off what he is doing. It occurs to you that he has probably said that sentence dozens of times this year — that every steward on every estate asks him to a meal, and that every meal would make what he writes afterwards harder to write.\n\n“I shall be back next quarter,” he says, and goes."
     },
     {
       "id": "audit_other_estates",
-      "text": "这一带别的庄园，账上也有这种情况吗",
+      "text": "Do the other estates around here have this in their books too?",
       "effects": {
         "flags": {
           "timothyDay12": "B"
         },
-        "logEntry": "你向凯斯勒打听别的庄园的账。"
+        "logEntry": "You asked Kessler about the other estates’ books."
       },
-      "resultText": "他停下来，看了你两秒。\n\n“别的庄园的账，是别的庄园的事。”\n\n他说得不重，但那句话后面没有任何余地。他把硬皮夹扣好，走到门口。\n\n“冯·阿尔德男爵的前一位管家，我打过三年交道。”他说，“他从来不问我这种问题。”\n\n门关上了。"
+      "resultText": "He stops and looks at you for two seconds.\n\n“The other estates’ books are the other estates’ business.”\n\nHe does not say it heavily, and there is no room at all left behind it. He fastens the folder and goes to the door.\n\n“Baron von Alder’s previous steward. I dealt with him three years,” he says. “He never asked me a question of that kind.”\n\nThe door closes."
     },
     {
       "id": "audit_nature",
-      "text": "那笔支出在技术上算什么性质",
+      "text": "Technically, what is that payment?",
       "effects": {
         "flags": {
           "timothyDay12": "C",
           "clue_ofc_timothy_nature": true
         },
-        "logEntry": "你问凯斯勒那笔支出在技术上算什么性质。"
+        "logEntry": "You asked Kessler what that payment was, technically."
       },
-      "resultText": "他停下手上的动作。\n\n“技术上，它什么都不算。”他说，“金额太小，摘要写了用途，有经手记录。不构成瞒报，不构成挪用，甚至不构成失职。”\n\n“如果你要问我它是什么，”他把硬皮夹的搭扣扣上，“它是有人在把一件不该有弹性的事情做出弹性来。这不违法。”\n\n他站起来。\n\n“我见过更糟的。也见过更精巧的。这个属于中间。”\n\n他走到门口的时候停了一下。\n\n“冯·阿尔德男爵的前一位管家，我打过三年交道。”他说，“账做得比你干净。”\n\n他没有说这是夸奖还是别的。他关上门走了。"
+      "resultText": "His hands stop.\n\n“Technically it is nothing at all,” he says. “The sum is too small, the summary states a purpose, there is a record of who handled it. It does not constitute concealment. It does not constitute misappropriation. It does not even constitute negligence.”\n\n“If you are asking me what it is” — he shuts the clasp on the folder — “it is somebody making a thing flexible that ought not to have any give in it. That is not illegal.”\n\nHe stands up.\n\n“I have seen worse. I have seen more elegant. This is in the middle.”\n\nAt the door he stops a moment.\n\n“Baron von Alder’s previous steward. I dealt with him three years,” he says. “His books were cleaner than yours.”\n\nHe does not say whether that is praise or something else. He closes the door and goes."
     }
   ]
 }
