@@ -5,51 +5,51 @@
   "forced": true,
   "advancesPhase": true,
   "activationFlag": "huntAttendedDay18",
-  "title": "猎场开幕",
-  "sceneText": "猎场开阔。松木营地的气味与马粪、皮革混在一起。公爵的旗帜低垂着，今天的秋风不给力。\n\n贵族和他们的管事分布在篝火与帐篷之间。亨克男爵站在中央，围着一群熟识的猎手大笑。玛格丽特坐在一张折叠椅上，手里拿着一本半合的书，眼睛没有在读。\n\n更远的地方，一队人正在上马。人数比这边多得多，装束也不一样，统一的深色骑装，马具上有同一种纹样。队伍中间有一个人，你隔着这个距离只能看见她在笑。\n\n她身边有人指了一下林线的方向，她点了点头。整个队伍随即开始移动。\n\n从头到尾没有人向这边看过来。\n\n公爵的队伍走了。你看了不到一分钟。\n\n亨克看见你，朝你挥手。\n\n“枫径庄园。你来了。”他一手搭上你的肩，“霍特曼最后那几年总是找借口，我们都以为那座庄园的人从此不打猎了。”\n\n他把你往篝火那边带。\n\n走到一半，一个穿深绿外套的人从帐篷后面绕出来，手里拿着一张画满线的纸。他一边走一边跟身后两个人交代什么，那两个人在点头。\n\n亨克松开了手。\n\n“瓦朗。”他喊了一声，“今天从哪边开始？”\n\n“东南。”那个人连头都没抬，“上午那阵风把气味压在低处，鹿在坡下。您要是从北边推，它们会往猎场外面跑，那边我没设人。”\n\n亨克愣了半秒，然后笑了。“听你的。”",
+  "title": "The Opening of the Season",
+  "sceneText": "The hunting ground is open country. The smell of the pine camp mixed with dung and leather. The Duke’s banner hangs slack; there is not enough autumn wind today to hold it.\n\nThe nobility and their stewards are spread out between the fires and the tents. Baron Henk is at the centre of it, laughing among a group of hunters he knows. Marguerite sits in a folding chair with a half-closed book in her hand, and her eyes are not on it.\n\nFurther off, a party is mounting up. There are many more of them than there are here, and they are turned out differently: dark riding dress all matching, and the same device on the tack. Somebody in the middle of that party — at this distance all you can see is that she is laughing.\n\nSomebody beside her points towards the tree line, and she nods. The whole party begins to move.\n\nFrom start to finish nobody looks over this way.\n\nThe Duke’s party goes. You watched for less than a minute.\n\nHenk sees you and waves.\n\n“Maplegate. You came.” He puts a hand on your shoulder. “Hartmann was always finding reasons those last few years. We had all assumed that estate was done with hunting for good.”\n\nHe steers you towards the fire.\n\nHalfway there a man in a dark green coat comes round from behind a tent with a sheet of paper covered in lines. He is giving instructions to two men behind him as he walks, and they are nodding.\n\nHenk lets go of your shoulder.\n\n“Vallant,” he calls. “Which side are we starting today?”\n\n“South-east.” The man does not even look up. “That wind this morning has pressed the scent down low; the deer are below the slope. If you push from the north they will run out of the ground, and I have nobody set that side.”\n\nHenk is blank for half a second, and then laughs. “As you say.”",
   "onEnterEffects": {
     "flags": { "met_thierry": true }
   },
   "variants": {
-    "thierry_met": "“又见面了。”他说，“我说过我一年有两百天在林子里。这五天算在里头。”\n\n他把纸重新展开一点，让你也能看见。\n\n“今天走东南。您要是骑马跟着，别跟在最前面，前面那几位喜欢抢，抢起来不看路。”",
-    "thierry_unmet": "“瓦朗。北区林务官。”他把纸折起来，“您就是枫径的新管事。”"
+    "thierry_met": "“Again, then,” he says. “I did say I am in the woods two hundred days of the year. These five are inside that.”\n\nHe opens the sheet out a little further so that you can see it too.\n\n“South-east today. If you are riding along, do not ride at the very front. That lot up there like to race, and when they race they do not watch the ground.”",
+    "thierry_unmet": "“Vallant. Forester, north district.” He folds the sheet away. “And you are the new steward at Maplegate.”"
   },
   "choices": [
     {
       "id": "hunt18_henk",
-      "text": "跟着亨克走向篝火",
+      "text": "Go with Henk to the fire",
       "effects": {
         "flags": { "huntDay18Pick": "A" },
-        "logEntry": "你跟着亨克走进了篝火边的那一圈人。"
+        "logEntry": "You went with Henk into the circle at the fire."
       },
-      "resultText": "亨克把你带进那一圈人里，一个一个报名字，两位邻庄领主，一个从河谷城来的马商，两个别家的管事。\n\n报到你的时候他说的是“枫径的新管事”，没有说你的名字，也没有说你是外国人。\n\n“他刚到一个月不到，”亨克说，“账已经理清楚了。”\n\n你不知道他从哪儿听来的。\n\n这一圈人里有人问你从哪儿来。你回答了。有人说了句什么，另一个人笑了。笑得不难听。\n\n半个钟头之后你发现自己已经在听他们说别的事了，谁家的马、谁家的地、今年的价钱。没有人再问你。\n\n这大概就是被接住的意思。"
+      "resultText": "Henk takes you into the circle and names them one at a time. Two neighbouring landholders, a horse dealer up from Valehold, two stewards from other houses.\n\nWhen he comes to you he says “the new steward at Maplegate”. He does not give your name, and he does not say that you are a foreigner.\n\n“He has been here under a month,” Henk says, “and the books are straight already.”\n\nYou have no idea where he heard that.\n\nSomebody in the circle asks where you are from. You tell them. Somebody says something and another man laughs. Not unkindly.\n\nHalf an hour later you notice that you are listening to them talk about other things — whose horses, whose land, this year’s prices. Nobody is asking you anything now.\n\nThis is more or less what it means to be caught when you fall."
     },
     {
       "id": "hunt18_marguerite",
-      "text": "先向玛格丽特问候",
+      "text": "Pay your respects to Marguerite first",
       "effects": {
         "flags": { "huntDay18Pick": "B" },
-        "logEntry": "你先去向玛格丽特男爵夫人问候。"
+        "logEntry": "You went to pay your respects to Baroness Marguerite first."
       },
-      "resultText": "你走到那张折叠椅旁边。\n\n她没有抬头，先把书合上，然后才看你。\n\n“你来了。”她说，“路德维希那座庄园已经有两年没有人来过。”\n\n她朝篝火那边看了一眼。\n\n“亨克很高兴。你注意到了吗，他每年都要问一次枫径的人为什么不来。”\n\n她把书放在膝上。\n\n“他不是想念霍特曼。他是不喜欢有一个位置空着，而他不知道那个位置上会坐什么人。”"
+      "resultText": "You go over to the folding chair.\n\nShe does not look up. She closes the book first, and then looks at you.\n\n“You came,” she says. “Nobody has come from Ludwig’s estate in two years.”\n\nShe glances towards the fire.\n\n“Henk is delighted. Have you noticed that he asks once a year why nobody from Maplegate comes?”\n\nShe sets the book on her knees.\n\n“He does not miss Hartmann. He dislikes having a place stand empty when he does not know who will end up sitting in it.”"
     },
     {
       "id": "hunt18_thierry",
-      "text": "站在原地看蒂埃里怎么安排",
+      "text": "Stay where you are and watch how Thierry arranges it",
       "effects": {
         "flags": { "huntDay18Pick": "C" },
-        "logEntry": "你站在原地看那个穿绿外套的人安排今天的路线。"
+        "logEntry": "You stayed where you were and watched the man in the green coat set out the day’s line."
       },
-      "resultText": "你没有立刻跟亨克走，站在原地看那个穿绿外套的人。\n\n他在纸上又画了两条线，把纸转过来给旁边的人看，说了三句话，那两个人就散开去做事了。整个过程不到一分钟。\n\n他抬起头，看见你在看他。"
+      "resultText": "You do not follow Henk straight away. You stay where you are and watch the man in the green coat.\n\nHe draws two more lines on the sheet, turns it round for the men beside him to see, says three sentences, and the two of them scatter to get on with it. The whole thing takes under a minute.\n\nHe looks up and sees you watching him."
     },
     {
       "id": "hunt18_edge",
-      "text": "找个不显眼的位置待着",
+      "text": "Find somewhere out of the way to stand",
       "effects": {
         "flags": { "huntDay18Pick": "D" },
-        "logEntry": "你在营地边缘找了个位置待着。"
+        "logEntry": "You found a place at the edge of the camp and stayed there."
       },
-      "resultText": "你在营地边缘找了个位置，靠着一辆卸了套的马车。\n\n从这儿能看见全场。亨克在中间，玛格丽特在椅子上，穿绿外套的那个在跟人交代事情。侍从在搬酒坛。有人在笑。\n\n你站了大概一刻钟，没有人过来。\n\n这不是被冷落。今天没有人有义务来找你，你是自己站到边上去的。\n\n到傍晚回程的时候，亨克在马上跟你打了个招呼，态度和早上一样热情。\n\n但你整个下午什么也没有听见。"
+      "resultText": "You find a place at the edge of the camp, against an unhitched cart.\n\nYou can see the whole field from here. Henk at the centre, Marguerite in her chair, the man in the green coat giving instructions. Attendants carrying the wine jars. Somebody laughing.\n\nYou stand there about a quarter of an hour and nobody comes over.\n\nThis is not being slighted. Nobody has any obligation to come and find you today, and you walked to the edge yourself.\n\nOn the ride back at dusk Henk greeted you from the saddle, as warmly as he had in the morning.\n\nBut you heard nothing at all the whole afternoon."
     }
   ]
 }
