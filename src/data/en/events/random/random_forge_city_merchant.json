@@ -3,31 +3,31 @@
   "day": 0,
   "forced": true,
   "timing": "dusk",
-  "title": "铸都来的行商",
-  "sceneText": "傍晚有人敲门，是个从铸都来的行商，赶路赶到天黑，问能不能借住一夜。\n\n这一带的规矩是让住。",
+  "title": "A Trader Up from Forgehold",
+  "sceneText": "Somebody knocks at dusk. A trader up from Forgehold, who has travelled into the dark and asks whether he might have a bed for the night.\n\nThe custom around here is that he gets one.",
   "variants": {
-    "stay_head": "玛莎多做了一个人的饭，没有问你。\n\n晚上他在厨房坐了一会儿，说了些路上的事。他从铸都出来走了六天，路上过了三个公国。",
-    "stay_tail": "第二天早上他走的时候留下了一小包东西给玛莎，盐，铸都那边的细盐。她收下了。"
+    "stay_head": "Martha cooked for one more without asking you.\n\nHe sat in the kitchen a while in the evening and talked about the road. Six days out of Forgehold, across three duchies.",
+    "stay_tail": "When he left in the morning he had put a small packet by for Martha. Salt. The fine salt they have in Forgehold. She took it."
   },
   "choices": [
     {
       "id": "merchant_stay",
-      "text": "让他住下",
+      "text": "Give him a bed",
       "effects": {
         "relationships": {
           "marta": 1
         },
-        "logEntry": "你留了一个铸都来的行商住一夜。"
+        "logEntry": "You put up a trader from Forgehold for the night."
       }
     },
     {
       "id": "merchant_refuse",
-      "text": "婉拒",
+      "text": "Turn him down",
       "effects": {
         "renown": -1,
-        "logEntry": "一个铸都来的行商问能不能借住，你说不方便。"
+        "logEntry": "A trader from Forgehold asked for a bed, and you said it was not convenient."
       },
-      "resultText": "你说庄园里现在不方便。\n\n他没有争，道了谢就走了。他往河谷城的方向去，那还有一个多钟头的路，天已经黑了。\n\n玛莎在厨房门口看着他走。她什么也没说。\n\n第二天早上你听说他昨晚在磨岭那边住下了。"
+      "resultText": "You said it was not convenient at the estate just now.\n\nHe did not argue. He thanked you and went. He set off in the direction of Valehold, which is over an hour further on, and it was already dark.\n\nMartha stood in the kitchen doorway and watched him go. She said nothing.\n\nIn the morning you heard that he had been put up at Millridge."
     }
   ]
 }

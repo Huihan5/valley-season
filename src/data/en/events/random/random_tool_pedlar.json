@@ -3,32 +3,32 @@
   "day": 0,
   "forced": true,
   "timing": "midday",
-  "title": "上门卖农具的人",
-  "sceneText": "中午有个人赶着车到了庄园门口。他不是这一带的人。\n\n车上装的是农具，镰刀、叉子、几副犁头。东西看着不差，价钱只有正常的一半。\n\n你把格雷格叫来看。他绕着车走了一圈，拿起一把镰刀，翻过来看柄的接口，又用指甲在刃上刮了一下。\n\n他把镰刀放回去，什么也没说，退了两步站到你后面。\n\n你注意到那些东西上都没有印记，这一带的铁器都打印记，那是保修的意思。",
+  "title": "The Man Selling Tools",
+  "sceneText": "At midday a man drives a cart up to the estate gate. He is not from around here.\n\nThe cart is loaded with tools. Sickles, forks, several ploughshares. The goods do not look bad, and the price is half what it should be.\n\nYou call Gregor over to look. He walks once round the cart, picks up a sickle, turns it over to look at the joint where the haft goes in, and scrapes a thumbnail along the edge.\n\nHe puts the sickle back, says nothing, and steps back twice to stand behind you.\n\nYou notice that none of it is stamped. Ironwork around here is stamped, and the stamp means it is guaranteed.",
   "choices": [
     {
       "id": "pedlar_buy",
-      "text": "买一批",
-      "description": "8 金卢",
+      "text": "Buy a set",
+      "description": "8 guldmark",
       "effects": {
         "guldmark": -8,
         "flags": {
           "toolsRepaired": true
         },
-        "logEntry": "你从一个外地人手里买了一批没有印记的农具。"
+        "logEntry": "You bought a set of unstamped tools from an outsider."
       },
-      "resultText": "你买了。八个金卢，比铁匠那边省下一大半，而且今天就能用。\n\n卸货的时候格雷格帮着搬，一句话没说。搬完他就回马厩了。\n\n那些东西确实能用。用得住多久是另一件事，但你现在需要的是今年秋天。"
+      "resultText": "You bought them. Eight guldmark, well over half of what the smith would have cost, and they can be used today.\n\nGregor helped carry them off the cart without a word. When it was unloaded he went back to the stable.\n\nThe tools do work. How long they will hold is another matter, but what you need is this autumn."
     },
     {
       "id": "pedlar_refuse",
-      "text": "不买",
+      "text": "Do not buy",
       "effects": {
         "relationships": {
           "gregor": 1
         },
-        "logEntry": "上门卖农具的人被你打发走了。"
+        "logEntry": "You sent the man selling tools on his way."
       },
-      "resultText": "你说不要。\n\n那个人也没有多劝，他大概一路上被拒绝过很多次。他把车赶走了。\n\n格雷格站在你旁边看着车走远。\n\n“刃是好的。”他说，“柄是新木头，没干透。”\n\n他顿了一下。\n\n“用一个月，赶上一场雨，就该换了。”\n\n这是他今天说的唯一一段话。"
+      "resultText": "You said no.\n\nHe did not press you. He has probably been turned down a good many times along the road. He drove the cart off.\n\nGregor stood beside you and watched it go.\n\n“The edges are good,” he said. “The hafts are new wood. Not seasoned.”\n\nHe paused.\n\n“Use them a month, catch one wet spell, and they will want replacing.”\n\nThat was the only stretch of speech he made all day."
     }
   ]
 }

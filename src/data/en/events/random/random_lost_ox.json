@@ -3,27 +3,27 @@
   "day": 0,
   "forced": true,
   "timing": "midday",
-  "title": "走丢的牛",
-  "sceneText": "中午有人跑来说，西边那家的牛不见了一头。\n\n那是他们家的耕牛，不是庄园的。但这一带的地是连着的，牛丢了，找起来要过好几家的田。",
+  "title": "The Lost Ox",
+  "sceneText": "At midday somebody comes running up to say the west holding has lost one of its oxen.\n\nIt is their plough ox, not the estate’s. But the land around here runs together, and once an ox is lost, looking for it means going across several people’s fields.",
   "choices": [
     {
       "id": "ox_search",
-      "text": "派两个人去找",
-      "description": "1 时段",
+      "text": "Send two men to look",
+      "description": "1 phase",
       "advancesPhase": true,
       "effects": {
         "renown": 1,
-        "logEntry": "你派了两个人去找西边那家走丢的牛。"
+        "logEntry": "You sent two men to look for the west holding’s lost ox."
       },
-      "resultText": "傍晚找回来了。牛在北面林地边上啃草，好好的。\n\n那家人来道谢，说了很多遍。你说不用。\n\n这件事在三天之内传遍了所有的佃户家。"
+      "resultText": "It was found by dusk. The ox was cropping grass at the edge of the north woods, none the worse.\n\nThe family came to thank you, and said so a great many times. You told them there was no need.\n\nInside three days every tenant household had heard about it."
     },
     {
       "id": "ox_decline",
-      "text": "让他们自己找",
+      "text": "Let them look for it themselves",
       "effects": {
-        "logEntry": "西边那家走丢了一头牛，你让他们自己找。"
+        "logEntry": "The west holding lost an ox, and you left them to look for it themselves."
       },
-      "resultText": "他们自己找了一整天。傍晚牛自己回来了，牛认得回家的路。\n\n第二天你在田里看见那家人，他们跟你打了招呼，态度和平时一样。\n\n什么也没有发生。"
+      "resultText": "They looked for it all day. At dusk the ox came back on its own; an ox knows the road home.\n\nThe next day you saw the family out in the fields. They greeted you the way they always do.\n\nNothing happened at all."
     }
   ]
 }

@@ -3,31 +3,31 @@
   "day": 0,
   "forced": true,
   "timing": "midday",
-  "title": "淘井",
-  "sceneText": "玛莎说厨房的水这两天有点浑。\n\n井是庄园自己的，在庭院东北角。上一次淘是哪一年，没有人记得。",
+  "title": "Cleaning the Well",
+  "sceneText": "Martha says the kitchen water has been cloudy these last two days.\n\nThe well is the estate’s own, in the north-east corner of the courtyard. Nobody remembers what year it was last cleaned out.",
   "choices": [
     {
       "id": "well_hire",
-      "text": "从村里请人来淘",
-      "description": "4 金卢",
+      "text": "Bring men up from the village to clean it",
+      "description": "4 guldmark",
       "effects": {
         "guldmark": -4,
-        "logEntry": "你从村里请了人来淘井。"
+        "logEntry": "You brought men up from the village to clean out the well."
       },
-      "resultText": "请来的是村里两个人，下去了半天，捞上来一堆东西，烂掉的木桶片、几块石头、一只鞋。\n\n“这鞋在里头有年头了。”其中一个说。\n\n玛莎看了一眼那只鞋，说了句什么，回厨房了。\n\n第二天的水清了。"
+      "resultText": "Two men came up from the village and were down there half a day. They brought up a heap of things: rotted staves off a bucket, several stones, one shoe.\n\n“That shoe has been down there some years,” one of them said.\n\nMartha looked at the shoe, said something, and went back to the kitchen.\n\nThe next day’s water ran clear."
     },
     {
       "id": "well_self",
-      "text": "自己带人下去弄",
-      "description": "1 时段",
+      "text": "Take men down and do it yourself",
+      "description": "1 phase",
       "advancesPhase": true,
       "effects": {
         "relationships": {
           "marta": 1
         },
-        "logEntry": "你自己下井淘了一个下午。"
+        "logEntry": "You spent an afternoon down the well cleaning it out yourself."
       },
-      "resultText": "你自己带了两个人下去。\n\n井底比你以为的深，也比你以为的冷。你在下面待了一个多钟头，捞上来一堆东西，烂掉的木桶片、几块石头、一只鞋。\n\n上来的时候玛莎在井边站着，手里端着一碗热的。\n\n“喝了。”她说。\n\n你喝了。她看着你喝完，把碗收走，一句别的话都没有说。\n\n第二天的水清了。"
+      "resultText": "You took two men down with you.\n\nThe bottom of the well is deeper than you thought, and colder. You were down there over an hour, and brought up a heap of things: rotted staves off a bucket, several stones, one shoe.\n\nWhen you came up Martha was standing at the well head with a bowl of something hot in her hands.\n\n“Drink it,” she said.\n\nYou drank it. She watched you finish, took the bowl away, and said nothing else at all.\n\nThe next day’s water ran clear."
     }
   ]
 }

@@ -3,12 +3,12 @@
   "day": 0,
   "forced": true,
   "timing": "midday",
-  "title": "第三幕的一天",
+  "title": "A Day in the Third Act",
   "sceneText": "",
   "variants": {
-    "one": "今天早上田里有两个人在吵架。\n\n吵的是一块地该谁先收，两家的地挨着，共用一条田埂，谁先收谁的车就先过。\n\n你到的时候他们已经不吵了。看见你，两个人都说没事。\n\n这个月剩下的日子里，他们都没有再提这件事。",
-    "two": "中午的时候雨停了一会儿，太阳出来了半个钟头。\n\n田里所有的人同时加快了速度，没有人喊，没有人指挥。半个钟头之后云又合上了，速度就慢下来。\n\n你站在田埂上看着这半个钟头。",
-    "three": "今天没有出任何事。\n\n天气一般，人手够，该收的收了，该记的记了。晚上你把账做完，数字和你昨天估的差不多。\n\n你在办公室多坐了一会儿才上楼。窗外什么声音都没有。"
+    "one": "Two men were arguing in the fields this morning.\n\nThe argument was over which plot got cut first. The two holdings sit side by side and share one bank, and whoever cuts first gets his cart along it first.\n\nBy the time you arrived they had stopped. Seeing you, both of them said it was nothing.\n\nNeither of them mentioned it again for the rest of the month.",
+    "two": "The rain let up around midday and the sun was out for half an hour.\n\nEveryone in the fields went faster at the same moment. Nobody called out and nobody was directing them. Half an hour later the cloud closed again, and the pace came down.\n\nYou stood on the bank and watched that half hour.",
+    "three": "Nothing happened today.\n\nThe weather was ordinary, there were hands enough, what wanted cutting was cut and what wanted entering was entered. You finished the accounts in the evening and the figures came out near enough to what you had guessed yesterday.\n\nYou sat on in the office a while before going up. There was no sound at all outside the window."
   },
   "choices": null
 }
