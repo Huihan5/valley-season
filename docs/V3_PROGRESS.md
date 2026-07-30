@@ -18,7 +18,7 @@
 | 5 | 调查系统与结局 | 已完成 |
 | 6 | PlaytestFeedback 收尾、随机事件池、引号归一 | 已完成 |
 | 7 | 解雇线收紧 + 存档系统 | 已完成 |
-| 8 | 中英双语 | 未开始（见「阶段八开工须知」） |
+| 8 | 中英双语 | 票一、票二完成；票三英译 44 / 54 文件（见「阶段八 · 英译进度」） |
 
 ---
 
@@ -383,6 +383,33 @@ PlaytestFeedback 1.e：Day 19 下午的文本里出现"Day 15 那天"，出戏�
 **`SAVE_VERSION` 是给 `GameState` 形状变化用的。** 往 `GameState` 里加删字段、改字段含义，就把它 +1，旧档会被拒绝而不是猜着读。**只加旗标不用动它**——`unpackSave` 已经把读到的 flags 铺在 `INITIAL_FLAGS` 上面。
 
 **标题页是阶段八语言开关的地方。** 现在只有三个按钮（继续 / 新的一季 / 读取存档），语言切换加在同一列即可，不需要再动结构。
+
+---
+
+## 阶段八 · 英译进度（2026-07-30）
+
+**票一、票二已完成**，见 CHANGELOG。票三英译 **44 / 54 文件**，45,002 → 18,101 汉字。
+
+**剩下的十个文件**，按量：
+
+| 汉字 | 文件 | 注意 |
+|---|---|---|
+| 6368 | `endings/endings.json` | 按 variant 块分别译，**不要合成一篇**；`ending1.variants.early` 是施工方写的占位文本 |
+| 3294 | `opening.json` | 担保书是法律文书语域；格雷格第一句「玛莎在里面。」= `Martha is inside`（三个英文词，Day 30 引用它时说的是 three words） |
+| 1601 | `day22.json` | 维特四档，**他不提供玩家未持有的信息**，译时不要让他显得知道更多 |
+| 1391 | `day27_street_corner.json` | 有一处圣火节，说话人是两位公务员 → `the Rite of the Sacred Flame` |
+| 1256 | `day30_millridge.json` | |
+| 1166 | `day18_hunt_arrival.json` | |
+| 1162 | `day15_stumps.json` | 蒂埃里量三个树桩，「量得很快，但每一次都量了两遍」是他的核心动作 |
+| 995 | `day21_hunt_lorenz.json` | 有一处圣火节，说话人是洛伦茨 → `Sacred Flame Observance` |
+| 865 | `day19_hunt_ride.json` | |
+| 3 | `ui.json` | **故意留的**，见下 |
+
+**`en/ui.json` 里故意留了三个汉字**：`titleRoman: "河谷季"`。中文版 h1 是「河谷季」、小字 `VALLEY SEASON`；英文版反过来。收尾时要加的「en 目录不得有汉字」测试**必须给这一个键开例外**，并在测试里写明理由，否则下一个人会「顺手修掉」它。
+
+**翻译时已定的约定**（逐条见 CHANGELOG 该日条目）：`forge-chapel`（不用 forge-hall）、`Steward` 与 `sir`、`the Duke` + `she`、圣火节三语域、产出档位 `meagre / fair / heavy`、`Maplegate Avenue`、`Luminhold`。
+
+**两处「数字数」的中文原文已按实际字数修正**（作者 7-30 授权）：`action_results.stable_help[1]` 三个字→四个字，`day30_evening.settled` 四个字→五个字。英文版按英文实际词数各为 three words。
 
 ---
 
