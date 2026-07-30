@@ -3,47 +3,47 @@
   "day": 18,
   "timing": "dawn",
   "forced": true,
-  "title": "邀请信",
-  "sceneText": "清晨，一名使者从磨岭庄园赶来，带来一封措辞正式的信函。\n\n封蜡上是公爵的纹章，狩猎季是公国的活动，邀请函走公国的格式。但里面的字是亨克男爵亲笔写的，笔迹宽阔，不像写给下属的命令，更像邻居之间的邀请。枫径庄园的前任管事每年都参与狩猎季，他希望这个传统能够延续。\n\n“狩猎营地设在公国林地东侧的猎场。今日午后开幕，为期五天，至十月二十二日日落为止。”\n\n格雷格从马厩探出头来。\n\n“每年都有这封信。”他说，不置可否，“霍特曼先生连续七年出席。第八年开始就找借口推掉了。”\n\n信的末尾有一行附注，字迹比正文小，也更随意：\n\n“公爵殿下今年将莅临开幕。”\n\n格雷格看了一眼那行字。\n\n“殿下年年都来。”他说，“只是从来不到我们这边。”",
+  "title": "The Invitation",
+  "sceneText": "Early in the morning a messenger rides over from Millridge with a formally worded letter.\n\nThe wax carries the Duke’s arms: the hunting season is a duchy occasion and the invitation goes out in the duchy’s form. But the writing inside is in Baron Henk’s own hand, broad and open, less an order to a subordinate than an invitation between neighbours. Maplegate’s previous steward took part in the season every year, and he hopes the custom will hold.\n\n“The camp is pitched at the hunting ground on the east side of the ducal woods. Opening this afternoon, five days, until sundown on the twenty-second of October.”\n\nGregor puts his head out of the stable.\n\n“That letter comes every year.” He commits to nothing either way. “Mr Hartmann attended seven years running. From the eighth he found reasons not to.”\n\nThere is a line appended at the foot of the letter, in smaller and looser writing than the body:\n\n“Her Grace the Duke will be present at the opening this year.”\n\nGregor glances at that line.\n\n“Her Grace comes every year,” he says. “She has never once come over to our side.”",
   "onEnterEffects": {
     "flags": { "huntingSeasonStarted": true }
   },
   "choices": [
     {
       "id": "hunt_attend_day18",
-      "text": "出席开幕式",
-      "description": "2 时段 · 疲劳 +2",
+      "text": "Attend the opening",
+      "description": "2 phases · fatigue +2",
       "advancesPhase": true,
       "effects": {
         "fatigue": 2,
         "renown": 1,
         "flags": { "huntAttendedDay18": true },
         "nextScene": "forest",
-        "logEntry": "你换了骑装，午后去了公国猎场。"
+        "logEntry": "You changed into riding dress and went to the ducal hunting ground after noon."
       }
     },
     {
       "id": "hunt_decline_day18",
-      "text": "送去一封得体的致歉信",
-      "description": "1 金卢",
+      "text": "Send back a properly worded apology",
+      "description": "1 guldmark",
       "effects": {
         "guldmark": -1,
         "renown": -1,
         "flags": { "huntDeclinedDay18": true },
-        "logEntry": "你写了一封致歉信，让使者带了回去。"
+        "logEntry": "You wrote an apology and sent it back with the messenger."
       },
-      "resultText": "你写了回信。措辞你斟酌了一会儿，秋收正紧，庄园人手不足，望见谅，来年再赴。\n\n你让那个使者把信带回去。他接过信的时候看了你一眼，那一眼里有点意外，但他什么也没说。\n\n格雷格在马厩门口站着。\n\n“回了？”\n\n你说回了。\n\n“嗯。”\n\n他转身进去了。你不知道他是赞成还是不赞成。\n\n三天之后你在集市上听说，今年狩猎季开幕来了十一个人。往年是十二个。"
+      "resultText": "You write a reply. You take a while over the wording: the harvest is at its height, the estate is short of hands, with regrets, and next year without fail.\n\nYou give it to the messenger to take back. He looks at you as he takes it — the look holds some surprise — but he says nothing.\n\nGregor is standing in the stable doorway.\n\n“Answered it?”\n\nYou say you did.\n\n“Mm.”\n\nHe turns and goes in. You do not know whether he approves.\n\nThree days later you hear at the market that eleven men came to the opening this year. Other years it is twelve."
     },
     {
       "id": "hunt_no_response_day18",
-      "text": "不作回应，照常处理庄园事务",
+      "text": "Make no answer, and get on with the estate",
       "effects": {
         "renown": -1,
         "relationships": { "henk": -1 },
         "flags": { "huntIgnoredDay18": true },
-        "logEntry": "磨岭那封信你没有回。"
+        "logEntry": "You did not answer the letter from Millridge."
       },
-      "resultText": "你把信放在桌上，然后去处理别的事。\n\n那个使者在庭院里等了将近一个钟头。玛莎给他倒了水。后来他自己走了。\n\n傍晚玛莎在厨房问了一句：磨岭那边的信要不要回。\n\n你说不用。\n\n她“哦”了一声，就没有再问。"
+      "resultText": "You put the letter on the desk and go and see to other things.\n\nThe messenger waited in the courtyard for nearly an hour. Martha brought him water. In the end he left on his own.\n\nAt dusk Martha asked, in the kitchen, whether the letter from Millridge wanted answering.\n\nYou said no.\n\nShe said “oh”, and did not ask again."
     }
   ]
 }

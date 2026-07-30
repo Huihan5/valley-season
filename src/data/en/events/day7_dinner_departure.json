@@ -4,36 +4,36 @@
   "timing": "evening",
   "forced": true,
   "activationFlag": "attendedDinner",
-  "title": "棘墙晚宴",
-  "sceneText": "上甜食的时候，有人问洛伦茨匠师今年圣火节的安排。\n\n“跟往年一样。”他说。\n\n“总该有点新意吧？”亨克说。\n\n“为什么？”洛伦茨反问。他问得很温和，没有一点冒犯的意思，但那个问题就停在桌子中间，没有人接。\n\n玛格丽特送你到门口。这不是她对每一位客人都做的事，你看见亨克是被仆人送出去的。\n\n外面已经很冷了。她站在台阶上，没有披外衣。\n\n“枫径那片地不好管。”她说，“不是因为土不好。是因为它离每个人都有一点远。”\n\n她停顿了一下。她的停顿总是比别人长半拍。\n\n“路德维希每年圣火节都回来。住三天，然后走。”",
+  "title": "The Thornwall Dinner",
+  "sceneText": "Over the sweet course somebody asks Master Lorenz about the arrangements for the Observance this year.\n\n“The same as other years,” he says.\n\n“Surely there ought to be something new in it?” says Henk.\n\n“Why?” Lorenz asks back. He asks it very mildly, with nothing offensive in it at all, and the question stays there in the middle of the table with nobody picking it up.\n\nMarguerite sees you to the door. She does not do this for every guest; you saw Henk shown out by a servant.\n\nIt is cold outside already. She stands on the step without a coat.\n\n“That land at Maplegate is not easy to manage,” she says. “Not because the soil is poor. Because it is a little far from everybody.”\n\nShe pauses. Her pauses always run half a beat longer than other people’s.\n\n“Ludwig comes back every year for the Kindling. Stays three days, and goes.”",
   "next": "day7_dinner_return",
   "choices": [
     {
       "id": "dinner3_my_work",
-      "text": "我会尽力做好我的工作",
+      "text": "I shall do my best at my work",
       "effects": {
         "flags": { "dinnerPick3": "A" },
-        "logEntry": "临走时你对玛格丽特说，你会尽力做好你的工作。"
+        "logEntry": "On leaving, you told Marguerite you would do your best at your work."
       },
-      "resultText": "“我会尽力做好我的工作。”\n\n她点了点头。\n\n“那是自然。”\n\n她没有再说什么。仆人把门推开，她进去了。\n\n门关上之前你听见里面有人在收拾餐具的声音。\n\n你在台阶上站了几秒钟。刚才那句话不算错，任何人在那个位置都可能这么说。\n\n但你没有回答她的话。她说的不是工作。"
+      "resultText": "“I shall do my best at my work.”\n\nShe nods.\n\n“Naturally.”\n\nShe says nothing further. The servant pushes the door open and she goes in.\n\nBefore it closes you hear somebody inside clearing the table.\n\nYou stand on the step a few seconds. What you said was not wrong. Anybody in that position might have said it.\n\nBut you did not answer what she said. She was not talking about work."
     },
     {
       "id": "dinner3_neighbours",
-      "text": "那我应该先去认识我的邻居",
+      "text": "Then I should get to know my neighbours first",
       "effects": {
         "flags": { "dinnerPick3": "B" },
-        "logEntry": "临走时你对玛格丽特说，你该先去认识你的邻居。"
+        "logEntry": "On leaving, you told Marguerite you should get to know your neighbours first."
       },
-      "resultText": "她看了你一会儿。\n\n“那就从下个月开始吧。”她说，“这个月你没有时间，我知道。”\n\n她转身进门，仆人把门关上。你在台阶上站了一会儿才想起来自己的马拴在哪儿。"
+      "resultText": "She looks at you a while.\n\n“Start next month, then,” she says. “You have no time this month. I know that.”\n\nShe turns and goes in, and the servant closes the door. You stand on the step a moment before you remember where your horse is tied."
     },
     {
       "id": "dinner3_the_baron",
-      "text": "男爵有他自己的职责",
+      "text": "The Baron has duties of his own",
       "effects": {
         "flags": { "dinnerPick3": "C" },
-        "logEntry": "临走时你替男爵说了一句话。"
+        "logEntry": "On leaving, you said a word on the Baron’s behalf."
       },
-      "resultText": "“男爵有他自己的职责。”\n\n她的表情没有变化，但她停顿的时间比刚才长。\n\n“我认识路德维希的时候他十二岁。”她说，“他的职责是什么，我大概不需要你来告诉我。”\n\n她说这话的语气很平，没有火气。\n\n“夜里冷。路上小心。”\n\n她转身进门。仆人把门关上的时候你还站在原地。"
+      "resultText": "“The Baron has duties of his own.”\n\nHer expression does not change, but the pause runs longer than the last one.\n\n“I knew Ludwig when he was twelve,” she says. “I do not imagine I need you to tell me what his duties are.”\n\nShe says it very evenly. There is no heat in it.\n\n“It is cold tonight. Mind the road.”\n\nShe turns and goes in. You are still standing where you were when the servant closes the door."
     }
   ]
 }
