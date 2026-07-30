@@ -4,33 +4,33 @@
   "timing": "midday",
   "forced": true,
   "activationFlag": "visitedMarket_day27",
-  "title": "街口",
-  "sceneText": "走开的那个又回来了。\n\n三个人站在文秘室外面的街口，没有人提议去别的地方，也没有人说要走。太阳已经很低了，街对面的墙上还有一条光，正在往上收。\n\n“卖完了？”蒂埃里问。\n\n你说卖完了。\n\n“十月的最后一个集市。”他把陶瓶换到另一只手上，“下次就是圣火节了，那时候卖的东西不一样。”\n\n他说这句话的时候没有想到你可能不在这儿了。或者想到了，只是没说。\n\n“我倒是天天在外面跑。”他忽然说，“但我也不是自愿的。”\n\n你问他这话什么意思。\n\n“伯爵家第三个儿子。”他说得很轻松，像在说别人的事，“按规矩该去当兵，或者娶一个不认识的人搬去很远的地方。这两条我都不想走。”\n\n“所以我在一场狩猎里让公爵笑了。”他摊了一下手，“就这样。一个位置，我自己挣来的。”\n\n提莫西一直没有说话。蒂埃里转向他。\n\n“你呢，凯斯勒。三年了。”\n\n“我是被派来的。”提莫西说。\n\n就这一句，没有别的。\n\n蒂埃里等了一会儿，看他还要不要说。他没有。\n\n“被派来的。”蒂埃里重复了一遍，“所以你天天算什么时候被调走。”\n\n“第五年。”提莫西说，“通常是第五年。”\n\n那条光从墙上收完了。街口暗下来。\n\n蒂埃里把陶瓶从一只手换到另一只手上，然后看着你。\n\n“那您呢，管事先生。”他说，“我是挣来的，他是被派来的。您是自己来的。”\n\n“所以您为什么要留在这里？”",
+  "title": "The Street Corner",
+  "sceneText": "The one who walked off has come back.\n\nThree of you standing at the corner outside the chancery. Nobody proposes going anywhere else and nobody says they are leaving. The sun is very low, and there is still one band of light on the wall across the street, drawing upward.\n\n“Sold out?” Thierry asks.\n\nYou say you sold out.\n\n“Last market of October.” He moves the bottle to his other hand. “Next one is the Kindling, and what gets sold then is different.”\n\nWhen he says it, it does not occur to him that you may not be here. Or it does, and he does not say so.\n\n“I am out and about every day, mind,” he says suddenly. “Not that it was my choice either.”\n\nYou ask what he means by that.\n\n“Third son of a count.” He says it lightly, as though it were somebody else’s business. “By rights I should have gone into the army, or married somebody I did not know and moved a long way off. I did not want either road.”\n\n“So I made the Duke laugh, at a hunt.” He opens a hand. “That is all. One post, and I earned it myself.”\n\nTimothy has not spoken at all. Thierry turns to him.\n\n“And you, Kessler. Three years now.”\n\n“I was posted here,” Timothy says.\n\nThat is the whole of it. Nothing else.\n\nThierry waits a moment to see whether more is coming. It is not.\n\n“Posted here.” Thierry repeats it. “So you spend every day working out when you get moved on.”\n\n“The fifth year,” Timothy says. “Usually the fifth year.”\n\nThe band of light finishes drawing up off the wall. The corner goes dim.\n\nThierry moves the bottle from one hand to the other, and then looks at you.\n\n“And you, Steward,” he says. “I earned mine. He was posted. You came of your own accord.”\n\n“So why do you want to stay here?”",
   "choices": [
     {
       "id": "corner_contract",
-      "text": "一份合同而已。三十天，到期就走",
+      "text": "It is only a contract. Thirty days, and then I go",
       "effects": {
-        "logEntry": "你说这只是一份三十天的合同。"
+        "logEntry": "You said it was only a thirty-day contract."
       },
-      "resultText": "“行。”蒂埃里说。\n\n他没有再问。提莫西也没有。\n\n又站了一会儿，蒂埃里说天要黑了，路上小心。他们朝反方向走了。\n\n你在街口站了几秒才想起来自己的车还在广场东侧。"
+      "resultText": "“Right,” Thierry says.\n\nHe does not ask again. Neither does Timothy.\n\nThey stand a while longer, and then Thierry says it is getting dark and to mind the road. They go off in opposite directions.\n\nYou stand at the corner a few seconds before you remember that your cart is still on the east side of the square."
     },
     {
       "id": "corner_need_work",
-      "text": "我需要这份工作",
+      "text": "I need the work",
       "effects": {
-        "logEntry": "你说你需要这份工作。"
+        "logEntry": "You said you needed the work."
       },
-      "resultText": "“工作到处都有。”蒂埃里说。\n\n他说得没有攻击性，只是顺口。但那句话停在那儿之后，没有人接。\n\n提莫西看了一眼天色，说他该回去了。\n\n三个人分开的时候，蒂埃里说了句“下个月见”。他大概自己也知道下个月你可能不在了。"
+      "resultText": "“There is work everywhere,” Thierry says.\n\nThere is nothing aggressive in it; it is only said in passing. But once that sentence is standing there, nobody picks it up.\n\nTimothy glances at the light and says he should be getting back.\n\nAs the three of you separate, Thierry says “see you next month”. He probably knows himself that next month you may not be here."
     },
     {
       "id": "corner_want_to_stay",
-      "text": "我……我想要个身份",
+      "text": "I … I want a standing of my own",
       "effects": {
         "flags": { "admittedWantToStay": true },
-        "logEntry": "你在街口说了一句你自己也没想到会说的话。"
+        "logEntry": "At the street corner you said something you had not expected to say."
       },
-      "resultText": "你说完这句话之后，有几秒钟没有人说话。\n\n你听见自己说了什么。你不知道自己为什么在一个稽查官和一个林务官面前说这个。\n\n然后蒂埃里大笑起来。\n\n笑得很响，在空掉的街上有回声。他一边笑一边摆手，意思是他不是在笑你。\n\n“凯斯勒，”他喘了一口气，“你听见了吗。”\n\n“我听见了。”提莫西说。\n\n他把手伸进制服内侧的口袋，掏出一个东西，一张卡片，深色的底，上面有一层压印的纹样，看不出是什么植物。\n\n“这是王领的。”他说。\n\n他没有把卡片递给你，只是拿在手上让你看了几秒，然后收回去。\n\n“我在这儿三年了。掏出来的时候还是会有人多看两眼。”\n\n他把口袋按平。\n\n“这一带所有人的证件都是瓦莱维斯普的。那种带枫叶纹的。玛莎的、格雷格的、瓦朗的都是。”他说，“他们不是故意要多看，是这东西他们平常见不到。”\n\n他停了一下。\n\n“这个国家不难留下——好吧，确实没那么容易——难的是留下之后的事。”\n\n这是他今天说的最长的一段话，而且第一次不是在念条款。\n\n然后他就回到念条款上去了。\n\n“关于居留身份，”他说，“临时居留许可续签需要担保人重新签署，到期前七日内可以提交，提交之后审批期间居留有效，你不会因为等结果而变成非法居留。”\n\n“首次续签是九十日。连续三次之后转为一年一签。五年可以申请长期居留，长期居留不等于国籍。”他停了半秒，“国籍需要八年，以及一份来自本地司法辖区的推荐。”\n\n“八年。”蒂埃里说，“那您可有的忙了。”\n\n他还没说完。\n\n“还有一件事他没提。”他伸出手指点了点提莫西的方向，“申请的时候要填一个公国。八年之后你拿到的不只是玛里尼的证件，还得是某个公国的。”\n\n“所以您得挑。”\n\n他开始数。\n\n“里奇克雷斯特，冬天六个月，出门看不见太阳，人硬，酒烈。弗拉姆科尔那边的人说话像在报价，什么事都要先算一遍。卢明维尔全是念书的，吃饭的时候还在争论。斯托姆盖尔在海边，不问你从哪儿来，也不问别的。”\n\n“王领。”他摇了摇头，“王领不是过日子的地方。”\n\n他数完了。\n\n“所以选这儿。”他说，手指在瓶身上敲了敲。\n\n然后他把瓶子递过来。你接了。里面还有一半，还是温的。\n\n“这儿的人问你从哪儿来，不是在查你。”他说，“是真的想知道。”\n\n他们朝反方向走了。走了几步，蒂埃里回过头。\n\n“瓶子不用还。”"
+      "resultText": "For several seconds after you say it, nobody speaks.\n\nYou hear what you said. You do not know why you said it in front of an inspector and a forester.\n\nAnd then Thierry laughs.\n\nLoudly, with an echo in the emptied street. He waves a hand while he laughs, meaning that he is not laughing at you.\n\n“Kessler,” he says, catching his breath. “Did you hear that?”\n\n“I heard it,” Timothy says.\n\nHe puts a hand inside his uniform and takes something out. A card, dark ground, with a pattern pressed into it. You cannot tell what plant it is.\n\n“This one is the Crown Lands’,” he says.\n\nHe does not hand it to you. He holds it up for you to see for a few seconds, and puts it away.\n\n“Three years I have been here. People still look twice when it comes out.”\n\nHe smooths the pocket flat.\n\n“Everybody around here carries a Valewisp one. The sort with the maple leaf. Martha’s, Gregor’s, Vallant’s, all of them,” he says. “They are not looking twice on purpose. It is only that they do not see this one about.”\n\nHe pauses.\n\n“It is not hard to stay in this country — well, it is not that easy either — what is hard is everything after staying.”\n\nIt is the longest stretch he has spoken all day, and the first time it has not been him reciting terms.\n\nAnd then he goes back to reciting terms.\n\n“On residence,” he says. “Renewal of a temporary permit requires the guarantor to sign again. It may be submitted within seven days of expiry, and residence remains valid while the application is under consideration; you do not become illegal by waiting for a result.”\n\n“The first renewal is ninety days. After three consecutive renewals it becomes annual. At five years you may apply for long-term residence, and long-term residence is not nationality.” He stops for half a second. “Nationality requires eight years, and a recommendation out of a local jurisdiction.”\n\n“Eight years,” Thierry says. “Then you will be busy.”\n\nHe has not finished.\n\n“And there is a thing he left out.” He points a finger in Timothy’s direction. “When you apply you have to enter a duchy. What you get after eight years is not only Marigni’s papers. It has to be some particular duchy’s as well.”\n\n“So you will have to choose.”\n\nHe starts counting them off.\n\n“Ridgecrest: six months of winter, you go out and never see the sun, hard people, hard drink. The Flamincore lot talk like men quoting a price; everything gets reckoned up first. Luminveil is all scholars, still arguing through dinner. Stormgale is on the sea, and does not ask where you are from, or anything else.”\n\n“The Crown Lands.” He shakes his head. “The Crown Lands are not a place to live a life.”\n\nHe has finished counting.\n\n“So choose here,” he says, and taps a finger against the bottle.\n\nThen he holds the bottle out. You take it. There is half of it left, and it is still warm.\n\n“When people here ask where you are from, they are not checking up on you,” he says. “They actually want to know.”\n\nThey go off in opposite directions. A few steps on, Thierry looks back.\n\n“Keep the bottle.”"
     }
   ]
 }
