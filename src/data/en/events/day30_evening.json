@@ -3,35 +3,35 @@
   "day": 30,
   "timing": "evening",
   "forced": true,
-  "title": "结算",
-  "sceneText": "天黑之后，事情一件一件停下来。\n\n田里的人先回来的。然后是马厩那边的灯灭了。厨房的声音持续得最久，玛莎在收拾，她收拾的时间比平时长。\n\n你在办公室把这个月的账做完了最后一页。\n\n桌上摊着的东西：总账、佃户名册、采伐记录、集市的收条、税赋核算表。还有那份担保书的副本，编号 VS-18-0947。\n\n三十天前你在上面签了名。",
+  "title": "The Reckoning",
+  "sceneText": "After dark things stop, one at a time.\n\nThe people in the fields come back first. Then the light in the stable goes out. The kitchen holds on longest; Martha is clearing up, and she takes longer over it than usual.\n\nIn the office you finish the last page of the month’s accounts.\n\nWhat is spread on the desk: the general ledger, the tenant roll, the felling record, the market receipts, the assessment of dues. And the copy of the guarantee, number VS-18-0947.\n\nThirty days ago you put your name to it.",
   "variants": {
-    "admitted": "你在河谷城那条街上说过一句话。你到现在还没有对第二个人说过。",
-    "review": "你把这个月做过的事在纸上列了一遍。不是为了交差，交差的表格已经填完了。你只是想看看这三十天到底装了些什么。\n\n收割了多少个上午，去了几次集市，修了几户人家的屋顶，在马厩待过多少个晚上，有几天是靠着办公室的桌子睡的。\n\n你数出来的数字比你以为的少。三十天不长。\n\n然后你翻到最后一页，看今晚的数字。",
-    "settled": "粮食够过冬，够缴税，够明年播种。金卢有结余。木材留足了取暖的份。\n\n你把账本合上，往椅背上靠。\n\n炉子里的火是玛莎傍晚添的，还旺。窗外没有月亮，霜已经开始落在院子里那几床被子上，埃莱娜今天早上晒出去，忘了收。或者不是忘了。\n\n你坐了很久。\n\n三十天前你从一辆两轮马车上下来，行李放在台阶上，一个五十多岁的人跟你说了四个字。\n\n你不知道明天会怎么样。但今晚这本账是平的。",
-    "short": "你把数字算了三遍。\n\n三遍都一样。\n\n差的不多。差的正好是那种“如果早两个星期多花一个上午”就能补上的量，但没有早两个星期了，只有今晚。\n\n你在办公室坐着，听见远处马厩的门被风撞了一下。\n\n然后你想起一个人。"
+    "admitted": "You said something on that street in Valehold. You have still not said it to a second person.",
+    "review": "You set down on paper what you did this month. Not to account for it; the forms for accounting for it are already filled in. You only wanted to see what these thirty days actually held.\n\nHow many mornings of reaping. How many trips to market. How many households’ roofs mended. How many evenings in the stable, and how many nights you slept against the office desk.\n\nThe numbers come out smaller than you thought. Thirty days is not long.\n\nThen you turn to the last page and look at tonight’s figures.",
+    "settled": "There is grain enough for the winter, enough for the dues, enough to sow next year. There is a surplus in guldmark. Enough timber has been kept back for heating.\n\nYou close the ledger and lean back in the chair.\n\nThe fire in the stove is the one Martha fed at dusk, and it is still up. There is no moon. Frost has begun to settle on those few quilts in the yard — Elena put them out this morning and forgot to bring them in. Or perhaps she did not forget.\n\nYou sit for a long time.\n\nThirty days ago you got down from a two-wheeled cart, your luggage was set on the steps, and a man in his fifties said three words to you.\n\nYou do not know what tomorrow will be. But tonight this book balances.",
+    "short": "You work the figures three times.\n\nThree times the same.\n\nIt is not short by much. It is short by exactly the amount that one more morning spent on it a fortnight ago would have covered — and there is no fortnight ago now. There is only tonight.\n\nYou sit in the office and hear the stable door catch the wind somewhere off.\n\nAnd then you think of somebody."
   },
   "choices": [
     {
       "id": "day30_ride_millridge",
-      "text": "让格雷格备马",
+      "text": "Have Gregor saddle a horse",
       "requiresFlag": "day30Short",
       "effects": {
         "renown": -1,
         "nextScene": "default",
         "flags": { "rodeToMillridge": true },
-        "logEntry": "你让格雷格备马，夜里往磨岭去了。"
+        "logEntry": "You had Gregor saddle a horse and rode for Millridge in the night."
       },
       "nextEvent": "day30_millridge"
     },
     {
       "id": "day30_close_book",
-      "text": "什么也不做。把账本合上",
+      "text": "Do nothing. Close the ledger",
       "requiresFlag": "day30Short",
       "effects": {
-        "logEntry": "你把账本合上了。"
+        "logEntry": "You closed the ledger."
       },
-      "resultText": "你把账本合上了。\n\n数字就是数字。你今晚做什么都不会让它变成别的数字，除了一种做法，而你没有做。\n\n你在黑下来的办公室里坐到很晚。"
+      "resultText": "You closed the ledger.\n\nThe figures are the figures. Nothing you do tonight will make them into different figures, except one thing, and you did not do it.\n\nYou sat in the dark office until very late."
     }
   ]
 }

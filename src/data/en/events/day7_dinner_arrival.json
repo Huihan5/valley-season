@@ -4,8 +4,8 @@
   "timing": "evening",
   "forced": true,
   "activationFlag": "attendedDinner",
-  "title": "棘墙晚宴",
-  "sceneText": "棘墙庄园比枫径大，也比枫径旧。石墙上有一层深色的地衣，看得出没人打算清理它，清理它等于承认它是脏的。\n\n引你进去的仆人走得比你慢半步，一直保持这个距离。\n\n会客室里已经有人了。磨岭的亨克男爵正在跟另外两位领主说话，声音是全场最大的那个。看见你，他立刻抬手招呼，好像你们已经认识很久。\n\n“枫径的新管事。”他快步过来，“我听说了。路德维希动作真快。”\n\n靠窗的位置坐着一位银灰色头发的老妇人。她没有起身，也没有说话，只是把目光转过来。\n\n房间里的音量降了一档。\n\n“玛格丽特。”她说，“欢迎你到我家里来。”\n\n洛伦茨匠师也在，站在壁炉旁边，手里端着一杯没怎么动过的东西。他朝你点了点头。他在这个房间里的位置很微妙，所有人都尊敬他，但没有人把他算作在座的一员。\n\n长桌上摆了七副餐具。你的位置在玛格丽特右手第三个。\n\n不是主宾，也不是末座。\n\n你在坐下的时候意识到，这个位置是有意安排的。他们还没有决定你是谁。\n\n第一道菜是本地的东西，烤根菜配羊肉，用的是深陶器皿，不是银器。玛格丽特完全可以拿出银器。她没有。\n\n“说到木材，”亨克在第二道菜上来之前忽然转向你，“我有个想法。”\n\n“枫径的林地在北坡，运出来要绕过整片丘陵，走你们自己的路得大半天。走我那边只要两个钟头，我的路今年刚修过。”他说得很快，“你把木头交给我，我替你运到河谷城，价钱按市价算，多出来的差价我们对半分。你省下的是时间，时间才是你现在最缺的东西。”\n\n他说得没有错。你现在最缺的确实是时间。\n\n桌上安静了一下。",
+  "title": "The Thornwall Dinner",
+  "sceneText": "Thornwall is larger than Maplegate, and older. There is a dark growth of lichen on the stone, and plainly nobody intends to clean it off; cleaning it off would concede that it is dirt.\n\nThe servant showing you in walks half a step behind you and keeps exactly that distance.\n\nThere are people in the receiving room already. Baron Henk of Millridge is talking to two other landholders, and his is the loudest voice in the room. Seeing you, he raises a hand at once, as though you had known each other a long time.\n\n“The new steward at Maplegate.” He comes over quickly. “I had heard. Ludwig does move fast.”\n\nAn old woman with silver-grey hair is sitting in the seat by the window. She does not rise and she does not speak. She only turns her eyes over.\n\nThe volume in the room drops a step.\n\n“Marguerite,” she says. “You are welcome in my house.”\n\nMaster Lorenz is here too, standing by the fireplace with a glass in his hand that he has barely touched. He gives you a nod. His position in this room is a delicate one: everybody respects him, and nobody counts him as one of the company.\n\nThere are seven places laid at the long table. Yours is the third on Marguerite’s right.\n\nNot the guest of honour. Not the foot of the table.\n\nSitting down, you understand that the place was chosen. They have not yet decided who you are.\n\nThe first course is local: roast roots with mutton, served in deep earthenware, not silver. Marguerite could perfectly well have put out silver. She has not.\n\n“Speaking of timber,” Henk says, turning to you suddenly before the second course, “I have an idea.”\n\n“Maplegate’s woodland is on the north slope. Getting it out means going round the whole line of hills; by your own road that is the better part of a day. By mine it is two hours, and my road was resurfaced this year.” He talks fast. “Hand the timber to me, I will get it to Valehold for you, we price it at market, and we split the difference above it. What you save is time, and time is the thing you are shortest of.”\n\nHe is not wrong. Time is exactly what you are shortest of.\n\nThe table goes quiet for a moment.",
   "onEnterEffects": {
     "flags": {
       "metMarguerite": true,
@@ -16,28 +16,28 @@
   "choices": [
     {
       "id": "dinner1_accept",
-      "text": "这听起来很划算，我们可以试试",
+      "text": "That sounds like good value. We could try it",
       "effects": {
         "relationships": { "henk": 1 },
         "flags": { "dinnerPick1": "A", "consideringMillridgeDeal": true },
-        "logEntry": "你在晚宴上当场应下了亨克的木材提议。"
+        "logEntry": "You accepted Henk’s timber proposal on the spot at the dinner."
       }
     },
     {
       "id": "dinner1_refuse",
-      "text": "恕我直言，我不认为把庄园的木材交给邻庄是稳妥的做法",
+      "text": "Forgive me, but I do not think handing the estate’s timber to a neighbour is sound",
       "effects": {
         "relationships": { "henk": -1 },
         "flags": { "dinnerPick1": "B" },
-        "logEntry": "你在晚宴上当众回绝了亨克的木材提议。"
+        "logEntry": "You refused Henk’s timber proposal in front of the table."
       }
     },
     {
       "id": "dinner1_defer",
-      "text": "我得先看看今年的采伐额度还剩多少，回头给您答复",
+      "text": "I shall have to see how much of this year’s allowance is left, and answer you then",
       "effects": {
         "flags": { "dinnerPick1": "C" },
-        "logEntry": "你把亨克的提议推到了一个有数据的时刻再答复。"
+        "logEntry": "You put off answering Henk until you had the figures."
       }
     }
   ]

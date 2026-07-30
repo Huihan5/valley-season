@@ -4,36 +4,36 @@
   "timing": "evening",
   "forced": true,
   "activationFlag": "attendedDinner",
-  "title": "棘墙晚宴",
-  "sceneText": "主菜之后，一位邻庄领主放下了刀。\n\n“那位……前任，”他说，“到底是怎么回事？”\n\n桌上的动作都轻了一点。所有人都在继续吃饭，但节奏对不上了。\n\n亨克笑了笑。“人各有志。做这行做久了，谁都会有想换个活法的时候。”\n\n玛格丽特没有说话。她在等你开口。",
+  "title": "The Thornwall Dinner",
+  "sceneText": "After the main course one of the neighbouring landholders puts down his knife.\n\n“That … predecessor of yours,” he says. “What actually happened there?”\n\nEvery movement at the table gets a little quieter. Everyone goes on eating, and the rhythm no longer matches.\n\nHenk smiles. “Every man to his own road. Anybody who does this work long enough has a moment of wanting a different life.”\n\nMarguerite says nothing. She is waiting for you to speak.",
   "next": "day7_dinner_departure",
   "choices": [
     {
       "id": "dinner2_investigating",
-      "text": "我正在查这件事",
+      "text": "I am looking into it",
       "effects": {
         "flags": { "dinnerPick2": "A" },
-        "logEntry": "你在晚宴上说你正在查霍特曼的事。"
+        "logEntry": "You said at the dinner that you were looking into Hartmann."
       },
-      "resultText": "“我正在查这件事。”\n\n你说完就知道说早了。\n\n亨克的表情没有变，他还在笑，但他放下叉子的动作比刚才慢了半拍。\n\n“查。”他说，“查什么？”\n\n你说账目上有些地方对不上。\n\n“账目。”他重复了一遍，然后转向那位邻庄领主，“你看，这就是新来的人的好处。老人做惯了的事，新人一眼就看出不对。”\n\n桌上有人附和。话题就这样过去了。\n\n玛格丽特一直没有说话。\n\n席间剩下的时间里，亨克跟你聊了两次木材，一次天气。他非常友善。"
+      "resultText": "“I am looking into it.”\n\nYou know as soon as it is out that it was too soon.\n\nHenk’s expression does not change. He is still smiling, and he sets his fork down half a beat slower than he did before.\n\n“Looking into it,” he says. “Looking into what?”\n\nYou say there are places in the accounts that do not come out.\n\n“The accounts.” He repeats it, and then turns to the neighbouring landholder. “There, you see — that is the good of a new man. What the old hands have grown used to, a new one sees is wrong at a glance.”\n\nSomebody at the table agrees with him. And so the subject passes.\n\nMarguerite has not spoken at all.\n\nFor the rest of the meal Henk talks to you twice about timber and once about the weather. He is extremely pleasant."
     },
     {
       "id": "dinner2_not_my_business",
-      "text": "我不清楚。我接手的是庄园，不是他的事",
+      "text": "I do not know. What I took over was the estate, not his affairs",
       "effects": {
         "flags": { "dinnerPick2": "B" },
-        "logEntry": "你在晚宴上把霍特曼的话题挡了回去。"
+        "logEntry": "You turned the subject of Hartmann away at the dinner."
       },
-      "resultText": "“我不清楚。”你说，“我接手的是庄园，不是他的事。”\n\n那位邻庄领主点了点头，说这话在理。\n\n话题转到了今年的价钱上。\n\n你没有失分，也没有得到任何东西。这顿饭剩下的部分你吃得很安稳。\n\n玛格丽特在你说完之后看了你一眼，然后就低头喝汤了。\n\n你不知道那一眼是什么意思。整晚你都没有再弄明白。"
+      "resultText": "“I do not know,” you say. “What I took over was the estate, not his affairs.”\n\nThe neighbouring landholder nods and says that is fair enough.\n\nThe talk moves on to this year’s prices.\n\nYou have lost nothing, and you have got nothing. You eat the rest of the meal in peace.\n\nMarguerite looked at you once after you had finished speaking, and then bent to her soup.\n\nYou do not know what that look meant. You never work it out all evening."
     },
     {
       "id": "dinner2_ask_them",
-      "text": "我到得太晚，没见过他。各位比我更了解他，他是个什么样的人？",
+      "text": "I arrived too late to meet him. You all knew him better than I — what sort of man was he?",
       "effects": {
         "flags": { "dinnerPick2": "C" },
-        "logEntry": "你把霍特曼的话题递给了桌上的人。"
+        "logEntry": "You handed the subject of Hartmann back to the table."
       },
-      "resultText": "亨克是第一个开口的，他说霍特曼是个“太认真的人”，说完自己笑了一下，好像这个评价里有什么好笑的地方。\n\n那位邻庄领主说他记性好得吓人，三年前的一笔账都能背出来。\n\n玛格丽特一直没有加入。等到话题快要过去的时候，她才说了一句。\n\n“他上一次到我这儿来，是在夏末。”\n\n她没有说他来做什么。她说完就伸手去拿水杯，这个动作结束了这个话题。"
+      "resultText": "Henk speaks first. He says Hartmann was “a man who took it all too seriously”, and laughs a little after saying it, as though there were something funny in the assessment.\n\nThe neighbouring landholder says his memory was frighteningly good — that he could recite an entry from three years back.\n\nMarguerite does not join in. Only when the subject is nearly past does she say one thing.\n\n“The last time he came to me was at the end of the summer.”\n\nShe does not say what he came for. Having said it she reaches for her water glass, and that movement ends the subject."
     }
   ]
 }
