@@ -1,5 +1,32 @@
 # Valley Season — Changelog
 
+## [2026-07-30] — 阶段八完成：中英双语
+
+### Added
+- **英译全部完成**：53 个内容文件，45,002 汉字。`src/data/en` 与 `src/data/zh` 同形
+- `tests/Localization.test.ts` 共八条守卫。除了票二那五条（键集合、数组长度、占位符、段落数、标识符），新增三条：
+  - **引号配平**。中文数「」与“”，英文数 curly。这是英译里唯一一类**静默失败**：漏一个右引号不报错、不崩、不影响拼接，只在玩家眼前的场景中间露出来。加这条测试是因为它真抓到了一个（`day19_hunt_ride.range_first`）
+  - **en 目录不得残留汉字**，`ui.titleScreen.titleRoman` 单独白名单并在测试里写明理由
+  - **zh 目录不得混入英文句子**。判据是「空格分隔的纯字母词 ≥ 3」——标识符用下划线不用空格，所以 `guarantee_letter`、`random_lost_ox`、`zh-CN`、`{day} · {phase}` 都不会误报
+  - 两条新守卫都用注入违例的方式验证过会红，撤销后回绿
+- `utils/text.ts` 新增 `plural(n, one, many)`
+
+### Changed
+- **英文的复数一致性**。中文不需要数的一致，所以票一抽字符串时从来没有单数形式，跑通一局才看见 `1 entries ↑`。所有可能取到 1 的计数都补了单数键：记录条数、粮食与木材两行、收割与采伐的日志、集市四处。**zh 两个形式故意写成一样的**，这是正确的而不是偷懒
+- `SceneSystem` 的地点前缀句号、`ui.phaseInline`（面板要 `Morning`，句子里要 `morning`）同理——只有英文在乎这些
+
+### Notes
+- **作者本轮定的两组语域**，都已写进 GDD ch.12：
+  - 圣火节：法定 `The Rite of the Sacred Flame` / 教内 `Sacred Flame Observance` / 日常 `The Kindling`。`Feast of the Flame` 弃用（旅游宣传册语域）
+  - 归火：公文 `Consecrated Cremation` / 日常 `The Returning` / 宗教 `received by the Flame`
+  - 这**不是**同义词组。选错等于把说话人放错阶层。Day 7 晚宴一场戏里就用了两档：席上问洛伦茨用 `the Observance`，玛格丽特讲路德维希的私事用 `the Kindling`
+- **一处教训**：进度文档里我曾把 `day27_street_corner` 的圣火节记作「两位公务员 → the Rite」。真读到那行才发现说话的是蒂埃里、讲的是集市卖什么，应取 `the Kindling`。**语域要看谁在说、在说什么，不能看场景里站着谁**
+- 新增专名，均经作者批准并入 GDD ch.12：`Maplegate Avenue`、`Luminhold`。另有 `the Crown Lands`（王领），按行政通名处理，未入表
+- 两处「数字数」的中文原文按实际字数修正（作者授权）：`stable_help[1]` 三→四个字，`day30_evening.settled` 四→五个字。英文按英文词数各为 three words
+- 488 个测试全绿，`tsc --noEmit` 干净。浏览器验证：`locale=en` 从担保书十三页走到 Day 1，界面、正文、选项、日志全英文，无 console 错误
+
+---
+
 ## [2026-07-30] — 阶段八票三：英译进行中（15 / 54 文件）
 
 ### Added

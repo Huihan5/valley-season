@@ -18,7 +18,7 @@
 | 5 | 调查系统与结局 | 已完成 |
 | 6 | PlaytestFeedback 收尾、随机事件池、引号归一 | 已完成 |
 | 7 | 解雇线收紧 + 存档系统 | 已完成 |
-| 8 | 中英双语 | 票一、票二完成；票三英译 44 / 54 文件（见「阶段八 · 英译进度」） |
+| 8 | 中英双语 | 已完成（见「阶段八 · 双语收尾记录」） |
 
 ---
 
@@ -386,30 +386,37 @@ PlaytestFeedback 1.e：Day 19 下午的文本里出现"Day 15 那天"，出戏�
 
 ---
 
-## 阶段八 · 英译进度（2026-07-30）
+## 阶段八 · 双语收尾记录（2026-07-30，已完成）
 
-**票一、票二已完成**，见 CHANGELOG。票三英译 **44 / 54 文件**，45,002 → 18,101 汉字。
+票一、票二、票三全部完成，详见 CHANGELOG。这里只留后来会绊人的几条。
 
-**剩下的十个文件**，按量：
+### 一 · `en/ui.json` 里有三个汉字，是故意的
 
-| 汉字 | 文件 | 注意 |
-|---|---|---|
-| 6368 | `endings/endings.json` | 按 variant 块分别译，**不要合成一篇**；`ending1.variants.early` 是施工方写的占位文本 |
-| 3294 | `opening.json` | 担保书是法律文书语域；格雷格第一句「玛莎在里面。」= `Martha is inside`（三个英文词，Day 30 引用它时说的是 three words） |
-| 1601 | `day22.json` | 维特四档，**他不提供玩家未持有的信息**，译时不要让他显得知道更多 |
-| 1391 | `day27_street_corner.json` | 有一处圣火节，说话人是两位公务员 → `the Rite of the Sacred Flame` |
-| 1256 | `day30_millridge.json` | |
-| 1166 | `day18_hunt_arrival.json` | |
-| 1162 | `day15_stumps.json` | 蒂埃里量三个树桩，「量得很快，但每一次都量了两遍」是他的核心动作 |
-| 995 | `day21_hunt_lorenz.json` | 有一处圣火节，说话人是洛伦茨 → `Sacred Flame Observance` |
-| 865 | `day19_hunt_ride.json` | |
-| 3 | `ui.json` | **故意留的**，见下 |
+`ui.titleScreen.titleRoman` = 「河谷季」。中文版 h1 是「河谷季」、小字 `VALLEY SEASON`；英文版反过来。`Localization.test.ts` 的「en 不得有汉字」那条给这一个键开了白名单，**理由写在测试里**。**不要「顺手修掉」它**；若哪天不要这个设计了，从两边同时删键，不要填成英文。
 
-**`en/ui.json` 里故意留了三个汉字**：`titleRoman: "河谷季"`。中文版 h1 是「河谷季」、小字 `VALLEY SEASON`；英文版反过来。收尾时要加的「en 目录不得有汉字」测试**必须给这一个键开例外**，并在测试里写明理由，否则下一个人会「顺手修掉」它。
+镜像的一条同理：zh 的 `titleRoman` = `VALLEY SEASON`，在「zh 不得混英文」那条里也有白名单。
 
-**翻译时已定的约定**（逐条见 CHANGELOG 该日条目）：`forge-chapel`（不用 forge-hall）、`Steward` 与 `sir`、`the Duke` + `she`、圣火节三语域、产出档位 `meagre / fair / heavy`、`Maplegate Avenue`、`Luminhold`。
+### 二 · 复数一致性是英文独有的负担
 
-**两处「数字数」的中文原文已按实际字数修正**（作者 7-30 授权）：`action_results.stable_help[1]` 三个字→四个字，`day30_evening.settled` 四个字→五个字。英文版按英文实际词数各为 three words。
+中文不需要数的一致。所有可能取到 1 的计数都有 `XxxOne` 单数键，靠 `utils/text.ts` 的 `plural(n, one, many)` 选。目前八处：`ui.logDrawer.expandOne`、`ui.resources.unitOne`、`actions.harvest.logOne`、`actions.fellTimber.logOne` 与 `withinQuotaOne`、`actions.market` 的 `sellGrainOne` / `sellTimberOne` / `capacityLeftOne` / `finishDescriptionOne`。
+
+**zh 的单数形式与复数形式一字不差，这是对的。** 后面新增任何带 `{n}` + 名词的串，都要想一下 n 能不能等于 1。
+
+同类的「只有英文在乎」还有两处：`ui.sceneLabel`（地点名与正文之间的句号 / 句点）与 `ui.phaseInline`（面板要 `Morning`，句子里要 `morning`）。
+
+### 三 · 语域要看谁在说，不能看场景里站着谁
+
+圣火节与归火各有三个语域（GDD ch.12 有表）。**这不是同义词组。** 施工时我在进度文档里把 `day27_street_corner` 记作「两位公务员 → the Rite」，真读到那一行才发现说话的是蒂埃里、讲的是集市卖什么，应取 `the Kindling`。按笔记套语域会套错。
+
+一处特意做出来的效果：`day21_hunt_lorenz` 的 `The kindling for the Observance is taken from here.`——神殿的词和河谷的词同句，正好解释了日常简称为什么就是那个东西的名字。中文「圣火节」与「引火柴」不共享任何字，这层因果只有英文说得出来。反过来，`scenes/market.json` 第三幕那句要避开撞词（改用 `bundled tinder`）：**同段撞词是噪音，跨语域并置才是信息。**
+
+### 四 · 引号是唯一的静默失败
+
+漏一个右引号不报错、不崩、不影响 `\n\n` 拼接，只在玩家眼前的场景中间露出来。`Localization.test.ts` 现在数配平，中文数「」与“”，英文数 curly。加这条是因为它真抓到一个（`day19_hunt_ride.range_first`）。
+
+### 五 · 若要加第三种语言
+
+`src/data/locale.ts` 的 `LOCALES` 加一项，`src/data/xx/` 复制一份目录并把 `index.ts` 声明为 `Bundle`，`src/data/index.ts` 加一个分支。`Localization.test.ts` 目前是**两两对照**写的（`ZH` / `EN` 两个常量），加第三种语言要把它改成对语言列表循环。
 
 ---
 
@@ -538,9 +545,9 @@ Epic 建议名：`Valley Season v3 rebuild`。合计 35 SP。
 | Summary | SP | 状态 |
 |---|---|---|
 | `[v3] Refresh the v2 names in STYLE_GUIDE.md` | 1 | 已完成 |
-| `[v3] Extract the 225 player-facing strings out of code into the data layer` | 3 | 待做 |
-| `[v3] Parallel zh/en data dirs, locale in localStorage, switch on the title screen` | 2 | 待做 |
-| `[v3] Translate src/data narrative to English (45k CJK chars)` | 6 | 待做 |
+| `[v3] Extract the 247 player-facing strings out of code into the data layer` | 3 | 已完成 |
+| `[v3] Parallel zh/en data dirs, locale in localStorage, switch on the title screen` | 2 | 已完成 |
+| `[v3] Translate src/data narrative to English (45k CJK chars)` | 6 | 已完成 |
 
 ---
 
