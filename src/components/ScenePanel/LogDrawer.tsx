@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { LogEntry } from '../../types/game';
 import { PHASE_LABELS, dayName } from '../../systems/TimeSystem';
 import DATA from '../../data';
-import { fill } from '../../utils/text';
+import { fill, plural } from '../../utils/text';
 
 const ui = DATA.ui;
 
@@ -35,7 +35,9 @@ export default function LogDrawer({ log }: { log: LogEntry[] }) {
       >
         <span className="text-cream-dim text-xs tracking-wider">{ui.logDrawer.heading}</span>
         <span className="text-game-dim text-xs">
-          {open ? ui.logDrawer.collapse : fill(ui.logDrawer.expand, { n: log.length })}
+          {open
+            ? ui.logDrawer.collapse
+            : fill(plural(log.length, ui.logDrawer.expandOne, ui.logDrawer.expand), { n: log.length })}
         </span>
       </button>
       <div

@@ -63,6 +63,50 @@ describe('zh and en are the same tree', () => {
     expect(wrong).toEqual([]);
   });
 
+  /**
+   * The one key in `en` that is Chinese on purpose. The Chinese title screen puts
+   * 河谷季 in the headline and VALLEY SEASON under it; the English one turns that
+   * round, and keeps the original title as the small line. It is the same move a
+   * Japanese game makes when it keeps its kanji title in an English release.
+   *
+   * Do not "fix" this by translating it. If the intent ever changes, remove the
+   * key from both bundles rather than filling it in.
+   */
+  const CHINESE_ON_PURPOSE = ['ui.titleScreen.titleRoman'];
+
+  const CJK = /[一-鿿]/;
+
+  it('has no Chinese left in the English bundle', () => {
+    const remaining = Object.keys(EN)
+      .filter(k => typeof EN[k] === 'string' && CJK.test(EN[k] as string))
+      .filter(k => !CHINESE_ON_PURPOSE.includes(k));
+    expect(remaining).toEqual([]);
+  });
+
+  /** The mirror case: the Chinese title screen carries VALLEY SEASON as its small line. */
+  const ENGLISH_ON_PURPOSE = ['ui.titleScreen.titleRoman'];
+
+  it('has no English prose sitting in the Chinese bundle', () => {
+    // A sentence that ended up in the wrong directory. What tells prose from an
+    // identifier is the separator: prose puts spaces between words, `guarantee_letter`
+    // and `random_lost_ox` do not. So count whitespace-separated words that are
+    // nothing but letters, and call three of them a sentence.
+    const englishWords = (s: string) =>
+      s.replace(/\{\w+\}/g, '')
+        .split(/\s+/)
+        .map(t => t.replace(/^[^A-Za-z]+|[^A-Za-z]+$/g, ''))
+        .filter(t => /^[A-Za-z]+$/.test(t))
+        .length;
+
+    const suspect = Object.keys(ZH).filter(k => {
+      const v = ZH[k];
+      if (typeof v !== 'string' || CJK.test(v)) return false;
+      if (ENGLISH_ON_PURPOSE.includes(k)) return false;
+      return englishWords(v) >= 3;
+    });
+    expect(suspect).toEqual([]);
+  });
+
   it('closes every quotation it opens, on both sides', () => {
     // A dropped closing quote survives every other check here: the key is present,
     // the placeholders match, the paragraph count matches. It only shows up on

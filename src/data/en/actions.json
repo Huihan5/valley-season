@@ -9,7 +9,8 @@
     "text": "Reap in the fields",
     "estimate": "Expect a {tier} harvest",
     "rainedOut": "Rain. The fields are mud and next to nothing can be got in",
-    "log": "You reaped the fields in the {phase} and brought in {n} units."
+    "log": "You reaped the fields in the {phase} and brought in {n} units.",
+    "logOne": "You reaped the fields in the {phase} and brought in {n} unit."
   },
   "fellTimber": {
     "text": "Cut timber in the woods",
@@ -19,7 +20,9 @@
     "pastQuota": "Expect a {tier} cut · already past the season’s allowance",
     "withinQuota": "Expect a {tier} cut, {n} units left of the season’s allowance",
     "log": "You cut {n} units of timber in the woods.",
-    "rainBlocked": "No felling in the rain"
+    "rainBlocked": "No felling in the rain",
+    "logOne": "You cut {n} unit of timber in the woods.",
+    "withinQuotaOne": "Expect a {tier} cut, {n} unit left of the season’s allowance"
   },
   "forage": {
     "text": "Forage the woods for mushrooms and herbs",
@@ -68,7 +71,11 @@
     "finishIdle": "Do nothing",
     "finishDescription": "{n} units gone today. {capacity}",
     "finishSoldLog": "You settled the day’s accounts and drove the empty cart back to Maplegate.",
-    "finishIdleLog": "You went round the market and traded nothing."
+    "finishIdleLog": "You went round the market and traded nothing.",
+    "sellGrainOne": "Sell {n} unit of grain",
+    "sellTimberOne": "Sell {n} unit of timber",
+    "capacityLeftOne": "The cart will take {n} more unit (a trip carries {cap})",
+    "finishDescriptionOne": "{n} unit gone today. {capacity}"
   },
   "hunt": {
     "text": "Ride out to today’s hunt",

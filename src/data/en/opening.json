@@ -3,93 +3,93 @@
     {
       "id": "guarantee_letter",
       "kind": "letter",
-      "act": "临时居留及劳务担保书",
+      "act": "Guarantee of Temporary Residence and Labour",
       "heading": "",
-      "text": "VALLEY SEASON 河谷季\n\n玛里尼王国 · 临时居留及劳务担保书\n\n编号：VS-18-0947 · 签发机关：玛里尼王国内政部 · 瓦莱维斯普公国文秘室联署\n\n据《玛里尼基本法》第十四章有关外籍人士临时居留之规定，及瓦莱维斯普公国领地劳务管理惯例，兹由下列担保人为下列被担保人之临时居留及劳务事宜提供全额担保。\n\n一、担保人\n瓦莱维斯普公国枫径庄园领主，贵族院议员\n男爵 路德维希·冯·阿尔德\n\n二、许可范围与期限\n被担保人获准于瓦莱维斯普公国河谷城北辖区枫径庄园范围内居留，从事庄园管理相关劳务。许可期限为自抵达之日起三十日整。届满未经续签，被担保人须于七日内离开玛里尼王国领土。\n\n三、担保人责任\n被担保人的劳动性质为庄园运营、家政人员及内部事务的监督管理，居住地址为主庄园宅邸内。担保人对被担保人在许可期内之行为承担连带责任，并负责提供住所、膳食及以 150 圣火金卢计价之劳务报酬。\n\n四、被担保人义务\n被担保人应遵守玛里尼王国法律、瓦莱维斯普公国地方法规以及居住地司法辖区的习惯。被担保人不得从事超出许可范围的活动，亦不得公开传播任何违反《基本法》第七章规定的宗教、意识形态或政治教义。\n\n五、圣火庇佑\n在许可有效期内，被担保人享有与玛里尼臣民同等的圣火保护权利，并承担相应的义务。\n\n六、签署与用印\n双方特此确认本文件所载一切信息准确无误。担保人确认接受第三节所规定的连带责任。被担保人确认理解并接受第四节和第五节所规定的全部义务。\n\n担保人签署：冯·阿尔德　　日期：2018 年 9 月 27 日\n被担保人签署：＿＿＿＿＿＿　　日期：2018 年 9 月 25 日\n\n玛里尼王国内政部 · 圣火铸印 ｜ 瓦莱维斯普公国文秘室 · 公国印"
+      "text": "VALLEY SEASON\n\nKingdom of Marigni · Guarantee of Temporary Residence and Labour\n\nNo. VS-18-0947 · Issued by the Ministry of the Interior, Kingdom of Marigni · Countersigned by the Chancery of the Duchy of Valewisp\n\nPursuant to the provisions of Chapter Fourteen of the Basic Law of Marigni concerning the temporary residence of foreign nationals, and to the customary practice governing labour on the demesnes of the Duchy of Valewisp, the guarantor named below hereby provides full guarantee for the temporary residence and labour of the guaranteed party named below.\n\nI. Guarantor\nLord of Maplegate Estate in the Duchy of Valewisp, Member of the House of Nobles\nBaron Ludwig von Alder\n\nII. Scope and Term of Permission\nThe guaranteed party is permitted to reside within the bounds of Maplegate Estate, north district of Valehold, Duchy of Valewisp, and to perform labour relating to the management of the estate. The term of permission is thirty days entire, counted from the date of arrival. Where no renewal is obtained upon expiry, the guaranteed party is required to depart the territory of the Kingdom of Marigni within seven days.\n\nIII. Responsibilities of the Guarantor\nThe nature of the guaranteed party's labour is the supervision and management of estate operations, of domestic staff and of internal affairs; the address of residence is within the main manor house. The guarantor accepts joint liability for the conduct of the guaranteed party during the term of permission, and undertakes to provide lodging, board, and remuneration for labour to the value of 150 guldmark.\n\nIV. Obligations of the Guaranteed Party\nThe guaranteed party shall observe the laws of the Kingdom of Marigni, the local ordinances of the Duchy of Valewisp, and the customs of the jurisdiction of residence. The guaranteed party shall not engage in activity exceeding the scope of permission, nor publicly propagate any religious, ideological or political doctrine contrary to the provisions of Chapter Seven of the Basic Law.\n\nV. Protection of the Sacred Flame\nFor the duration of the permission, the guaranteed party enjoys rights of protection under the Sacred Flame equal to those of subjects of Marigni, and bears the obligations corresponding thereto.\n\nVI. Signature and Seal\nBoth parties hereby confirm that every particular set out in this document is accurate. The guarantor confirms acceptance of the joint liability set out in Section III. The guaranteed party confirms understanding and acceptance of all obligations set out in Sections IV and V.\n\nSigned, guarantor: von Alder    Date: 27 September 2018\nSigned, guaranteed party: ______    Date: 25 September 2018\n\nMinistry of the Interior, Kingdom of Marigni · Seal Forged in the Sacred Flame | Chancery of the Duchy of Valewisp · Seal of the Duchy"
     },
     {
       "id": "forgehold_1",
       "kind": "scene",
-      "act": "第一幕 · 铸都",
-      "heading": "中介的话",
-      "text": "“瓦莱维斯普公国，枫径庄园。”\n\n中间人把那份文件推到桌面这边来的时候，窗外的铸都正下着一种介于雾和细雨之间的东西，银灰色的光把他办公室里所有的纸张都染成了同一种颜色。\n\n“领主急缺一位临时管事，原先那位突然走了，连交接都没有。秋收马上就到，庄园里的事情堆了快三个星期没人管。”\n\n他没有看你。他在整理另一叠文件。\n\n“为期三十天，食宿全包，报酬合理。瓦莱维斯普那边的活儿不复杂，但需要有人立刻过去。”\n\n他合上文件夹。\n\n“不过说实在的，冯·阿尔德男爵愿意担保一个外国人，这种机会不多见。”"
+      "act": "Act One · Forgehold",
+      "heading": "What the Agent Said",
+      "text": "“The Duchy of Valewisp. Maplegate Estate.”\n\nWhen the middleman pushes the document across the desk to your side, outside the window Forgehold is coming down with something between fog and fine rain, and the silver-grey light has stained every sheet of paper in his office the same colour.\n\n“The lord is badly in want of a temporary steward. The last one left suddenly. There was no handover at all. Harvest is on them, and the estate has had nobody running it for close to three weeks.”\n\nHe is not looking at you. He is squaring up another stack of papers.\n\n“Thirty-day term, board and lodging found, reasonable pay. The work over in Valewisp is not complicated, but somebody has to go at once.”\n\nHe closes the folder.\n\n“Though I will say this. Baron von Alder being willing to guarantee a foreigner — that is not an opportunity you see often.”"
     },
     {
       "id": "forgehold_2",
       "kind": "scene",
-      "act": "第一幕 · 铸都",
-      "heading": "男爵的评估",
-      "text": "冯·阿尔德男爵在铸都的公国馆见了你。\n\n会面很短。他的办公室朝北，没有阳光，墙上挂着一幅枫径庄园的小幅画，那是办公室里唯一一件不是文件的东西。\n\n他翻了你的简历。问了两个问题，都是关于账务的。你回答的时候他没有抬头。\n\n第二个问题是：如果一本账上有一笔你看不懂的支出，你会先做什么。\n\n“可以。”他说。然后他在那份担保书上签了字，把它推回给中间人。整个过程没有超过十五分钟。\n\n你起身的时候他已经在看别的文件了。走到门口，你回头看了一眼那幅画。\n\n你走出代表馆的时候，铸都的天空还是那种银灰色。你手里攥着一张火车票。"
+      "act": "Act One · Forgehold",
+      "heading": "The Baron's Assessment",
+      "text": "Baron von Alder saw you at the duchy's chambers in Forgehold.\n\nThe meeting was short. His office faces north and gets no sun. On the wall hangs a small painting of Maplegate Estate, the one thing in the room that is not a document.\n\nHe went through your record. He asked two questions, both about accounts. He did not look up while you answered.\n\nThe second question was: if there is an item of expenditure in a ledger that you cannot make sense of, what do you do first.\n\n“That will do,” he said. Then he signed the guarantee and pushed it back to the middleman. The whole thing took under fifteen minutes.\n\nHe was already reading something else as you stood up. At the door you looked back once at the painting.\n\nWhen you came out of the chambers the Forgehold sky was still that silver grey. You had a railway ticket gripped in your hand."
     },
     {
       "id": "forgehold_3",
       "kind": "scene",
-      "act": "第一幕 · 铸都",
-      "heading": "王国中央车站",
-      "text": "车站位于铸者之河的下游、铸都南岸市区的边缘。\n\n大厅是一座用北境山脉的青灰色石材建造的穹顶建筑，光线从穹顶高处的窄窗倾泻而下，被空气中的微尘切割成一道道可见的光柱。钢铁与石材的接合处有一种极其精确的衔接方式，这座城市的建筑像是从岩石里长出来的，又像是被人用极大的耐心一块一块铸造出来的。\n\n站台上的空气是冷的，带着铁轨的金属气息和远处河水的湿意。几辆列车安静地停靠着，车身是深灰色，窗框是铜色，没有广告，没有多余的标识，只有车次编号和目的地名称用小号铜字嵌在车厢侧面。\n\n你的车次是 08:40，终点站是河谷城北。\n\n回头望去，铸者之河对岸的北岸上城区在晨雾中只露出轮廓，冠焰宫的塔尖、圣堂的穹顶、君王之跃石桥连成一条淡灰色的天际线。你没来得及去那边看过。也许以后也不会。\n\n你上了车，找到座位，把行李放好。车门关闭的声音很轻。"
+      "act": "Act One · Forgehold",
+      "heading": "The Kingdom's Central Station",
+      "text": "The station stands downstream on the River Forgel, at the edge of the south-bank quarter of Forgehold.\n\nThe hall is a domed building of the grey-green stone of the northern ranges, and the light pours down from narrow windows high in the dome and is cut by dust in the air into visible columns. Where steel meets stone the joins are made with extreme precision. The architecture of this city looks as though it grew out of the rock, and also as though it were cast, block by block, by somebody with enormous patience.\n\nThe air on the platform is cold, carrying the metal of the rails and the damp of the river further off. Several trains stand quietly at rest, dark grey bodies, copper window frames, no advertising and no unnecessary markings — only the service number and the name of the destination, set into the side of each carriage in small copper letters.\n\nYour train is the 08:40. The terminus is Valehold North.\n\nLooking back, the upper town on the north bank of the River Forgel shows only its outline in the morning fog: the spires of Crownblaze Palace, the dome of the Sanctum, and the stone span of the King's Leap running together into one pale grey skyline. You never got over there to see it. Perhaps you never will.\n\nYou board, find your seat and stow your case. The carriage door closes very quietly."
     },
     {
       "id": "valley_4",
       "kind": "scene",
-      "act": "第二幕 · 河谷",
-      "heading": "离开山脉",
-      "text": "列车驶入第一条隧道时，车厢里暗了下来。\n\n从铸都到河谷城，铁路要穿过北境山脉南麓的三条隧道和两个山口。这些通道直属王领管辖，沿途每隔一段就能看到路基旁的小型关卡和信号站，有些看起来已经很古老了，石墙上长着苔藓，但信号灯是新的。\n\n隧道里的空气有一种地下特有的凉意，不是冷，是一种温度被岩石吸走后的平静。\n\n出了最长的那条隧道，光线突然涌进来。"
+      "act": "Act Two · The Valley",
+      "heading": "Leaving the Mountains",
+      "text": "The carriage goes dark as the train runs into the first tunnel.\n\nBetween Forgehold and Valehold the railway passes through three tunnels and two passes on the southern face of the northern ranges. These works fall directly under the Crown Lands, and every so often along the line you can see a small checkpoint and signal post beside the trackbed. Some of them look very old, with moss on the stone, and the signal lamps are new.\n\nThe air in a tunnel has a coolness particular to being underground. Not cold. A calm left behind after the rock has taken the temperature out of it.\n\nComing out of the longest one, the light floods in all at once."
     },
     {
       "id": "valley_5",
       "kind": "scene",
-      "act": "第二幕 · 河谷",
-      "heading": "风景转换",
-      "text": "山脉的南坡和北坡是两个世界。\n\n北坡，铸都那一边，是灰色的，岩石裸露，植被稀疏，天空像被水洗过后没有晾干。南坡的颜色忽然变得多了起来：针叶林让位给了混交林，深绿色的冷杉之间开始出现金黄的桦树和正在变色的橡树。山势在降低，河谷在展开。\n\n列车沿着一条支流的河谷缓缓下行。窗外的树冠从灰绿变成黄绿，再变成金色，像有人在铁路两侧一层一层地刷上颜料。空气也不一样了，少了金属的冷冽，多了一种甜而厚重的气味，你后来会知道那是落叶腐殖的味道。\n\n偶尔经过一个小镇，站台上有人在等别的车次。他们穿得比铸都的人随意，颜色也暖一些。\n\n没有人注意到你。"
+      "act": "Act Two · The Valley",
+      "heading": "The Country Changes",
+      "text": "The south face of the range and the north face are two different worlds.\n\nThe north face, the Forgehold side, is grey. Bare rock, thin cover, a sky like something washed and not dried. On the south face the colours suddenly multiply: conifer gives way to mixed woodland, and among the dark green firs there begin to be gold birches and oaks in the middle of turning. The land falls away. The valley opens out.\n\nThe train works slowly down the valley of a tributary. Outside the window the canopy goes from grey-green to yellow-green to gold, as though somebody had laid the colour on in coats along both sides of the line. The air is different too: less of the cold of metal, and more of a smell both sweet and heavy, which you will learn later is leaf mould.\n\nNow and then you pass a small town, with people on the platform waiting for other trains. They are dressed more easily than people in Forgehold, and in warmer colours.\n\nNobody notices you."
     },
     {
       "id": "valley_6",
       "kind": "scene",
-      "act": "第二幕 · 河谷",
-      "heading": "瓦莱维斯普",
-      "text": "过了第三个小站之后，地势彻底平缓下来。\n\n窗外是大片的农田和牧场，沿河两岸铺展开的麦田，有些已经收割完毕，留下整齐的短茬和翻过的黑色泥土；有些还在等待，饱满的麦穗在风中低头，颜色是一种深沉的金色，接近琥珀。远处的丘陵上有成片的林地，秋天把它们染成了一面面参差不齐的铜红色旗帜。\n\n牛群在田埂上慢慢走动。有一座庄园从树丛后面露出屋顶，石板屋顶上的烟囱正在冒着稀薄的炊烟。\n\n你不知道那是谁的庄园。你只知道你要去的那一座，在更北的丘陵上。\n\n列车开始减速。"
+      "act": "Act Two · The Valley",
+      "heading": "Valewisp",
+      "text": "After the third halt the ground levels out altogether.\n\nOutside the window is farmland and pasture at large, wheat spread along both banks of the river. Some of it is cut already, leaving even stubble and turned black earth; some of it is still waiting, the full heads bowing in the wind, a deep gold verging on amber. On the hills further off there are stretches of woodland, and autumn has dyed them into ragged copper-red banners.\n\nCattle move slowly along the field banks. One estate shows its roof from behind a stand of trees, and thin smoke from the cooking fire is coming off a chimney on the slate.\n\nYou do not know whose estate that is. You know only that the one you are going to is further north, up in the hills.\n\nThe train begins to slow."
     },
     {
       "id": "valley_7",
       "kind": "scene",
-      "act": "第二幕 · 河谷",
-      "heading": "河谷城北",
-      "text": "在城中心，更大、更正式的是河谷城的主站。与之相比，北站是一个只有两条轨道的小站，站台上铺着和铸都一样的青灰色石板，缝隙里长着草。候车室的门半开着，里面空荡荡的，墙上贴着一张公国林业法令的公告和一张本季集市时间表。\n\n你拎着行李走出站台。九月底的午后，阳光还有些力气，但风里已经能闻到秋天。\n\n站台旁边的空地上停着一辆两轮马车，朴素的那种，深色的木车身，没有多余的装饰。挽马是一匹灰褐色的中型工作马，安静地站着嚼草。\n\n马车旁边站着一个人。五十多岁，穿着一件洗得发白的深色外套，帽檐低压。他看见你的时候点了一下头，没有说话。他走过来，把你的行李箱提上车尾的货架，动作不快但很准确。\n\n然后他走回驾座，等你上车。\n\n整个过程没有一句寒暄。"
+      "act": "Act Two · The Valley",
+      "heading": "Valehold North",
+      "text": "The larger and more formal station is Valehold's main one, in the centre of the town. Against it, the north station is a small stop with two tracks, the platform laid with the same grey-green slabs as in Forgehold, grass growing up through the joints. The waiting-room door stands half open on an empty room, and on the wall are a notice of the duchy's forestry decrees and a timetable of this season's markets.\n\nYou carry your luggage out off the platform. Late September afternoon; there is still some strength in the sun, but you can smell autumn in the wind.\n\nOn the open ground beside the platform stands a two-wheeled cart, the plain kind, dark wooden body, nothing about it for show. In the shafts is a grey-brown working horse of middling size, standing quietly and chewing.\n\nA man is standing by the cart. Fifties, in a dark coat washed pale, the brim of his hat low. When he sees you he gives one nod and says nothing. He comes over and lifts your case onto the rack at the back of the cart. Not quickly, but exactly.\n\nThen he goes back to the driver's seat and waits for you to get up.\n\nThrough all of it there is not one word of greeting."
     },
     {
       "id": "maplegate_8",
       "kind": "scene",
-      "act": "第三幕 · 枫径",
-      "heading": "行径",
-      "text": "马车驶上了一条维护得还不错的土路，两侧是收割过的麦田和零星的果树。\n\n车轮在硬土上发出有规律的轧声。格雷格，你后来才知道他的名字，坐在前面赶车，背对着你，脊背很直。马蹄声是这段路上唯一的节奏。\n\n你试着打量四周。从这里能看到北面的丘陵线，上面有深色的林地。南面是开阔的谷地，谷水河在远处折了一道弯，河面反射着下午的光。空气比车站那边更甜，也更安静，你意识到你已经很久没有听到这种安静了。\n\n路过一个三岔口，路标上用两种文字写着方向，上面一行是你看不懂的古语，下面一行是通用语。往北：枫径庄园，四公里。\n\n格雷格让马拐了弯。"
+      "act": "Act Three · Maplegate",
+      "heading": "The Road In",
+      "text": "The cart turns onto a dirt road kept in reasonable repair, with cut wheat fields and scattered fruit trees on either side.\n\nThe wheels make a regular grinding on the hard ground. Gregor — you learn his name later — sits in front driving, his back to you, his spine very straight. The hooves are the only rhythm on this stretch of road.\n\nYou try to take stock of it. From here you can see the line of the hills to the north with dark woodland along the top. To the south is open valley, and the River Valenne bends once in the distance, the surface of it giving back the afternoon light. The air is sweeter than at the station, and quieter, and you realise it has been a long time since you last heard quiet like it.\n\nYou pass a fork with a signpost giving the directions in two scripts. The upper line is in an old language you cannot read; the lower is in the common tongue. North: Maplegate Estate, four kilometres.\n\nGregor turns the horse."
     },
     {
       "id": "maplegate_9",
       "kind": "scene",
-      "act": "第三幕 · 枫径",
-      "heading": "大道",
-      "text": "在最后一段上坡路的尽头，道路两侧忽然出现了枫树。\n\n枝干在头顶交汇，整整齐齐的两排形成了一条隧道。此刻，九月的最后几天，这条隧道正在燃烧，叶片是金色的、铜色的、将红未红的深橙色，层层叠叠，光线穿过缝隙落在石板路面上，像是碎掉的金箔。偶尔一片叶子脱离枝头，在空中慢慢翻转，然后落在马的鬃毛上。\n\n马车在枫径大道上走了不到五分钟。\n\n前方，树冠之间露出了一组建筑的轮廓，石墙、木瓦屋顶、一根正在冒烟的烟囱。\n\n庄园到了。\n\n格雷格拉住了马，下车，把你的行李从货架上提下来。他把行李放在庄园正门的台阶上，然后第一次开口说话：\n\n“玛莎在里面。”\n\n他牵着马往马厩走了。"
+      "act": "Act Three · Maplegate",
+      "heading": "The Avenue",
+      "text": "At the end of the last rise, maples appear suddenly along both sides of the road.\n\nThe branches meet overhead, and the two even rows make a tunnel of it. Just now, in the last days of September, the tunnel is burning: gold leaves, copper leaves, deep orange not yet turned red, layer on layer, and the light coming through the gaps and falling on the flagstones like broken gold leaf. Every so often one leaf lets go and turns slowly in the air, and comes down on the horse's mane.\n\nThe cart is under five minutes on Maplegate Avenue.\n\nAhead, the outline of a group of buildings shows between the crowns: stone walls, wooden-shingled roofs, one chimney smoking.\n\nThe estate.\n\nGregor pulls up, gets down and lifts your luggage off the rack. He sets it on the steps at the main door of the estate, and then speaks for the first time:\n\n“Martha is inside.”\n\nHe leads the horse away towards the stable."
     },
     {
       "id": "manor_10",
       "kind": "scene",
-      "act": "第四幕 · 庄园",
-      "heading": "门厅",
-      "text": "门是开着的。\n\n你提起行李走进去。门厅比外面暗，需要几秒钟眼睛才能适应。石地面，一道通向二楼的木楼梯，右手边有一扇门半开着，里面传来锅碗的声音和一个女人说话的声音。她在跟什么人交代事情，语速很快。\n\n那个声音停了。\n\n“来了？”\n\n她从门后走出来。四十多岁，围裙上有面粉，手在围裙上擦了两下才伸过来。“玛莎。厨房归我管。”\n\n她上下打量你，没有掩饰。\n\n“路上还顺利吧。格雷格话不多，您别往心里去，他对谁都那样。”她说这话的时候已经转身往里走，你只能跟上，“晚饭六点。您先上去看看房间。埃莱娜。”\n\n楼梯上有脚步声。"
+      "act": "Act Four · The Manor",
+      "heading": "The Hall",
+      "text": "The door stands open.\n\nYou pick up your luggage and go in. The hall is darker than outside and your eyes take a few seconds. Stone floor, a wooden staircase going up, and on the right a door half open, with the sound of pots coming through it and a woman's voice. She is giving somebody instructions, quickly.\n\nThe voice stops.\n\n“You're here?”\n\nShe comes out from behind the door. Forties, flour on her apron, and she wipes her hands on it twice before putting one out. “Martha. The kitchen is mine.”\n\nShe looks you over, and does not disguise doing it.\n\n“Road all right, was it? Gregor does not talk much. Do not take it to heart, he is like that with everybody.” She has already turned to go further in as she says it, so that you can only follow. “Supper at six. Go up and look at your room first. Elena.”\n\nThere are footsteps on the stairs."
     },
     {
       "id": "manor_11",
       "kind": "scene",
-      "act": "第四幕 · 庄园",
-      "heading": "房间",
-      "text": "埃莱娜走在你前面半步，两只手交叠在身前。她一句话也没说，只在拐弯的时候侧过身，示意方向。\n\n二楼走廊尽头的房间。她推开门，站在门口，没有进来。\n\n房间不大。一张床，床单是新换的，折角压得整齐。一个衣柜，一张桌子，桌子对着窗，窗外是枫径大道的方向，此刻已经暗了。\n\n桌面是深色的木头。上面有一块长方形的痕迹，颜色比周围浅。四条边很直。那里原本放着什么东西，放了很久，久到把周围的木头晒得比它深。\n\n“东西都收拾过了。”埃莱娜说。这是她开口的第一句话。“如果您需要别的，跟我说。”\n\n她退了半步，把门带上。\n\n她的脚步在走廊上走了几步，停了一下，然后才继续下楼。"
+      "act": "Act Four · The Manor",
+      "heading": "The Room",
+      "text": "Elena walks half a step ahead of you with her hands folded in front of her. She does not say a word, and only turns side-on at the corners to indicate the way.\n\nThe room at the end of the upstairs corridor. She pushes the door open and stands in the doorway. She does not come in.\n\nThe room is not large. A bed, with fresh sheets, the corners folded down square. A wardrobe, a desk. The desk faces the window, and the window faces the direction of Maplegate Avenue, which has gone dark by now.\n\nThe desktop is dark wood. There is a rectangular mark on it, paler than the wood around it. The four edges are very straight. Something stood there once, and stood there long enough for the wood around it to darken past it.\n\n“Everything has been put in order,” Elena says. It is the first thing she has said. “If you need anything else, tell me.”\n\nShe steps back and pulls the door to.\n\nHer footsteps go a few paces along the corridor, stop for a moment, and only then go on down."
     },
     {
       "id": "manor_12",
       "kind": "scene",
-      "act": "第四幕 · 庄园",
-      "heading": "第一夜",
-      "text": "窗外完全黑下来之后，庄园安静得出乎意料。\n\n没有城市的那种底噪。你能听见的东西是分开的：远处马厩里的一声响动，风穿过枫树的声音，某个方向有水在滴。每一个声音都能单独听清楚，之间是完整的安静。\n\n你把行李箱打开了一半，又合上。\n\n明天开始，这座庄园归你管三十天。"
+      "act": "Act Four · The Manor",
+      "heading": "The First Night",
+      "text": "Once it has gone fully dark outside, the estate is quieter than you expected.\n\nThere is none of the floor of noise a city has. What you can hear comes separately: one movement in the stable off in the distance, the wind going through the maples, water dripping somewhere. Every sound can be heard on its own, with whole silence in between them.\n\nYou open your case halfway, and close it again.\n\nFrom tomorrow, this estate is yours to run for thirty days."
     }
   ]
 }

@@ -16,6 +16,17 @@ export function interpolate(text: string, state: Pick<GameState, 'playerName'>):
  * and must leave unknown placeholders alone, whereas every slot here has a value
  * supplied at the call site.
  */
+/**
+ * Picks the singular or plural wording for a count.
+ *
+ * Chinese needs no agreement, so its two forms are identical and this is a no-op
+ * there. English does need it, and the game shows plenty of counts that can come
+ * out at one — a single log entry, a single unit of grain.
+ */
+export function plural(n: number, one: string, many: string): string {
+  return n === 1 ? one : many;
+}
+
 export function fill(template: string, vars: Record<string, string | number>): string {
   return template.replace(/\{(\w+)\}/g, (whole, key) =>
     key in vars ? String(vars[key]) : whole

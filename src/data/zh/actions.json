@@ -9,7 +9,8 @@
     "text": "前往农田收割",
     "estimate": "预计收割 {tier}",
     "rainedOut": "阴雨天气，田地泥泞，收割效率极低",
-    "log": "你在{phase}收割了农田，收上来 {n} 单位。"
+    "log": "你在{phase}收割了农田，收上来 {n} 单位。",
+    "logOne": "你在{phase}收割了农田，收上来 {n} 单位。"
   },
   "fellTimber": {
     "text": "前往林地采伐",
@@ -19,7 +20,9 @@
     "pastQuota": "预计采伐 {tier} · 已超出本季额度",
     "withinQuota": "预计采伐 {tier}，本季额度还剩 {n} 单位",
     "log": "你在林地采伐了 {n} 单位木材。",
-    "rainBlocked": "雨天无法采伐"
+    "rainBlocked": "雨天无法采伐",
+    "logOne": "你在林地采伐了 {n} 单位木材。",
+    "withinQuotaOne": "预计采伐 {tier}，本季额度还剩 {n} 单位"
   },
   "forage": {
     "text": "去林地采集蘑菇草药",
@@ -68,7 +71,11 @@
     "finishIdle": "什么都不做",
     "finishDescription": "今日已出手 {n} 单位。{capacity}",
     "finishSoldLog": "你结清了今天的账，把空车赶回枫径。",
-    "finishIdleLog": "你在集市转了一圈，没有交易。"
+    "finishIdleLog": "你在集市转了一圈，没有交易。",
+    "sellGrainOne": "出售粮食 {n} 单位",
+    "sellTimberOne": "出售木材 {n} 单位",
+    "capacityLeftOne": "马车还能装 {n} 单位（单次运力上限 {cap}）",
+    "finishDescriptionOne": "今日已出手 {n} 单位。{capacity}"
   },
   "hunt": {
     "text": "出席今日猎场",

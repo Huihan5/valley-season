@@ -7,6 +7,7 @@ import {
   GRAIN_EXCELLENT_THRESHOLD, NOBLE_TRUST_MAX, LORD_IMPRESSION_MAX, DAILY_GULDMARK_COST,
 } from '../../data/config';
 import DATA from '../../data';
+import { plural } from '../../utils/text';
 
 const ui = DATA.ui;
 
@@ -15,6 +16,9 @@ const SECTION_LABEL = 'text-cream-dim text-xs tracking-wider mb-2';
 
 const NPC_NAMES: Record<NpcId, string> = ui.npc;
 const T = ui.statusPanel;
+
+/** English wants "1 unit" and "2 units"; Chinese wants 单位 either way. */
+const units = (n: number) => plural(n, ui.resources.unitOne, ui.resources.unit);
 
 interface Props {
   state: GameState;
@@ -60,9 +64,9 @@ export default function StatusPanel({ state }: Props) {
       <div className="px-4 py-3 border-b border-game-border">
         <p className={SECTION_LABEL}>{T.resourcesHeading}</p>
         <div className="space-y-2">
-          <ResourceRow icon="🌾" label={ui.resources.grain} value={resources.grain} unit={ui.resources.unit} target={GRAIN_EXCELLENT_THRESHOLD} />
+          <ResourceRow icon="🌾" label={ui.resources.grain} value={resources.grain} unit={units(resources.grain)} target={GRAIN_EXCELLENT_THRESHOLD} />
           <ResourceRow icon="🪙" label={ui.resources.guldmark} value={resources.guldmark} unit="" warnBelow={15} />
-          <ResourceRow icon="🪵" label={ui.resources.timber} value={resources.timber} unit={ui.resources.unit} warnBelow={5} />
+          <ResourceRow icon="🪵" label={ui.resources.timber} value={resources.timber} unit={units(resources.timber)} warnBelow={5} />
           <ResourceRow icon="⭐" label={ui.resources.renown} value={resources.renown} unit="" showSign />
         </div>
         {/* An empty purse used to pass in silence (PlaytestFeedback 4.a.iii). */}

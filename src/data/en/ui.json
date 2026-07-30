@@ -11,17 +11,50 @@
   },
   "dayNames": [
     "",
-    "Day One", "Day Two", "Day Three", "Day Four", "Day Five",
-    "Day Six", "Day Seven", "Day Eight", "Day Nine", "Day Ten",
-    "Day Eleven", "Day Twelve", "Day Thirteen", "Day Fourteen", "Day Fifteen",
-    "Day Sixteen", "Day Seventeen", "Day Eighteen", "Day Nineteen", "Day Twenty",
-    "Day Twenty-One", "Day Twenty-Two", "Day Twenty-Three", "Day Twenty-Four", "Day Twenty-Five",
-    "Day Twenty-Six", "Day Twenty-Seven", "Day Twenty-Eight", "Day Twenty-Nine", "Day Thirty"
+    "Day One",
+    "Day Two",
+    "Day Three",
+    "Day Four",
+    "Day Five",
+    "Day Six",
+    "Day Seven",
+    "Day Eight",
+    "Day Nine",
+    "Day Ten",
+    "Day Eleven",
+    "Day Twelve",
+    "Day Thirteen",
+    "Day Fourteen",
+    "Day Fifteen",
+    "Day Sixteen",
+    "Day Seventeen",
+    "Day Eighteen",
+    "Day Nineteen",
+    "Day Twenty",
+    "Day Twenty-One",
+    "Day Twenty-Two",
+    "Day Twenty-Three",
+    "Day Twenty-Four",
+    "Day Twenty-Five",
+    "Day Twenty-Six",
+    "Day Twenty-Seven",
+    "Day Twenty-Eight",
+    "Day Twenty-Nine",
+    "Day Thirty"
   ],
   "dayNameFallback": "Day {day}",
   "moment": "{day} · {phase}",
   "sceneLabel": "{label}. {body}",
-  "weekdays": ["", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+  "weekdays": [
+    "",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday"
+  ],
   "weather": {
     "sunny": "Clear",
     "cloudy": "Cloudy",
@@ -55,7 +88,8 @@
     "timber": "Timber",
     "renown": "Renown",
     "unit": "units",
-    "guldmarkAmount": "{n} guldmark"
+    "guldmarkAmount": "{n} guldmark",
+    "unitOne": "unit"
   },
   "statusPanel": {
     "estate": "Maplegate",
@@ -75,7 +109,8 @@
   "logDrawer": {
     "heading": "— Record —",
     "collapse": "Close ↓",
-    "expand": "{n} entries ↑"
+    "expand": "{n} entries ↑",
+    "expandOne": "{n} entry ↑"
   },
   "scenePanel": {
     "saves": "Saves"
@@ -96,7 +131,11 @@
   "saveMenu": {
     "heading": "— Saves —",
     "close": "Close",
-    "slots": ["Save One", "Save Two", "Save Three"],
+    "slots": [
+      "Save One",
+      "Save Two",
+      "Save Three"
+    ],
     "summary": "{moment}　{savedAt}",
     "dateLocale": "en-GB",
     "finished": "Finished",

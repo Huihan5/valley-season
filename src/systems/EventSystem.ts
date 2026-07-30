@@ -38,7 +38,7 @@ import {
   HORSE_CARE_TRUST_AT, OFFICE_FOLIO_AT, TIMBER_RESTRAINT_AT,
 } from '../data/config';
 import DATA from '../data';
-import { fill } from '../utils/text';
+import { fill, plural } from '../utils/text';
 
 const ui = DATA.ui;
 const lines = DATA.systemLines;
@@ -518,7 +518,7 @@ function getMarketAfternoonChoices(state: GameState): Choice[] {
   for (const lot of getSellLots(resources.grain, capacityLeft)) {
     choices.push({
       id: `market_sell_grain_${lot}`,
-      text: fill(A.market.sellGrain, { n: lot }),
+      text: fill(plural(lot, A.market.sellGrainOne, A.market.sellGrain), { n: lot }),
       description: fill(A.market.sellGrainDescription, {
         revenue: getGrainRevenue(lot),
         price: MARKET_GRAIN_PRICE,
@@ -537,7 +537,7 @@ function getMarketAfternoonChoices(state: GameState): Choice[] {
   for (const lot of getSellLots(resources.timber, capacityLeft)) {
     choices.push({
       id: `market_sell_timber_${lot}`,
-      text: fill(A.market.sellTimber, { n: lot }),
+      text: fill(plural(lot, A.market.sellTimberOne, A.market.sellTimber), { n: lot }),
       description: fill(A.market.sellTimberDescription, {
         revenue: getTimberRevenue(state, lot),
         price: timberPrice,
@@ -554,7 +554,7 @@ function getMarketAfternoonChoices(state: GameState): Choice[] {
   }
 
   const capacityNote = capacityLeft > 0
-    ? fill(A.market.capacityLeft, { n: capacityLeft, cap: MARKET_TRANSPORT_CAP })
+    ? fill(plural(capacityLeft, A.market.capacityLeftOne, A.market.capacityLeft), { n: capacityLeft, cap: MARKET_TRANSPORT_CAP })
     : fill(A.market.capacityFull, { cap: MARKET_TRANSPORT_CAP });
 
   // Coming home empty is not a wasted trip: you now know what things go for.
@@ -563,7 +563,7 @@ function getMarketAfternoonChoices(state: GameState): Choice[] {
     id: 'market_finish',
     text: sold ? A.market.finishSold : A.market.finishIdle,
     description: sold
-      ? fill(A.market.finishDescription, { n: soldSoFar, capacity: capacityNote })
+      ? fill(plural(soldSoFar, A.market.finishDescriptionOne, A.market.finishDescription), { n: soldSoFar, capacity: capacityNote })
       : undefined,
     effects: {
       nextScene: 'default',
@@ -601,7 +601,7 @@ export function getFreeChoices(state: GameState): Choice[] {
         grain: grainGain,
         fatigue: 1,
         nextScene: 'fields',
-        logEntry: fill(A.harvest.log, {
+        logEntry: fill(plural(grainGain, A.harvest.logOne, A.harvest.log), {
           // Mid-sentence, so not the panel's capitalised label.
           phase: phase === 'morning' ? ui.phaseInline.morning : ui.phaseInline.afternoon,
           n: grainGain,
@@ -639,7 +639,7 @@ export function getFreeChoices(state: GameState): Choice[] {
             // "0 left" would read as a wall, and it is not one.
             : quotaLeft <= 0
               ? fill(A.fellTimber.pastQuota, { tier: getYieldTierLabel(timberGain) })
-              : fill(A.fellTimber.withinQuota, {
+              : fill(plural(quotaLeft, A.fellTimber.withinQuotaOne, A.fellTimber.withinQuota), {
                 tier: getYieldTierLabel(timberGain), n: quotaLeft,
               }),
       effects: {
@@ -654,7 +654,7 @@ export function getFreeChoices(state: GameState): Choice[] {
           // The promise is spent either way: he does not get to be disappointed twice.
           ...(breaksPromise ? { respectedLand: false, brokeLandPromise: true } : {}),
         },
-        logEntry: fill(A.fellTimber.log, { n: timberGain }),
+        logEntry: fill(plural(timberGain, A.fellTimber.logOne, A.fellTimber.log), { n: timberGain }),
       },
       resultKind: 'fell_timber',
       resultVars: { n: timberGain, r: Math.max(0, quotaLeft - timberGain) },
