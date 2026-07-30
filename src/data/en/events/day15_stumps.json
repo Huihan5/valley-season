@@ -5,13 +5,13 @@
   "forced": true,
   "activationFlag": "visitedBoundary",
   "advancesPhase": false,
-  "title": "北面林地",
-  "sceneText": "争议区域在北坡往下的位置，走到那儿要穿过一段没有路的地方。\n\n树桩是新的。\n\n断面还是浅色的，边缘的木屑没有变黑，最多两三个星期。你数了一下，十一个。它们在你这一侧，如果“沿溪为界”这句话是按现在的溪流走向理解的话。",
+  "title": "The North Woods",
+  "sceneText": "The disputed ground lies below the north slope, and getting there means going through a stretch with no path.\n\nThe stumps are new.\n\nThe cut faces are still pale and the chips at the edges have not gone black. Three weeks at the outside. You count them: eleven. And they are on your side of it, if the words “the stream to be the boundary” are read against the way the stream runs now.",
   "variants": {
-    "surveyed": "你上一次走这片林子的时候，这里没有树桩。\n\n你记得这一带的样子，那次你沿着坡走到过更下面，回头看的时候这一片是连着的。\n\n所以这十一棵是在你到任之后砍的。\n\n你没有办法判断这是不是越界，但你可以确认它发生在什么时候。",
-    "road": "集材道在树桩之间穿过，压出两道很深的车辙，通向北面。\n\n你顺着车辙走了一段。它翻过一道矮坡之后就出了枫径的地界。\n\n你站在坡顶上看了很久。你不知道这意味着什么。你不知道这十一棵树是不是合法的间伐，不知道那条溪改道之后地界该怎么算，也不知道这样的车辙在林业上算不算证据。\n\n你是一个管账的人。\n\n你正准备往回走的时候，听见下面有人在喊。\n\n一声，停顿，再一声。这是在林子里确认位置的喊法。\n\n从坡下上来一个人，三十多岁，穿着深绿色的外套，肩上挎着一个帆布包。",
-    "unmet": "他看见你，先愣了一下，然后笑了。\n\n“枫径的新管事？”他把手伸出来，“蒂埃里·瓦朗。北区林务官。”\n\n他的手上有树皮的碎屑，他先在裤子上擦了一下才伸过来。\n\n“您也是来看这些树桩的？”他顺口问。",
-    "met": "“管事先生。”他一点也不意外，“我说过我一年有两百天在这片林子里。”\n\n他走到最近的那个树桩前面，没有先看你，先看的是树。\n\n“这个是新的。”\n\n“您怎么看？”"
+    "surveyed": "There were no stumps here the last time you walked this wood.\n\nYou remember how this stretch looked. That time you went further down along the slope, and looking back this piece of it was unbroken.\n\nSo these eleven came down after you took the post.\n\nYou have no way of judging whether it is over the line, but you can be certain when it happened.",
+    "road": "A skid road runs through between the stumps, two deep ruts pressed into the ground, heading north.\n\nYou follow the ruts a way. They go over a low rise and out of Maplegate’s land.\n\nYou stand on the rise a long time. You do not know what any of it means. You do not know whether these eleven trees were a lawful thinning; you do not know how the boundary is to be reckoned after that stream changed course; you do not know whether ruts like these count as evidence in forestry at all.\n\nYou are a man who keeps accounts.\n\nYou are about to turn back when you hear somebody calling below.\n\nOne call, a pause, another. That is how position is confirmed in woodland.\n\nA man comes up from the foot of the slope. Thirties, dark green coat, a canvas bag over his shoulder.",
+    "unmet": "Seeing you, he stops short and then laughs.\n\n“The new steward at Maplegate?” He puts out his hand. “Thierry Vallant. Forester, north district.”\n\nThere is bark grit on his hand; he wipes it on his trousers first.\n\n“Are you up here about these stumps as well?” he asks, in passing.",
+    "met": "“Steward.” He is not surprised in the least. “I did say I am in this wood two hundred days of the year.”\n\nHe walks to the nearest stump. He does not look at you first. He looks at the tree.\n\n“This one is new.”\n\n“What do you make of it?”"
   },
   "onEnterEffects": {
     "flags": { "met_thierry": true }
@@ -20,30 +20,30 @@
   "choices": [
     {
       "id": "stumps_accuse",
-      "text": "这是磨岭的越界采伐",
+      "text": "This is Millridge cutting over the line",
       "effects": {
         "flags": { "thierryDay15": "A" },
-        "logEntry": "你当着林务官的面断定这是磨岭的越界采伐。"
+        "logEntry": "You declared to the forester’s face that this was Millridge cutting over the line."
       },
-      "resultText": "他“嗯”了一声，蹲下去看了看最近的那个树桩，用手指刮了一下断面。\n\n“越界得看地界，地界得看那条溪。”他说，“那条溪去年改过道。改道之后按哪一年的走向算，这个我也不知道，得看勘界的卷宗，卷宗在文秘室。”\n\n他站起来。\n\n“您要是已经有结论了，那我就不多说了。”\n\n他拍了拍帆布包，朝坡下走。走了几步他回过头。\n\n“不过您记着，别在别人面前说得这么肯定。您现在没有证据。”"
+      "resultText": "He says “mm”, crouches at the nearest stump and scrapes the cut face with a finger.\n\n“Over the line depends on the boundary, and the boundary depends on that stream,” he says. “The stream changed course last year. Which year’s course you reckon by after a change, I do not know either. You would want the survey file, and the file is at the chancery.”\n\nHe stands up.\n\n“If you have your conclusion already then I will say no more about it.”\n\nHe pats the canvas bag and starts down the slope. A few steps on he turns round.\n\n“One thing, though. Do not say it that certainly in front of other people. You have no evidence yet.”"
     },
     {
       "id": "stumps_internal",
-      "text": "这属于庄园内部事务，勘界结论出来后我会通报公国",
+      "text": "This is an internal estate matter. I shall report to the duchy once the survey is settled",
       "effects": {
         "flags": { "thierryDay15": "B" },
-        "logEntry": "你说这属于庄园内部事务，结论出来后会通报公国。"
+        "logEntry": "You said it was an internal estate matter and that you would report to the duchy in due course."
       },
-      "resultText": "他愣了一下。\n\n“通报公国。”他重复了一遍。\n\n然后他笑了，那个笑跟刚才见你时的笑不是一种。\n\n“行。那您通报吧。”他把帆布包重新挎上肩，“我就是公国。”\n\n他往坡下走了两步，又停下来，语气重新变得随意。\n\n“我不是要跟您较劲。您到任才两个星期，规矩不熟，正常。”他说，“但下次在林子里碰见我，您可以直接问我。我一年有两百天在这片林子里。”\n\n他走了。"
+      "resultText": "He stops short.\n\n“Report to the duchy.” He repeats it.\n\nThen he laughs, and it is not the same laugh he had when he first saw you.\n\n“Right. You report, then.” He shoulders the canvas bag again. “I am the duchy.”\n\nHe goes two steps down the slope and stops, and his tone comes back to easy.\n\n“I am not trying to score off you. Two weeks in the post, of course you do not know the procedure,” he says. “But next time you run into me in the woods, you can just ask. I am in here two hundred days of the year.”\n\nHe goes."
     },
     {
       "id": "stumps_dont_know",
-      "text": "说实话我看不懂。这算不算越界，我判断不了",
+      "text": "Honestly, I cannot read it. Whether this is over the line, I cannot say",
       "effects": {
         "flags": { "thierryDay15": "C", "clue_ofc_thierry_declaration": true },
-        "logEntry": "你告诉林务官，这算不算越界你判断不了。"
+        "logEntry": "You told the forester you could not judge whether it was over the line."
       },
-      "resultText": "他吹了声口哨。\n\n“那太好了。”他说，“上一个跟我说他看得懂林子的管事，让我修了三个月的采伐申报。”\n\n他蹲下去，从帆布包里拿出一把小尺子，量了三个树桩的断面直径，又数了年轮。他量得很快，但每一次都量了两遍。\n\n“这批树的胸径在三十二到三十八之间。”他说，“三十八这个数字有意思。今年北区所有的合法采伐申报里，胸径上限是三十。”\n\n他站起来拍手上的土。\n\n“超过三十的要单独报批，因为那个尺寸的橡树在这片坡上大概要长六十年。这十一棵里有四棵超了。”\n\n你问他这意味着什么。\n\n“意味着有人报的是一件事，砍的是另一件事。”他说得很轻松，没有一点严肃的意思，“也可能是量错了。人会量错。”\n\n他看了一眼那条通向北面的集材道。\n\n“但集材道不会走错方向。”"
+      "resultText": "He whistles.\n\n“That is very good news,” he says. “The last steward who told me he could read a wood had me correcting his felling declarations for three months.”\n\nHe crouches, takes a small rule out of the canvas bag, measures the diameter of three cut faces and counts the rings. He measures fast, and he measures every one of them twice.\n\n“These are between thirty-two and thirty-eight at breast height,” he says. “Thirty-eight is the interesting number. Across every lawful felling declaration in the north district this year, the diameter limit is thirty.”\n\nHe stands and brushes off his hands.\n\n“Anything over thirty wants separate approval, because an oak that size on this slope takes about sixty years. Four of these eleven are over.”\n\nYou ask him what that means.\n\n“It means somebody declared one thing and cut another,” he says. He says it lightly, with nothing serious in it at all. “Or somebody measured wrong. People measure wrong.”\n\nHe glances at the skid road running north.\n\n“But a skid road does not run the wrong way.”"
     }
   ]
 }
