@@ -3,15 +3,15 @@
   "day": 12,
   "timing": "midday",
   "forced": true,
-  "title": "税务审计",
-  "sceneText": "他是自己走进来的，没有人通报。文秘室的稽查官到访不需要通报。\n\n深灰色制服，剪裁很好但明显穿了很多年，袖口的位置磨得发亮。三十出头，比你想象的年轻。他手里拿着一个硬皮夹，走进办公室之后先看了一眼窗户的朝向，然后才看你。\n\n“凯斯勒。文秘室。”他说，“本季度的账目核查。”",
+  "title": "The Tax Audit",
+  "sceneText": "He walks in himself, unannounced. A chancery inspector calling does not require announcing.\n\nDark grey uniform, well cut and plainly years old, the cuffs worn to a shine. Early thirties, younger than you had imagined. He has a hard folder in his hand, and on coming into the office he first looks at which way the window faces, and then at you.\n\n“Kessler. Chancery,” he says. “This quarter’s check of the accounts.”",
   "variants": {
-    "met_before": "“我们见过。”他补了一句，语气没有任何变化，“集市那次。”",
-    "first_meeting": "他把硬皮夹放在桌上，打开，取出一支笔。没有寒暄。",
-    "body": "他坐下来开始翻账本，速度很快，手指沿着数字往下走，偶尔停一下，在纸上记一笔。他不问你任何问题。\n\n房间里安静了将近二十分钟。\n\n“本季度应缴税赋为收成总量的十四点五个百分比。”他终于开口，“按你目前的进度，最终数字要到月末才能确定。这不构成问题。”\n\n他翻回前面几页。\n\n“问题在这里。”",
-    "noticed": "“七月到九月，一系列小额支出，摘要栏写着杂项。”他用笔尖点了点，“你注意到了。”\n\n这不是一个问句。你在那几页上做的标记还在。\n\n“很好。”他说，然后就翻过去了。",
-    "missed": "“七月到九月，一系列小额支出，摘要栏写着杂项。”他用笔尖点了点，“你没有注意到。”\n\n他抬起头，第一次真正看着你。\n\n“我不是在指责你。你到任九天，账本有两个月的缺口，任何人都会先去看田里。”他说得很平，“但从现在起你注意到了。下个季度我还会来。”\n\n他在自己的记录上写了一行，你看不清写的是什么。",
-    "receipts": "他翻到收条那一叠的时候停了一下。\n\n“这些收条的排列顺序和账本的记账顺序不一样。”他说，“账本是按日期，收条是按……”\n\n他把那叠纸抽出来，摊在桌上比了比。\n\n“按金额。从小到大。”\n\n他抬起头。\n\n“谁经手过这些收条？”\n\n你知道答案。埃莱娜负责办公室，这间屋子里所有的纸都经过她的手。而这个排列方式不是你的习惯，也不像霍特曼的，他的账本从头到尾按日期。\n\n你还知道另一件事：这一叠里有几张是霍特曼失踪之后才归档的。"
+    "met_before": "“We have met,” he adds, with no change of tone at all. “At the market.”",
+    "first_meeting": "He puts the folder on the desk, opens it and takes out a pen. No pleasantries.",
+    "body": "He sits down and starts through the ledger, quickly, his finger travelling down the figures, stopping now and then to make a note.\n\nHe asks you nothing. The room is quiet for close to twenty minutes.\n\n“Dues payable this quarter stand at fourteen and a half per cent of total yield,” he says at last. “At your present rate the final figure cannot be settled until the end of the month. That does not constitute a problem.”\n\nHe turns back several pages.\n\n“The problem is here.”",
+    "noticed": "“July to September. A series of small payments, summary column reading sundry.” He taps the tip of the pen against it. “You noticed.”\n\nIt is not a question. Your own marks are still on those pages.\n\n“Good,” he says, and turns past it.",
+    "missed": "“July to September. A series of small payments, summary column reading sundry.” He taps the tip of the pen against it. “You did not notice.”\n\nHe looks up, and for the first time he actually looks at you.\n\n“I am not accusing you of anything. You have been in post nine days, the ledger has a two-month hole in it, and anybody would go and look at the fields first.” He says it quite evenly. “But from now on you have noticed. I shall be back next quarter.”\n\nHe writes a line in his own record. You cannot make out what it says.",
+    "receipts": "He stops when he comes to the stack of receipts.\n\n“These receipts are not in the order the ledger enters them,” he says. “The ledger is by date. The receipts are by —”\n\nHe pulls the stack out and lays it on the desk, comparing.\n\n“By amount. Smallest first.”\n\nHe looks up.\n\n“Who has handled these receipts?”\n\nYou know the answer. Elena has the office; every sheet of paper in this room passes through her hands. And that arrangement is not your habit, nor does it look like Hartmann’s — his ledger runs by date from beginning to end.\n\nYou know one other thing: several sheets in that stack were filed after Hartmann disappeared."
   },
   "onEnterEffects": {
     "flags": {
@@ -21,7 +21,7 @@
   "choices": [
     {
       "id": "receipts_maid",
-      "text": "女仆负责办公室。她对这些东西有别样的兴趣",
+      "text": "The housemaid has the office. She takes a certain interest in these things",
       "effects": {
         "relationships": {
           "elena": -1
@@ -29,31 +29,31 @@
         "flags": {
           "exposedElena": true
         },
-        "logEntry": "你告诉稽查官那些收条是女仆归档的。"
+        "logEntry": "You told the inspector the receipts had been filed by the housemaid."
       },
-      "resultText": "“女仆。”提莫西在本子上记了一行。\n\n“叫什么？”\n\n你说了名字。\n\n“我需要问她两句。”他说，“不是审她。归档的人有时候比记账的人更清楚东西是从哪儿来的。”\n\n他去了。谈话在门厅进行，你听不见内容，大概三四分钟。\n\n回来之后他什么也没说，继续看账。\n\n那天下午你在楼梯上遇见埃莱娜。她给你让了路，退到墙边，让出整个楼梯宽度，比平时退得多。\n\n她低着头。"
+      "resultText": "“The housemaid.” Timothy writes a line in the notebook.\n\n“Her name?”\n\nYou give it.\n\n“I shall need a word with her,” he says. “Not an examination. Whoever files a thing sometimes knows better than whoever entered it where it came from.”\n\nHe goes. The conversation happens in the hall, out of your hearing, three or four minutes.\n\nWhen he comes back he says nothing about it and goes on with the accounts.\n\nThat afternoon you meet Elena on the stairs. She gives you the way, backing to the wall, leaving you the whole width of the staircase, further back than she usually goes.\n\nHer head is down."
     },
     {
       "id": "receipts_mine",
-      "text": "我。我到任之后重新整理过",
+      "text": "I did. I reorganised them when I took over",
       "effects": {
         "flags": {
           "protectedElena": true
         },
-        "logEntry": "你告诉稽查官那些收条是你自己整理的。"
+        "logEntry": "You told the inspector you had sorted the receipts yourself."
       },
-      "resultText": "“您？”\n\n“我到任之后重新整理过。”\n\n他看了你两秒钟。\n\n你不知道他信没信。他没有追问，他只是在本子上划掉了一行还没写完的字，然后翻到下一页。\n\n“那这一叠的归档时间就没有意义了。”他说。\n\n他继续往下看账。"
+      "resultText": "“You did?”\n\n“I reorganised them when I took over.”\n\nHe looks at you for two seconds.\n\nYou do not know whether he believed it. He does not press. He only strikes out a half-written line in the notebook and turns to the next page.\n\n“Then the filing dates on this stack mean nothing,” he says.\n\nHe goes on down the accounts."
     },
     {
       "id": "receipts_unknown",
-      "text": "我不清楚。这是我接手之前的事",
+      "text": "I do not know. That was before I took over",
       "effects": {
         "flags": {
           "protectedElena": true
         },
-        "logEntry": "你说那些收条是你接手之前的事。"
+        "logEntry": "You said the receipts were from before you took over."
       },
-      "resultText": "“我不清楚。这是我接手之前的事。”\n\n“嗯。”\n\n他没有再问。这个回答在程序上无懈可击，你确实不该为前任的归档负责。\n\n他把收条按原样叠回去，用夹子夹好。"
+      "resultText": "“I do not know. That was before I took over.”\n\n“Mm.”\n\nHe asks nothing further. As procedure the answer is unassailable; you are genuinely not answerable for your predecessor’s filing.\n\nHe stacks the receipts back as they were and clips them together."
     }
   ],
   "next": "day12_officer"

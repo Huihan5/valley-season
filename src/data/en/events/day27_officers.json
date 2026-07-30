@@ -4,8 +4,8 @@
   "timing": "midday",
   "forced": true,
   "activationFlag": "visitedMarket_day27",
-  "title": "文秘室外",
-  "sceneText": "十月的最后一个集市日，广场比上次冷清，但文秘室那条街上有人。\n\n两个人从文秘室的门里出来。一个深灰制服，一个深绿外套。绿外套那个手里拎着一个陶瓶，正在说话，说得很快；灰制服那个走在他旁边，隔着大概半步的距离，没有说话，但也没有走快。\n\n他们在街口停下来。蒂埃里把陶瓶往提莫西那边递了一下。提莫西看了那个瓶子两秒，然后接了过去，他接得很自然，但那两秒是真的。\n\n他喝了一口，把瓶子还回去。\n\n他们同时看见了你。\n\n蒂埃里先招手。“管事先生。今天来卖东西？”\n\n提莫西朝你点了一下头，把陶瓶换到另一只手上。",
+  "title": "Outside the Chancery",
+  "sceneText": "The last market day of October. The square is thinner than last time, but there are people on the chancery street.\n\nTwo men come out of the chancery door. One in dark grey uniform, one in a dark green coat. The green coat has an earthenware bottle in his hand and is talking, quickly; the grey uniform walks beside him at about half a step, saying nothing, and not walking any faster either.\n\nThey stop at the corner. Thierry holds the bottle out towards Timothy. Timothy looks at the bottle for two seconds, and then takes it. He takes it naturally enough, but those two seconds were real.\n\nHe drinks a mouthful and hands it back.\n\nThey see you at the same moment.\n\nThierry waves first. “Steward. Selling today?”\n\nTimothy gives you a nod and moves the bottle to his other hand.",
   "onEnterEffects": {
     "flags": { "met_timothy": true, "met_thierry": true }
   },
@@ -13,22 +13,22 @@
   "choices": [
     {
       "id": "day27_timothy",
-      "text": "问提莫西磨岭那边的采伐申报",
+      "text": "Ask Timothy about Millridge’s felling declarations",
       "effects": {
         "flags": { "clue_ofc_timothy_declaration": true },
-        "logEntry": "你向提莫西打听了磨岭的采伐申报。"
+        "logEntry": "You asked Timothy about Millridge’s felling declarations."
       },
-      "resultText": "蒂埃里很自然地说他去看看别的东西，走开了。\n\n提莫西站着没动。\n\n你问他磨岭那边的采伐申报。\n\n“我不能给你看别人的卷宗。”他说。然后他停了一下。\n\n“但公国的采伐额度表是公开的，贴在那边的板子上，你自己能看。”他朝北头指了指，“磨岭今年申报的总量是四十，胸径上限三十。”\n\n“北区今年实际出货的橡木，从码头装船的记录我签过字。磨岭那边出的量是五十二。”\n\n他把这两个数字说完就不说了。\n\n“十二个单位的差额。”你说。\n\n“十二个单位的差额。”他重复了一遍，“分三年就是四个单位一年，一年四个单位在一个五千公顷的林区里是量测误差的范围。这就是为什么它不值得立案。”\n\n他抬起手里的陶瓶看了一眼，他大概还没决定要不要拿着这个东西走回去。\n\n“冯·阿尔德男爵的前一位管家三年前问过我同一个问题。”"
+      "resultText": "Thierry says easily that he will go and look at something else, and walks off.\n\nTimothy does not move.\n\nYou ask him about the felling declarations from Millridge.\n\n“I cannot show you another party’s file,” he says. And then he pauses.\n\n“But the duchy’s table of allowances is public. It is posted on the board over there. You can read it yourself.” He points towards the north end. “Millridge declared a total of forty this year, with a diameter limit of thirty.”\n\n“The oak that actually went out of the north district this year — I signed the loading records at the wharf myself. What went out from Millridge was fifty-two.”\n\nHaving said those two numbers, he stops.\n\n“A difference of twelve units,” you say.\n\n“A difference of twelve units.” He repeats it. “Spread over three years that is four units a year, and four units a year across a forestry district of five thousand hectares is inside the margin of measurement error. Which is why it is not worth opening a case on.”\n\nHe lifts the bottle in his hand and looks at it; he has probably not yet decided whether to carry the thing back with him.\n\n“Baron von Alder’s previous steward asked me the same question three years ago.”"
     },
     {
       "id": "day27_thierry",
-      "text": "把格雷格给你的那个布包拿给蒂埃里看",
+      "text": "Show Thierry the cloth bundle Gregor gave you",
       "requiresFlag": "clue_pos_horse_condition",
       "effects": {
         "flags": { "clue_pos_locate": true },
-        "logEntry": "你把格雷格给你的布包摊在蒂埃里面前。"
+        "logEntry": "You spread out Gregor’s cloth bundle in front of Thierry."
       },
-      "resultText": "提莫西说他还有东西要送回去，走了。\n\n你把格雷格给你的那个布包拿出来。\n\n蒂埃里在街边找了个石台，把布包摊开，用两根手指把里面那些干枯的东西拨散。他看了很久，比你以为的久得多。\n\n“这个不对。”他说。\n\n你问什么不对。\n\n“这个季节，这个东西不该在这一带出现。”他捏起一根很细的草茎，“它长在有水的地方，而且要背阴，要凉。低处的洼地太暖了，这东西在低处活不到十月。”\n\n他抬头看了看北面的丘陵线。\n\n“海拔要再高一点。高处有水又背阴的洼地，我那条线以外，我能想到三个。”\n\n他把布包重新包好递还给你。\n\n“泥呢？”他问。\n\n你说是黑的，有味道。\n\n“那就是两个。”他说，“另外一个是石底，不出黑泥。”\n\n他在石台上用手指画了两个点，中间隔了大概一寸。\n\n“这两个地方，走过去要一整天。您要去的话跟我说，我带路。您一个人去找不到，那边没有路。”"
+      "resultText": "Timothy says he has something else to deliver, and goes.\n\nYou take out the cloth bundle Gregor gave you.\n\nThierry finds a stone ledge at the side of the street, opens the bundle out and works the dried stuff apart with two fingers. He looks at it a long time. Much longer than you expected.\n\n“This is wrong,” he says.\n\nYou ask what is wrong.\n\n“This time of year, this should not be anywhere around here.” He picks up a very fine stem. “It grows where there is water, and it wants shade, and it wants cool. The low bottoms are too warm; this would not live down there into October.”\n\nHe looks up at the line of the hills to the north.\n\n“Higher up. A hollow up high with water in it and out of the sun. Beyond my line, I can think of three.”\n\nHe wraps the bundle up again and hands it back to you.\n\n“The mud?” he asks.\n\nYou say it was black, and it had a smell.\n\n“Then it is two,” he says. “One of the three has a stone bottom. No black mud out of that.”\n\nHe draws two points on the stone ledge with a finger, about an inch apart.\n\n“Those two places are a full day’s walk. If you want to go, tell me and I will take you. You will not find them alone. There is no path in.”"
     }
   ]
 }
