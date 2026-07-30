@@ -5,43 +5,43 @@
   "forced": true,
   "advancesPhase": true,
   "activationFlag": "rodeToMillridge",
-  "title": "磨岭 · 夜访",
-  "sceneText": "格雷格什么也没问就去备马了。\n\n但他备马的时候看了你一眼。就一眼，然后他低头去扣马肚带。\n\n出门的时候厨房的灯还亮着。玛莎站在门口，手里端着东西，看着你上马。她也什么都没说。\n\n一个小时的路。夜里没有月亮，格雷格给你挂了灯笼。\n\n你在路上想的是：明天早上这一趟就会传遍整个河谷。这一带的人晚上都不出门，谁家的马夜里走出去，第二天全村都知道。\n\n而磨岭这个方向，尤其。\n\n磨岭庄园的门房还没睡。他看见你，也没有露出意外。\n\n亨克在书房，穿着家常的衣服，壁炉烧得很旺。他看见你进来，放下手里的东西，站起来。\n\n“这么晚。”他说。\n\n他脸上没有惊讶。\n\n他倒了两杯酒，把一杯放在你面前，然后坐回去，两手交叠放在腹前，等你说。\n\n你说了。\n\n他听完点了点头，什么表情也没有。\n\n“枫径今年不容易。”他说，“路德维希一年回来住三天，剩下三百六十二天都压在管事身上。霍特曼扛了八年，您扛了一个月。”\n\n他喝了一口。\n\n“说吧。您需要什么。”",
+  "title": "Millridge · A Call at Night",
+  "sceneText": "Gregor asked nothing at all and went to saddle up.\n\nBut while he was saddling he looked at you. Once, and then he bent to the girth.\n\nThe kitchen light was still on as you went out. Martha stood in the doorway with something in her hands and watched you mount. She said nothing either.\n\nAn hour’s ride. There is no moon, and Gregor hung you a lantern.\n\nWhat you think about on the road is this: by tomorrow morning this ride will be all over the valley. Nobody here goes out at night. When one household’s horse goes out after dark, the whole village knows by the next day.\n\nAnd towards Millridge, particularly.\n\nThe porter at Millridge is not yet in bed. He sees you and shows no surprise either.\n\nHenk is in the study in house clothes, with the fire well up. He sees you come in, puts down what is in his hand and stands.\n\n“Late,” he says.\n\nThere is no surprise on his face.\n\nHe pours two glasses, sets one in front of you, then sits back with his hands folded across his front and waits for you to speak.\n\nYou speak.\n\nHe hears you out and nods, with no expression at all.\n\n“It has not been an easy year at Maplegate,” he says. “Ludwig comes home for three days a year, and the other three hundred and sixty-two rest on the steward. Hartmann carried it eight years. You have carried it a month.”\n\nHe takes a drink.\n\n“Go on. What do you need.”",
   "variants": {
-    "short_of_trust": "他听完，眉毛动了一下。\n\n然后他笑了。这个笑跟他平时那个不一样，平时那个是给你的，这个是给他自己的。\n\n他把酒杯放下，往椅背上靠。\n\n“我请您吃过一次饭，邀您打过一次猎，跟您提过一次运木头的事。”他说，“那件事您到今天也没有给我答复。”\n\n“我不是在算账。”他说，“我是在说，我跟您还没到那个份上。”\n\n他站起来，走到桌子那边，从抽屉里拿了一样东西过来，放在你面前。\n\n一枚金卢。\n\n“拿着。”他说，“路上给马买点东西。”\n\n他没有再坐下。\n\n“夜里骑马回去当心。”他说，“这条路秋天不好走。”\n\n门房送你出去。整个过程亨克没有再说一句话。\n\n回程的时候你想起玛莎站在厨房门口看你上马的样子。"
+    "short_of_trust": "He hears you out, and one eyebrow moves.\n\nThen he smiles. It is not the smile he usually has. The usual one is for you; this one is for himself.\n\nHe puts the glass down and leans back in the chair.\n\n“I have had you to dinner once, asked you to a hunt once, and put a proposal to you once about carrying timber,” he says. “That last one you have still not answered.”\n\n“I am not keeping accounts,” he says. “I am saying that you and I are not yet on those terms.”\n\nHe stands, goes to the desk, takes something out of a drawer and sets it in front of you.\n\nOne guldmark.\n\n“Take it,” he says. “Get something for the horse on the road.”\n\nHe does not sit down again.\n\n“Mind yourself riding back,” he says. “That road is poor in autumn.”\n\nThe porter sees you out. Through all of it Henk does not say another word.\n\nOn the way home you think of Martha standing in the kitchen doorway, watching you mount."
   },
   "choices": [
     {
       "id": "millridge_everything",
-      "text": "我需要的不少",
+      "text": "I need a good deal",
       "effects": {
-        "logEntry": "你在磨岭的书房里说，你需要的不少。"
+        "logEntry": "In the study at Millridge you said you needed a good deal."
       },
-      "resultText": "他没有让你说第二遍。\n\n“行。”他说，然后就朝门外喊了一声。有人应了。\n\n接下来的一刻钟里，磨岭的人开始装车。粮食、木材、一小袋沉得不像样的钱。你站在院子里看着他们装，一个人过来问你车板承重多少，你答不上来，他自己去看了。\n\n亨克披了件外套出来，站在你旁边。\n\n“过冬的量。”他说，“多的那部分您留着，开春播种也够。”\n\n你说这个数目太大了。\n\n“邻居嘛。”他说。\n\n他看着车，不看你。\n\n“以后总有用得上我的时候。”\n\n就这一句。他没有说什么时候，没有说是什么事，也没有让你答应任何东西。\n\n你们站着看那些人装完了车。他拍了拍你的肩，说路上小心。\n\n回程的路你走得很慢。车重了，马走得慢，灯笼晃着。\n\n你什么也没有答应。\n\n但你现在带着的这一车东西，是那种一旦收下就说不清的东西。"
+      "resultText": "He did not make you say it twice.\n\n“Right,” he says, and calls out through the door. Somebody answers.\n\nFor the next quarter of an hour the Millridge men are loading the cart. Grain, timber, a small bag of money absurdly heavy for its size. You stand in the yard and watch them load. One of them comes over to ask what weight the boards will take, and you cannot tell him, so he goes and looks himself.\n\nHenk comes out with a coat over his shoulders and stands beside you.\n\n“Enough for the winter,” he says. “Keep what is over; it will do for the spring sowing as well.”\n\nYou say the amount is too much.\n\n“Neighbours,” he says.\n\nHe watches the cart, not you.\n\n“There will come a time when you are of use to me.”\n\nThat is all of it. He does not say when, and he does not say what, and he does not ask you to agree to anything.\n\nYou stand together and watch them finish loading. He claps you on the shoulder and says to mind the road.\n\nYou ride home slowly. The cart is heavy, the horse goes slowly, the lantern swings.\n\nYou agreed to nothing.\n\nBut what you are carrying home is the kind of thing that, once accepted, cannot be accounted for."
     },
     {
       "id": "millridge_cash",
-      "text": "我需要一笔现钱",
+      "text": "I need cash",
       "effects": {
-        "logEntry": "你在磨岭开口要了一笔现钱。"
+        "logEntry": "At Millridge you asked for cash."
       },
-      "resultText": "“钱好办。”他说。\n\n他叫人取来一个布袋，当着你的面数了一遍，然后推过来。\n\n数目正好是你需要的那个数，你没有说过具体数字。\n\n“算我借您的。”他说，“什么时候还都行。”\n\n他说“什么时候还都行”的时候是笑着的。\n\n你把袋子收进内袋。它比你以为的重。"
+      "resultText": "“Money is easy,” he says.\n\nHe has a cloth bag brought in, counts it through in front of you, and pushes it across.\n\nThe amount is exactly the amount you needed. You never named a figure.\n\n“Call it a loan from me,” he says. “Repay it whenever.”\n\nHe is smiling when he says whenever.\n\nYou put the bag in an inside pocket. It is heavier than you expected."
     },
     {
       "id": "millridge_goods",
-      "text": "我需要粮食和木材",
+      "text": "I need grain and timber",
       "effects": {
-        "logEntry": "你在磨岭开口要了粮食和木材。"
+        "logEntry": "At Millridge you asked for grain and timber."
       },
-      "resultText": "“粮食和木头我这边有。”他说，“木头尤其多。”\n\n他说这句话的时候你没有接。\n\n他也没有解释他的木头为什么多。\n\n装车用了一会儿。他站在廊下看着，中间进屋了一次，出来的时候手里拿着一件外套，不是给你的，是给赶车的。\n\n“都记在账上。”他说，“回头咱们一起算。”"
+      "resultText": "“Grain and wood I have,” he says. “Wood especially.”\n\nYou did not pick that up when he said it.\n\nHe did not explain why he has so much wood, either.\n\nLoading takes a while. He stands under the eaves and watches, and goes inside once in the middle of it. When he comes out there is a coat in his hand. Not for you. For the man driving.\n\n“Put it all on the account,” he says. “We will settle up by and by.”"
     },
     {
       "id": "millridge_nothing",
-      "text": "还是算了",
+      "text": "Never mind",
       "effects": {
-        "logEntry": "你在磨岭什么也没要，空手回了枫径。"
+        "logEntry": "You asked for nothing at Millridge and rode back to Maplegate empty."
       },
-      "resultText": "你站起来，说打扰了。\n\n有几秒钟你们两个都没有说话。\n\n他在等你把话说完，你已经说完了。\n\n“哦。”他说。\n\n他也站起来，脸上重新挂上那个笑，但那个笑今天晚上第一次显得不合身。\n\n“那，”他说，“路上小心。”\n\n他送你到书房门口。走廊上灯已经熄了一半。\n\n“枫径的事，”他在你要出门的时候说，“您要是哪天想通了，随时来。”\n\n“我不搬家。”\n\n你骑马回去的路上，风比来的时候大。\n\n你什么也没带回来。但整个河谷明天都会知道你去过。"
+      "resultText": "You stand up and say you have disturbed him.\n\nFor several seconds neither of you says anything.\n\nHe is waiting for you to finish. You have finished.\n\n“Ah,” he says.\n\nHe stands as well, and the smile goes back on his face, and for the first time this evening it does not fit him.\n\n“Well then,” he says. “Mind the road.”\n\nHe sees you to the study door. Half the lamps in the corridor are already out.\n\n“About Maplegate,” he says as you are going out. “If you ever come round to it, any time.”\n\n“I am not moving house.”\n\nThe wind on the ride home is stronger than it was coming out.\n\nYou brought nothing back. But the whole valley will know tomorrow that you went."
     }
   ]
 }
