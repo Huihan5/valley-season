@@ -1,106 +1,106 @@
 {
   "gregor": {
     "estranged": [
-      "他在给马刷毛。你走进马厩，他没有停下，也没有回头。刷子的节奏没有变。",
-      "他抬眼看了你一下，随即低头去检查蹄铁。那一眼里没有敌意，只是确认了一件他已经知道的事。"
+      "He is brushing a horse. You come into the stable and he does not stop and does not turn round. The rhythm of the brush does not change.",
+      "He lifts his eyes to you for a moment, then bends to check a shoe. There was no hostility in the look. It only confirmed something he already knew."
     ],
     "cold": [
-      "“嗯。”他把干草叉靠在墙上，等你说话。你说完了他还站着，像在等一句更有用的。",
-      "他点了点头，继续手里的活。你在他身后站了一会儿，他没有再抬头。"
+      "“Mm.” He leans the hayfork against the wall and waits for you to speak. When you have finished he is still standing there, as though waiting for something more useful.",
+      "He nods and goes back to what is in his hands. You stand behind him a while and he does not look up again."
     ],
     "neutral": [
-      "他停下手，转过身，等着。整个动作里没有一个多余的部分。",
-      "“管事先生。”他说完就没有下文了。"
+      "He stops, turns round, waits. There is not one unnecessary part in any of it.",
+      "“Steward.” And nothing follows it."
     ],
     "accepted": [
-      "“今天下午会下雨。”他说，然后才看向你，“你要出去的话，别走西边那条。”",
-      "他从马厩深处走出来，手上还沾着油。“那匹灰的今天不太对。你要用的话用别的。”"
+      "“It will rain this afternoon,” he says, and only then looks at you. “If you are going out, not the west road.”",
+      "He comes out from the back of the stable with oil still on his hands. “The grey is not right today. Take another if you are riding.”"
     ],
     "trusted": [
-      "他往旁边挪了半步，让出那只木箱。这是他的邀请方式。",
-      "“你上次说的那个事。”他一边解缰绳一边说，没有前言，“我想了想。”"
+      "He moves half a step over and leaves the wooden crate clear. This is how he invites you to sit.",
+      "“That thing you said last time.” He says it while he is untying a rein, with nothing in front of it. “I have thought about it.”"
     ],
     "embraced": [
-      "你走进马厩的时候，你的马已经备好了，马具挂在顺手的钩子上。他在另一头忙别的，没有回头。",
-      "“早。”这个字他一天说不了两次。"
+      "When you come into the stable your horse is already saddled and the tack is on the hook nearest your hand. He is busy with something at the other end and does not turn round.",
+      "“Morning.” He does not say that word twice in a day."
     ]
   },
   "marta": {
     "estranged": [
-      "“早。”她说，眼睛没有离开砧板。厨房里另外两个人不约而同地安静下来。",
-      "她把汤锅盖上，动作比平时轻。“先生有什么吩咐。”她用了“吩咐”这个词。"
+      "“Morning,” she says, and her eyes do not leave the board. The two others in the kitchen go quiet at the same moment without arranging it.",
+      "She puts the lid on the soup pot, more gently than usual. “What are your orders, sir.” She used the word orders."
     ],
     "cold": [
-      "“哎哟，管事先生。”声音是亮的，脸上的笑是标准的，“有什么事吗？”她的手一直没停。",
-      "“您来得正好。”她说，然后转身去够架子上的东西，没有说正好什么。"
+      "“Well now, Steward.” The voice is bright and the smile is the standard one. “Was there something?” Her hands never stop.",
+      "“You have come at just the right moment,” she says, and turns away to reach something down off a shelf, without saying right for what."
     ],
     "neutral": [
-      "“管事先生，进来进来，别站在门口，那是风口。”她拉开一张凳子，随即又把它擦了一遍。",
-      "“正想着您什么时候会过来呢。”她笑得很响。这句话她对每个新来的人都说过。"
+      "“Steward, come in, come in, do not stand in the doorway, that is where the draught is.” She pulls out a stool, and then wipes it again.",
+      "“I was only just wondering when you would come by.” She laughs loudly. She has said that to everyone who ever arrived here."
     ],
     "accepted": [
-      "“您来得正好，我有话直说行吗？”她把擀面杖搁下，两只手在围裙上擦了一下。",
-      "“西边那家又来问了。”她开门见山，招呼都省了。"
+      "“You have come at the right moment. May I say it straight out?” She sets down the rolling pin and wipes both hands on her apron.",
+      "“The household on the west side has asked again.” Straight to it, the greeting left out altogether."
     ],
     "trusted": [
-      "“帮我扶一下这个。”她头也不抬，把锅柄那头往你这边推。",
-      "“坐。”她指了指桌子那头，“我烧了水。你脸色不好。”"
+      "“Hold this for me.” Without looking up, she pushes the handle end of the pot over towards you.",
+      "“Sit.” She points at the far end of the table. “I have put water on. You do not look well.”"
     ],
     "embraced": [
-      "桌上摆着一小碟东西，是你上周随口说过喜欢的。她什么也没说，继续切她的洋葱。",
-      "“锅里有。”她说，“没放那个。您不吃的那个。”"
+      "There is a small dish set out on the table. It is the thing you happened to say last week that you liked. She says nothing about it and goes on with her onions.",
+      "“There is some in the pot,” she says. “Without the thing in it. The thing you do not eat.”"
     ]
   },
   "elena": {
     "estranged": [
-      "她正在擦楼梯扶手。看见你下来，她把抹布收进桶里，侧身让开，等你过去。",
-      "“先生。”她低着头，两步之后已经在走廊另一头了。"
+      "She is wiping the stair rail. Seeing you come down, she puts the cloth into the bucket, turns side-on out of the way, and waits for you to pass.",
+      "“Sir.” Her head is down, and two steps later she is at the other end of the corridor."
     ],
     "cold": [
-      "“先生。”她停下手上的活，等你说完，然后点头。整个过程她的视线落在你身后那扇窗上。",
-      "她把叠好的床单换到另一只手上，腾出手扶了扶门。“您需要什么吗。”这句话没有问号的语气。"
+      "“Sir.” She stops what she is doing, waits until you have finished, and nods. Through all of it her eyes rest on the window behind you.",
+      "She shifts the folded sheets to her other arm and puts the free hand to the door. “Is there anything you need.” She does not say it as a question."
     ],
     "neutral": [
-      "“早，先生。”她的声音很轻，说完就低下头去，手上的活没有停很久。",
-      "“楼上已经收拾好了。”她说，然后停顿了一下，好像还有半句，但她没有说。"
+      "“Good morning, sir.” Her voice is very quiet, and her head goes down as soon as it is said. Her hands do not stop for long.",
+      "“Upstairs is done,” she says, and then pauses, as though there were half a sentence more. She does not say it."
     ],
     "accepted": [
-      "“我把窗户关上了，昨天夜里风大。”她顿了顿，“您房间那张桌子，腿有点松，我叫人看看。”",
-      "“早，先生。”她说完没有立刻走开，手上的抹布换了个方向，又擦了一遍已经擦过的地方。"
+      "“I shut the windows; there was a wind in the night.” She pauses. “The table in your room, the leg is a little loose. I will have someone look at it.”",
+      "“Good morning, sir.” She does not go straight off after saying it. She turns the cloth round in her hand and wipes again over a place she has already wiped."
     ],
     "trusted": [
-      "“格雷格先生今天没吃早饭。”她说。她注意到的东西总是这一类。",
-      "“先生。”她停下来，等你先开口。她以前不会等，她会找个理由走开。"
+      "“Mr Gregor did not eat his breakfast today,” she says. What she notices is always of this kind.",
+      "“Sir.” She stops, and waits for you to speak first. She would not have waited before. She would have found a reason to go."
     ],
     "embraced": [
-      "“早。”她说。没有先生。说完还站在那儿，像是这里也是她可以站的地方。",
-      "她在擦窗户，看见你进来，把抹布搭在桶沿上，转过身。她以前会侧身让开。"
+      "“Morning,” she says. No sir. And having said it she stays where she is, as though this were also a place she is allowed to stand.",
+      "She is wiping the windows, and seeing you come in she lays the cloth over the rim of the bucket and turns round. She used to turn side-on out of the way."
     ]
   },
   "lorenz": {
     "estranged": [
-      "“愿炉火照看您。”他微微颔首，用的是对陌生人的那一句。",
-      "他正在往炉膛里添柴，添完才转身。“管事先生。您有事要问？”"
+      "“May the hearth-fire keep you.” A slight bow of the head. It is the line kept for strangers.",
+      "He is feeding the hearth, and only turns round when he has finished. “Steward. Was there something you wanted to ask?”"
     ],
     "cold": [
-      "“季节转得快。”他说完看着火，没有再说下去。",
-      "“您来得不巧，我正要走。”他并没有要走的意思，但他也没有坐下。"
+      "“The season turns quickly.” Then he looks at the fire and does not go on.",
+      "“You have caught me badly; I was about to go.” He has no intention of going. He does not sit down either."
     ],
     "neutral": [
-      "“管事先生。坐一会儿？火刚旺起来。”",
-      "“这个庄园的炉堂朝向很好。”他说，“早上有光，下午没有。设计的人懂事。”"
+      "“Steward. Sit a while? The fire has only just come up.”",
+      "“This estate’s forge-chapel is well set,” he says. “Light in the morning, none in the afternoon. Whoever laid it out understood the work.”"
     ],
     "accepted": [
-      "“您来了有些日子了。”他往火里添了一块柴，“适应得怎么样？”",
-      "“有件事我一直想问您。”他说得很慢，“不急，您可以不答。”"
+      "“You have been here some days now.” He puts another piece of wood on the fire. “How are you settling?”",
+      "“There is something I have been meaning to ask you.” He says it slowly. “There is no hurry. You need not answer.”"
     ],
     "trusted": [
-      "“您为什么留下来？”他问得很直接，然后马上补了一句，“我不是要您现在回答。”",
-      "“金属回火的时候是最安静的。”他拨了拨炭，“人也一样。您最近很安静。”"
+      "“Why do you stay?” He asks it straight out, and adds at once: “I am not asking you to answer now.”",
+      "“Metal is at its quietest while it is tempering.” He moves the coals about. “So are people. You have been very quiet lately.”"
     ],
     "embraced": [
-      "他往旁边挪了挪，示意你坐下。有很长一段时间他什么也没说，只是看着火。",
-      "“今天不谈事。”他说，“坐着就行。”"
+      "He shifts over and motions for you to sit. For a long time he says nothing at all, and only watches the fire.",
+      "“No business today,” he says. “Just sit.”"
     ]
   }
 }
