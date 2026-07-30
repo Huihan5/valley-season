@@ -3,45 +3,45 @@
   "day": 3,
   "timing": "midday",
   "forced": true,
-  "title": "账本的裂缝",
-  "sceneText": "你在整理霍特曼留下的文件堆时，发现最后两个月的账目对不上。\n\n不是大数目。是一系列小额支出，每笔三到五金卢，间隔不规律，摘要栏统一写着“杂项支出”。加起来不到二十金卢，在一座庄园一个月的流水里几乎看不出来。\n\n你把它们按日期抄在一张纸上，看了很久。\n\n让你停下来的不是金额。是每一笔的日期、数目、经手人都记得清清楚楚，字迹和其他页面完全一样，工整，不抖，没有涂改。\n\n一个想遮掩的人不会记得这么清楚。\n\n他是在记录，不是在掩盖。他在给什么人留一份底。\n\n在最后一页的支出预算表上，你找了两遍，没有找到自己。\n\n你的报酬不在这本账上。它出自男爵在铸都的私人预算，和马厩的修缮费、佃户的种子款、厨房的采买不在一个系统里。你管着这座庄园的每一枚金卢，而你自己是另一本账上的一行。\n\n那本账你看不到。",
+  "title": "The Crack in the Ledger",
+  "sceneText": "Sorting through the papers Hartmann left, you find that the last two months do not come out.\n\nIt is not a large sum. It is a series of small payments, three to five guldmark each, at irregular intervals, the summary column giving “sundry expenditure” for every one. Together they come to under twenty guldmark, which in a month of an estate’s turnover is next to invisible.\n\nYou copy them onto a sheet by date and look at it for a long time.\n\nWhat stops you is not the amount. It is that the date, the sum and the person handling it are recorded exactly for every one of them, in the same hand as every other page. Neat, unshaken, nothing corrected.\n\nA man who wanted to cover something would not record it that clearly.\n\nHe was keeping a record, not concealing one. He was leaving somebody a copy.\n\nOn the expenditure budget at the back you look twice, and you are not on it.\n\nYour pay is not in this ledger. It comes out of the Baron’s private budget in Forgehold, in a different system from the stable repairs, the tenants’ seed money, the kitchen buying. You account for every guldmark on this estate, and you yourself are one line in another book.\n\nThat book you cannot see.",
   "choices": [
     {
       "id": "investigate",
-      "text": "继续往下查，弄清这些钱付给了谁",
-      "description": "1 时段",
+      "text": "Go on with it, and find out who the money went to",
+      "description": "1 phase",
       "advancesPhase": true,
       "effects": {
         "flags": {
           "investigatedLedger": true
         },
-        "logEntry": "你开始深入调查账本的异常记录。"
+        "logEntry": "You began looking properly into the irregular entries in the ledger."
       },
-      "resultText": "你又坐了一个下午。\n\n那些支出没有收款人姓名，只有一个代号，三个字母加两位数字，八次全都一样。你在别的页上找这个代号，找到了：它出现在一份三年前的运输契约的付款栏里。\n\n那份契约是磨岭的。\n\n你把这一页折了个角。\n\n折完之后你坐了一会儿，然后把角展平了。你不知道自己在跟谁较劲。"
+      "resultText": "You sat with it another afternoon.\n\nThere is no payee named against those payments, only a reference: three letters and two digits, the same on all eight. You look for the reference on other pages, and you find it. It appears in the payment column of a carriage contract from three years ago.\n\nThe contract is Millridge’s.\n\nYou turned the corner of the page down.\n\nThen you sat a while, and smoothed the corner flat again. You do not know who you were arguing with."
     },
     {
       "id": "report",
-      "text": "写信告知男爵",
+      "text": "Write to the Baron",
       "effects": {
         "renown": -1,
         "lordImpression": 1,
         "flags": {
           "reportedLedger": true
         },
-        "logEntry": "你写信将账目异常上报给冯·阿尔德男爵。"
+        "logEntry": "You wrote to Baron von Alder reporting the irregularity in the accounts."
       },
-      "resultText": "信写得很短。你重写了三遍，每一遍都更短。\n\n最后送出去的那版只有四行：接手时的账目状况、你发现的不一致、你打算怎么处理、以及一句请他知悉。\n\n埃莱娜来收走要寄的东西时，看了一眼信封上的地址。\n\n她什么也没说。\n\n三天之后玛莎在厨房问你，铸都那边有没有回信。\n\n你没有跟任何人说过你写了信。"
+      "resultText": "The letter came out short. You wrote it three times and each version was shorter.\n\nWhat finally went out was four lines: the state of the accounts as you took them over, the inconsistency you had found, what you intended to do about it, and a line asking him to be aware of it.\n\nWhen Elena came to collect what was going out, she glanced at the address on the envelope.\n\nShe said nothing.\n\nThree days later Martha asked you in the kitchen whether there had been any reply from Forgehold.\n\nYou had not told anybody that you wrote."
     },
     {
       "id": "defer",
-      "text": "先放着。秋收更要紧",
+      "text": "Leave it. The harvest matters more",
       "effects": {
         "flags": {
           "deferredLedger": true
         },
-        "logEntry": "你决定先把账本问题放一边，专注于秋收。"
+        "logEntry": "You set the ledger question aside and put the harvest first."
       },
-      "resultText": "你把那几页合上，放回原处。\n\n麦子在地里。这是唯一一件不能等的事。\n\n你把账本推到桌角，压在一摞佃户名册下面。第二天你在同一个位置又看见它，埃莱娜整理的时候把它抽出来放在最上面了。\n\n她大概以为你在找它。"
+      "resultText": "You close those pages and put them back where they were.\n\nThe wheat is in the fields. That is the one thing that cannot wait.\n\nYou push the ledger to the corner of the desk, underneath a stack of tenant rolls. The next day you find it in the same place, except that Elena, tidying, has drawn it out and set it on top.\n\nShe probably thought you were looking for it."
     }
   ]
 }

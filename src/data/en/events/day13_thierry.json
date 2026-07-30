@@ -4,38 +4,38 @@
   "timing": "midday",
   "forced": true,
   "activationFlag": "visitedMarket_day13",
-  "title": "公告板前",
-  "sceneText": "集市北头有一块公国的公告板，钉着林业法令、采伐额度表、几张已经卷边的通告。\n\n板子前面站着四五个人，中间那个穿深绿外套的正在解释什么。他说话的时候手在动，比着树的高度和粗细，另外几个人在点头。\n\n“……所以三十以下你自己报就行，超过三十的要单独批。麻烦是麻烦，但你要是砍了不报，我这边一查就是三年的事。”\n\n有人问了句什么，他笑起来，声音很大。\n\n他转身的时候看见了你，愣了一下，他不认识你，然后看了看你身后的车，看了看车上装的东西。\n\n“枫径的？”",
+  "title": "At the Notice Board",
+  "sceneText": "At the north end of the market there is a duchy notice board with the forestry decrees nailed up on it, the table of felling allowances, and several notices that have begun to curl at the edges.\n\nFour or five men are standing in front of it, and the one in the middle in the dark green coat is explaining something. His hands move while he talks, marking out the height and the thickness of a tree, and the others are nodding.\n\n“— so under thirty you declare it yourself, and over thirty wants a separate approval. It is a nuisance, yes, but if you cut it and do not declare it, one look from my side and it is three years’ worth.”\n\nSomebody asks something, and he laughs, loudly.\n\nTurning round, he sees you and stops for a moment; he does not know you. Then he looks at the cart behind you, and at what is on it.\n\n“Maplegate?”",
   "onEnterEffects": {
     "flags": { "met_thierry": true }
   },
   "choices": [
     {
       "id": "thierry13_yes",
-      "text": "是。我是新来的管事",
+      "text": "Yes. I am the new steward",
       "effects": {
         "flags": { "thierryDay13": "A" },
-        "logEntry": "你在公告板前认识了北区林务官蒂埃里。"
+        "logEntry": "You met Thierry, the forester for the north district, at the notice board."
       },
-      "resultText": "“蒂埃里。北区林务官。”他把手伸出来，“你们那边的采伐额度今年还剩二十五。”\n\n他记得数字，但他说得很随意，像在说天气。\n\n“有事到林子里找我，我一年有两百天在里头。”"
+      "resultText": "“Thierry. Forester, north district.” He puts out his hand. “You have twenty-five left of this year’s allowance over your way.”\n\nHe has the figure by heart, and he says it as loosely as he would say the weather.\n\n“If you want me, I am in the woods. Two hundred days of the year I am in there.”"
     },
     {
       "id": "thierry13_how",
-      "text": "您怎么看出来的",
+      "text": "How could you tell?",
       "effects": {
         "flags": { "thierryDay13": "B" },
-        "logEntry": "你问蒂埃里是怎么看出你是枫径来的。"
+        "logEntry": "You asked Thierry how he had known you were from Maplegate."
       },
-      "resultText": "“车上的木料。”他指了指，“北坡的橡木，断面偏红。这一带只有你们和棘墙有这种树，棘墙不卖木头。”\n\n他说完自己也觉得有点得意，摸了下鼻子。\n\n“蒂埃里。北区林务官。”"
+      "resultText": "“The timber on your cart.” He points at it. “North slope oak. The cut face runs red. Only you and Thornwall have that tree around here, and Thornwall does not sell wood.”\n\nHe is a little pleased with himself when he has said it, and rubs his nose.\n\n“Thierry. Forester, north district.”"
     },
     {
       "id": "thierry13_boundary",
-      "text": "是。北面那片林地我一直没弄明白，正想找个懂的人问",
+      "text": "Yes. That north wood I have never made sense of, and I have been wanting someone who knows",
       "effects": {
         "flags": { "thierryDay13": "C", "clue_ofc_thierry_range": true },
-        "logEntry": "你向蒂埃里请教了北面那片林地的地界。"
+        "logEntry": "You asked Thierry about the boundary of the north wood."
       },
-      "resultText": "“哦。”他把公告板上一张纸按平，“哪一片？”\n\n你说了大概位置。\n\n“那片麻烦。”他说得很直接，“地界写的是沿溪为界，那条溪去年春汛改过道。改道之后按老河床算还是按新河床算，卷宗里没写，因为写卷宗的人没想到河会动。”\n\n他从帆布包里掏出一张折了很多次的纸，是他自己画的图，在上面点了点。\n\n“我巡林的范围到这儿为止。”他的指头停在一条线上，“这条线以外不是我不管，是那边没有申报过的林地，也没有人住。年年秋天有猎人从那边过。”\n\n他把纸折回去。\n\n“您要是哪天想去那边看看，别一个人去。”"
+      "resultText": "“Ah.” He smooths down one of the sheets on the board. “Which stretch?”\n\nYou describe roughly where.\n\n“That stretch is trouble,” he says, straight out. “The boundary is written as the stream, and the stream changed course in last year’s spring flood. Whether you reckon by the old bed or the new one after a change is not in the file, because whoever wrote the file did not expect a river to move.”\n\nHe pulls a much-folded sheet out of his canvas bag — a map he drew himself — and taps a point on it.\n\n“My round comes to an end here.” His finger stops on a line. “Past this line is not somewhere I am uninterested in. It is woodland that was never declared, and nobody lives there. Every autumn there are hunters coming through from that side.”\n\nHe folds the sheet away.\n\n“If you ever want to go and look at it, do not go alone.”"
     }
   ]
 }
