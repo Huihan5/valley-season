@@ -1,5 +1,20 @@
 # Valley Season — Changelog
 
+## [2026-07-30] — 英文版端到端 playtest，与部署核实
+
+### Fixed
+- **15 处直角撇号**，几乎全在 `opening.json`（一口气写完的那份）。其余三千余处都是弯的 `’`。这类错误在 diff 里看不出、在页面上跟满篇弯撇号并排就是错的
+- `tests/Localization.test.ts` 增第九条守卫：en 全库不得出现 `[A-Za-z]'`
+
+### Notes
+- **两局 playtest。** 第一局 Day 13 破产（驱动把 50 金卢全投进庄园事务、零收入），验证了 `ending1.variants.early` 的英文；第二局走完三十天，结局二 The Competent Outsider，粮食 112、声望 +3。83 个日段，无 console 错误、无占位符泄漏、无 `undefined`、除语言开关的「中文」标签外无汉字
+- **存档三项验证**：英文里 Day 5 存档 → 走到 Day 8 → 读回 Day 5（14 粮食、14 条日志一致）；**同一槽位切到中文照样读出**（`第五日 · 上午`、`粮食 14 单位`），时间戳格式随 locale 从 `30/07` 变 `7/30`。这是 locale 不进 `GameState` 的回报
+- **GitHub Pages 已上线且是最新构建。** `https://huihan5.github.io/valley-season/`，服务的 bundle 哈希（`index-BIxVYRAe.js`）与本地 `npm run build` 产物一致。真浏览器里中英两版都能进。部署由 `.github/workflows/deploy.yml` 在 push 到 main 时自动触发，v2 时期就配好了，无需改动
+- **一个交给作者的数值问题**：开局把钱投进修农具 + 清仓 + 佃户会议（25 金卢）而不挣钱，第 13 天破产。解雇线是作者定的 ≤ 0，所以这不是 bug；但「先投资后回本」是合理打法却输得很快。见 V3_PROGRESS「下一步候选」
+- **安全**：`git remote` 的 URL 里嵌着明文 GitHub PAT。建议吊销重发并改用 credential helper 或 SSH，不要写回 URL
+
+---
+
 ## [2026-07-30] — 阶段八完成：中英双语
 
 ### Added
