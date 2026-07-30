@@ -3,23 +3,23 @@
   "day": 0,
   "forced": true,
   "advancesPhase": false,
-  "title": "二十单位",
-  "sceneText": "今天这一趟砍完，格雷格在场院上核数。他数得很慢，数完之后又数了一遍。\n\n“二十。”他说。\n\n你说额度是二十五。\n\n“嗯。”\n\n他把记号笔放回口袋，看着那一堆木头。\n\n“二十五是法令写的。法令是按整个北区算的。”\n\n他停了一下。\n\n“这片坡上的橡木，长到能砍要六十年。今年砍二十五，明年就得从更北边砍。更北边那片是斜坡，砍完留不住土。”\n\n他说完就去牵马了。\n\n他没有说不要砍。他只是把这件事说了一遍。",
+  "title": "Twenty Units",
+  "sceneText": "When today’s load is in, Gregor counts it over in the yard. He counts slowly, and when he has finished he counts it again.\n\n“Twenty,” he says.\n\nYou say the allowance is twenty-five.\n\n“Mm.”\n\nHe puts the marking pencil back in his pocket and looks at the stack.\n\n“Twenty-five is what the decree says. The decree is written for the whole north district.”\n\nHe pauses.\n\n“Oak on this slope takes sixty years to come to a size worth cutting. Cut twenty-five this year and next year you cut further north. What is further north is a steep face. Cut that and the soil will not hold.”\n\nThen he goes to see to the horses.\n\nHe did not say not to cut it. He only said the thing once.",
   "choices": [
     {
       "id": "timber_finish",
-      "text": "按计划采完剩下的五单位",
+      "text": "Take the remaining five units as planned",
       "effects": {
         "flags": {
           "timberRestraintAnswered": true
         },
-        "logEntry": "你把本季额度采满了。"
+        "logEntry": "You cut the season’s allowance out to the full."
       },
-      "resultText": "你把剩下的五单位采完了。\n\n没有违规。账上一切干净，二十五单位，一单位不超。\n\n最后那一趟收工的时候格雷格来接车。他照常卸货，照常牵马，什么也没说。\n\n那五单位木头在场院上堆了三天才运走。"
+      "resultText": "You took the last five units.\n\nNothing was broken. The books are clean: twenty-five units, not one over.\n\nWhen the last load came in Gregor came to take the cart. He unloaded as usual and led the horses off as usual and said nothing.\n\nThose five units sat in the yard three days before they were carried away."
     },
     {
       "id": "timber_stop",
-      "text": "就到这儿。剩下的额度不用了",
+      "text": "Stop here. Leave the rest of the allowance unused",
       "effects": {
         "relationships": {
           "gregor": 1
@@ -28,9 +28,9 @@
           "timberRestraintAnswered": true,
           "respectedLand": true
         },
-        "logEntry": "你把本季的采伐停在了二十单位。"
+        "logEntry": "You stopped the season’s felling at twenty units."
       },
-      "resultText": "你说就到这儿。\n\n格雷格正在解缰绳，手上的动作停了半秒。\n\n“嗯。”\n\n他继续解他的缰绳。\n\n那天晚上你去马厩的时候，他在门口站着，他平时不在门口站着。\n\n“北边那片，”他说，“我父亲那辈砍过一次。砍完那年冬天塌了半面坡。”\n\n“后来种回去了？”\n\n“种了。”他说，“现在长到这么粗。”\n\n他用手比了一下，不到一拃。\n\n“六十年。”"
+      "resultText": "You say that is far enough.\n\nGregor is untying a rein, and his hands stop for half a second.\n\n“Mm.”\n\nHe goes on untying the rein.\n\nThat evening when you go to the stable he is standing in the doorway. He does not usually stand in the doorway.\n\n“That ground to the north,” he says. “My father’s generation cut it once. Half the slope came down that winter.”\n\n“Was it planted back?”\n\n“It was,” he says. “It has come up this thick now.”\n\nHe shows you with his hand. Less than a span.\n\n“Sixty years.”"
     }
   ]
 }

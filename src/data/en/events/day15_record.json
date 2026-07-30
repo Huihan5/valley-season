@@ -5,27 +5,27 @@
   "forced": true,
   "activationFlag": "visitedBoundary",
   "advancesPhase": true,
-  "title": "北面林地",
-  "sceneText": "你可以把这些记下来。",
+  "title": "The North Woods",
+  "sceneText": "You could write this down.",
   "choices": [
     {
       "id": "record_stumps",
-      "text": "记录树桩位置、断面尺寸、集材道走向",
+      "text": "Record the stump positions, the diameters, the line of the skid road",
       "effects": {
         "flags": { "documentedStumps": true },
         "nextScene": "forest",
-        "logEntry": "你把树桩、尺寸和集材道的走向画在了一块桦树皮上。"
+        "logEntry": "You drew the stumps, the measurements and the line of the skid road on a piece of birch bark."
       },
-      "resultText": "你没有带纸。你用炭在一块桦树皮的内面上画。\n\n十一个树桩的位置，大概的间距，集材道的走向，还有蒂埃里报的那几个数字，三十二、三十五、三十八，以及申报上限三十。\n\n蒂埃里在旁边看着你画。\n\n“您画得挺准。”他说，“就是比例不对。”\n\n他蹲下来，用手指在树皮空白处补了两笔，一条线代表溪，一个叉代表溪改道之前的位置。\n\n“这个您回去自己对着地图看。”他说，“我不能给您卷宗，但地图是公开的。”\n\n你把那块树皮带回了庄园，夹在办公室的一本旧册子里。"
+      "resultText": "You did not bring paper. You draw with charcoal on the inner face of a piece of birch bark.\n\nThe positions of the eleven stumps, the spacing roughly, the line of the skid road, and the figures Thierry gave: thirty-two, thirty-five, thirty-eight — and a declared limit of thirty.\n\nThierry watches you draw.\n\n“That is accurate,” he says. “The proportions are wrong, though.”\n\nHe crouches and adds two strokes with a finger in the blank part of the bark: a line for the stream, and a cross for where the stream ran before it moved.\n\n“Take that back and look at it against a map yourself,” he says. “I cannot give you the file, but maps are public.”\n\nYou carry the bark back to the estate and press it inside an old folio in the office."
     },
     {
       "id": "record_remember",
-      "text": "记在心里，先去处理地界纠纷本身",
+      "text": "Keep it in your head, and deal with the boundary dispute itself",
       "effects": {
         "nextScene": "forest",
-        "logEntry": "你没有记，你觉得这些东西你忘不掉。"
+        "logEntry": "You did not write it down. You thought it was not the kind of thing you forget."
       },
-      "resultText": "你觉得记不记下来无所谓，这些东西你都看见了，忘不掉。\n\n回程的路上你把数字在心里过了两遍。三十二，三十五，三十八。上限三十。\n\n三天之后你想不起来是三十八还是三十六。\n\n那两个数字的区别是四棵树还是两棵树。"
+      "resultText": "You decide it makes no difference whether you write it down. You have seen all of it. You will not forget it.\n\nOn the way back you run the figures through your head twice. Thirty-two, thirty-five, thirty-eight. Limit of thirty.\n\nThree days later you cannot remember whether it was thirty-eight or thirty-six.\n\nThe difference between those two numbers is four trees or two."
     }
   ]
 }

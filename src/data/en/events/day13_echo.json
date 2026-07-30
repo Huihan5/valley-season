@@ -4,12 +4,12 @@
   "timing": "dawn",
   "forced": true,
   "activationFlag": "auditResult",
-  "title": "审计的回音",
+  "title": "The Audit Comes Back",
   "sceneText": "",
   "choices": null,
   "variants": {
-    "protected": "埃莱娜今天把办公室重新整理了一遍。\n\n所有的文件都按日期排好了。收条单独一摞，按日期，不再按金额。账本摊开在你昨天停下的那一页。\n\n桌角上多了一支削好的铅笔。\n\n她进来送水的时候，你正在看那叠收条。\n\n她把水放下，站了一会儿没有走。\n\n“凯斯勒先生昨天……”\n\n她说到这里停住了。\n\n你说他核完账就走了。\n\n“嗯。”\n\n她把托盘抱在身前，往门口退了半步，又停下。\n\n“谢谢您。”\n\n她说完就出去了，走得比平时快。\n\n你没有问她谢什么。",
-    "exposed": "办公室今天没有人整理。\n\n文件还是你昨天离开时的样子，昨晚的茶杯还在桌角。\n\n上午她来过一次，把该洗的东西拿走了，没有进屋，她站在门口，把手伸进来。\n\n你叫了她一声。\n\n“先生。”她说。\n\n然后是一段很长的安静。\n\n“没事。”你说。\n\n她点了点头就走了。",
-    "audit_tail": "你在整理的时候发现，昨天提莫西看过的那几页，被人重新夹上了标签。\n\n标签的位置和他停下来的位置一样。\n\n你没有让任何人做这件事。"
+    "protected": "Elena has put the office in order again today.\n\nEvery paper is arranged by date. The receipts are in a stack of their own, by date, no longer by amount. The ledger is open at the page you stopped on yesterday.\n\nThere is a freshly sharpened pencil on the corner of the desk.\n\nWhen she comes in with the water you are looking through that stack of receipts.\n\nShe sets the water down and stands there a moment without going.\n\n“Mr Kessler, yesterday —”\n\nAnd there she stops.\n\nYou say that he finished checking the accounts and left.\n\n“Yes.”\n\nShe holds the tray against her front, takes half a step back towards the door, and stops again.\n\n“Thank you.”\n\nThen she goes out, faster than she usually walks.\n\nYou do not ask her what for.",
+    "exposed": "Nobody has put the office in order today.\n\nThe papers are as you left them yesterday and last night’s tea cup is still on the corner of the desk.\n\nShe came once in the morning to take away what needed washing. She did not come in. She stood in the doorway and reached her hand through.\n\nYou called out to her.\n\n“Sir,” she said.\n\nThen a very long silence.\n\n“It is nothing,” you said.\n\nShe nodded and went.",
+    "audit_tail": "While you are sorting, you find that the few pages Timothy looked at yesterday have been tabbed again.\n\nThe tabs are at exactly the places where he stopped.\n\nYou did not ask anybody to do that."
   }
 }
