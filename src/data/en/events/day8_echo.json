@@ -4,11 +4,11 @@
   "timing": "dawn",
   "forced": true,
   "activationFlag": "attendedDinner",
-  "title": "晚宴的回音",
-  "sceneText": "你今天早上下楼的时候，厨房那边的说话声停了一下。\n\n不是那种被抓包的停，是那种“话题换一下”的停。等你走过去，声音又起来了，但换了内容。\n\n中午玛莎跟你说话的时候，顺口提了一句棘墙那边的厨子。\n\n“她做的那个羊肉，用的是山那边的做法。”她说，“她男人是从岭上下来的。”\n\n你没有跟任何人说过昨天晚上吃了什么。",
+  "title": "The Dinner Comes Back",
+  "sceneText": "When you came down this morning the talking in the kitchen stopped for a moment.\n\nNot the way it stops when people are caught, but the way it stops while the subject is changed. By the time you had gone past, the voices were up again, on something else.\n\nAt midday Martha, in the middle of talking to you, happened to mention the cook over at Thornwall.\n\n“That mutton she does, it is the way they do it on the other side of the hills,” she said. “Her husband came down off the ridge.”\n\nYou have not told anybody what you ate last night.",
   "variants": {
-    "decorous": "下午格雷格在马厩说了一句：“听说您昨天让男爵夫人送到门口了。”\n\n他说完就低头去刷马了。这是他这个星期说的第三句话。",
-    "graceless": "下午你路过厨房，听见里面有人在笑。看见你之后笑声停了。\n\n玛莎从灶台后面探出头来，脸上还是那个标准的笑。\n\n“先生有什么吩咐？”"
+    "decorous": "In the afternoon Gregor said, at the stable: “I hear the Baroness saw you to the door yesterday.”\n\nThen he bent down and went on brushing. That was the third thing he had said this week.",
+    "graceless": "Going past the kitchen in the afternoon you heard somebody laughing inside. The laughing stopped when they saw you.\n\nMartha put her head out from behind the range, with the standard smile still on it.\n\n“Were there any orders, sir?”"
   },
   "choices": null
 }

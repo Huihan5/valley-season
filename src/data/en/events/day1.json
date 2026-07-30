@@ -3,8 +3,8 @@
   "day": 1,
   "timing": "dawn",
   "forced": true,
-  "title": "第一个早晨",
-  "sceneText": "你下楼的时候，庭院里已经有人了。\n\n不是很多，五六个，站在不同的位置上，各自做着看起来像是在做什么的事。有人在搬东西，有人在等着搬东西的人搬完。他们看见你，动作没有停，但节奏变了。\n\n玛莎从厨房门口探出来，手里还端着东西。她什么也没说。\n\n你意识到他们在等你开口。\n\n三个星期没有人告诉这些人该做什么。麦子在地里，农具在库房，账本在楼上的桌子上。所有的东西都还在原地，等着有人说第一句话。\n\n今天是十月一日。你有三十天。",
+  "title": "The First Morning",
+  "sceneText": "There are already people in the courtyard when you come down.\n\nNot many. Five or six, standing in different places, each of them doing something that looks like doing something. One is carrying things. One is waiting for the one carrying things to finish. They see you, and their movements do not stop, but the rhythm of them changes.\n\nMartha leans out of the kitchen doorway with something still in her hands. She says nothing.\n\nYou realise they are waiting for you to speak first.\n\nFor three weeks nobody has told these people what to do. The wheat is in the fields, the tools are in the store, the ledger is on the desk upstairs. Everything is where it was, waiting for somebody to say the first sentence.\n\nToday is the first of October. You have thirty days.",
   "choices": null,
   "onEnterEffects": null
 }

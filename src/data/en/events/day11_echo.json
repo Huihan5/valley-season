@@ -4,12 +4,12 @@
   "timing": "dawn",
   "forced": true,
   "activationFlag": "petitionResolved",
-  "title": "请愿的回音",
+  "title": "The Petition Comes Back",
   "sceneText": "",
   "variants": {
-    "full": "早上有个人在庭院里等你，是那五户里的一个。他手上拿着一小袋东西。\n\n“我媳妇做的。”他说，“不值什么钱。”\n\n他把袋子塞给你就走了，走得很快，像是怕你还回去。\n\n里面是一种你没见过的干果，很甜。",
-    "fair": "老文德在田里叫住了你。\n\n“牛棚那个昨天开工了。”他说，“我看了，做得实在。”\n\n他顿了一下。\n\n“剩下那两家，我跟他们说了。他们不闹。”\n\n他说完就回去干活了。你不知道他跟他们说了什么。",
-    "unfair": "早上派活的时候，有两个人没有到。\n\n玛莎说他们家里有事。她说这话的时候没有看你。\n\n你没有追问。你也不知道该不该追问。"
+    "full": "There is a man waiting for you in the courtyard in the morning, one of the five. He has a small bag in his hands.\n\n“My wife made them,” he says. “They are not worth anything.”\n\nHe puts the bag into your hands and goes, quickly, as though afraid you will hand it back.\n\nInside is a dried fruit you have not seen before. Very sweet.",
+    "fair": "Old Wendt stopped you out in the fields.\n\n“They started on the cow shed yesterday,” he said. “I looked at it. It is being done properly.”\n\nHe paused.\n\n“The other two households. I spoke to them. They will not make trouble.”\n\nThen he went back to work. You do not know what he said to them.",
+    "unfair": "Two men did not turn up when the work was given out this morning.\n\nMartha said they had things at home. She was not looking at you when she said it.\n\nYou did not press her. You do not know whether you should have."
   },
   "choices": null
 }

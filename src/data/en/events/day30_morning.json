@@ -3,11 +3,11 @@
   "day": 30,
   "timing": "dawn",
   "forced": true,
-  "title": "最后一天",
-  "sceneText": "十月三十日。\n\n你醒来的时候天还没亮透，窗外有霜。这几天每天都有霜。\n\n楼下已经有动静了，不比平时早，也不比平时晚。玛莎在厨房，格雷格在马厩，田里的人已经出去了。\n\n今天和昨天没有区别。今天要做的事和昨天要做的事是同一批事。\n\n只是今天做完之后，还会有明天吗？",
+  "title": "The Last Day",
+  "sceneText": "The thirtieth of October.\n\nYou wake before it is properly light and there is frost outside the window. There has been frost every day this week.\n\nThere is already movement downstairs, no earlier than usual and no later. Martha is in the kitchen, Gregor is in the stable, the people in the fields went out long ago.\n\nToday is no different from yesterday. What has to be done today is the same set of things that had to be done yesterday.\n\nOnly: once today is done, will there be a tomorrow?",
   "variants": {
-    "elena_distant": "你下楼的时候，埃莱娜正在擦楼梯扶手。她看见你，侧过身让你过去。",
-    "elena_close": "你下楼的时候，埃莱娜正抱着一大卷东西往院子走。\n\n是冬天的厚被子。她一床一床搬出去，摊在院墙的横杆上晒。\n\n今天是十月三十日。\n\n那些被子要到十一月中旬才用得上。她没有问过任何人要不要现在晒。"
+    "elena_distant": "As you come down, Elena is wiping the stair rail. She sees you and turns side-on to let you pass.",
+    "elena_close": "As you come down, Elena is carrying a great roll of something out towards the yard.\n\nThe winter quilts. She takes them out one at a time and lays them over the rail along the yard wall to air.\n\nToday is the thirtieth of October.\n\nThose quilts will not be wanted until the middle of November. She did not ask anybody whether they should be aired now."
   },
   "choices": null
 }

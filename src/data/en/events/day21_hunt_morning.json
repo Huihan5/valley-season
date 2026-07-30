@@ -5,30 +5,30 @@
   "forced": true,
   "advancesPhase": true,
   "activationFlag": "campOvernight",
-  "title": "营地清晨",
-  "sceneText": "帐篷布透着冷光。你在营地醒来，骨头比在床上睡要僵得多。\n\n篝火已经熄了，剩下灰烬和几个还在睡的侍从。远处有鸟叫。马那边有动静。\n\n亨克已经起来了，站在林边喝着什么热的，背对着营地。\n\n你昨晚说的那句话，今天早上没有人提。",
+  "title": "Morning in Camp",
+  "sceneText": "There is a cold light coming through the canvas. You wake in the camp far stiffer in the bones than you would have from a bed.\n\nThe fire has gone out; there is ash left, and a few attendants still asleep. Birds somewhere off. Movement over where the horses are.\n\nHenk is already up, standing at the edge of the trees with something hot, his back to the camp.\n\nWhat you said last night, nobody mentions this morning.",
   "choices": [
     {
       "id": "camp_stay",
-      "text": "留下，参加今日猎场",
-      "description": "疲劳 +1",
+      "text": "Stay, and ride out with today’s hunt",
+      "description": "fatigue +1",
       "advancesPhase": false,
       "effects": {
         "fatigue": 1,
         "flags": { "huntAttendedDay21": true, "huntAttendedDay21Continued": true },
         "nextScene": "forest",
-        "logEntry": "你留在营地，跟着队伍走了今天的路线。"
+        "logEntry": "You stayed in camp and rode today’s line with the field."
       },
       "nextEvent": "day21_camp_harvest"
     },
     {
       "id": "camp_return",
-      "text": "向亨克道别，返回庄园",
+      "text": "Take your leave of Henk and ride back to the estate",
       "effects": {
         "nextScene": "default",
-        "logEntry": "你向亨克道别，骑马回了枫径。"
+        "logEntry": "You took your leave of Henk and rode back to Maplegate."
       },
-      "resultText": "你去跟亨克道别。\n\n他正在跟两个人说今天走哪条路，看见你过来，把话停下。\n\n“这就走？”\n\n你说庄园那边压着事。\n\n“行。”他说，“昨天您留下来了，这就够意思了。”\n\n他说的是真心话。他拍了拍你的肩，然后转回去继续说他的路线。\n\n回程的路上有霜。马走得比来的时候慢。\n\n你到庄园的时候上午已经过去了大半。田里的人早就出去了，玛莎在厨房，看见你回来点了点头，没有问狩猎的事。\n\n下午你还有一个时段。"
+      "resultText": "You go to take your leave of Henk.\n\nHe is telling two men which line they are taking today, and stops when he sees you coming.\n\n“Off already?”\n\nYou say there are things waiting at the estate.\n\n“Fair enough,” he says. “You stayed last night. That is handsome of you.”\n\nHe means it. He claps you on the shoulder and turns back to his line.\n\nThere is frost on the road home. The horse goes slower than it came.\n\nMost of the morning is gone by the time you reach the estate. The people in the fields went out long ago. Martha is in the kitchen, and she nods when she sees you back, and asks nothing about the hunt.\n\nYou still have the afternoon."
     }
   ]
 }

@@ -3,11 +3,11 @@
   "day": 15,
   "timing": "midday",
   "forced": true,
-  "title": "林地报告",
-  "sceneText": "一个佃户在傍晚捎话过来，说北面林地那边有情况。\n\n具体是什么他说不清。“树倒了。”他说，“不是风倒的。”",
+  "title": "Word from the Woods",
+  "sceneText": "A tenant sends word over at dusk that there is something going on in the north woods.\n\nHe cannot say what, exactly. “Trees down,” he says. “Not the wind.”",
   "variants": {
-    "unmet": "你翻了霍特曼的记录。北面那片林地和磨岭的地界确实有争议，去年做过一次勘界，结论是“沿溪为界”。但那条溪在春汛之后改过道。\n\n记录到这里就停了。改道之后地界怎么算，卷宗里没有写。",
-    "met": "你翻了霍特曼的记录，找到了那次勘界的结论：沿溪为界。\n\n就是蒂埃里在集市上说的那条溪。他说改道之后按老河床还是按新河床，卷宗里没写，因为写卷宗的人没想到河会动。\n\n现在那片林子里“树倒了”。"
+    "unmet": "You go through Hartmann’s records. The boundary between the north woods and Millridge is genuinely disputed. A survey was made last year and the conclusion was “the stream to be the boundary”. But that stream changed its course after the spring flood.\n\nThe record stops there. How the boundary is to be reckoned after the course changed is not written down anywhere in the file.",
+    "met": "You go through Hartmann’s records and find the conclusion of that survey: the stream to be the boundary.\n\nThe same stream Thierry spoke about at the market. He said that whether it goes by the old bed or the new one after the change is not in the file, because whoever wrote the file did not expect a river to move.\n\nAnd now there are “trees down” in that wood."
   },
   "onEnterEffects": {
     "flags": { "forestReportReceived": true }

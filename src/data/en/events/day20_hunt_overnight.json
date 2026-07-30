@@ -4,30 +4,30 @@
   "timing": "dusk",
   "forced": true,
   "activationFlag": "huntAttendedDay20",
-  "title": "夜宴去留",
-  "sceneText": "篝火在营地中央燃着，比庄园炉堂的火要热，也要粗糙得多。\n\n亨克在入夜前截住了你。\n\n“留下来吃晚饭。”他说。这不像邀请，更像陈述，“每年猎季的第三夜，我们都在营地过。”\n\n他没有解释“我们”是谁。\n\n帐篷已经支好。侍从开始搬酒坛。\n\n你意识到：如果留下，今晚就回不了庄园。明早要从营地开始。",
+  "title": "Stay or Ride",
+  "sceneText": "The fire burns in the middle of the camp, hotter than the fire in the estate forge-chapel and a great deal rougher.\n\nHenk catches you before dark.\n\n“Stay for supper,” he says. It is less an invitation than a statement of fact. “The third night of the season we always spend in camp.”\n\nHe does not explain who we is.\n\nThe tents are already up. The attendants have begun carrying the wine jars.\n\nYou understand what it means: if you stay, there is no getting back to the estate tonight. Tomorrow starts here.",
   "choices": [
     {
       "id": "overnight_stay",
-      "text": "留下来",
-      "description": "占用晚间与次日上午 · 疲劳 +1",
+      "text": "Stay",
+      "description": "takes the evening and tomorrow morning · fatigue +1",
       "effects": {
         "fatigue": 1,
         "flags": { "campOvernight": true, "huntOvernightDay20": true },
         "nextScene": "forest",
-        "logEntry": "你留在了营地过夜。"
+        "logEntry": "You stayed the night in camp."
       },
       "nextEvent": "day20_camp_banquet"
     },
     {
       "id": "overnight_decline",
-      "text": "婉拒，连夜返回庄园",
+      "text": "Decline, and ride back through the night",
       "effects": {
         "relationships": { "henk": -1 },
         "nextScene": "default",
-        "logEntry": "你连夜骑马回了枫径。"
+        "logEntry": "You rode back to Maplegate through the night."
       },
-      "resultText": "你说庄园明天有事，得回去。\n\n亨克愣了半秒，他大概很久没有被人拒绝过这种邀请了，然后立刻笑起来。\n\n“那当然。”他说，“您比我们忙。”\n\n他叫人给你备马，还嘱咐了一句路上黑，让人给你挂个灯笼。他做这些的时候还是那么热情。\n\n你骑马回去用了两个钟头。夜里的林道比白天长得多。\n\n到庄园的时候厨房还亮着灯。玛莎从窗户里看见你，愣了一下，她以为你不回来了。\n\n“锅里还有。”她说。"
+      "resultText": "You say there are things at the estate tomorrow and you have to get back.\n\nHenk is blank for half a second — it has probably been a long time since anyone turned down an invitation of that kind from him — and then laughs at once.\n\n“Of course,” he says. “You are busier than we are.”\n\nHe has your horse brought round, and adds that the road is dark and someone should hang a lantern for you. He is just as warm about all of it as before.\n\nThe ride back takes two hours. A forest road at night is much longer than it is by day.\n\nThe kitchen light is still on when you reach the estate. Martha sees you through the window and stops for a moment; she had thought you were not coming back.\n\n“There is some in the pot,” she says."
     }
   ]
 }

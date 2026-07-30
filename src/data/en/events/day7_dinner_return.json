@@ -4,7 +4,7 @@
   "timing": "evening",
   "forced": true,
   "activationFlag": "attendedDinner",
-  "title": "回程",
-  "sceneText": "回枫径的路要走四十分钟。夜里的空气比白天冷得多，马呼出的白气在灯笼的光里散开。\n\n你在路上把整个晚上重新过了一遍。谁说了什么，谁在什么时候看了你一眼，那个位置为什么是第三个而不是第二个。\n\n你想明白了一件事：那不是一顿饭。\n\n明天庄园里的每一个人都会知道你昨晚在哪儿、待了多久、回来的时候是什么脸色。",
+  "title": "The Ride Back",
+  "sceneText": "The road back to Maplegate takes forty minutes. The night air is much colder than the day was, and the horse’s breath opens out white in the lantern light.\n\nYou go back over the whole evening on the way. Who said what. Who looked at you and at what moment. Why that place at the table was the third one and not the second.\n\nOne thing becomes clear to you: that was not a meal.\n\nTomorrow every single person on the estate will know where you were last night, how long you stayed, and what your face looked like when you got back.",
   "choices": null
 }
