@@ -5,40 +5,40 @@
   "forced": true,
   "advancesPhase": true,
   "activationFlag": "huntAttendedDay19",
-  "title": "林地边缘",
-  "sceneText": "今天的猎场范围延伸到公国林地的东侧。马蹄踩过落叶，声音沉闷而规律。\n\n你的视线扫过远处的林线。你认得那个方向，再往北一点，就是枫径和磨岭的争议地界。\n\n从马背上看，那片林地和普通的秋林没有区别：深棕、暗绿、偶有金黄。\n\n蒂埃里骑在你旁边。他的马走得很平稳，他的眼睛扫过的地方和你的不同，他在看树干，不在看猎物。\n\n“您那片林子，”他忽然说，“我上个月量过一次。”",
+  "title": "The Edge of the Woods",
+  "sceneText": "Today’s ground runs out to the east side of the ducal woods. Hooves over the leaf litter, dull and regular.\n\nYour eye goes along the far tree line. You know that direction. A little further north is the disputed boundary between Maplegate and Millridge.\n\nFrom horseback that wood is no different from any autumn wood: dark brown, dark green, gold here and there.\n\nThierry rides beside you. His horse goes steadily. His eyes travel over different things from yours — he is looking at trunks, not at game.\n\n“That wood of yours,” he says suddenly. “I measured it last month.”",
   "onEnterEffects": {
     "flags": { "met_thierry": true }
   },
   "variants": {
-    "range_first": "他勒了一下马，让它慢下来。\n\n“有意思的问题。”他说，“大部分人问我管得到哪儿。”\n\n他抬起下巴指了指北面。\n\n“我的巡林范围到那道坡为止。坡以外不是别人管，是没人管，那边没有申报过的林地，没有人住，也没有路。”\n\n“什么样的地方叫没有路？”\n\n“就是走过去要靠认地形的地方。”他说，“有几处旧的护林点，早年间修的，现在没人用了。石头墙，半边屋顶，能挡风。还有两三个炭窑，也废了。”\n\n他从怀里掏出那张折了很多次的纸，他自己画的图，在马背上摊开一半。\n\n“秋天有猎人从那边过。冬天就没人了。”\n\n他把纸折回去。\n\n“您要是哪天想去，跟我说。别一个人去。”",
-    "range_again": "他勒了一下马。\n\n“您上次问过这个。”他说，“我想想您上次我漏了什么。”\n\n他一边骑一边想，走了很长一段。\n\n“那三个地方不一样。”他终于说，“最东边那个是石底，干净，不出泥，但也没有水，要走半里地去挑。中间那个背阴，一天见不到两个钟头的太阳，水是有的，从坡上渗下来的，冬天不冻。”\n\n“第三个我不太熟。”他说，“高，比另外两个高出去一大截。上面有个洼子，我只去过一次，是夏天。”\n\n“夏天怎么样？”\n\n“潮。”他说，“上面长的东西跟下面不一样。有几种草只在那种地方活得下去。”\n\n他看了你一眼。\n\n“您问这个问得很细。”\n\n你没有回答。\n\n“行。”他说，“不问了。”"
+    "range_first": "He checks his horse and lets it slow.\n\n“Good question,” he says. “Most people ask me how far my authority runs.”\n\nHe lifts his chin towards the north.\n\n“My round ends at that slope. Beyond the slope is not somebody else’s; it is nobody’s. Undeclared woodland, nobody living there, and no road.”\n\n“What makes a place have no road?”\n\n“A place you get to by reading the ground,” he says. “There are a few old forest posts up there, built years back, not used now. Stone walls, half a roof, enough to keep the wind off. Two or three charcoal kilns as well, all abandoned.”\n\nHe pulls that much-folded sheet out of his coat — the map he drew himself — and opens half of it across the saddle.\n\n“Hunters come through from that side in autumn. In winter there is nobody.”\n\nHe folds the sheet away.\n\n“If you ever want to go, tell me. Do not go alone.”",
+    "range_again": "He checks his horse.\n\n“You asked me that before,” he says. “Let me think what I left out last time.”\n\nHe thinks about it as he rides, for a good stretch of the way.\n\n“Those three places are not alike,” he says at last. “The easternmost one has a stone bottom. Clean, no mud comes off it, but no water either — you would be carrying it half a mile. The middle one is shaded; it does not see two hours of sun in a day. There is water, seeping down off the slope, and it does not freeze in winter.”\n\n“The third I do not know well,” he says. “High. A good deal higher than the other two. There is a hollow up there. I have been once, in summer.”\n\n“What was it like in summer?”\n\n“Damp,” he says. “What grows up there is not what grows below. There are a few plants that will only live in a place like that.”\n\nHe glances at you.\n\n“You are asking about this in a great deal of detail.”\n\nYou do not answer.\n\n“Right,” he says. “I will not ask.”"
   },
   "choices": [
     {
       "id": "ride_ask_measure",
-      "text": "问他量出了什么",
+      "text": "Ask what he measured",
       "effects": {
         "flags": { "thierryDay19": "A" },
-        "logEntry": "你问蒂埃里在你那片林子里量出了什么。"
+        "logEntry": "You asked Thierry what he had measured in your wood."
       },
-      "resultText": "“三十七棵够尺寸的。”他立刻答上来，“其中十九棵是能砍的，剩下的太年轻，再等十年。”\n\n“您那片林子底子不差。”他说，“就是这几年没人认真管过。间伐要按年做，隔一年做一次就变成砍树了。”\n\n他侧过头看你。\n\n“明年您要是还在，我可以给您排个五年的表。”\n\n“明年我要是还在。”你说。\n\n“对。”他说得很轻松，没有停顿，“明年您要是还在。”"
+      "resultText": "“Thirty-seven of a size,” he answers straight away. “Nineteen of those are ready to come down. The rest are too young; give them another ten years.”\n\n“That wood is not in bad heart,” he says. “It is only that nobody has managed it properly these last few years. Thinning wants doing yearly. Do it every other year and it stops being thinning and becomes cutting trees down.”\n\nHe turns his head to look at you.\n\n“If you are still here next year I can set you out a five-year table.”\n\n“If I am still here next year,” you say.\n\n“Yes,” he says. Easily, without a pause. “If you are still here next year.”"
     },
     {
       "id": "ride_mention_road",
-      "text": "说起磨岭那边的集材道",
+      "text": "Bring up the skid road on the Millridge side",
       "effects": {
         "flags": { "thierryDay19": "B" },
-        "logEntry": "你在马背上跟蒂埃里提起了那条集材道。"
+        "logEntry": "You brought up the skid road with Thierry from the saddle."
       },
-      "resultText": "“那条道我知道。”他说，“我也走过。”\n\n你等着他说下去，他没有。\n\n又走了一段，他才开口。\n\n“您想让我说的那句话，我不能在这儿说。”他朝前面的队伍抬了抬下巴，“前头那位就是磨岭的人。”\n\n他没有回头看你。\n\n“林子里我可以说。这儿不行。”"
+      "resultText": "“I know that road,” he says. “I have walked it too.”\n\nYou wait for him to go on. He does not.\n\nAnother stretch of the way, and then he speaks.\n\n“The sentence you want out of me, I cannot say here.” He lifts his chin at the field ahead. “That man up front is Millridge’s.”\n\nHe does not look round at you.\n\n“In the woods I can say it. Not here.”"
     },
     {
       "id": "ride_ask_range",
-      "text": "问他这一带有多少地方是他管不到的",
+      "text": "Ask how much of this country lies outside his round",
       "effects": {
         "flags": { "thierryDay19": "C", "clue_ofc_thierry_range": true },
-        "logEntry": "你问蒂埃里，这一带有多少地方是他管不到的。"
+        "logEntry": "You asked Thierry how much of the country lay outside his round."
       }
     }
   ]

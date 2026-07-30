@@ -63,6 +63,21 @@ describe('zh and en are the same tree', () => {
     expect(wrong).toEqual([]);
   });
 
+  it('closes every quotation it opens, on both sides', () => {
+    // A dropped closing quote survives every other check here: the key is present,
+    // the placeholders match, the paragraph count matches. It only shows up on
+    // screen, in the middle of a scene. This caught one in day19_hunt_ride.
+    const unbalanced = (bundle: Record<string, Json>, open: string, close: string) =>
+      Object.entries(bundle).filter(([, v]) =>
+        typeof v === 'string'
+        && (v.split(open).length !== v.split(close).length)
+      ).map(([k]) => k);
+
+    expect(unbalanced(ZH, '「', '」')).toEqual([]);
+    expect(unbalanced(ZH, '“', '”')).toEqual([]);
+    expect(unbalanced(EN, '“', '”')).toEqual([]);
+  });
+
   it('leaves identifiers alone', () => {
     // id, flag keys, resultKind and activationFlag are English already; a
     // translated one silently unhooks the event from the system that looks for it.
