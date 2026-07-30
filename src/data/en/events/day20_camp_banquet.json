@@ -5,36 +5,36 @@
   "forced": true,
   "advancesPhase": true,
   "activationFlag": "campOvernight",
-  "title": "营地夜宴",
-  "sceneText": "酒过两轮之后，营地的说话声就散了。人分成了三四堆，各自说着各自的事。\n\n你坐在篝火的外圈。玛格丽特在你斜对面，没有喝酒，手里端着一杯热的东西。亨克在另一边，正在跟三个人比划什么，声音是全场最大的。\n\n蒂埃里不在。有人说他去看明天的路了。\n\n火烧得很旺。夜里的林子很静，静得能听见远处什么东西踩过落叶。\n\n亨克在某个时刻转过头来。\n\n“对了。”他说，声音大得让附近几堆人都听得见，“我一直想问。”\n\n“你打算在这儿待多久？”\n\n他说得像玩笑。他脸上的表情也是玩笑的表情。\n\n但周围有两三个人停下了说话。",
+  "title": "Supper in Camp",
+  "sceneText": "After two rounds of wine the talk in the camp breaks up. People fall into three or four knots, each on its own business.\n\nYou are sitting on the outside of the fire. Marguerite is across from you at an angle, not drinking, with something hot in her hands. Henk is on the other side, marking something out for three men, and his is the loudest voice there.\n\nThierry is not here. Somebody says he has gone to look at tomorrow’s line.\n\nThe fire is well up. The woods at night are so quiet you can hear something a long way off treading over the leaves.\n\nAt some point Henk turns his head.\n\n“Now then,” he says, loudly enough for the nearest few knots to hear it. “I have been meaning to ask.”\n\n“How long do you mean to stay here?”\n\nHe says it as a joke. His face has the expression of a joke on it.\n\nBut two or three people nearby have stopped talking.",
   "choices": [
     {
       "id": "banquet_thirty_days",
-      "text": "三十天。合同上写的",
+      "text": "Thirty days. It is in the contract",
       "effects": {
         "relationships": { "henk": 1 },
         "flags": { "banquetAnswer": "A" },
-        "logEntry": "你在夜宴上说，三十天，合同上写的。"
+        "logEntry": "At the camp supper you said thirty days, it is in the contract."
       },
-      "resultText": "“三十天。”你说，“合同上写的。”\n\n亨克大笑起来，用手拍了一下大腿。\n\n“好。”他说，“我喜欢知道数字的人。”\n\n他转回去继续他那边的话题。这件事到此为止。"
+      "resultText": "“Thirty days,” you say. “It is in the contract.”\n\nHenk laughs out loud and slaps his thigh.\n\n“Good,” he says. “I like a man who knows his figures.”\n\nHe turns back to his own conversation. That is the end of it."
     },
     {
       "id": "banquet_up_to_baron",
-      "text": "看男爵的意思",
+      "text": "That is for the Baron to say",
       "effects": {
         "flags": { "banquetAnswer": "B" },
-        "logEntry": "你说这要看男爵的意思。"
+        "logEntry": "You said that was for the Baron to say."
       },
-      "resultText": "“看男爵的意思。”你说。\n\n“路德维希的意思。”亨克重复了一遍，然后点点头，“那就是不知道。”\n\n他没有再问，但那句话之后，附近几个人的注意力也散了。\n\n火里有一根柴塌下去，溅起一阵火星。"
+      "resultText": "“That is for the Baron to say,” you tell him.\n\n“For Ludwig to say.” Henk repeats it, and then nods. “So: you do not know.”\n\nHe asks nothing further, but after that sentence the attention of the people nearby drifts off as well.\n\nA log falls in on itself in the fire and throws up a spray of sparks."
     },
     {
       "id": "banquet_havent_thought",
-      "text": "我还没想过",
+      "text": "I have not thought about it",
       "effects": {
         "flags": { "banquetAnswer": "C", "askedWhyStay": true },
-        "logEntry": "你说你还没想过。玛格丽特替你把话拦了下来。"
+        "logEntry": "You said you had not thought about it. Marguerite headed the conversation off for you."
       },
-      "resultText": "“我还没想过。”\n\n你说完就意识到这句话在这个场合是多么没有防备。\n\n亨克的眼睛亮了一下。他往前倾了一点。\n\n“没想过。”他说，“那就是可以想。你要是想在河谷长久待下去，有些事情早点安排比晚点好，比如说，一个外国人在这一带能不能自己置产，这里头门道很多，我可以——”\n\n“亨克。”\n\n玛格丽特没有提高声音，但整个外圈都安静了。\n\n她把手里的杯子换了个位置。\n\n“他在替一个不在场的人管一座庄园。”她说，“你在饭桌上问他打算待多久，就跟问你家管事打算给你干几年一样。”\n\n亨克愣了一下，然后哈哈笑了两声，摊开手。\n\n“说得也是。”他说，“我就是好奇。”\n\n他转回去了。旁边的人也重新开始说话。\n\n玛格丽特没有再看你。她在看火。\n\n过了一会儿她说了一句，声音很小，你不确定是不是对你说的。\n\n“这个问题他不该在这儿问。”"
+      "resultText": "“I have not thought about it.”\n\nYou hear how undefended that is in this company as soon as it is out.\n\nHenk’s eyes brighten. He leans in a little.\n\n“Not thought about it,” he says. “So it can be thought about. If you mean to be in the valley for the long run, some things are better arranged sooner than later. Whether a foreigner can hold property here in his own name, for instance — there is a good deal in that, and I could —”\n\n“Henk.”\n\nMarguerite does not raise her voice, and the whole outer ring goes quiet.\n\nShe moves the cup in her hands to a different place.\n\n“He manages an estate on behalf of a man who is not here,” she says. “Asking him at supper how long he means to stay is like asking your own steward how many years he intends to give you.”\n\nHenk is blank a moment, then laughs twice and opens his hands.\n\n“True enough,” he says. “I was only curious.”\n\nHe turns back. The people beside him start talking again.\n\nMarguerite does not look at you again. She is looking at the fire.\n\nAfter a while she says something, very quietly, and you are not certain it was said to you.\n\n“He should not have asked that here.”"
     }
   ]
 }
