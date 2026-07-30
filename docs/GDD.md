@@ -1201,6 +1201,18 @@ Day 30 是 10 月 30 日，圣火节在 11 月初，所以正常情况下结算�
 | 君王之跃 | The King's Leap |
 | 圣火铸神殿 | Temple Forged by the Sacred Flame |
 | 圣火金卢 | Guldmark |
+| 枫径大道 | Maplegate Avenue |
+| 圣火节 | 见下方语域说明 |
+
+**圣火节的三个语域**（2026-07-30 作者定）。这个节日在英文里按说话人的位置分三种叫法，不是同义词，选错了等于把人物放错了阶层：
+
+| 场合 | 英文 | 谁这么说 |
+|---|---|---|
+| 法定正式名 | The Rite of the Sacred Flame | 公文、法条、正式文书 |
+| 国教内部与神学术语 | Sacred Flame Observance | 匠师、神殿系统、真理院 |
+| 国内日常简称 | The Kindling | 河谷的人、集市上、厨房里 |
+
+`Feast of the Flame` **不用**——那是旅游宣传册的语域，玛里尼没有这个声音。
 
 ### 12.3 命名规则
 
