@@ -1,5 +1,28 @@
 # Valley Season — Changelog
 
+## [2026-07-30] — 阶段八票三：英译进行中（15 / 54 文件）
+
+### Added
+- 已完成：`ui.json`、`actions.json`、`system_lines.json`、`scenes/` 全部六个文件、`dialogue/` 两个文件、`events/random/` 五个文件
+- 剩余 39 个文件、31,859 汉字：34 个固定事件、`opening.json`、`endings/endings.json`
+
+### Changed
+- **圣火节按语域分成三个名字**（作者 7-30 定，已写入 GDD ch.12）：法定正式名 `The Rite of the Sacred Flame`，国教内部与神学术语 `Sacred Flame Observance`，国内日常简称 `The Kindling`。这**不是**同义词组，选错等于把说话人放错阶层。`Feast of the Flame` 弃用，那是旅游宣传册的语域
+  - 已译的两处都是家常语境，都取 `The Kindling`。集市那句原本写 `kindling in sheaves`（引火柴），与节日名撞词，改为 `bundled tinder`
+- `枫径大道 → Maplegate Avenue`、`明光城 → Luminhold`，均经作者批准并补进 GDD ch.12
+- `SceneSystem` 里 `${label}。${body}` 的句号是硬编码的标点，挪进 `ui.sceneLabel`。同理 `ui.phaseInline`——面板要 `Morning`，句子里要 `morning`，只有英文在乎这个区别
+
+### Notes
+- 翻译判断记录，供作者复核：
+  - 炉堂一律 `forge-chapel`，依据 STYLE_GUIDE 术语表与 `unlockForgeChapel` 这个 flag 名，不用代码注释里的 forge-hall
+  - 管事先生 / 先生 → `Steward`（格雷格、玛莎、洛伦茨用作称谓）与 `sir`（埃莱娜）。英语家仆本来就有 `Cook`、`Nanny` 这类光用职称呼人的传统，语域是对的
+  - 公爵瓦妮莎 → `the Duke`，代词 `she`（作者定）。头衔不随性别变，正好是「理性封建制」的一个注脚
+  - 玛莎信任升档时中文靠 您→你 换称，英语没有这个代词层，改由祈使句的直白承担（`“Sit.”`）
+  - 产出档位 `meagre / fair / heavy`；`heavy` 是英语农事里现成的说法
+- 485 个测试全绿。`tests/Localization.test.ts` 在逐文件替换的过程中一直守着占位符、数组长度与段落数
+
+---
+
 ## [2026-07-30] — 阶段八票二：平行 zh / en 目录与语言开关
 
 ### Added
