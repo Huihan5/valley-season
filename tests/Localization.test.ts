@@ -107,6 +107,16 @@ describe('zh and en are the same tree', () => {
     expect(suspect).toEqual([]);
   });
 
+  it('uses the curly apostrophe throughout the English bundle', () => {
+    // Same class of silent drift as an unclosed quote: a straight apostrophe reads
+    // fine in a diff and wrong on the page, beside three thousand curly ones. This
+    // caught fifteen, mostly in opening.json, which was written in one sitting.
+    const straight = Object.keys(EN).filter(
+      k => typeof EN[k] === 'string' && /[A-Za-z]'/.test(EN[k] as string)
+    );
+    expect(straight).toEqual([]);
+  });
+
   it('closes every quotation it opens, on both sides', () => {
     // A dropped closing quote survives every other check here: the key is present,
     // the placeholders match, the paragraph count matches. It only shows up on
