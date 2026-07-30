@@ -1214,6 +1214,16 @@ Day 30 是 10 月 30 日，圣火节在 11 月初，所以正常情况下结算�
 
 `Feast of the Flame` **不用**——那是旅游宣传册的语域，玛里尼没有这个声音。
 
+**归火的三个语域**（2026-07-30 作者定）。同理，一件事按说话人的位置有不同的叫法：
+
+| 场合 | 英文 | 说明 |
+|---|---|---|
+| 法定公文、正式报告与回复 | Consecrated Cremation | 承认它物理上确实是火葬，但在这个国家带宗教意义 |
+| 日常简称 | The Returning | 与 `The Kindling` 同一层，河谷的人这么说 |
+| 宗教语域 | received by the Flame / going back to the Flame | 匠师与神殿系统的说法，多作动词性短语而非名词 |
+
+例：结局 4A 标题 `A Body Not Yet Received by the Flame`（宗教语域，因为标题说的正是「仪式没有发生」）；洛伦茨口中「归火就是归火」= `a Returning is a Returning`（他用日常词，因为他在说这件事不必大惊小怪）。
+
 ### 12.3 命名规则
 
 1. 姓氏音译，庄园名意译。
