@@ -1,5 +1,20 @@
 # Valley Season — Changelog
 
+## [2026-08-12] — Multi-target deployment (local / itch.io / GitHub Pages)
+
+### Changed
+- `vite.config.ts`: `base` now reads from `VITE_BASE_PATH` env var, defaulting to `./`
+- `.github/workflows/deploy.yml`: passes `VITE_BASE_PATH: /valley-season/` at build time so GitHub Pages is unaffected
+
+### Notes
+- Default build (`npm run build`, no env var) produces relative asset paths (`./assets/…`). Works served from any root — local static server, itch.io, or any CDN without a subpath
+- GitHub Pages build continues to use `/valley-season/` via the CI env var; no change to the live URL
+- **itch.io packaging**: `npm run build` → zip the *contents* of `dist/` (not the folder itself) → upload as HTML game on itch.io
+- **Local static test**: `npm run build` → `npx serve dist` or `npx vite preview` → open `http://localhost:4173`
+- Verified locally: `http://localhost:4173` loads the title screen with no console errors
+
+---
+
 ## [2026-07-30] — 英文版端到端 playtest，与部署核实
 
 ### Fixed
