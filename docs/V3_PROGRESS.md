@@ -19,6 +19,7 @@
 | 6 | PlaytestFeedback 收尾、随机事件池、引号归一 | 已完成 |
 | 7 | 解雇线收紧 + 存档系统 | 已完成 |
 | 8 | 中英双语 | 已完成（见「阶段八 · 双语收尾记录」） |
+| — | 卷宗（线索 + 地图）、结局收集册 | 已完成（2026-08-16） |
 
 ---
 
@@ -410,11 +411,39 @@ PlaytestFeedback 1.e：Day 19 下午的文本里出现"Day 15 那天"，出戏�
 
 ### 美术
 
-玛格丽特与亨克仍无立绘（常驻四人 + 遭遇二人已齐）。地图 `src/assets/map_valehold.png` 需补中文标注与猎场位置标记。**英文版还需要一版英文标注的地图**，这一条是双语带出来的新需求。
+玛格丽特与亨克仍无立绘（常驻四人 + 遭遇二人已齐）。
+
+**地图那条此前记反了，2026-08-16 更正**：`src/assets/map_valehold.png` **本来就是英文标注的**（THORNWALL / MAPLEGATE / MILLRIDGE / VALEHOLD / River Valenne / DUCHY OF VALEWISP），所以英文版无需另做，缺的是**中文标注版**。两版都还缺猎场位置标记。图已在卷宗的地图页上线，中文版目前显示的是英文标注那张。
 
 ### 已核实不是缺口
 
 `night_ledger_4`、`ending4a/4b` 的 `festival_mirror` 与 `henk` 追加段都已有正文（曾在阶段五记为空槽）。
+
+---
+
+## 卷宗与结局收集册（2026-08-16，已完成）
+
+详见 CHANGELOG。这里只留后来会绊人的几条。
+
+### 一 · 新增线索必须同时接进 `JournalSystem` 的 `CLUE_ORDER`
+
+卷宗的条目顺序是 `CLUE_ORDER` 里那 16 行写死的，因为 bundle 的键序是字母序（day10 排在 day3 前面），给不出时间顺序。**漏接不会崩、不会红，只会让那条线索永远不出现在卷宗里。**
+
+`tests/JournalSystem.test.ts` 的第一条就是为此：扫数据里所有 `clue_` flag，凡不在注册表里就红。这是这批测试里唯一有长期回归价值的一条。
+
+### 二 · 卷宗的文字是采集来的，不是抄来的
+
+不要因为「取一句摘要更方便」就新建 `clues.json`。抄本会在作者改写某句日志行的那天悄悄失效，而现有守卫看不见——`Localization.test.ts` 比的是中英两版结构，不是转录与原文。
+
+两条例外已在 `harvestExplicit()` 里显式登记并写明理由（`clue_mot_handwriting`、`clue_nob_marguerite`）。**改 Day 21 猎场事件的 `variants.marguerite` 时留意**：卷宗取的是那一段的第一个 `\n\n` 块。
+
+### 三 · 「只显示已得」是设计，不是省事
+
+没有计数、没有空格子、空的组整个不画。GDD ch.9 的调查系统就建立在不知道还差多少上面。**收集册是反的**（显示五个格子），因为结局总数是 GDD ch.10 明写的设计事实。两者不一致是有意的。
+
+### 四 · 收集册与 locale 一样不进 `GameState`
+
+`localStorage` 键 `valley-season:endings`。放进存档要顶 `SAVE_VERSION`，而且三个手动槽本来就是拿来从 Day 27 分叉试结局的——绑进存档会让它不断覆盖自己的历史。
 
 ---
 

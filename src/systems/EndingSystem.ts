@@ -14,6 +14,11 @@ const endingsData = DATA.endings.endings;
 
 export type EndingId = 'ending1' | 'ending2' | 'ending3' | 'ending4a' | 'ending4b';
 
+/** All five, in the order the game numbers them. The gallery lists them in this order. */
+export const ENDING_IDS: readonly EndingId[] = [
+  'ending1', 'ending2', 'ending3', 'ending4a', 'ending4b',
+];
+
 export interface EndingData {
   id: string;
   title: string;

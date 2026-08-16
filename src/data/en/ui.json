@@ -113,7 +113,27 @@
     "expandOne": "{n} entry ↑"
   },
   "scenePanel": {
-    "saves": "Saves"
+    "saves": "Saves",
+    "journal": "The File"
+  },
+  "journal": {
+    "heading": "— The File —",
+    "close": "Close",
+    "tabClues": "What You Have",
+    "tabMap": "Map",
+    "groupEstate": "On the estate",
+    "groupOfficer": "In the offices",
+    "groupNoble": "Among the peerage",
+    "empty": "Nothing has gone in here yet.",
+    "mapCaption": "The Duchy of Valewisp",
+    "mapAlt": "Map of the Duchy of Valewisp"
+  },
+  "gallery": {
+    "heading": "— Endings —",
+    "close": "Close",
+    "open": "Endings Seen",
+    "unseen": "Not yet seen",
+    "empty": "No season has been played to its end."
   },
   "estateTaskList": {
     "heading": "Estate business",

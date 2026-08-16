@@ -8,9 +8,10 @@ const ui = DATA.ui;
 interface Props {
   state: GameState;
   onOpenSaves: () => void;
+  onOpenJournal: () => void;
 }
 
-export default function ScenePanel({ state, onOpenSaves }: Props) {
+export default function ScenePanel({ state, onOpenSaves, onOpenJournal }: Props) {
   const { day, phase, activeEvent, currentSceneText, lastResult, log } = state;
 
   return (
@@ -29,8 +30,14 @@ export default function ScenePanel({ state, onOpenSaves }: Props) {
           </>
         )}
         <button
-          onClick={onOpenSaves}
+          onClick={onOpenJournal}
           className="ml-auto text-game-dim text-xs hover:text-cream transition-colors shrink-0"
+        >
+          {ui.scenePanel.journal}
+        </button>
+        <button
+          onClick={onOpenSaves}
+          className="text-game-dim text-xs hover:text-cream transition-colors shrink-0"
         >
           {ui.scenePanel.saves}
         </button>

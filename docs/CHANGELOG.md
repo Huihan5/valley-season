@@ -1,5 +1,27 @@
 # Valley Season — Changelog
 
+## [2026-08-16] — 卷宗（线索 + 地图）与结局收集册
+
+### Added
+- **`src/systems/JournalSystem.ts`** — 卷宗。玩家手上的线索，按 GDD 9.1 的三组分节
+- **`src/systems/CollectionSystem.ts`** — 结局收集册，记在 `localStorage`（键 `valley-season:endings`）
+- `src/components/common/Journal.tsx`（线索 / 地图两个标签页）、`src/components/common/EndingGallery.tsx`
+- `src/vite-env.d.ts` —— 之前没有，PNG 之类的资源 import 在 `tsc` 下没有类型
+- `EndingSystem.ts` 导出 `ENDING_IDS`
+- `tests/JournalSystem.test.ts`（10 条）、`tests/CollectionSystem.test.ts`（9 条）。全库 508 测试绿
+
+### Notes
+- **卷宗的文字一个字都不是新写的。** 16 条线索里 8 条的日志行在 `fragments.json`、6 条在事件 choice 的 `logEntry`，启动时扫 `DATA` 采集，不另存一份抄本——抄本会在作者改写某句日志行的那天悄悄失效，而 `Localization.test.ts` 比的是中英两版，看不见转录与原文脱节
+- **两条扫不到，在注册表里显式登记**：`clue_mot_handwriting` 由夜账选项在第三晚写入（取 `actions.reviewAccounts.log`）；`clue_nob_marguerite` 由 `EventSystem` 的 `onEnterEffects` 写入，**根本没有 `logEntry`**。回退到事件标题会把「洛伦茨在猎场」印在玛格丽特说的话上面，所以取那个 variant 块的第一段
+- **`clue_ofc_thierry_range` 有两个来源**（Day 13 集市 / Day 19 猎场骑行），日志行不同。展示时优先选 `state.log` 里真出现过的那句。已在浏览器里验证：换掉记录里的那一行，卷宗跟着换
+- **不显示计数、不显示空格子、空的组整个不画。** 「不知道还差多少」就是调查系统本身（GDD ch.9）
+- **收集册反过来显示缺口**，五个结局是 GDD ch.10 明写的设计事实，藏起来就不成其为重玩的理由了
+- `JournalSystem.test.ts` 那条「注册表覆盖数据里所有 clue flag」是真正有回归价值的一条：以后新增线索若忘了接卷宗，不会崩、只会永远不出现
+- **不进 `GameState`**：收集册跨季节存在，放进存档要顶 `SAVE_VERSION`，而且会被单个存档锁住——三个手动槽本来就是拿来分叉试结局的
+- 验证：dev 与 `serve dist` 两份都跑过，中英两版、地图在相对 base 下也正常（`assets/map_valehold-Cwtd1ZOk.png`，112 kB，独立资源不进 JS）
+
+---
+
 ## [2026-08-12] — Multi-target deployment (local / itch.io / GitHub Pages)
 
 ### Changed

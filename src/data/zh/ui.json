@@ -113,7 +113,27 @@
     "expandOne": "共 {n} 条 ↑"
   },
   "scenePanel": {
-    "saves": "存档"
+    "saves": "存档",
+    "journal": "卷宗"
+  },
+  "journal": {
+    "heading": "— 卷宗 —",
+    "close": "关闭",
+    "tabClues": "线索",
+    "tabMap": "地图",
+    "groupEstate": "庄园里",
+    "groupOfficer": "公务上",
+    "groupNoble": "贵族那边",
+    "empty": "还没有什么可以放进来的。",
+    "mapCaption": "瓦莱维斯普公国",
+    "mapAlt": "瓦莱维斯普公国地图"
+  },
+  "gallery": {
+    "heading": "— 结局 —",
+    "close": "关闭",
+    "open": "已见的结局",
+    "unseen": "未见",
+    "empty": "还没有走完过一季。"
   },
   "estateTaskList": {
     "heading": "庄园事务",

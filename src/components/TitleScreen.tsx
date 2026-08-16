@@ -14,6 +14,7 @@ interface Props {
   onNew: () => void;
   onContinue: () => void;
   onOpenSaves: () => void;
+  onOpenGallery: () => void;
 }
 
 /**
@@ -21,7 +22,9 @@ interface Props {
  * left nowhere to put "continue" — and nowhere to put the language switch the
  * bilingual build will need (PlaytestFeedback 3.a). Both live here.
  */
-export default function TitleScreen({ auto, hasManualSaves, onNew, onContinue, onOpenSaves }: Props) {
+export default function TitleScreen({
+  auto, hasManualSaves, onNew, onContinue, onOpenSaves, onOpenGallery,
+}: Props) {
   const resumable = auto && !auto.finished;
   const locale = getLocale();
 
@@ -62,6 +65,13 @@ export default function TitleScreen({ auto, hasManualSaves, onNew, onContinue, o
             {T.loadSave}
           </button>
         )}
+
+        <button
+          onClick={onOpenGallery}
+          className="px-6 py-2.5 border border-game-border text-game-text font-serif text-sm rounded-sm hover:bg-bg-hover hover:border-gold-dim transition-all"
+        >
+          {ui.gallery.open}
+        </button>
 
         {/* Changing language reloads: the text is wired in at module load, and the
             season is on the autosave, so there is nothing to lose by starting over

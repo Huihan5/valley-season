@@ -23,10 +23,13 @@ import EstateTaskList from './components/common/EstateTaskList';
 import OpeningSequence from './components/OpeningSequence';
 import TitleScreen from './components/TitleScreen';
 import SaveMenu from './components/common/SaveMenu';
+import Journal from './components/common/Journal';
+import EndingGallery from './components/common/EndingGallery';
 import {
   AUTO_SLOT, ManualSlot, SaveSummary,
   writeSlot, readSlot, clearSlot, readSlotSummary, listManualSlots,
 } from './systems/SaveSystem';
+import { readSeenEndings, recordEnding } from './systems/CollectionSystem';
 
 const ui = DATA.ui;
 const lines = DATA.systemLines;
@@ -351,10 +354,21 @@ export default function App() {
   // not saved: a refresh puts them back at the title with the season intact.
   const [atTitle, setAtTitle] = useState(true);
   const [savesOpen, setSavesOpen] = useState(false);
+  const [journalOpen, setJournalOpen] = useState(false);
+  const [galleryOpen, setGalleryOpen] = useState(false);
   const [autoSave, setAutoSave] = useState<SaveSummary | null>(() => readSlotSummary(AUTO_SLOT));
   const [manualSaves, setManualSaves] = useState<(SaveSummary | null)[]>(() => listManualSlots());
+  const [seenEndings, setSeenEndings] = useState<EndingId[]>(() => readSeenEndings());
 
   const refreshManualSaves = useCallback(() => setManualSaves(listManualSlots()), []);
+
+  // The gallery is a record of the browser, not of the season, so an ending goes in
+  // the moment it is reached — including one reached by loading a finished save.
+  useEffect(() => {
+    if (!state.demoComplete || !state.endingId) return;
+    recordEnding(state.endingId as EndingId);
+    setSeenEndings(readSeenEndings());
+  }, [state.demoComplete, state.endingId]);
 
   // The autosave follows every change, including the ones inside an event: the
   // season should survive a closed tab at any point in it, not only at bedtime.
@@ -429,6 +443,7 @@ export default function App() {
           onNew={startNewSeason}
           onContinue={continueSeason}
           onOpenSaves={() => setSavesOpen(true)}
+          onOpenGallery={() => setGalleryOpen(true)}
         />
         {savesOpen && (
           <SaveMenu
@@ -439,6 +454,9 @@ export default function App() {
             onDelete={deleteManual}
             onClose={() => setSavesOpen(false)}
           />
+        )}
+        {galleryOpen && (
+          <EndingGallery seen={seenEndings} onClose={() => setGalleryOpen(false)} />
         )}
       </>
     );
@@ -468,6 +486,7 @@ export default function App() {
           <ScenePanel
             state={state}
             onOpenSaves={() => { refreshManualSaves(); setSavesOpen(true); }}
+            onOpenJournal={() => setJournalOpen(true)}
           />
         </div>
         <div className="w-64 shrink-0">
@@ -526,6 +545,10 @@ export default function App() {
           onDelete={deleteManual}
           onClose={() => setSavesOpen(false)}
         />
+      )}
+
+      {journalOpen && (
+        <Journal state={state} onClose={() => setJournalOpen(false)} />
       )}
     </div>
   );
