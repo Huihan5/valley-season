@@ -2,7 +2,9 @@ import { GameState, NpcId } from '../../types/game';
 import { WEATHER_LABELS, WEATHER_ICONS } from '../../systems/WeatherSystem';
 import { getFatigueLabel, getFatigueEffect } from '../../systems/FatigueSystem';
 import { getDayOfWeek, isMarketDay } from '../../systems/TimeSystem';
-import { getTrust, getKnownNpcs } from '../../systems/RelationSystem';
+import {
+  getTrust, getKnownNpcs, getTrustTier, getEffectiveTenantTrust, TrustTier,
+} from '../../systems/RelationSystem';
 import {
   GRAIN_EXCELLENT_THRESHOLD, NOBLE_TRUST_MAX, LORD_IMPRESSION_MAX, DAILY_GULDMARK_COST,
 } from '../../data/config';
@@ -16,6 +18,16 @@ const SECTION_LABEL = 'text-cream-dim text-xs tracking-wider mb-2';
 
 const NPC_NAMES: Record<NpcId, string> = ui.npc;
 const T = ui.statusPanel;
+
+/**
+ * Relationships read as words, not numbers (PlaytestFeedback 2026-09 / D3): the exact
+ * trust value is the game's business, and a "+3" turned the estate into a spreadsheet.
+ * The six tiers come from RelationSystem so a threshold and its label never drift apart.
+ */
+const TIER_LABELS: Record<TrustTier, string> = ui.statusPanel.trustTiers;
+const tierWord = (value: number): string => TIER_LABELS[getTrustTier(value)];
+const tierColor = (value: number): string =>
+  value > 0 ? 'text-gold-dim' : value < 0 ? 'text-rust' : 'text-game-dim';
 
 /** English wants "1 unit" and "2 units"; Chinese wants 单位 either way. */
 const units = (n: number) => plural(n, ui.resources.unitOne, ui.resources.unit);
@@ -101,6 +113,14 @@ export default function StatusPanel({ state }: Props) {
       <div className="px-4 py-3 border-b border-game-border">
         <p className={SECTION_LABEL}>{T.standingHeading}</p>
         <div className="space-y-1.5">
+          {/* 佃户整体信任 had no readout at all before (D3). It reads as a word, like
+              the individual relationships — never the raw number. */}
+          <div className="flex items-center justify-between">
+            <span className="text-game-dim text-xs">{T.tenants}</span>
+            <span className={`text-xs ${tierColor(getEffectiveTenantTrust(state))}`}>
+              {tierWord(getEffectiveTenantTrust(state))}
+            </span>
+          </div>
           <PipRow label={T.nobleTrust} value={nobleTrust} max={NOBLE_TRUST_MAX} />
           <PipRow label={T.lordImpression} value={lordImpression} max={LORD_IMPRESSION_MAX} />
         </div>
@@ -116,9 +136,7 @@ export default function StatusPanel({ state }: Props) {
               <div key={npc}>
                 <div className="flex items-center justify-between mb-0.5">
                   <span className="text-game-text text-xs">{NPC_NAMES[npc]}</span>
-                  <span className={`text-xs ${val > 0 ? 'text-gold-dim' : val < 0 ? 'text-rust' : 'text-game-dim'}`}>
-                    {val > 0 ? `+${val}` : val}
-                  </span>
+                  <span className={`text-xs ${tierColor(val)}`}>{tierWord(val)}</span>
                 </div>
                 <RelationBar value={val} />
               </div>

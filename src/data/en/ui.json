@@ -67,7 +67,9 @@
     "tired": "Tired",
     "fresh": "Rested",
     "forcedRest": "Tomorrow morning goes to rest",
-    "penalty": "Every action −1"
+    "penalty": "Every action −1",
+    "tiredNote": "Your hands have gone slow, and everything today takes a little longer than it should.",
+    "spentNote": "You catch your face in the window glass: grey, the lips gone faintly blue. You cannot keep on at this."
   },
   "npc": {
     "gregor": "Gregor",
@@ -100,8 +102,17 @@
     "relationsHeading": "— Relations —",
     "nobleTrust": "Noble trust",
     "lordImpression": "Lord’s regard",
+    "tenants": "Tenants",
     "purseEmpty": "The account is empty.",
-    "purseLow": "Not enough on the account for tomorrow’s running costs."
+    "purseLow": "Not enough on the account for tomorrow’s running costs.",
+    "trustTiers": {
+      "estranged": "Estranged",
+      "cold": "Cool",
+      "neutral": "Reserved",
+      "accepted": "Warming",
+      "trusted": "Trusts you",
+      "embraced": "Close"
+    }
   },
   "choicePanel": {
     "heading": "— Choices —"
@@ -168,7 +179,9 @@
   "opening": {
     "signatureLabel": "Signature of the Guaranteed Party",
     "signaturePrompt": "Write your name",
-    "sign": "Sign"
+    "sign": "Sign",
+    "namePrompt": "Before the season begins, sign the guarantee of residence.",
+    "skip": "Skip the opening →"
   },
   "app": {
     "documentTitle": "Valley Season",

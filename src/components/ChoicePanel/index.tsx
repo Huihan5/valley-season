@@ -1,7 +1,33 @@
 import { Choice } from '../../types/game';
+import { getEffectChips } from '../../systems/ChoicePreview';
 import DATA from '../../data';
 
 const ui = DATA.ui;
+
+/**
+ * These are shown in the left-hand estate panel at desktop width (D5), so the bottom
+ * panel hides them from `lg` up to avoid listing the same action twice. Below `lg`
+ * the sidebar is hidden, so they stay here and remain reachable.
+ */
+const delegatedToSidebar = (id: string) => id.startsWith('task_') || id === 'go_to_market';
+
+/** Costs read rust, gains read gold — the estate's own two colours (D11/P7). */
+function EffectChips({ choice }: { choice: Choice }) {
+  const chips = getEffectChips(choice);
+  if (chips.length === 0) return null;
+  return (
+    <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 mt-1">
+      {chips.map((c) => (
+        <span
+          key={c.key}
+          className={`text-[11px] tabular-nums ${c.tone === 'gain' ? 'text-gold' : 'text-rust'}`}
+        >
+          <span aria-hidden="true">{c.icon}</span> {c.sign}{c.value}
+        </span>
+      ))}
+    </div>
+  );
+}
 
 interface Props {
   choices: Choice[];
@@ -34,9 +60,10 @@ export default function ChoicePanel({ choices, onChoice, locked = false }: Props
             disabled={locked || choice.disabled}
             className={`
               group text-left px-4 py-3 rounded-sm border transition-all
+              ${delegatedToSidebar(choice.id) ? 'lg:hidden' : ''}
               ${choice.disabled || locked
                 ? 'border-game-border bg-bg text-game-dim cursor-not-allowed opacity-50'
-                : 'border-game-border bg-bg hover:bg-bg-hover hover:border-gold-dim cursor-pointer'
+                : 'border-game-border bg-bg hover:bg-bg-hover hover:border-gold hover:shadow-[inset_0_0_0_1px_rgba(196,163,90,0.35)] active:bg-bg-warm active:translate-y-px cursor-pointer'
               }
             `}
           >
@@ -50,6 +77,9 @@ export default function ChoicePanel({ choices, onChoice, locked = false }: Props
                 : choice.description;
               return note ? <p className="text-xs text-game-dim leading-snug">{note}</p> : null;
             })()}
+            {/* Colour-coded cost/gain — only where the choice already explains itself,
+                so event judgment choices (no microcopy) stay bare (D11/P7). */}
+            {!choice.disabled && choice.description ? <EffectChips choice={choice} /> : null}
           </button>
         ))}
       </div>

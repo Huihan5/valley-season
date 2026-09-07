@@ -19,6 +19,7 @@ import ScenePanel from './components/ScenePanel';
 import StatusPanel from './components/StatusPanel';
 import ChoicePanel from './components/ChoicePanel';
 import NameInput from './components/common/NameInput';
+import NameEntry from './components/common/NameEntry';
 import EstateTaskList from './components/common/EstateTaskList';
 import OpeningSequence from './components/OpeningSequence';
 import TitleScreen from './components/TitleScreen';
@@ -38,6 +39,7 @@ type Action =
   | { type: 'MAKE_CHOICE'; choiceId: string }
   | { type: 'SET_PLAYER_NAME'; name: string }
   | { type: 'ADVANCE_OPENING' }
+  | { type: 'SKIP_OPENING' }
   | { type: 'ADVANCE_DAY_EVENT' }
   | { type: 'LOAD_STATE'; state: GameState }
   | { type: 'RESET' };
@@ -148,6 +150,7 @@ function createInitialState(): GameState {
     flags: { ...INITIAL_FLAGS },
     currentScene: 'default',
     lastResult: null,
+    lastSpeaker: null,
     activeEvent: null,
     eventResolved: false,
     log: [],
@@ -170,6 +173,7 @@ function gameReducer(state: GameState, action: Action): GameState {
       // What the player sees happened: an action's result text, or the greeting of
       // whoever they went to see. Trust is read after the visit is recorded.
       let result: string | null = null;
+      let speaker: NpcId | null = null;
       if (choice.resultText) {
         result = choice.resultText;
       } else if (choice.resultKind) {
@@ -177,10 +181,12 @@ function gameReducer(state: GameState, action: Action): GameState {
       } else if (effects.conversationWith || effects.greetingFrom) {
         const npc = (effects.conversationWith ?? effects.greetingFrom) as NpcId;
         result = getGreeting(next, npc, Math.random);
+        speaker = npc; // so the scene can put a face to the voice (P15)
       }
       next = {
         ...next,
         lastResult: result,
+        lastSpeaker: speaker,
         currentScene: effects.nextScene ?? next.currentScene,
       };
 
@@ -230,6 +236,11 @@ function gameReducer(state: GameState, action: Action): GameState {
       if (state.openingPage === null) return state;
       return { ...state, openingPage: nextOpeningPage(state.openingPage) };
     }
+
+    // Straight to Day 1. The first phase was built at init and does not read the
+    // name (day1 has no {playerName}), so ending the opening early is all it takes.
+    case 'SKIP_OPENING':
+      return { ...state, openingPage: null };
 
     case 'ADVANCE_DAY_EVENT': {
       const eventId = state.activeEvent?.id;
@@ -297,7 +308,7 @@ function advancePhase(state: GameState): GameState {
 
     const weather = generateWeather(newDay);
     // A new day starts back at the manor, with yesterday's result cleared away.
-    next = { ...next, weather, currentScene: 'default', lastResult: null };
+    next = { ...next, weather, currentScene: 'default', lastResult: null, lastSpeaker: null };
     next = { ...next, resources: applyDailyOperatingCost(next.resources) };
     next = { ...next, resources: clampResources(next.resources, next.flags) };
 
@@ -474,6 +485,11 @@ export default function App() {
 
   const openingPage = state.openingPage === null ? null : getOpeningPage(state.openingPage);
   if (openingPage) {
+    // Name first, then the documents (D6): until it is given, the only screen is
+    // the signature. After that the letter renders already bearing it.
+    if (!state.playerName) {
+      return <NameEntry onSubmit={(name) => dispatch({ type: 'SET_PLAYER_NAME', name })} />;
+    }
     return (
       <OpeningSequence
         page={openingPage}
@@ -481,6 +497,7 @@ export default function App() {
         playerName={state.playerName}
         onSign={(name) => dispatch({ type: 'SET_PLAYER_NAME', name })}
         onAdvance={() => dispatch({ type: 'ADVANCE_OPENING' })}
+        onSkip={() => dispatch({ type: 'SKIP_OPENING' })}
       />
     );
   }
@@ -490,7 +507,12 @@ export default function App() {
       {/* Main content: scene (left) + status (right) */}
       <div className="flex flex-1 gap-3 min-h-0">
         <div className="w-48 shrink-0 hidden lg:block">
-          <EstateTaskList state={state} />
+          <EstateTaskList
+            state={state}
+            actionableIds={new Set(state.currentChoices.filter(c => !c.disabled).map(c => c.id))}
+            marketChoice={state.currentChoices.find(c => c.id === 'go_to_market') ?? null}
+            onTake={(id) => dispatch({ type: 'MAKE_CHOICE', choiceId: id })}
+          />
         </div>
         <div className="flex-1 min-w-0">
           <ScenePanel

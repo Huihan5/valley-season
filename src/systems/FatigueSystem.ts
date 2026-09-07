@@ -31,3 +31,15 @@ export function getFatigueEffect(fatigue: number): string | null {
   if (fatigue >= FATIGUE_TIRED_THRESHOLD) return ui.fatigue.penalty;
   return null;
 }
+
+/**
+ * A short in-voice line for when the body is telling on the player — shown in the
+ * scene itself, not only as a bar in the panel (PlaytestFeedback 2026-09 / D7). The
+ * "spent" line is where 嘴唇发紫 landed.
+ */
+export function getFatigueNote(fatigue: number): string | null {
+  const status = getFatigueStatus(fatigue);
+  if (status === 'exhausted') return ui.fatigue.spentNote;
+  if (status === 'tired') return ui.fatigue.tiredNote;
+  return null;
+}

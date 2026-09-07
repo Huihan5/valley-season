@@ -165,6 +165,12 @@ export interface GameState {
   currentScene: string;
   /** What just happened, shown above the scene until the next action replaces it. */
   lastResult: string | null;
+  /**
+   * Whose voice `lastResult` is, when it is a greeting — so the scene can show a
+   * face and a name (PlaytestFeedback 2026-09 / P15). Null when what just happened
+   * was not someone speaking to the player.
+   */
+  lastSpeaker?: NpcId | null;
   currentChoices: Choice[];
   activeEvent: EventData | null;
   eventResolved: boolean;

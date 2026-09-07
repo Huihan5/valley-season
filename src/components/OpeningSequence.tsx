@@ -18,13 +18,14 @@ interface Props {
   playerName: string;
   onSign: (name: string) => void;
   onAdvance: () => void;
+  onSkip: () => void;
 }
 
 /**
  * Day 0. No status panel, no choices, no clock — the season has not started yet.
  * The letter is framed as a document; everything after it is read as prose.
  */
-export default function OpeningSequence({ page, index, playerName, onSign, onAdvance }: Props) {
+export default function OpeningSequence({ page, index, playerName, onSign, onAdvance, onSkip }: Props) {
   const isLetter = page.kind === 'letter';
   const unsigned = requiresSignature(page) && !playerName;
   const body = isLetter ? signLetter(page.text, playerName) : page.text;
@@ -68,12 +69,19 @@ export default function OpeningSequence({ page, index, playerName, onSign, onAdv
         {unsigned ? (
           <NameInput spec={SIGNATURE_SPEC} onSubmit={onSign} />
         ) : (
-          <div className="bg-bg-card border border-game-border rounded-sm px-4 py-3 flex justify-center">
+          <div className="bg-bg-card border border-game-border rounded-sm px-4 py-3 flex items-center justify-center relative">
             <button
               onClick={onAdvance}
               className="px-8 py-2.5 border border-gold-dim text-cream font-serif text-sm rounded-sm hover:bg-bg-hover hover:border-gold transition-all"
             >
               {ui.app.continue}
+            </button>
+            {/* The way straight to Day 1, for a returning player (D6). */}
+            <button
+              onClick={onSkip}
+              className="absolute right-4 text-game-dim text-xs hover:text-cream transition-colors"
+            >
+              {ui.opening.skip}
             </button>
           </div>
         )}

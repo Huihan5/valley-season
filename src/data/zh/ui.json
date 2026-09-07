@@ -67,7 +67,9 @@
     "tired": "疲惫",
     "fresh": "精力充沛",
     "forcedRest": "次日上午强制休息",
-    "penalty": "所有行动效率 -1"
+    "penalty": "所有行动效率 -1",
+    "tiredNote": "手脚都慢了下来，今天做什么都比该有的多费些工夫。",
+    "spentNote": "窗玻璃里映出你的脸：面色发灰，嘴唇透出些青紫。这样下去，撑不住。"
   },
   "npc": {
     "gregor": "格雷格",
@@ -100,8 +102,17 @@
     "relationsHeading": "— 关系 —",
     "nobleTrust": "贵族信任",
     "lordImpression": "领主印象",
+    "tenants": "佃户",
     "purseEmpty": "账上已经空了。",
-    "purseLow": "账上不够明天的日常开销。"
+    "purseLow": "账上不够明天的日常开销。",
+    "trustTiers": {
+      "estranged": "疏远",
+      "cold": "冷淡",
+      "neutral": "生分",
+      "accepted": "渐熟",
+      "trusted": "信任",
+      "embraced": "亲近"
+    }
   },
   "choicePanel": {
     "heading": "— 选择 —"
@@ -168,7 +179,9 @@
   "opening": {
     "signatureLabel": "被担保人签署",
     "signaturePrompt": "写下你的名字",
-    "sign": "签字"
+    "sign": "签字",
+    "namePrompt": "这一季开始之前，先在居留担保书上签名。",
+    "skip": "跳过开场 →"
   },
   "app": {
     "documentTitle": "河谷季 · Valley Season",
