@@ -1,5 +1,5 @@
 import { GameState, NpcId } from '../../types/game';
-import { PHASE_LABELS, dayName } from '../../systems/TimeSystem';
+import { PHASE_LABELS, dayName, isHuntSeason } from '../../systems/TimeSystem';
 import { getFatigueNote, getFatigueStatus } from '../../systems/FatigueSystem';
 import LogDrawer from './LogDrawer';
 import DATA from '../../data';
@@ -29,12 +29,22 @@ export default function ScenePanel({ state, onOpenSaves, onOpenJournal }: Props)
   const spent = getFatigueStatus(state.fatigue) === 'exhausted';
   // Who is speaking, when what just happened was a greeting (P15).
   const speaker = state.lastSpeaker ?? null;
+  // Day 18–21 the estate turns cooler and shorter-handed; the panel says so and
+  // shifts its accent from the warm gold to frost while the hunt is on (D13).
+  const huntSeason = isHuntSeason(state);
 
   return (
-    <div className="flex flex-col h-full bg-bg-card border border-game-border rounded-sm overflow-hidden">
+    <div className={`flex flex-col h-full bg-bg-card border rounded-sm overflow-hidden transition-colors ${huntSeason ? 'border-frost/40' : 'border-game-border'}`}>
+      {/* The season, pinned above everything while the duchy's hunt is open (D13). */}
+      {huntSeason && (
+        <div className="px-5 py-1.5 bg-frost/10 border-b border-frost/30 flex items-baseline gap-2">
+          <span className="text-frost text-xs font-serif tracking-widest">{ui.scenePanel.huntSeason}</span>
+          <span className="text-frost/70 text-[11px] font-serif italic truncate">{ui.scenePanel.huntSeasonSub}</span>
+        </div>
+      )}
       {/* Header */}
       <div className="px-5 py-3 border-b border-game-border flex items-center gap-3">
-        <span className="text-gold font-serif text-sm tracking-widest">
+        <span className={`font-serif text-sm tracking-widest transition-colors ${huntSeason ? 'text-frost' : 'text-gold'}`}>
           {dayName(day)}
         </span>
         <span className="text-game-dim text-xs">·</span>

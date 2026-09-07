@@ -72,8 +72,10 @@ export default function EstateTaskList({ state, actionableIds, marketChoice, onT
                   {task.label}
                 </span>
               </div>
-              <p className={`text-[10px] leading-snug pl-4 ${
-                task.status === 'blocked' ? 'text-rust/70' : 'text-game-dim'
+              <p className={`text-[10px] leading-snug pl-4 transition-colors ${
+                task.status === 'blocked' ? 'text-rust/70'
+                  : takeable ? 'text-game-dim group-hover:text-rust/90'
+                    : 'text-game-dim'
               }`}>
                 {task.status === 'done' ? T.done
                   : task.status === 'blocked' ? task.blockedReason
@@ -86,7 +88,7 @@ export default function EstateTaskList({ state, actionableIds, marketChoice, onT
             <button
               key={task.id}
               onClick={() => onTake(task.id)}
-              className="w-full text-left rounded-sm px-1 py-1 -mx-1 hover:bg-bg-hover cursor-pointer transition-colors"
+              className="group w-full text-left rounded-sm px-1 py-1 -mx-1 hover:bg-bg-hover cursor-pointer transition-colors"
             >
               {body}
             </button>

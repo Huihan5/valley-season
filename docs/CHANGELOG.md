@@ -1,8 +1,8 @@
 # Valley Season — Changelog
 
-## [2026-09-07] — Playtest 反馈 · 阶段二（UI 强化，进行中）
+## [2026-09-07] — Playtest 反馈 · 阶段二（UI 强化，已完成）
 
-已完成并在浏览器验证六项（D1/D3/D5/D6/D7/D11/P9/P15）；2.7（流言/狩猎季）、2.8（P27）与三个打磨点已确认方向、尚未实现（见 `ImplementationPlan_2026-09.md` 的「恢复点」）。全库 528 测试绿，tsc 干净。
+阶段二全部完成并在浏览器验证：2.1–2.6（D1/D3/D5/D6/D7/D11/P9/P15）＋ 2.7（D12 流言衔接 / D13 狩猎季 UI）＋三个打磨点。2.8（P27）作者延后。全库 528 测试绿，tsc 干净。
 
 ### Added
 - **`src/systems/ChoicePreview.ts`** + `tests/ChoicePreview.test.ts`（6 条）——从 `choice.effects` 派生的资源涨跌 chip；消耗锈红、收益金；收割/采伐（tier 估算）的正向产出**不显数字**，只保留档位词。
@@ -11,21 +11,22 @@
 - 场景里的**过劳文字**（疲劳≥3 出现，"面色发灰、嘴唇发青"落在 spent；`FatigueSystem.getFatigueNote` + `ScenePanel`，D7）。
 - 对话**说话人头像+名字**（`GameState.lastSpeaker`；`ScenePanel` 用 `assets/portraits`，四位常驻有图，二贵族只显名；P15）。
 - 开场**跳过按钮**与 `SKIP_OPENING`（D6）。
+- **狩猎季界面**（D13/P23）：`TimeSystem.isHuntSeason(state)`（Day18–21 且 `huntingSeasonStarted`，与 `EventSystem` 共用一处判定）；`ScenePanel` 在狩猎季于顶部置一条**季节标签横幅**（`ui.scenePanel.huntSeason` + `huntSeasonSub`），并把面板边框与日期标题的暖金**换成霜蓝**（`frost`）作氛围色。
+- `ChoicePreview.hasEstimatedYield(choice)` 导出——供 `ChoicePanel` 判定"档位估算"类动作。
 
 ### Changed
 - **关系模糊化**（`StatusPanel`，D3）：NPC 关系的 `+N` 数字→模糊词（复用 `getTrustTier` 六档，文案在 `ui.statusPanel.trustTiers`）；新增**佃户整体信任**行（也用词）；贵族信任/领主印象暂保留圆点（非数字，待你决定是否也模糊化）。
 - **开场顺序**（`OpeningSequence`/`App`，D6）：先 `NameEntry` 签名 → 再进聘书（自动带名）→ 其余正文。
 - **左栏变可点击操作区**（`EstateTaskList`，D5）：可做的一次性事务=按钮，集市日"前往集市"置顶；桌面宽度下这些项从底部选项区 `lg:hidden`（小屏仍留在底部，避免丢失入口）。
-- `ui.json`（中英）新增 `statusPanel.trustTiers/tenants`、`fatigue.tiredNote/spentNote`、`opening.namePrompt/skip`。
+- `ui.json`（中英）新增 `statusPanel.trustTiers/tenants`、`fatigue.tiredNote/spentNote`、`opening.namePrompt/skip`、`scenePanel.huntSeason/huntSeasonSub`。
 - `types/game.ts`：`GameState.lastSpeaker?`（可选，存档向后兼容，未升 `SAVE_VERSION`）。
+- **流言衔接**（D12/P21，`SceneSystem` + `scenes/rumors.json` 中英）：在排队引子与流言之间插一句 `lead`（"队伍往前挪一步，又停下。话就在这停顿里一句一句地过来——"），让流言不再突兀地接在集市正文后。`getMarketAfternoon` 与 `getActionResult('market_rumours')` 都走这条组装。
+- **采集/果园说明去数字**（打磨-1，`actions.json` 中英）：forage/orchard 的 `description` 去掉重复的"N 金卢"，金卢涨幅只由 chip（🪙+N）承载；佃户信任等非资源项仍留在文字里。
+- **左栏任务花费悬停上色**（打磨-2，`EstateTaskList`）：可点任务加 `group`，花费行 `group-hover:text-rust/90`——悬停时花费转锈红，与选项 chip 的"消耗=锈红"一致。
+- **收割/采伐档位词淡金**（打磨-3，`ChoicePanel`）：`hasEstimatedYield` 的动作（收割/采伐，产出藏在档位词里、无 chip）其说明改用 `text-gold-dim`，让"这是收益"有色彩暗示。
 
-### 待办（本阶段剩余，已确认方向）
-- **D12 · 流言衔接（P21）**：流言直接接在集市文字后显得突兀。加一句"听到有人说……"之类的**衔接引子**，让它更自然地融入。（`SceneSystem` 的 rumours 渲染 + `scenes/rumors.json` 的 intro/衔接，中英。）
-- **D13 · 狩猎季 UI（P23）**：Day18–22 换一个**氛围色**并**置顶一个季节标签**。
-- **打磨-1**：采集/果园说明里去掉重复的"N 金卢"，只留 chip。（`actions.json` forage/orchard description，中英。）
-- **打磨-2**：左栏任务花费**悬停时**上锈红色（group-hover）。
-- **打磨-3**：收割/采伐的**档位词**给淡金色，暗示"这是收益"。
-- **P27（延后）**：refine「账目上的工钱」——作者暂不记得具体指哪句，属世界观问题，待下次 playtest 想起再定。
+### 延后
+- **P27**：refine「账目上的工钱」——作者暂不记得具体指哪句，属世界观问题，待下次 playtest 想起再定。
 
 ---
 

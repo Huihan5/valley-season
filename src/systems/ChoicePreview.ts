@@ -34,6 +34,15 @@ const ICONS: Record<string, string> = {
 const TIER_ESTIMATED = new Set(['harvest', 'fell_timber']);
 
 /**
+ * True when the choice's yield hides behind a tier word rather than a chip. The tier
+ * word is then the only cue that the action pays at all, so the panel tints it to
+ * read as a gain (D11 polish, 2026-09).
+ */
+export function hasEstimatedYield(choice: Choice): boolean {
+  return choice.resultKind ? TIER_ESTIMATED.has(choice.resultKind) : false;
+}
+
+/**
  * The resource chips for a choice, in a fixed order. A judgment choice (no
  * microcopy) returns none — spelling out its effect would give the answer away
  * (GDD 11.6) — so callers should only chip choices that already carry a description.
@@ -41,7 +50,7 @@ const TIER_ESTIMATED = new Set(['harvest', 'fell_timber']);
 export function getEffectChips(choice: Choice): EffectChip[] {
   const e = choice.effects;
   if (!e) return [];
-  const estimatedYield = choice.resultKind ? TIER_ESTIMATED.has(choice.resultKind) : false;
+  const estimatedYield = hasEstimatedYield(choice);
 
   const chips: EffectChip[] = [];
   const push = (key: string, value: number | undefined, suppressGain = false) => {

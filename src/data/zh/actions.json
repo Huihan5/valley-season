@@ -26,12 +26,12 @@
   },
   "forage": {
     "text": "去林地采集蘑菇草药",
-    "description": "1 时段 · {n} 金卢 · 计一次与玛莎的交谈",
+    "description": "1 时段 · 计一次与玛莎的交谈",
     "log": "你采了一趟，换了 {n} 金卢。"
   },
   "orchard": {
     "text": "去果园采摘",
-    "description": "1 时段 · {n} 金卢",
+    "description": "1 时段",
     "tenantBonus": " · 佃户整体信任 +1",
     "overripe": "（果子过熟，收益减半）",
     "log": "你在果园摘了一趟，换了 {n} 金卢。"

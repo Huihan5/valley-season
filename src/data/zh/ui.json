@@ -125,7 +125,9 @@
   },
   "scenePanel": {
     "saves": "存档",
-    "journal": "卷宗"
+    "journal": "卷宗",
+    "huntSeason": "狩猎季",
+    "huntSeasonSub": "狩猎季开了，这几日庄上总少着几个人手。"
   },
   "journal": {
     "heading": "— 卷宗 —",

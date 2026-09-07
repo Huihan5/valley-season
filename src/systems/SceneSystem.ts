@@ -41,7 +41,7 @@ const LOCATIONS = locationsData as unknown as Record<string, LocationEntry>;
 const WEATHER = weatherLines as Record<string, string[]>;
 const RESULTS = actionResults as Record<string, string[]>;
 const AMBIENT = ambientData as Record<string, string[]>;
-const RUMOURS = rumoursData as unknown as { intro: string } & Record<string, string[] | string>;
+const RUMOURS = rumoursData as unknown as { intro: string; lead: string } & Record<string, string[] | string>;
 const MARKET = marketData as unknown as {
   arrival: Record<'act1' | 'act2' | 'act3', string>;
 } & Record<string, string>;
@@ -152,7 +152,7 @@ export function getActionResult(
 ): string {
   if (kind === 'market_rumours') {
     const { intro, lines } = getMarketRumours(rng);
-    return [intro, ...lines].join('\n\n');
+    return [intro, RUMOURS.lead, ...lines].join('\n\n');
   }
   // Walking the woods ends on what they look like now, which is not a number.
   if (kind.startsWith('survey_forest_')) {
@@ -193,7 +193,7 @@ export function getMarketArrival(state: GameState): string {
 /** Queueing behind the grain stall, where the rumours come from. */
 export function getMarketAfternoon(state: GameState): string {
   const lines = readRumours(decodeRumours(state.flags[rumoursFlagKey(state.day)]));
-  return [RUMOURS.intro, ...lines].join('\n\n');
+  return [RUMOURS.intro, RUMOURS.lead, ...lines].join('\n\n');
 }
 
 export function getMarketTradeResult(kind: string, state: GameState): string {

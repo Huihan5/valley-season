@@ -1,5 +1,5 @@
-import { DayPhase } from '../types/game';
-import { DEMO_MAX_DAYS } from '../data/config';
+import { DayPhase, GameState } from '../types/game';
+import { DEMO_MAX_DAYS, HUNT_FIRST_DAY, HUNT_LAST_DAY } from '../data/config';
 import DATA from '../data';
 import { fill } from '../utils/text';
 
@@ -50,4 +50,12 @@ export function getDayOfWeek(day: number): string {
 
 export function isDemoComplete(day: number): boolean {
   return day > DEMO_MAX_DAYS;
+}
+
+/**
+ * The duchy's hunt runs Day 18–21, once the season has opened. The window colours
+ * both the encounters (EventSystem) and the estate itself (the scene ambiance, D13).
+ */
+export function isHuntSeason(state: GameState): boolean {
+  return !!(state.flags.huntingSeasonStarted && state.day >= HUNT_FIRST_DAY && state.day <= HUNT_LAST_DAY);
 }

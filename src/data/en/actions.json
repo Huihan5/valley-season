@@ -26,12 +26,12 @@
   },
   "forage": {
     "text": "Forage the woods for mushrooms and herbs",
-    "description": "1 phase · {n} guldmark · counts as a talk with Martha",
+    "description": "1 phase · counts as a talk with Martha",
     "log": "You went out foraging and turned it into {n} guldmark."
   },
   "orchard": {
     "text": "Pick in the orchard",
-    "description": "1 phase · {n} guldmark",
+    "description": "1 phase",
     "tenantBonus": " · tenant trust +1",
     "overripe": " (the fruit is past its best, half yield)",
     "log": "You picked a load in the orchard and turned it into {n} guldmark."

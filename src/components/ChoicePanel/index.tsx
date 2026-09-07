@@ -1,5 +1,5 @@
 import { Choice } from '../../types/game';
-import { getEffectChips } from '../../systems/ChoicePreview';
+import { getEffectChips, hasEstimatedYield } from '../../systems/ChoicePreview';
 import DATA from '../../data';
 
 const ui = DATA.ui;
@@ -75,7 +75,12 @@ export default function ChoicePanel({ choices, onChoice, locked = false }: Props
               const note = choice.disabled && choice.disabledReason
                 ? choice.disabledReason
                 : choice.description;
-              return note ? <p className="text-xs text-game-dim leading-snug">{note}</p> : null;
+              // Harvest and felling hide their yield behind a tier word; give that
+              // word a pale gold so the line still reads as a gain (D11 polish).
+              const gainHint = !choice.disabled && !locked && hasEstimatedYield(choice);
+              return note ? (
+                <p className={`text-xs leading-snug ${gainHint ? 'text-gold-dim' : 'text-game-dim'}`}>{note}</p>
+              ) : null;
             })()}
             {/* Colour-coded cost/gain — only where the choice already explains itself,
                 so event judgment choices (no microcopy) stay bare (D11/P7). */}

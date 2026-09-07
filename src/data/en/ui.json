@@ -125,7 +125,9 @@
   },
   "scenePanel": {
     "saves": "Saves",
-    "journal": "The File"
+    "journal": "The File",
+    "huntSeason": "Hunt Season",
+    "huntSeasonSub": "The hunt is open in the duchy; the household runs a little short."
   },
   "journal": {
     "heading": "— The File —",

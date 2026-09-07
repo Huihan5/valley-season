@@ -7,7 +7,7 @@ import {
   getTimberFelled, getTimberQuotaLeft, getForestTier,
   getForageYield, getOrchardYield, getOrchardTenantGain, getOrchardTenantTotal,
 } from './ResourceSystem';
-import { isMarketDay, isVigilNight, getDayOfWeek } from './TimeSystem';
+import { isMarketDay, isVigilNight, getDayOfWeek, isHuntSeason } from './TimeSystem';
 import {
   marketSoldKey, getUnitsSoldToday, getCapacityLeft,
   getGrainRevenue, getTimberRevenue, getTimberUnitPrice, getSellLots,
@@ -28,7 +28,7 @@ import {
   MARKET_TRANSPORT_CAP, MARKET_GRAIN_PRICE, BROKER, GIFT_COST,
   OUTING_FATIGUE, MARKET_TRADE_FATIGUE,
   DINNER_DAY, PETITION_INFORMED_TRUST, ECHO_DECOROUS_AT,
-  HUNT_FIRST_DAY, HUNT_LAST_DAY, LORENZ_FRAGMENT_TRUST, MARGUERITE_FRAGMENT_TRUST,
+  HUNT_LAST_DAY, LORENZ_FRAGMENT_TRUST, MARGUERITE_FRAGMENT_TRUST,
   WYNTER_PARTIAL_ACCOUNT, WYNTER_FULL_ACCOUNT, POSITION_LINE_COMPLETE,
   GRAIN_RETAIN_THRESHOLD, GRAIN_EXCELLENT_THRESHOLD, LETTER_GOOD_GULDMARK,
   ELENA_QUILTS_TRUST, MILLRIDGE_TRUST, MILLRIDGE_CASH, MILLRIDGE_TIMBER, MILLRIDGE_SPRING_SEED,
@@ -578,7 +578,7 @@ function getMarketAfternoonChoices(state: GameState): Choice[] {
 export function getFreeChoices(state: GameState): Choice[] {
   const { phase, weather, fatigue, day, flags, resources } = state;
   const exhausted = fatigue >= 5;
-  const inHuntSeason = !!(flags.huntingSeasonStarted && day >= HUNT_FIRST_DAY && day <= HUNT_LAST_DAY);
+  const inHuntSeason = isHuntSeason(state);
   const choices: Choice[] = [];
 
   // Market visit: spent morning traveling — afternoon is for trading at the market
