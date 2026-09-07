@@ -54,7 +54,8 @@ describe('cart capacity', () => {
   });
 
   it('never goes negative', () => {
-    const state = makeState({ flags: { visitingMarketToday: 6, [marketSoldKey(6)]: 25 } });
+    // Oversell past the cap (whatever it is) — capacity clamps at 0, not below.
+    const state = makeState({ flags: { visitingMarketToday: 6, [marketSoldKey(6)]: MARKET_TRANSPORT_CAP + 5 } });
     expect(getCapacityLeft(state)).toBe(0);
   });
 

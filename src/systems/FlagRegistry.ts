@@ -43,6 +43,13 @@ export const INITIAL_FLAGS: FlagMap = {
    */
   dismissedEarly: false,
 
+  /**
+   * The one-time insolvency reprieve has fired (D4 / PlaytestFeedback 2026-09). The
+   * first time dismissal would happen the player instead finds the last steward's
+   * tin — coin and a warning — and the season goes on. Written by: App 的每日结算。
+   */
+  stewardRescueUsed: false,
+
   randomRolledDay: 0,
   randomEventPending: '',
   randomEventVariant: '',

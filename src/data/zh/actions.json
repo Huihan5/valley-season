@@ -47,6 +47,8 @@
   },
   "surveyForest": {
     "text": "巡视林地",
+    "description": "1 时段 · 摸清哪几片林子好下手——此后每次伐木多出一些",
+    "descriptionDone": "1 时段 · 看看眼下林子成什么样了",
     "log": "你在林地里走了一趟，把看见的都记下来了。"
   },
   "deepLedger": {
@@ -86,7 +88,11 @@
   "dinner": {
     "text": "前往棘墙庄园赴宴",
     "description": "2 时段（下午与晚间）",
-    "log": "你换了衣服，骑马去了棘墙庄园。"
+    "log": "你换了衣服，骑马去了棘墙庄园。",
+    "textGift": "带上一份礼物，前往棘墙庄园赴宴",
+    "descriptionGift": "2 时段 · {cost} 金卢 · 两位主人都会领这份情",
+    "logGift": "你备了一份送主人的礼物，骑马去了棘墙庄园。",
+    "giftTooPoor": "2 时段 · 备一份送主人的礼物要 {cost} 金卢——你眼下拿不出"
   },
   "boundary": {
     "text": "前往北面林地查看",
@@ -134,32 +140,37 @@
   "broker": {
     "grainToGold": {
       "text": "以粮换钱（经纪人渠道）",
-      "description": "消耗6粮食 + 1木材，换取4金卢（应急汇率偏低）",
-      "descriptionShort": "消耗6粮食 + 1木材，换取4金卢——当前储备不足",
-      "log": "你通过驻地经纪人进行了应急换算，以粮食换取了金卢。包装和运费从木材里扣了一部分。",
-      "shortGrain": "粮食不足（需要6单位）",
-      "shortTimber": "木材不足（需要1单位）"
+      "description": "消耗 {grain} 粮食，换取 {guldmark} 金卢（应急汇率偏低）",
+      "descriptionShort": "消耗 {grain} 粮食，换取 {guldmark} 金卢——当前储备不足",
+      "log": "你通过驻地经纪人进行了应急换算，以粮食换取了金卢。价格远不如集市，但眼下也只有这条路了。",
+      "shortGrain": "粮食不足（需要 {grain} 单位）"
     },
     "timberToGold": {
       "text": "以木换钱（经纪人渠道）",
-      "description": "消耗3木材，换取3金卢（木材加工后折价出售）",
-      "descriptionShort": "消耗3木材，换取3金卢——当前储备不足",
+      "description": "消耗 {timber} 木材，换取 {guldmark} 金卢（折价出售）",
+      "descriptionShort": "消耗 {timber} 木材，换取 {guldmark} 金卢——当前储备不足",
       "log": "你通过驻地经纪人将木材折价出售。价格远不如集市，但眼下也只有这条路了。",
-      "shortTimber": "木材不足（需要3单位）"
+      "shortTimber": "木材不足（需要 {timber} 单位）"
     },
     "timberToGrain": {
       "text": "以木换粮（经纪人渠道）",
-      "description": "消耗2木材 + 1金卢，换取7粮食（邻庄调运，效率尚可）",
-      "descriptionShort": "消耗2木材 + 1金卢，换取7粮食——当前储备不足",
-      "log": "你通过经纪人从邻庄调运了一批粮食。运费以金卢结清，木材用于抵扣部分货款。",
-      "shortTimber": "木材不足（需要2单位）",
-      "shortGuldmark": "金卢不足（需要1单位）"
+      "description": "消耗 {timber} 木材，换取 {grain} 粮食（邻庄调运）",
+      "descriptionShort": "消耗 {timber} 木材，换取 {grain} 粮食——当前储备不足",
+      "log": "你通过经纪人从邻庄调运了一批粮食，用木材抵了货款。",
+      "shortTimber": "木材不足（需要 {timber} 单位）"
+    },
+    "goldToTimber": {
+      "text": "以钱换木（经纪人渠道）",
+      "description": "消耗 {guldmark} 金卢，换取 {timber} 木材（比集市贵，但随时能拿到）",
+      "descriptionShort": "消耗 {guldmark} 金卢，换取 {timber} 木材——金卢不足",
+      "log": "你通过驻地经纪人花钱调来了一批木材。比河谷城木料场贵些，但不必等到集市日。",
+      "shortGuldmark": "金卢不足（需要 {guldmark} 单位）"
     }
   },
   "estateTasks": {
     "repairTools": {
       "label": "修农具",
-      "effect": "收割 {from}→{to}"
+      "effect": "收割 {from}→{to} · 伐木 +1"
     },
     "clearStorage": {
       "label": "清理仓储",

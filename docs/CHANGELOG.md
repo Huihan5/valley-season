@@ -1,5 +1,28 @@
 # Valley Season — Changelog
 
+## [2026-09-07] — Playtest 反馈 · 阶段一（机制/平衡）
+
+依据 `PlaytestFeedback_2026-09.md` 与 `ImplementationPlan_2026-09.md` 的已确认决定 D1–D11。本次只做阶段一的机制/平衡项；UI（阶段二）与文本精简（阶段三）另行推进。1.5（礼物/时装解锁时机）因设计冲突待作者确认，暂未动。
+
+### Changed
+- **集市运输上限 20 → 40**（D9，`config.ts` `MARKET_TRANSPORT_CAP`）。一次进城基本能清掉大部分库存；仍保留上限。
+- **伐木提效**（D8）：`ResourceSystem.getTimberYield` 现读两条持续加成——巡视林地 `+1`（`surveyedForest`）、修农具 `+1`（`toolsRepaired`），可叠加，仍受疲劳 -1。常量 `TIMBER_SURVEY_BONUS` / `TIMBER_TOOLS_BONUS`。复用已有动作，给了伐木一条与收割对称的"越准备越高效"路径。
+  - 文案：`actions.json`（中英）surveyForest 加 `description`/`descriptionDone`，repairTools 的 effect 加"伐木 +1"；`EventSystem` 的 survey_forest 按 `surveyedForest` 切换描述。
+- **经纪人换货**（D10）：兑换率从 `EventSystem` 硬编码迁到 `config.BROKER`（合规：平衡数字不写在系统里）。软化汇率（以粮换钱去掉木材消耗、以木换钱 3→4 金、以木换粮去掉 1 金且 +1 粮），并**新增"以钱换木" 5 金→2 木**——原本四选项全在消耗木材、没有买木材的方向。`actions.json`（中英）broker 描述改为模板，数字由 config 填充，读到的与实际支付的不会脱节。
+- **被开除线 `≤0` → `<0`**（D4，`ResourceSystem.getInsolvencyEffects` 用 `<` 比较）。声望恰为 0 时不再当场判死，先走"声望每日 -1"的缓冲。
+- **Elena 交谈提速**（P28）：`TALKS_PER_TRUST_POINT_BY_NPC = { elena: 2 }`，仅埃莱娜每 2 次交谈 +1（上限 +2 不变，其余 NPC 仍为 3）。
+- **礼物/时装登场时机**（P11）：秋装仍开局可买。事务清单里的两个"送礼"项加 `visible` 谓词，**Day 7 之后**且未购过才出现（此前玩家不认识玛格丽特，看到"送礼玛格丽特"很困惑）。Day 7 晚宴（贵族引见处）新增赴宴方式 `attend_dinner_gift`"带上一份礼物"（10 金卢），当场带礼 → **玛格丽特 +2、亨克 +2**（作者意图：让玛格丽特碎片最好拿，单步即达解锁线 2）；共用 `boughtGift`，晚宴带了礼即视为已购、长期项目不再出现。`EstateTaskSystem` 加 `visible?`，`actions.dinner` 加 textGift/descriptionGift/logGift/giftTooPoor（中英）。
+
+### Added
+- **一次性"前任管家救场"**（D4）：破产后首次本该被开除时，不开除，改为 +10 金卢（`STEWARD_RESCUE_GULDMARK`）+ 明确警告，包装成"发现前任管家留下的铁盒与笔记"（`system_lines.stewardRescue` / `stewardRescueLog`，中英，按 STYLE_GUIDE）。`getInsolvencyEffects` 返回 `rescued`/`guldmark`；`App` 在每日结算处接住、写 `stewardRescueUsed` 并把正文放到当天清晨的 lastResult。每局仅一次。
+- 测试：`ResourceSystem.test.ts` 新增伐木提效 5 条、重写破产 + 救场语义；`RelationSystem.test.ts` 新增 Elena 提速 2 条；`EventSystem.test.ts` 新增经纪人买木材/软化汇率 3 条。全库 **519 绿**，`tsc --noEmit` 干净。
+
+### Notes
+- ⚠️ D8+D9+D10 叠加明显放宽木材/收入，属核心经济松绑。阶段一收尾建议完整跑一遍看平衡，必要时回调（数值都集中在 `config.ts`，好调）。
+- GDD ch.3.3 / 5.4 / 5.5 已同步：集市上限、巡视林地加成（推翻原"巡视不给采伐加成"的原则并注明 v3.1 缘由）、农具维修兼顾伐木、采伐产出、经纪人四渠道、埃莱娜交谈提速。
+
+---
+
 ## [2026-08-16] — 卷宗（线索 + 地图）与结局收集册
 
 ### Added

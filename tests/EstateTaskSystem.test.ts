@@ -96,20 +96,28 @@ describe('affordability', () => {
 });
 
 describe('gift and attire', () => {
-  it('offers the gift once per recipient but retires both after either is bought', () => {
-    const fresh = makeState();
-    const ids = getEstateTaskChoices(fresh).map(c => c.id);
+  // PlaytestFeedback 2026-09 (P11): the standing gift is the post-dinner fallback,
+  // so it only appears after Day 7 (DINNER_DAY) and only while none has been bought.
+  it('keeps the standing gift out of the list until after the dinner', () => {
+    const early = getEstateTaskChoices(makeState({ day: 5 })).map(c => c.id);
+    expect(early).not.toContain('task_gift_marguerite');
+    expect(early).not.toContain('task_gift_henk');
+  });
+
+  it('offers the gift once per recipient after the dinner, but retires both after either is bought', () => {
+    const after7 = makeState({ day: 9 });
+    const ids = getEstateTaskChoices(after7).map(c => c.id);
     expect(ids).toContain('task_gift_marguerite');
     expect(ids).toContain('task_gift_henk');
 
-    const bought = makeState({ flags: { boughtGift: true } });
+    const bought = makeState({ day: 9, flags: { boughtGift: true } });
     const after = getEstateTaskChoices(bought).map(c => c.id);
     expect(after).not.toContain('task_gift_marguerite');
     expect(after).not.toContain('task_gift_henk');
   });
 
   it('sends the trust to whoever was named at purchase', () => {
-    const choices = getEstateTaskChoices(makeState());
+    const choices = getEstateTaskChoices(makeState({ day: 9 }));
     expect(choices.find(c => c.id === 'task_gift_marguerite')?.effects?.relationships).toEqual({ marguerite: 1 });
     expect(choices.find(c => c.id === 'task_gift_henk')?.effects?.relationships).toEqual({ henk: 1 });
   });
@@ -129,7 +137,7 @@ describe('gift and attire', () => {
 
 describe('microcopy is mechanical, never narrated (GDD 11.6)', () => {
   it('states the phase, the cost and the effect, and nothing else', () => {
-    expect(task(makeState(), 'task_repair_tools').summary).toBe('1 时段 · 15 金卢 · 收割 3→5');
+    expect(task(makeState(), 'task_repair_tools').summary).toBe('1 时段 · 15 金卢 · 收割 3→5 · 伐木 +1');
     expect(task(makeState(), 'task_repair_stable').summary).toBe('1 时段 · 12 金卢 · 3 木材 · 格雷格信任 +1');
   });
 

@@ -2,6 +2,8 @@ import { Resources, WeatherType, GameState, FlagMap } from '../types/game';
 import {
   WEATHER_HARVEST_MOD,
   TIMBER_YIELD,
+  TIMBER_SURVEY_BONUS,
+  TIMBER_TOOLS_BONUS,
   DAILY_GULDMARK_COST,
   GRAIN_STORAGE_CAP_UNCLEARED,
   RENOWN_MIN,
@@ -10,6 +12,7 @@ import {
   INSOLVENCY_TENANT_PER_DAY,
   INSOLVENCY_DISMISS_RENOWN,
   INSOLVENCY_DISMISS_TENANT,
+  STEWARD_RESCUE_GULDMARK,
   FATIGUE_TIRED_THRESHOLD,
   GRAIN_RETAIN_THRESHOLD,
   GRAIN_EXCELLENT_THRESHOLD,
@@ -117,7 +120,12 @@ export function getHarvestYield(state: GameState): number {
 
 export function getTimberYield(state: GameState): number {
   const fatiguePenalty = state.fatigue >= FATIGUE_TIRED_THRESHOLD ? 1 : 0;
-  return Math.max(0, TIMBER_YIELD - fatiguePenalty);
+  // PlaytestFeedback 2026-09 (D8): felling now has a preparation path parallel to
+  // the harvest. Walking the woods (+1) and repairing the tools (+1) stack, so a
+  // prepared steward cuts more per phase and timber is no longer a flat 3.
+  const surveyBonus = state.flags.surveyedForest ? TIMBER_SURVEY_BONUS : 0;
+  const toolsBonus = state.flags.toolsRepaired ? TIMBER_TOOLS_BONUS : 0;
+  return Math.max(0, TIMBER_YIELD + surveyBonus + toolsBonus - fatiguePenalty);
 }
 
 export function applyDailyOperatingCost(resources: Resources): Resources {
@@ -129,6 +137,9 @@ export interface InsolvencyEffects {
   tenantTrust: number;
   /** 男爵 does not wait for the term to run out. */
   dismissed: boolean;
+  /** The one-time reprieve fired instead of dismissal (D4). Carries the coin found. */
+  rescued?: boolean;
+  guldmark?: number;
   logEntry: string;
 }
 
@@ -140,22 +151,36 @@ export interface InsolvencyEffects {
  * settle with the smith and the flour cart is talked about within the week — and
  * only once there is no standing left do the people who live here start to go.
  *
- * Both lines are 0 rather than the axes' own floors (作者 2026-07-30): standing
- * earned earlier in the season is what buys the days, and when there is none the
- * season ends the same morning. 佃户整体信任 starts at -2, so that half of the
- * test is already true on Day 1 — an empty account is only survivable for a
- * steward the valley thinks well of.
+ * The line is strictly below 0 (D4, was ≤ 0): standing earned earlier buys the
+ * days, and at exactly 0 the season does not end yet — the renown-spending grace
+ * day comes first. 佃户整体信任 starts at -2, so that half of the test is already
+ * true early; the renown axis is what actually keeps a broke steward in place.
+ *
+ * The first time both are spent, a one-time reprieve fires instead of dismissal
+ * (D4): the player finds what the previous steward left behind, `rescued` coin and
+ * a warning. `rescueUsed` says whether that has already happened this season.
  */
 export function getInsolvencyEffects(
   resources: Resources,
   tenantTrust: number,
+  rescueUsed = false,
 ): InsolvencyEffects | null {
   if (resources.guldmark > 0) return null;
 
-  const renownSpent = resources.renown <= INSOLVENCY_DISMISS_RENOWN;
-  const tenantsSpent = tenantTrust <= INSOLVENCY_DISMISS_TENANT;
+  const renownSpent = resources.renown < INSOLVENCY_DISMISS_RENOWN;
+  const tenantsSpent = tenantTrust < INSOLVENCY_DISMISS_TENANT;
 
   if (renownSpent && tenantsSpent) {
+    if (!rescueUsed) {
+      return {
+        renown: 0,
+        tenantTrust: 0,
+        dismissed: false,
+        rescued: true,
+        guldmark: STEWARD_RESCUE_GULDMARK,
+        logEntry: lines.stewardRescueLog,
+      };
+    }
     return {
       renown: 0,
       tenantTrust: 0,

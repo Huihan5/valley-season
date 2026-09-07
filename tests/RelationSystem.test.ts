@@ -67,6 +67,22 @@ describe('conversational trust layer', () => {
     expect(getTrust(state, 'gregor')).toBeLessThan(4);
   });
 
+  // PlaytestFeedback 2026-09 (P28): 埃莱娜 earns a talk point every 2 conversations,
+  // not 3 — but the +2 conversational cap still holds.
+  it('grants 埃莱娜 a point every two talks, faster than the default three', () => {
+    expect(getTalkTrust(makeState({ conversations: { ...ZERO, elena: 2 } }), 'elena')).toBe(1);
+    expect(getTalkTrust(makeState({ conversations: { ...ZERO, elena: 4 } }), 'elena')).toBe(2);
+    // still capped at +2
+    expect(getTalkTrust(makeState({ conversations: { ...ZERO, elena: 40 } }), 'elena')).toBe(2);
+    // the faster rate is hers alone
+    expect(getTalkTrust(makeState({ conversations: { ...ZERO, marta: 2 } }), 'marta')).toBe(0);
+  });
+
+  it('reports 埃莱娜 two talks from her first point, and marta three', () => {
+    expect(talksUntilNextPoint(makeState(), 'elena')).toBe(2);
+    expect(talksUntilNextPoint(makeState(), 'marta')).toBe(3);
+  });
+
   it('stacks on top of action trust to reach 4 and beyond', () => {
     const state = makeState({
       relationships: { ...ZERO, gregor: 3 },

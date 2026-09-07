@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { getFixedEvent, getFreeChoices, getEventById } from '../src/systems/EventSystem';
 import { determineEnding } from '../src/systems/EndingSystem';
 import { GameState } from '../src/types/game';
+import { BROKER } from '../src/data/config';
 
 // ── Helpers ────────────────────────────────────────────────────────────────
 
@@ -491,6 +492,38 @@ describe('getFreeChoices — afternoon choices', () => {
     }));
     const broker = choices.find(c => c.id === 'broker_timber_to_grain');
     expect(broker?.disabled).toBe(true);
+  });
+
+  // ── D10 (PlaytestFeedback 2026-09): buy-timber channel + eased rates ─────────
+  const brokerChoices = () => getFreeChoices(makeState({
+    day: 25,
+    phase: 'afternoon',
+    flags: { lordsLetterRead: true, brokerUnlocked: true },
+    resources: { grain: 50, guldmark: 20, timber: 10, renown: 0 },
+  }));
+
+  it('offers a coin→timber channel — the one direction the broker never had', () => {
+    const buy = brokerChoices().find(c => c.id === 'broker_gold_to_timber');
+    expect(buy).toBeDefined();
+    expect(buy?.effects?.guldmark).toBe(-BROKER.goldToTimber.guldmark);
+    expect(buy?.effects?.timber).toBe(BROKER.goldToTimber.timber);
+  });
+
+  it('coin→timber disabled when the purse is short', () => {
+    const choices = getFreeChoices(makeState({
+      day: 25, phase: 'afternoon',
+      flags: { lordsLetterRead: true, brokerUnlocked: true },
+      resources: { grain: 50, guldmark: 1, timber: 10, renown: 0 },
+    }));
+    expect(choices.find(c => c.id === 'broker_gold_to_timber')?.disabled).toBe(true);
+  });
+
+  it('no longer makes selling grain cost timber, and pays the eased rates', () => {
+    const g2c = brokerChoices().find(c => c.id === 'broker_grain_to_gold');
+    expect(g2c?.effects?.timber).toBeUndefined();   // grain→gold used to also take a timber
+    expect(g2c?.effects?.guldmark).toBe(BROKER.grainToGold.guldmark);
+    const t2c = brokerChoices().find(c => c.id === 'broker_timber_to_gold');
+    expect(t2c?.effects?.guldmark).toBe(BROKER.timberToGold.guldmark); // 4 now, was 3
   });
 });
 

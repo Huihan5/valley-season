@@ -44,6 +44,23 @@ describe('the dinner is one outing and three decisions', () => {
     expect(day6).not.toContain('attend_dinner');
   });
 
+  // PlaytestFeedback 2026-09 (P11): the gift is introduced here as a way of attending.
+  it('offers a gift-bearing way to attend that warms both hosts (the generous route, +2 each)', () => {
+    const gift = getFreeChoices(makeState()).find(c => c.id === 'attend_dinner_gift');
+    expect(gift).toBeDefined();
+    expect(gift?.effects?.relationships).toEqual({ marguerite: 2, henk: 2 });
+    expect(gift?.effects?.flags?.attendedDinner).toBe(true);
+    expect(gift?.effects?.flags?.boughtGift).toBe(true);
+    expect(gift?.effects?.guldmark).toBeLessThan(0);
+  });
+
+  it('disables the gift option when the purse cannot spare it', () => {
+    const broke = getFreeChoices(makeState({ resources: { grain: 0, guldmark: 3, timber: 12, renown: 0 } }));
+    expect(broke.find(c => c.id === 'attend_dinner_gift')?.disabled).toBe(true);
+    // …but you can still go empty-handed
+    expect(broke.find(c => c.id === 'attend_dinner')?.disabled).toBeFalsy();
+  });
+
   it('does not open unless the player went', () => {
     expect(getFixedEvent(7, 'evening', makeState({ phase: 'evening' }))).toBeNull();
     const attended = makeState({ phase: 'evening', flags: { attendedDinner: true } });

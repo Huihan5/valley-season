@@ -7,6 +7,7 @@ import {
   ATTIRE_COST,
   TENANT_MEETING_MIN_TRUST,
   HARVEST_YIELD,
+  DINNER_DAY,
 } from '../data/config';
 import DATA from '../data';
 import { fill } from '../utils/text';
@@ -54,6 +55,8 @@ interface TaskSpec {
   recipient?: NpcId;
   /** Extra condition beyond affording it. */
   requires?: (state: GameState) => string | null;
+  /** When absent the task is always listed; when present it is only listed if this returns true. */
+  visible?: (state: GameState) => boolean;
 }
 
 const SPECS: TaskSpec[] = [
@@ -103,6 +106,11 @@ const SPECS: TaskSpec[] = [
     timber: REPAIR_STABLE_COST.timber,
     doneFlag: 'repairedStableRoof',
   },
+  // PlaytestFeedback 2026-09 (P11): the gift used to sit in the list from Day 1,
+  // before the player had any idea who 玛格丽特 is. The nobles are introduced at the
+  // Day 7 dinner, which now carries the gift as an inline option (both hosts +1). The
+  // standing task is the fallback for a player who did not take it there — so it only
+  // appears after the dinner, and only while no gift has been bought yet.
   {
     id: 'task_gift_marguerite',
     label: TEXT.giftMarguerite.label,
@@ -110,6 +118,7 @@ const SPECS: TaskSpec[] = [
     guldmark: GIFT_COST,
     doneFlag: 'boughtGift',
     recipient: 'marguerite',
+    visible: (s) => s.day > DINNER_DAY && !s.flags.boughtGift,
   },
   {
     id: 'task_gift_henk',
@@ -118,6 +127,7 @@ const SPECS: TaskSpec[] = [
     guldmark: GIFT_COST,
     doneFlag: 'boughtGift',
     recipient: 'henk',
+    visible: (s) => s.day > DINNER_DAY && !s.flags.boughtGift,
   },
   {
     id: 'task_attire',
@@ -139,7 +149,7 @@ function describe(spec: TaskSpec): string {
 }
 
 export function getEstateTasks(state: GameState): EstateTask[] {
-  return SPECS.map((spec) => {
+  return SPECS.filter((spec) => spec.visible?.(state) ?? true).map((spec) => {
     const timber = spec.timber ?? 0;
     let status: TaskStatus = 'available';
     let blockedReason: string | undefined;

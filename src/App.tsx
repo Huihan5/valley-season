@@ -302,17 +302,27 @@ function advancePhase(state: GameState): GameState {
     next = { ...next, resources: clampResources(next.resources, next.flags) };
 
     // An empty account settles once a day, and it settles downward.
-    const insolvency = getInsolvencyEffects(next.resources, next.tenantTrust);
+    const insolvency = getInsolvencyEffects(next.resources, next.tenantTrust, !!next.flags.stewardRescueUsed);
     if (insolvency) {
       next = applyEffects(next, {
         renown: insolvency.renown,
         tenantTrust: insolvency.tenantTrust,
+        guldmark: insolvency.guldmark, // only set by the rescue; undefined is a no-op
         logEntry: insolvency.logEntry,
       });
       next = {
         ...next,
         log: [...next.log, { day: newDay, phase: 'morning', text: insolvency.logEntry }],
       };
+      // The one-time reprieve (D4): coin found, warning given, and the season goes
+      // on. It gets the morning's lead line so the player cannot miss the warning.
+      if (insolvency.rescued) {
+        next = {
+          ...next,
+          flags: { ...next.flags, stewardRescueUsed: true },
+          lastResult: lines.stewardRescue,
+        };
+      }
       if (insolvency.dismissed) {
         const flags = { ...next.flags, dismissedEarly: true };
         const dismissed = { ...next, flags };

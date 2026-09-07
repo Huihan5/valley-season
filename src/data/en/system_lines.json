@@ -6,5 +6,7 @@
   "millridgeShortOfTrust": "You asked, at Millridge. The two of you are not on those terms yet.",
   "insolvencyDismissed": "The Baron’s man came in the morning with half a sheet of paper: payment stops today, hand over within three days.",
   "insolvencyTenantsLeaving": "Another day and not one account settled. There were fewer people in the fields than yesterday.",
-  "insolvencyRenownSpending": "Another day and not one account settled. Word of a thing like that travels fast in the valley."
+  "insolvencyRenownSpending": "Another day and not one account settled. Word of a thing like that travels fast in the valley.",
+  "stewardRescue": "Behind a loose board in the office there is a tin the steward before you left there. A few coins — you count them out, enough to keep the gate open a while longer — and a half-sheet of notes in a careful hand. Most of it is figures. One line is not: an empty account, and a valley that has stopped speaking well of you, is a thing no letter of guarantee will hold against. Take the warning with the coin.",
+  "stewardRescueLog": "You found a tin the last steward left — a little coin, and a warning."
 }

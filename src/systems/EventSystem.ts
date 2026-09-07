@@ -25,7 +25,7 @@ import {
   isGregorAtStable,
 } from './SceneSystem';
 import {
-  MARKET_TRANSPORT_CAP, MARKET_GRAIN_PRICE,
+  MARKET_TRANSPORT_CAP, MARKET_GRAIN_PRICE, BROKER, GIFT_COST,
   OUTING_FATIGUE, MARKET_TRADE_FATIGUE,
   DINNER_DAY, PETITION_INFORMED_TRUST, ECHO_DECOROUS_AT,
   HUNT_FIRST_DAY, HUNT_LAST_DAY, LORENZ_FRAGMENT_TRUST, MARGUERITE_FRAGMENT_TRUST,
@@ -761,7 +761,9 @@ export function getFreeChoices(state: GameState): Choice[] {
     choices.push({
       id: 'survey_forest',
       text: A.surveyForest.text,
-      description: A.common.noYield,
+      // The first walk unlocks a standing felling bonus (D8); once taken, the action
+      // still repeats for the Day 15 narrative and to read the woods as they change.
+      description: flags.surveyedForest ? A.surveyForest.descriptionDone : A.surveyForest.description,
       effects: {
         fatigue: 1,
         flags: { surveyedForest: true },
@@ -839,6 +841,27 @@ export function getFreeChoices(state: GameState): Choice[] {
     // 棘墙晚宴: an outing that takes the afternoon to get there and the whole
     // evening once you have. Not going is a choice too, and it costs standing.
     if (day === DINNER_DAY && !flags.attendedDinner) {
+      // PlaytestFeedback 2026-09 (P11): the gift is introduced here, where the nobles
+      // are — deciding to bring one to the dinner warms both hosts markedly. GIFT_COST
+      // is per recipient, so a gift for the two of them is twice that. This is the
+      // deliberately generous route (D-choice B): +2 to each, which alone clears
+      // 玛格丽特's fragment line — her fragment is meant to be the easiest to reach.
+      // The standing post-dinner gift stays the smaller one-recipient +1.
+      const dinnerGiftCost = GIFT_COST * 2;
+      choices.push({
+        id: 'attend_dinner_gift',
+        text: A.dinner.textGift,
+        description: fill(A.dinner.descriptionGift, { cost: dinnerGiftCost }),
+        effects: {
+          guldmark: -dinnerGiftCost,
+          relationships: { marguerite: 2, henk: 2 },
+          flags: { attendedDinner: true, boughtGift: true },
+          nextScene: 'default',
+          logEntry: A.dinner.logGift,
+        },
+        disabled: resources.guldmark < dinnerGiftCost,
+        disabledReason: fill(A.dinner.giftTooPoor, { cost: dinnerGiftCost }),
+      });
       choices.push({
         id: 'attend_dinner',
         text: A.dinner.text,
@@ -919,56 +942,55 @@ export function getFreeChoices(state: GameState): Choice[] {
     }
 
     // ── 经纪人换货渠道 (Day 24-30, unlocked by lord's letter) ────────────
+    // Rates live in config.BROKER (D10); descriptions are templates filled from them,
+    // so the numbers a player reads can never drift from the numbers they pay.
     if (flags.brokerUnlocked && day <= 30) {
+      const B = A.broker;
+
+      const g2c = BROKER.grainToGold;
+      const g2cShort = resources.grain < g2c.grain;
       choices.push({
         id: 'broker_grain_to_gold',
-        text: A.broker.grainToGold.text,
-        description: resources.grain >= 6 && resources.timber >= 1
-          ? A.broker.grainToGold.description
-          : A.broker.grainToGold.descriptionShort,
-        effects: {
-          grain: -6,
-          guldmark: 4,
-          timber: -1,
-          logEntry: A.broker.grainToGold.log,
-        },
-        disabled: resources.grain < 6 || resources.timber < 1,
-        disabledReason: resources.grain < 6
-          ? A.broker.grainToGold.shortGrain
-          : A.broker.grainToGold.shortTimber,
+        text: B.grainToGold.text,
+        description: fill(g2cShort ? B.grainToGold.descriptionShort : B.grainToGold.description, g2c),
+        effects: { grain: -g2c.grain, guldmark: g2c.guldmark, logEntry: B.grainToGold.log },
+        disabled: g2cShort,
+        disabledReason: fill(B.grainToGold.shortGrain, g2c),
       });
 
+      const t2c = BROKER.timberToGold;
+      const t2cShort = resources.timber < t2c.timber;
       choices.push({
         id: 'broker_timber_to_gold',
-        text: A.broker.timberToGold.text,
-        description: resources.timber >= 3
-          ? A.broker.timberToGold.description
-          : A.broker.timberToGold.descriptionShort,
-        effects: {
-          timber: -3,
-          guldmark: 3,
-          logEntry: A.broker.timberToGold.log,
-        },
-        disabled: resources.timber < 3,
-        disabledReason: A.broker.timberToGold.shortTimber,
+        text: B.timberToGold.text,
+        description: fill(t2cShort ? B.timberToGold.descriptionShort : B.timberToGold.description, t2c),
+        effects: { timber: -t2c.timber, guldmark: t2c.guldmark, logEntry: B.timberToGold.log },
+        disabled: t2cShort,
+        disabledReason: fill(B.timberToGold.shortTimber, t2c),
       });
 
+      const t2g = BROKER.timberToGrain;
+      const t2gShort = resources.timber < t2g.timber;
       choices.push({
         id: 'broker_timber_to_grain',
-        text: A.broker.timberToGrain.text,
-        description: resources.timber >= 2 && resources.guldmark >= 1
-          ? A.broker.timberToGrain.description
-          : A.broker.timberToGrain.descriptionShort,
-        effects: {
-          timber: -2,
-          grain: 7,
-          guldmark: -1,
-          logEntry: A.broker.timberToGrain.log,
-        },
-        disabled: resources.timber < 2 || resources.guldmark < 1,
-        disabledReason: resources.timber < 2
-          ? A.broker.timberToGrain.shortTimber
-          : A.broker.timberToGrain.shortGuldmark,
+        text: B.timberToGrain.text,
+        description: fill(t2gShort ? B.timberToGrain.descriptionShort : B.timberToGrain.description, t2g),
+        effects: { timber: -t2g.timber, grain: t2g.grain, logEntry: B.timberToGrain.log },
+        disabled: t2gShort,
+        disabledReason: fill(B.timberToGrain.shortTimber, t2g),
+      });
+
+      // 以钱换木 — the one direction the broker never offered (D10). Timber is the
+      // scarce thing at season's end; this buys a little, dearer than the yard.
+      const c2t = BROKER.goldToTimber;
+      const c2tShort = resources.guldmark < c2t.guldmark;
+      choices.push({
+        id: 'broker_gold_to_timber',
+        text: B.goldToTimber.text,
+        description: fill(c2tShort ? B.goldToTimber.descriptionShort : B.goldToTimber.description, c2t),
+        effects: { guldmark: -c2t.guldmark, timber: c2t.timber, logEntry: B.goldToTimber.log },
+        disabled: c2tShort,
+        disabledReason: fill(B.goldToTimber.shortGuldmark, c2t),
       });
     }
   }

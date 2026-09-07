@@ -47,6 +47,8 @@
   },
   "surveyForest": {
     "text": "Walk the woods",
+    "description": "1 phase · learn where the good stands are — you cut more timber per phase afterwards",
+    "descriptionDone": "1 phase · see how the woods stand now",
     "log": "You went through the woods and wrote down what you saw."
   },
   "deepLedger": {
@@ -86,7 +88,11 @@
   "dinner": {
     "text": "Ride to Thornwall for the dinner",
     "description": "2 phases (afternoon and evening)",
-    "log": "You changed your clothes and rode to Thornwall."
+    "log": "You changed your clothes and rode to Thornwall.",
+    "textGift": "Ride to Thornwall, and take a gift for the hosts",
+    "descriptionGift": "2 phases · {cost} guldmark · both hosts warm to it",
+    "logGift": "You took a gift for the hosts and rode to Thornwall.",
+    "giftTooPoor": "2 phases · a gift for the hosts would run to {cost} guldmark — you cannot spare it"
   },
   "boundary": {
     "text": "Go and look at the north woods",
@@ -134,32 +140,37 @@
   "broker": {
     "grainToGold": {
       "text": "Grain for coin (through the broker)",
-      "description": "6 grain + 1 timber for 4 guldmark (a poor emergency rate)",
-      "descriptionShort": "6 grain + 1 timber for 4 guldmark — not enough in store",
-      "log": "You put grain through the resident broker for coin at the emergency rate. Packing and carriage came out of the timber.",
-      "shortGrain": "Not enough grain (6 units needed)",
-      "shortTimber": "Not enough timber (1 unit needed)"
+      "description": "{grain} grain for {guldmark} guldmark (a poor emergency rate)",
+      "descriptionShort": "{grain} grain for {guldmark} guldmark — not enough in store",
+      "log": "You put grain through the resident broker for coin at the emergency rate. Nothing like the market, but there is no other road just now.",
+      "shortGrain": "Not enough grain ({grain} units needed)"
     },
     "timberToGold": {
       "text": "Timber for coin (through the broker)",
-      "description": "3 timber for 3 guldmark (worked first, then sold on at a discount)",
-      "descriptionShort": "3 timber for 3 guldmark — not enough in store",
+      "description": "{timber} timber for {guldmark} guldmark (sold on at a discount)",
+      "descriptionShort": "{timber} timber for {guldmark} guldmark — not enough in store",
       "log": "You had the resident broker sell the timber on at a discount. Nothing like the market price, but there is no other road just now.",
-      "shortTimber": "Not enough timber (3 units needed)"
+      "shortTimber": "Not enough timber ({timber} units needed)"
     },
     "timberToGrain": {
       "text": "Timber for grain (through the broker)",
-      "description": "2 timber + 1 guldmark for 7 grain (carted from a neighbouring estate, fair enough)",
-      "descriptionShort": "2 timber + 1 guldmark for 7 grain — not enough in store",
-      "log": "You had the broker cart in grain from a neighbouring estate. The carriage was settled in coin, and the timber went against the goods.",
-      "shortTimber": "Not enough timber (2 units needed)",
-      "shortGuldmark": "Not enough guldmark (1 needed)"
+      "description": "{timber} timber for {grain} grain (carted from a neighbouring estate)",
+      "descriptionShort": "{timber} timber for {grain} grain — not enough in store",
+      "log": "You had the broker cart in grain from a neighbouring estate against the timber.",
+      "shortTimber": "Not enough timber ({timber} units needed)"
+    },
+    "goldToTimber": {
+      "text": "Coin for timber (through the broker)",
+      "description": "{guldmark} guldmark for {timber} timber (dearer than the yard, but to hand)",
+      "descriptionShort": "{guldmark} guldmark for {timber} timber — not enough coin",
+      "log": "You had the resident broker bring in timber for coin. Dearer than the yard at Valehold, but there was no waiting for a market day.",
+      "shortGuldmark": "Not enough guldmark ({guldmark} needed)"
     }
   },
   "estateTasks": {
     "repairTools": {
       "label": "Repair the tools",
-      "effect": "harvest {from}→{to}"
+      "effect": "harvest {from}→{to} · felling +1"
     },
     "clearStorage": {
       "label": "Clear the stores",

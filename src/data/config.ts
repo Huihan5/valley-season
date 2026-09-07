@@ -40,6 +40,12 @@ export const WEATHER_HARVEST_MOD: Record<string, number> = {
 // Timber per harvest phase
 export const TIMBER_YIELD = 3;
 
+// PlaytestFeedback 2026-09 (D8): felling gets a preparation path of its own, so it
+// is no longer a flat 3 with no way to improve. Both bonuses reuse existing actions
+// and stack: walking the woods scouts the best stands, a repaired tool set cuts faster.
+export const TIMBER_SURVEY_BONUS = 1;  // after 巡视林地 (surveyedForest)
+export const TIMBER_TOOLS_BONUS = 1;   // after 修工具 (toolsRepaired)
+
 // Seasonal felling quota set by ducal decree (GDD ch.5.4). Exceeding it costs renown.
 export const TIMBER_SEASON_QUOTA = 25;
 
@@ -51,10 +57,16 @@ export const DAILY_GULDMARK_COST = 2;
 // 人才开始走，佃户信任每天掉一点；两样都归零而账上仍然是空的，男爵不等期限。
 export const INSOLVENCY_RENOWN_PER_DAY = -1;
 export const INSOLVENCY_TENANT_PER_DAY = -1;
-// 解雇线是 0 而不是两条轴各自的下限（作者 2026-07-30 定）。挣来的名声可以垫
-// 几天，垫完就没有了；佃户信任开局本来就是 -2，所以这一条开局即成立。
+// PlaytestFeedback 2026-09 (D4): the line used to be ≤ 0, and 佃户整体信任 opens at -2,
+// so a steward who ran out of money before earning any renown was dismissed on the
+// spot — "一进去就死". The line is now strictly < 0 (getInsolvencyEffects compares with <),
+// so standing at exactly 0 still buys the renown-spending grace day first.
 export const INSOLVENCY_DISMISS_RENOWN = 0;
 export const INSOLVENCY_DISMISS_TENANT = 0;
+// A one-time reprieve the first time dismissal would fire: instead of the season
+// ending, the player finds what the previous steward left behind — some coin and
+// notes — worth this much, with a clear warning. Narrative in system_lines.stewardRescue.
+export const STEWARD_RESCUE_GULDMARK = 10;
 
 // Storage cap until the barn is cleared out; clearing lifts it entirely (GDD ch.5.4).
 export const GRAIN_STORAGE_CAP_UNCLEARED = 80;
@@ -236,6 +248,10 @@ export const RELATION_MAX = 5;
 // Trust is layered (GDD ch.5.5): conversational trust caps low, action trust carries the rest.
 export const TALKS_PER_TRUST_POINT = 3; // 每 3 次有效交谈 +1
 export const TALK_TRUST_CAP = 2;        // 单靠交谈最高 +2
+// PlaytestFeedback 2026-09 (P28): 埃莱娜 is the office/records line's keystone and
+// talking her toward trust felt too slow. She alone earns a talk point every 2
+// conversations; the cap (+2) is unchanged and everyone else keeps the default 3.
+export const TALKS_PER_TRUST_POINT_BY_NPC: Record<string, number> = { elena: 2 };
 
 // 贵族信任 (GDD ch.5.5) — three chances at +1 each: Day 7 dinner, boundary dispute, hunt season
 export const NOBLE_TRUST_MIN = 0;
@@ -254,11 +270,27 @@ export const RENOWN_MAX = 10;
 // ── 集市 (GDD ch.5.4) ───────────────────────────────────────────────────────
 // v3: Saturdays only (Day 6 / 13 / 20 / 27), but quantity per trip is open up to
 // the cart's capacity. The bottleneck moved from market frequency to felling phases.
+// PlaytestFeedback 2026-09 (D9): a single 20-unit trip felt like it only let the
+// player nibble at their stock, so the cart carries 40 now — enough to clear most
+// of a season's stock in one Saturday, while a cap is still there.
 export const MARKET_GRAIN_PRICE = 1.5;            // 金卢/unit
 export const MARKET_TIMBER_PRICE = 3;             // 金卢/unit
 export const MARKET_TIMBER_PRICE_MILLRIDGE = 4;   // after the 磨岭 agreement with 亨克
-export const MARKET_TRANSPORT_CAP = 20;           // grain + timber combined, per trip (cart capacity)
+export const MARKET_TRANSPORT_CAP = 40;           // grain + timber combined, per trip (cart capacity)
 export const MARKET_LOT_SIZES = [4, 10];          // fixed lots offered alongside a sell-max option
+
+// ── 经纪人换货 (Day 24-30，领主来信后解锁) ──────────────────────────────────
+// An emergency channel, always worse than the market. PlaytestFeedback 2026-09 (D10):
+// previously every option consumed timber and none produced it, and the rates felt
+// punishing day after day. Added a buy-timber channel, and eased the rates a little
+// (still below the market so it stays a last resort, not a strategy). These used to
+// be hard-coded in EventSystem; single-sourced here per the balance-numbers rule.
+export const BROKER = {
+  grainToGold:  { grain: 6, guldmark: 4 },   // was 6 grain + 1 timber → 4g (dropped the timber cost)
+  timberToGold: { timber: 3, guldmark: 4 },  // was 3 timber → 3g (a coin more)
+  timberToGrain: { timber: 2, grain: 8 },    // was 2 timber + 1g → 7 grain (dropped the coin, +1 grain)
+  goldToTimber: { guldmark: 5, timber: 2 },  // new: buy timber in a pinch, dearer than the yard
+} as const;
 
 // ── 时段与疲劳消耗 (V3_BUILD_BRIEF 阶段二) ──────────────────────────────────
 // 插入式事件不占时段；行动触发式占 1；外出式占 2（上午出发，下午抵达）。

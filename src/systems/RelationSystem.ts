@@ -3,6 +3,7 @@ import {
   RELATION_MIN,
   RELATION_MAX,
   TALKS_PER_TRUST_POINT,
+  TALKS_PER_TRUST_POINT_BY_NPC,
   TALK_TRUST_CAP,
   NOBLE_TRUST_MIN,
   NOBLE_TRUST_MAX,
@@ -32,10 +33,15 @@ export function getActionTrust(state: GameState, npc: NpcId): number {
   return state.relationships[npc] ?? 0;
 }
 
+/** How many effective talks buy one point of trust, for this particular NPC. */
+function talksPerPoint(npc: NpcId): number {
+  return TALKS_PER_TRUST_POINT_BY_NPC[npc] ?? TALKS_PER_TRUST_POINT;
+}
+
 /** Trust earned by showing up and talking, capped low on purpose. */
 export function getTalkTrust(state: GameState, npc: NpcId): number {
   const talks = state.conversations[npc] ?? 0;
-  return Math.min(TALK_TRUST_CAP, Math.floor(talks / TALKS_PER_TRUST_POINT));
+  return Math.min(TALK_TRUST_CAP, Math.floor(talks / talksPerPoint(npc)));
 }
 
 /** What every threshold in the game reads: both layers, clamped to the -5..+5 range. */
@@ -52,7 +58,8 @@ export function recordConversation(counts: TrustCounts, npc: NpcId): TrustCounts
 export function talksUntilNextPoint(state: GameState, npc: NpcId): number | null {
   if (getTalkTrust(state, npc) >= TALK_TRUST_CAP) return null;
   const talks = state.conversations[npc] ?? 0;
-  return TALKS_PER_TRUST_POINT - (talks % TALKS_PER_TRUST_POINT);
+  const rate = talksPerPoint(npc);
+  return rate - (talks % rate);
 }
 
 export function adjustActionTrust(current: number, delta: number): number {
