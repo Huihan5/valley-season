@@ -13,6 +13,8 @@ interface Props {
   actionableIds: Set<string>;
   /** The market trip, when it is on offer today — pinned above the business (D5). */
   marketChoice?: Choice | null;
+  /** While an event is on screen, estate work cannot be arranged — dim it and say so (B). */
+  inEvent?: boolean;
   onTake: (id: string) => void;
 }
 
@@ -26,7 +28,7 @@ interface Props {
  * Taking one still spends the phase — the click just dispatches the same choice the
  * bottom panel would have; the reducer resolves it exactly as before.
  */
-export default function EstateTaskList({ state, actionableIds, marketChoice, onTake }: Props) {
+export default function EstateTaskList({ state, actionableIds, marketChoice, inEvent = false, onTake }: Props) {
   const tasks = getEstateTasks(state);
   const outstanding = tasks.filter(t => t.status !== 'done').length;
 
@@ -37,7 +39,16 @@ export default function EstateTaskList({ state, actionableIds, marketChoice, onT
         <span className="text-game-dim text-[10px]">{fill(T.outstanding, { n: outstanding })}</span>
       </div>
 
-      <div className="flex-1 overflow-y-auto px-3 py-2 space-y-2">
+      {/* An event holds the day: the business is still shown, greyed and inert, so
+          the player sees what waits without being able to start it (B). */}
+      {inEvent && (
+        <div className="px-3 py-2 border-b border-game-border/60">
+          <p className="text-cream-dim text-[11px] font-serif">{T.inEventTitle}</p>
+          <p className="text-game-dim text-[10px] leading-snug mt-0.5">{T.inEventBody}</p>
+        </div>
+      )}
+
+      <div className={`flex-1 overflow-y-auto px-3 py-2 space-y-2 ${inEvent ? 'opacity-40 pointer-events-none' : ''}`}>
         {/* Market day, pinned. */}
         {marketChoice && (
           <button

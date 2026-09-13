@@ -117,7 +117,13 @@
     }
   },
   "choicePanel": {
-    "heading": "— Choices —"
+    "heading": "— Choices —",
+    "dailyHeading": "What will you do today?",
+    "eventHeading": "You decide…",
+    "tabLabor": "Work",
+    "tabSocial": "People",
+    "tabRest": "Rest",
+    "tabEmpty": "Nothing of this kind to do just now."
   },
   "logDrawer": {
     "heading": "— Record —",
@@ -153,7 +159,9 @@
   "estateTaskList": {
     "heading": "Estate business",
     "outstanding": "{n} outstanding",
-    "done": "Done"
+    "done": "Done",
+    "inEventTitle": "An event is underway",
+    "inEventBody": "You cannot take on other estate work while this is going on."
   },
   "titleScreen": {
     "title": "Valley Season",

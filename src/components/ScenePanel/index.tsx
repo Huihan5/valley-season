@@ -1,7 +1,7 @@
+import { ReactNode } from 'react';
 import { GameState, NpcId } from '../../types/game';
 import { PHASE_LABELS, dayName, isHuntSeason } from '../../systems/TimeSystem';
 import { getFatigueNote, getFatigueStatus } from '../../systems/FatigueSystem';
-import LogDrawer from './LogDrawer';
 import DATA from '../../data';
 import Gregor from '../../assets/portraits/Gregor.png';
 import Martha from '../../assets/portraits/Martha.png';
@@ -20,10 +20,12 @@ interface Props {
   state: GameState;
   onOpenSaves: () => void;
   onOpenJournal: () => void;
+  /** The choices, rendered inline under the prose and scrolling with it (B). */
+  children?: ReactNode;
 }
 
-export default function ScenePanel({ state, onOpenSaves, onOpenJournal }: Props) {
-  const { day, phase, activeEvent, currentSceneText, lastResult, log } = state;
+export default function ScenePanel({ state, onOpenSaves, onOpenJournal, children }: Props) {
+  const { day, phase, activeEvent, currentSceneText, lastResult } = state;
   // Overwork the player can see in the scene, not only as a bar in the panel (D7).
   const fatigueNote = getFatigueNote(state.fatigue);
   const spent = getFatigueStatus(state.fatigue) === 'exhausted';
@@ -105,9 +107,16 @@ export default function ScenePanel({ state, onOpenSaves, onOpenJournal }: Props)
         <p className="text-game-text font-serif text-sm leading-relaxed whitespace-pre-line max-w-[46rem]">
           {currentSceneText}
         </p>
-      </div>
 
-      <LogDrawer log={log} />
+        {/* The choices sit right under the last paragraph and scroll with it (B):
+            the player decides inside the reading, not on a panel below it. A short
+            rule sets them apart without breaking the column. */}
+        {children && (
+          <div className="pt-2 border-t border-game-border/60 max-w-[46rem]">
+            {children}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

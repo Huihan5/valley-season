@@ -117,7 +117,13 @@
     }
   },
   "choicePanel": {
-    "heading": "— 选择 —"
+    "heading": "— 选择 —",
+    "dailyHeading": "今天做什么？",
+    "eventHeading": "你决定……",
+    "tabLabor": "劳作",
+    "tabSocial": "往来",
+    "tabRest": "休整",
+    "tabEmpty": "这个时段没有这类事可做。"
   },
   "logDrawer": {
     "heading": "— 记录 —",
@@ -153,7 +159,9 @@
   "estateTaskList": {
     "heading": "庄园事务",
     "outstanding": "{n} 项未办",
-    "done": "已完成"
+    "done": "已完成",
+    "inEventTitle": "事件处理中",
+    "inEventBody": "当前正在处理事件，无法安排其他事务。"
   },
   "titleScreen": {
     "title": "河谷季",

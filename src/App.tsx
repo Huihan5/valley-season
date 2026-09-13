@@ -18,6 +18,7 @@ import { INITIAL_RESOURCES, INITIAL_RELATIONSHIPS, TENANT_TRUST_INITIAL } from '
 import DATA from './data';
 import { interpolate, fill } from './utils/text';
 import ScenePanel from './components/ScenePanel';
+import LogDrawer from './components/ScenePanel/LogDrawer';
 import StatusPanel from './components/StatusPanel';
 import ChoicePanel from './components/ChoicePanel';
 import NameInput from './components/common/NameInput';
@@ -508,71 +509,77 @@ export default function App() {
     );
   }
 
+  // The choices now live inline under the prose (UI direction B). Whatever the
+  // beat asks for — a season's-end farewell, a signature, a plain 继续, or the
+  // day's own actions — is rendered in the same slot beneath the last paragraph.
+  const choiceArea = state.demoComplete && state.endingId ? (
+    <div className="flex flex-col items-start gap-3 py-1">
+      <div>
+        <p className="text-gold font-serif text-lg">{getEndingData(state.endingId as EndingId).title}</p>
+        <p className="text-game-text text-sm mt-1">{getEndingData(state.endingId as EndingId).subtitle}</p>
+      </div>
+      {/* 4.g.v: the way back to Day 1 stays a whisper, not a banner. */}
+      <button
+        onClick={backToTitle}
+        className="px-10 py-3 bg-gold-dim border border-gold text-bg font-serif text-base rounded-sm hover:bg-gold transition-all"
+      >
+        {ui.app.restart}
+      </button>
+    </div>
+  ) : pendingInput ? (
+    <NameInput
+      spec={pendingInput}
+      onSubmit={(name) => dispatch({ type: 'SET_PLAYER_NAME', name })}
+    />
+  ) : isNarrativeOnly ? (
+    <button
+      onClick={() => dispatch({ type: 'ADVANCE_DAY_EVENT' })}
+      className="px-8 py-2.5 border border-gold-dim text-cream font-serif text-sm rounded-sm hover:bg-bg-hover hover:border-gold transition-all"
+    >
+      {ui.app.continue}
+    </button>
+  ) : (
+    <ChoicePanel
+      choices={state.currentChoices}
+      mode={state.activeEvent ? 'event' : 'daily'}
+      onChoice={(id) => dispatch({ type: 'MAKE_CHOICE', choiceId: id })}
+    />
+  );
+
   return (
-    <div className="h-screen bg-bg text-game-text flex flex-col overflow-hidden p-3 gap-3">
-      {/* Main content: scene (left) + status (right) */}
-      <div className="flex flex-1 gap-3 min-h-0">
-        <div className="w-48 shrink-0 hidden lg:block">
+    <div className="h-screen bg-bg text-game-text flex overflow-hidden p-3 gap-3">
+      {/* Left: the estate's business, and the record beneath it (B) — the log
+          moved out from between the prose and the choices. */}
+      <div className="w-48 shrink-0 hidden lg:flex flex-col gap-3 min-h-0">
+        <div className="flex-1 min-h-0">
           <EstateTaskList
             state={state}
             actionableIds={new Set(state.currentChoices.filter(c => !c.disabled).map(c => c.id))}
             marketChoice={state.currentChoices.find(c => c.id === 'go_to_market') ?? null}
+            inEvent={state.activeEvent !== null}
             onTake={(id) => dispatch({ type: 'MAKE_CHOICE', choiceId: id })}
           />
         </div>
-        <div className="flex-1 min-w-0">
-          <ScenePanel
-            state={state}
-            onOpenSaves={() => { refreshManualSaves(); setSavesOpen(true); }}
-            onOpenJournal={() => setJournalOpen(true)}
-          />
-        </div>
-        <div className="w-64 shrink-0">
-          <StatusPanel state={state} />
-        </div>
+        <LogDrawer log={state.log} />
       </div>
 
-      {/* Choice panel (bottom) */}
-      {/* The bottom slot keeps one height whatever is in it, so nothing above it
-          moves between an event and a market afternoon (PlaytestFeedback 2.g). */}
-      {state.demoComplete && state.endingId ? (
-        <div className="bg-bg-card border border-gold-dim rounded-sm px-5 py-4 h-52 shrink-0 flex flex-col items-center justify-center gap-4">
-          <div className="text-center">
-            <p className="text-gold font-serif text-lg">{getEndingData(state.endingId as EndingId).title}</p>
-            <p className="text-game-text text-sm mt-1">{getEndingData(state.endingId as EndingId).subtitle}</p>
+      {/* Centre: the prose, with the choices inline beneath it. */}
+      <div className="flex-1 min-w-0">
+        <ScenePanel
+          state={state}
+          onOpenSaves={() => { refreshManualSaves(); setSavesOpen(true); }}
+          onOpenJournal={() => setJournalOpen(true)}
+        >
+          <div key={`${state.day}-${state.phase}`} className="choices-enter">
+            {choiceArea}
           </div>
-          {/* 4.g.v: the way back to Day 1 was a whisper in the corner. */}
-          <button
-            onClick={backToTitle}
-            className="px-10 py-3 bg-gold-dim border border-gold text-bg font-serif text-base rounded-sm hover:bg-gold transition-all"
-          >
-            {ui.app.restart}
-          </button>
-        </div>
-      ) : pendingInput ? (
-        <div className="shrink-0">
-          <NameInput
-            spec={pendingInput}
-            onSubmit={(name) => dispatch({ type: 'SET_PLAYER_NAME', name })}
-          />
-        </div>
-      ) : isNarrativeOnly ? (
-        <div className="bg-bg-card border border-game-border rounded-sm px-4 py-3 h-52 shrink-0 flex items-center justify-center">
-          <button
-            onClick={() => dispatch({ type: 'ADVANCE_DAY_EVENT' })}
-            className="px-8 py-2.5 border border-gold-dim text-cream font-serif text-sm rounded-sm hover:bg-bg-hover hover:border-gold transition-all"
-          >
-            {ui.app.continue}
-          </button>
-        </div>
-      ) : (
-        <div key={`${state.day}-${state.phase}`} className="choices-enter shrink-0">
-          <ChoicePanel
-            choices={state.currentChoices}
-            onChoice={(id) => dispatch({ type: 'MAKE_CHOICE', choiceId: id })}
-          />
-        </div>
-      )}
+        </ScenePanel>
+      </div>
+
+      {/* Right: the estate's readouts. */}
+      <div className="w-64 shrink-0">
+        <StatusPanel state={state} />
+      </div>
 
       {savesOpen && (
         <SaveMenu

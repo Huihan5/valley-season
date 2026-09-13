@@ -7,11 +7,11 @@ import { fill, plural } from '../../utils/text';
 const ui = DATA.ui;
 
 /**
- * The record, which used to show the last four lines and let everything older
- * fall off the bottom (PlaytestFeedback 2.g.i). Collapsed it is one line tall and
- * stays put; opened it lifts over the scene and holds the whole season, scrolled
- * to the end, because the thing a player wants is usually the thing just before
- * the thing they are looking at.
+ * The record, its own card at the bottom-left of the season (UI direction B),
+ * moved out from between the prose and the choices so the reader no longer crosses
+ * history to answer the beat in front of them. Collapsed it shows the last two
+ * lines; opened it holds the whole season, scrolled to the end, because the thing
+ * a player wants is usually the thing just before the thing they are looking at.
  */
 export default function LogDrawer({ log }: { log: LogEntry[] }) {
   const [open, setOpen] = useState(false);
@@ -28,7 +28,7 @@ export default function LogDrawer({ log }: { log: LogEntry[] }) {
   const shown = open ? log : log.slice(-2);
 
   return (
-    <div className="border-t border-game-border shrink-0">
+    <div className="bg-bg-card border border-game-border rounded-sm overflow-hidden shrink-0">
       <button
         onClick={() => setOpen(!open)}
         className="w-full flex items-center justify-between px-5 py-2 hover:bg-bg-hover transition-colors"

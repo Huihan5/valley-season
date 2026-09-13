@@ -43,6 +43,28 @@ export function hasEstimatedYield(choice: Choice): boolean {
 }
 
 /**
+ * Which daily tab a free action belongs under, for the narrative-first layout's
+ * 劳作 / 往来 / 休整 grouping (UI direction B). 采蘑菇 / 办公室文书 stay under 劳作
+ * despite the talk they earn — they are work first (author's call). The forge-chapel
+ * is a call on 洛伦茨 the night he keeps the vigil (it carries a conversation), and
+ * plain meditation any other night. 往来 holds the actions whose whole point is a
+ * person — talking to 玛莎, lending a hand at 格雷格's stable, calling on 洛伦茨 —
+ * none of which produce anything but the relationship.
+ */
+export type ChoiceCategory = 'labor' | 'social' | 'rest';
+
+const SOCIAL_IDS = new Set(['talk_gregor', 'talk_marta', 'help_horses', 'visit_lorenz']);
+
+export function getChoiceCategory(choice: Choice): ChoiceCategory {
+  const id = choice.id;
+  if (id.startsWith('fragment_')) return 'social';
+  if (SOCIAL_IDS.has(id)) return 'social';
+  if (id === 'visit_chapel') return choice.effects?.conversationWith ? 'social' : 'rest';
+  if (id === 'rest') return 'rest';
+  return 'labor';
+}
+
+/**
  * The resource chips for a choice, in a fixed order. A judgment choice (no
  * microcopy) returns none — spelling out its effect would give the answer away
  * (GDD 11.6) — so callers should only chip choices that already carry a description.

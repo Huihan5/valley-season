@@ -1,14 +1,25 @@
+import { useState } from 'react';
 import { Choice } from '../../types/game';
-import { getEffectChips, hasEstimatedYield } from '../../systems/ChoicePreview';
+import {
+  getEffectChips, hasEstimatedYield, getChoiceCategory, ChoiceCategory,
+} from '../../systems/ChoicePreview';
 import DATA from '../../data';
 
-const ui = DATA.ui;
+const C = DATA.ui.choicePanel;
 
 /**
- * These are shown in the left-hand estate panel at desktop width (D5), so the bottom
- * panel hides them from `lg` up to avoid listing the same action twice. Below `lg`
- * the sidebar is hidden, so they stay here and remain reachable.
+ * UI direction B (narrative-first): the choices live inline under the prose and
+ * scroll with it, in one of two shapes. A day's own actions are a compact,
+ * categorised grid — 劳作 / 往来 / 休整, each card showing its time and cost — so a
+ * player can find the thing they meant to do. An event's answers are a single
+ * column of full sentences, because there the point is reading the difference
+ * between them, not scanning a shelf. The reducer sees the same `Choice[]` either
+ * way; only the presentation changes with the state.
  */
+
+/** Estate tasks and the market trip already live in the left panel at desktop
+ *  width, so hide their duplicates here from `lg` up (they return below `lg`,
+ *  where the sidebar is gone). */
 const delegatedToSidebar = (id: string) => id.startsWith('task_') || id === 'go_to_market';
 
 /** Costs read rust, gains read gold — the estate's own two colours (D11/P7). */
@@ -29,65 +40,135 @@ function EffectChips({ choice }: { choice: Choice }) {
   );
 }
 
+/** The microcopy under a choice: a blocked reason, or the cost/description. Harvest
+ *  and felling hide their yield behind a tier word, tinted to still read as a gain. */
+function ChoiceNote({ choice, locked }: { choice: Choice; locked: boolean }) {
+  const note = choice.disabled && choice.disabledReason ? choice.disabledReason : choice.description;
+  if (!note) return null;
+  const gainHint = !choice.disabled && !locked && hasEstimatedYield(choice);
+  return <p className={`text-xs leading-snug ${gainHint ? 'text-gold-dim' : 'text-game-dim'}`}>{note}</p>;
+}
+
+const buttonClass = (off: boolean) => `group text-left rounded-sm border transition-all ${
+  off
+    ? 'border-game-border bg-bg text-game-dim cursor-not-allowed opacity-50'
+    : 'border-game-border bg-bg hover:bg-bg-hover hover:border-gold hover:shadow-[inset_0_0_0_1px_rgba(196,163,90,0.35)] active:bg-bg-warm active:translate-y-px cursor-pointer'
+}`;
+
 interface Props {
   choices: Choice[];
+  mode: 'daily' | 'event';
   onChoice: (choiceId: string) => void;
   locked?: boolean;
 }
 
-export default function ChoicePanel({ choices, onChoice, locked = false }: Props) {
-  // The box keeps its height whatever the day offers (PlaytestFeedback 2.g): a
-  // market afternoon with nine choices must not push the record up the screen,
-  // and a single 继续 must not let it drop. Overflow scrolls inside the box.
-  const frame = 'bg-bg-card border border-game-border rounded-sm px-4 py-3 h-52 flex flex-col';
-
+export default function ChoicePanel({ choices, mode, onChoice, locked = false }: Props) {
   if (choices.length === 0) {
-    return (
-      <div className={`${frame} items-center justify-center`}>
-        <span className="text-game-dim text-sm italic">…</span>
-      </div>
-    );
+    return <p className="text-game-dim text-sm italic">…</p>;
   }
+  return mode === 'event'
+    ? <EventChoices choices={choices} onChoice={onChoice} locked={locked} />
+    : <DailyChoices choices={choices} onChoice={onChoice} locked={locked} />;
+}
+
+// ── Event: a column of full sentences ───────────────────────────────────────
+
+function EventChoices({ choices, onChoice, locked }: Omit<Props, 'mode'> & { locked: boolean }) {
+  return (
+    <div>
+      <p className="text-cream-dim text-xs tracking-wider mb-3">{C.eventHeading}</p>
+      <div className="space-y-2 max-w-[46rem]">
+        {choices.map((choice, i) => {
+          const off = locked || !!choice.disabled;
+          return (
+            <button
+              key={choice.id}
+              onClick={() => !off && onChoice(choice.id)}
+              disabled={off}
+              className={`${buttonClass(off)} w-full flex items-start gap-3 px-4 py-3`}
+            >
+              <span className={`shrink-0 mt-0.5 w-5 h-5 flex items-center justify-center rounded-sm border text-[11px] tabular-nums ${
+                off ? 'border-game-border text-game-dim' : 'border-gold-dim/50 text-gold-dim group-hover:border-gold group-hover:text-gold'
+              }`}>
+                {i + 1}
+              </span>
+              <span className="flex-1 min-w-0">
+                <p className={`text-sm font-serif ${off ? 'text-game-dim' : 'text-cream group-hover:text-gold'}`}>
+                  {choice.text}
+                </p>
+                <ChoiceNote choice={choice} locked={locked} />
+                {!choice.disabled && choice.description ? <EffectChips choice={choice} /> : null}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// ── Daily: a categorised grid ───────────────────────────────────────────────
+
+const CATS: { key: ChoiceCategory; label: string }[] = [
+  { key: 'labor', label: C.tabLabor },
+  { key: 'social', label: C.tabSocial },
+  { key: 'rest', label: C.tabRest },
+];
+
+function DailyChoices({ choices, onChoice, locked }: Omit<Props, 'mode'> & { locked: boolean }) {
+  const byCat: Record<ChoiceCategory, Choice[]> = { labor: [], social: [], rest: [] };
+  choices.forEach((c) => byCat[getChoiceCategory(c)].push(c));
+  // Open on the first tab that has anything — the component remounts each phase
+  // (keyed on day+phase in App), so this re-picks as the day's actions change.
+  const [tab, setTab] = useState<ChoiceCategory>(CATS.find((c) => byCat[c.key].length > 0)?.key ?? 'labor');
+  const shown = byCat[tab];
 
   return (
-    <div className={frame}>
-      <p className="text-cream-dim text-xs tracking-wider mb-3 shrink-0">{ui.choicePanel.heading}</p>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 overflow-y-auto pr-1 content-start">
-        {choices.map((choice) => (
-          <button
-            key={choice.id}
-            onClick={() => !locked && !choice.disabled && onChoice(choice.id)}
-            disabled={locked || choice.disabled}
-            className={`
-              group text-left px-4 py-3 rounded-sm border transition-all
-              ${delegatedToSidebar(choice.id) ? 'lg:hidden' : ''}
-              ${choice.disabled || locked
-                ? 'border-game-border bg-bg text-game-dim cursor-not-allowed opacity-50'
-                : 'border-game-border bg-bg hover:bg-bg-hover hover:border-gold hover:shadow-[inset_0_0_0_1px_rgba(196,163,90,0.35)] active:bg-bg-warm active:translate-y-px cursor-pointer'
-              }
-            `}
-          >
-            <p className={`text-sm font-serif mb-0.5 ${choice.disabled || locked ? 'text-game-dim' : 'text-cream group-hover:text-gold'}`}>
-              {choice.text}
-            </p>
-            {(() => {
-              // Judgment choices carry no microcopy at all — no empty line either.
-              const note = choice.disabled && choice.disabledReason
-                ? choice.disabledReason
-                : choice.description;
-              // Harvest and felling hide their yield behind a tier word; give that
-              // word a pale gold so the line still reads as a gain (D11 polish).
-              const gainHint = !choice.disabled && !locked && hasEstimatedYield(choice);
-              return note ? (
-                <p className={`text-xs leading-snug ${gainHint ? 'text-gold-dim' : 'text-game-dim'}`}>{note}</p>
-              ) : null;
-            })()}
-            {/* Colour-coded cost/gain — only where the choice already explains itself,
-                so event judgment choices (no microcopy) stay bare (D11/P7). */}
-            {!choice.disabled && choice.description ? <EffectChips choice={choice} /> : null}
-          </button>
-        ))}
+    <div>
+      <p className="text-cream-dim text-xs tracking-wider mb-2">{C.dailyHeading}</p>
+      <div className="flex items-center gap-5 border-b border-game-border mb-3">
+        {CATS.map((c) => {
+          const active = c.key === tab;
+          const count = byCat[c.key].length;
+          return (
+            <button
+              key={c.key}
+              onClick={() => count && setTab(c.key)}
+              disabled={!count}
+              className={`pb-1.5 -mb-px text-xs font-serif tracking-wide border-b-2 transition-colors ${
+                active ? 'border-gold text-gold'
+                  : count ? 'border-transparent text-game-dim hover:text-cream cursor-pointer'
+                    : 'border-transparent text-game-border cursor-default'
+              }`}
+            >
+              {c.label}
+            </button>
+          );
+        })}
       </div>
+      {shown.length === 0 ? (
+        <p className="text-game-dim text-xs italic py-2">{C.tabEmpty}</p>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-w-[46rem]">
+          {shown.map((choice) => {
+            const off = locked || !!choice.disabled;
+            return (
+              <button
+                key={choice.id}
+                onClick={() => !off && onChoice(choice.id)}
+                disabled={off}
+                className={`${buttonClass(off)} px-4 py-3 ${delegatedToSidebar(choice.id) ? 'lg:hidden' : ''}`}
+              >
+                <p className={`text-sm font-serif mb-0.5 ${off ? 'text-game-dim' : 'text-cream group-hover:text-gold'}`}>
+                  {choice.text}
+                </p>
+                <ChoiceNote choice={choice} locked={locked} />
+                {!choice.disabled && choice.description ? <EffectChips choice={choice} /> : null}
+              </button>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }
