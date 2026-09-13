@@ -10,7 +10,14 @@
 >
 > ---
 > ## 🔖 恢复点（compact 之后从这里继续）
-> 阶段一、二已全部完成并 commit。**下一步是阶段三（D2 文本精简）**：目标是压一压偏长的重复性文本（location 基底/act 变体、行动结果、事件正文），不动机制、不改叙事事实，zh/en 成对改，改完 `tsc` + `npm test`（尤其 `Localization.test.ts` 的键对齐）+ 浏览器抽查 + 更新 CHANGELOG，最后 commit。开始前先和作者确认精简的**幅度与优先顺序**（作者早前说"目前 playthrough 比预想长，需要精简但不必大幅"）。
+>
+> **2026-09-13 追加（本轮几件事，都已完成/在途，见下）：**
+> - ✅ **霜冻→收成（忠实版）已实现+实测+push**（`8424f66`）。立田存粮 `flags.fieldGrain`（开局 `HARVESTABLE_TOTAL=150`，作者定，GDD ch.5.4 已同步 140→150）；收割扣田、收完退场；`getFrostDayEndLoss` 霜冻日按 `FROST_LOSS_RATE=0.1` 折损剩余；状态栏"田间待收"（霜冻天显霜蓝）。全库 **540 测试绿**。详见 `docs/CHANGELOG.md` 顶部 2026-09-13 条。
+> - ✅ **Git 凭证泄露已处理**：remote URL 内嵌 token 已清、配了 Git Credential Manager、清掉 Windows 凭据管理器里那条过期的 `GitHub for Visual Studio` 记录、作者已浏览器登录成功、push 正常。（这些是仓库/机器层面，不进 CHANGELOG。）
+> - ✅ **盲测交付包已备**：`../valley-season-blind-playtest-2026-09-13/`（code.zip 无剧透 + design-reference 存 docs/；另有全量 `../valley-season-src.zip` 含 docs，勿发测试者）。
+> - 🟡 **UI 版面方向待作者拍板**：三套版面 A(三栏精修)/B(叙事优先单栏)/C(叙事+账册) 做成了 Claude Design 画布 `https://claude.ai/code/artifact/b096bd73-17b8-4dfd-baa9-eee5e320e4ce`（另有静态稿 `5ca99bc2-...`）。作者选定后：把最终版做进主画板、其余挪走；再落到真实组件。**这是当前最主要的开放线程。**
+>
+> **阶段三（D2 文本精简）** 仍未开始：压偏长的重复性文本（location 基底/act 变体、行动结果、事件正文），不动机制、不改叙事事实，zh/en 成对改，改完 `tsc` + `npm test`（尤其 `Localization.test.ts` 键对齐）+ 浏览器抽查 + 更新 CHANGELOG，最后 commit。开始前先和作者确认**幅度与优先顺序**（作者：playthrough 偏长，需精简但不必大幅）。作者倾向文本自己动手，我做"打靶/工具/非文字减负"那部分。
 > ---
 > 分两大阶段：**先修 playtest 暴露的问题（机制/平衡），再强化 UI**。不擅自扩范围、不动核心玩法。
 > 文中 ★ = **仍需你拍板的小点**（已给默认建议）；⚑ = **要同步改 GDD ch.5**（改前会再找你确认）。
