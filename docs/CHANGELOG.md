@@ -1,5 +1,29 @@
 # Valley Season — Changelog
 
+## [2026-09-13] — 盲测反馈四则：三处接线 bug + 玛格丽特线索闸门
+
+外部盲测者报了三处"文档意图与代码不符"，并追问晚宴礼物的设计意图。逐条核到代码，四条都成立——三条是真 bug，第四条是闸门接错了变量（违背 GDD 5.5 §4.5 的明写意图）。全库 **546 绿**，tsc 干净。
+
+### Fixed
+- **清仓后收割不升级**（`ResourceSystem.getHarvestYield`）。清仓任务写 `storageCleared`，但产出判的是从未被写入的 `flags.toolsAndStorage`，第二档 5→6 因此永远够不到（清仓当时只抬了粮仓上限）。改判 `storageCleared`。旧测试用假 flag `toolsAndStorage:true` 测映射、绕过真实任务链才漏掉，一并改成走 `storageCleared`。
+- **固定事件付费选项不看钱包**（`EventSystem.markUnaffordableChoices` + `App.enterEvent`）。Day 10「五户全修」（40 金卢 / 10 木材）等 JSON 选项不像庄园事务会自我把关，破产也能点、缺口 clamp 到 0、奖励照拿，架空了 GDD 说的预算压力。现对任一事件选项：guldmark/timber 成本超出持有即禁用，复用庄园事务的"不足"文案。
+- **下午拜访洛伦茨就白给炉堂碎片**（`EventSystem.getFreeChoices`）。下午 `visit_lorenz` 曾无条件调 `getLorenzChapelExtra` 并把 `clue_mot_lorenz_question` 并入效果，与它自己的注释、GDD 5.5（line 714）"下午只计信任不给碎片"都矛盾，架空了周四守夜的取舍。下午改为只计交谈信任；碎片交回周四守夜（晚间）与 Day 21 猎场。
+
+### Changed
+- **玛格丽特线索改判合计闸门**（`EventSystem.processHuntLorenz`）。原判 `nobleTrust ≥ 2`，而礼物只加 `relationships.marguerite`（独立轴），于是"带礼物"对解锁线索毫无作用——与 GDD 5.5 §4.5"+2 晚宴礼物单步即够到解锁线 2"的明写意图相悖。改为 `nobleTrust + getTrust(marguerite) ≥ 2`：纯社交路线（贵族信任 2）与礼物路线（玛格丽特 +2）各自都能过，一次得体 + 一份礼物也能过。阈值 2 不变（`MARGUERITE_FRAGMENT_TRUST`），只是改判在两者之和上。
+
+### Tests
+- `EventSystem.test`：`markUnaffordableChoices` 三条（金卢不足 / 木材不足 / 付得起且不碰免费选项）。
+- `EstateTaskSystem.test`：下午拜访洛伦茨"只计信任、绝不给碎片"；收割梯度改走真实 `storageCleared`。
+- `ClueSystem.test`：碎片"随周四守夜给出"（改自误挂下午的旧断言）+ "下午不漏碎片"。
+- `HuntSeason.test`：玛格丽特线索的合计闸门（社交路线 / 礼物路线 / 一次得体+礼物 / 之和不足则不给）。
+
+### Docs
+- GDD 5.5（line 684）/ 9.3（line 1017）措辞更新为"贵族信任与玛格丽特个人信任之和 ≥ 2"，与本次合计闸门一致，并与 §4.5"伴手礼单步够到"自洽（作者批准）。结局三仍用贵族信任单独判（`NOBLE_TRUST_ENDING3_MIN`，未动）。
+
+### 悬置：贵族信任的第二次机会（边界纠纷）
+GDD 5.5 列贵族信任"三次机会"含"Day 15 之后·边界纠纷中尊重历史 +1"，但当前构建的边界链（Day 13/15）整条只产出公务员（蒂埃里）线索，**没有与玛格丽特谈判、可挂 nobleTrust +1 的结算节点**——它属于 GDD 1280"上门拜访棘墙"那块尚未实现的内容。因此贵族信任实际最高只到 2（晚宴 + Day 18 猎场），"容错一次"不成立。补齐需新建一段棘墙边界戏（玛格丽特声音、"尊重历史/不自作聪明"二选一 → 得体 +1），属叙事新增，待作者定写法后再做。
+
 ## [2026-09-13] — 霜冻真正影响收成（补上未实现的核心机制）
 
 设定里"霜冻影响收成"一直没落地：霜冻天气会发生（第 22 日强制、中后期 10%/25%），但 `WEATHER_HARVEST_MOD.frost=0` 且 `applyHarvestWeather()` 是块没人调用的空壳。现按 GDD ch.5.4 忠实实现"抢收"张力。

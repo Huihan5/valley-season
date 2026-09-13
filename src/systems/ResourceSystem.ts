@@ -117,7 +117,10 @@ export function getHarvestYield(state: GameState): number {
   const flags = state.flags;
   let base = 3; // unprepared
   if (flags.fullyPrepared) base = 7;
-  else if (flags.toolsAndStorage) base = 6;
+  // Clearing the storeroom is the second rung. The task writes storageCleared
+  // (which also lifts the grain cap); the old read of a never-written
+  // toolsAndStorage flag left this rung dead, capping a prepared steward at 5.
+  else if (flags.storageCleared) base = 6;
   else if (flags.toolsRepaired) base = 5;
 
   const weatherMod = WEATHER_HARVEST_MOD[state.weather] ?? 0;

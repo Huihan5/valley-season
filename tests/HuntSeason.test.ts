@@ -261,12 +261,26 @@ describe('the tree, and what people decide to tell you', () => {
     expect(again.sceneText).not.toContain('是不是错得越多');
   });
 
-  it('gives 玛格丽特 fragment in the carriage, at 贵族信任 2', () => {
+  it('gives 玛格丽特 fragment when noble trust and her regard together reach 2', () => {
     expect(tree().sceneText).not.toContain('这就是那个问题');
-    const carriage = tree({}, {}, 2);
-    expect(carriage.sceneText).toContain('他是个好管家');
-    expect(carriage.sceneText).toContain('这就是那个问题');
-    expect(carriage.onEnterEffects?.flags?.clue_nob_marguerite).toBe(true);
+
+    // Pure social standing: two decorous occasions, no gift.
+    const bystanding = tree({}, {}, 2);
+    expect(bystanding.sceneText).toContain('他是个好管家');
+    expect(bystanding.sceneText).toContain('这就是那个问题');
+    expect(bystanding.onEnterEffects?.flags?.clue_nob_marguerite).toBe(true);
+
+    // The gift alone reaches it — the +2 dinner gift was written to do exactly this.
+    expect(tree({}, { marguerite: 2 }, 0).onEnterEffects?.flags?.clue_nob_marguerite).toBe(true);
+
+    // One decorous occasion made good by the gift also clears the bar.
+    expect(tree({}, { marguerite: 1 }, 1).onEnterEffects?.flags?.clue_nob_marguerite).toBe(true);
+  });
+
+  it('withholds 玛格丽特 fragment when the two together fall short', () => {
+    const shy = tree({}, { marguerite: 1 }, 0);
+    expect(shy.sceneText).not.toContain('这就是那个问题');
+    expect(shy.onEnterEffects?.flags?.clue_nob_marguerite).toBeUndefined();
   });
 
   it('does not hand out the carriage twice', () => {

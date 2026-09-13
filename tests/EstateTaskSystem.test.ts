@@ -52,7 +52,8 @@ describe('the efficiency ladder is climbable', () => {
   it('rises one rung at a time as the flags land', () => {
     const rate = (flags: FlagMap) => getHarvestYield(makeState({ flags }));
     expect(rate({ toolsRepaired: true })).toBe(HARVEST_YIELD.toolsRepaired);
-    expect(rate({ toolsRepaired: true, toolsAndStorage: true })).toBe(HARVEST_YIELD.toolsAndStorage);
+    // The clear-storage rung reads the flag the task actually writes, storageCleared.
+    expect(rate({ toolsRepaired: true, storageCleared: true })).toBe(HARVEST_YIELD.toolsAndStorage);
     expect(rate({ fullyPrepared: true })).toBe(HARVEST_YIELD.fullyPrepared);
   });
 
@@ -264,5 +265,23 @@ describe('the Thursday vigil', () => {
     })).find(c => c.id === 'visit_chapel');
     expect(later?.effects?.relationships).toBeUndefined();
     expect(later?.effects?.conversationWith).toBe('lorenz');
+  });
+});
+
+describe('the afternoon call on 洛伦茨', () => {
+  const visit = (trust: number) =>
+    getFreeChoices(makeState({
+      day: 12, phase: 'afternoon',
+      relationships: { ...ZERO, lorenz: trust },
+      flags: { unlockForgeChapel: true },
+    })).find(c => c.id === 'visit_lorenz');
+
+  it('pays conversational trust but never hands over a fragment, however high his trust', () => {
+    const trusted = visit(4);
+    expect(trusted?.effects?.conversationWith).toBe('lorenz');
+    // The fragments belong to the Thursday vigil and the Day 21 tree, not the daytime visit.
+    expect(trusted?.effects?.flags).toEqual({ lorenzFirstVisitDone: true });
+    expect(trusted?.effects?.flags?.clue_mot_lorenz_question).toBeUndefined();
+    expect(trusted?.resultText).toBeUndefined();
   });
 });

@@ -3,7 +3,9 @@ import { GameState, Choice, ChoiceEffects, EventData, NpcId } from './types/game
 import { generateWeather } from './systems/WeatherSystem';
 import { nextPhase, isDemoComplete } from './systems/TimeSystem';
 import { applyDailyOperatingCost, clampResources, getInsolvencyEffects } from './systems/ResourceSystem';
-import { getFreeChoices, getFixedEvent, getEventById, getDayEndEffects } from './systems/EventSystem';
+import {
+  getFreeChoices, getFixedEvent, getEventById, getDayEndEffects, markUnaffordableChoices,
+} from './systems/EventSystem';
 import { rollRandomEvent, getPendingRandomEvent, markEventDay } from './systems/RandomEventSystem';
 import { determineEnding, getEndingData, composeEnding, EndingId } from './systems/EndingSystem';
 import {
@@ -110,8 +112,12 @@ function enterEvent(state: GameState, event: EventData): GameState {
     ...entered,
     currentSceneText: interpolate(event.sceneText, state),
     // Filtered against the flags the event itself just set: an event may decide
-    // on arrival which of its choices exist at all.
-    currentChoices: filterChoicesByFlags(event.choices ?? [], entered.flags),
+    // on arrival which of its choices exist at all. Then a paid choice the player
+    // cannot cover is disabled rather than silently sold at a discount.
+    currentChoices: markUnaffordableChoices(
+      filterChoicesByFlags(event.choices ?? [], entered.flags),
+      entered.resources,
+    ),
   };
 }
 

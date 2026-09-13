@@ -1,5 +1,5 @@
 import {
-  GameState, Choice, ChoiceEffects, DayPhase, EventData, EventTiming, FlagMap,
+  GameState, Choice, ChoiceEffects, DayPhase, EventData, EventTiming, FlagMap, Resources,
 } from '../types/game';
 import { canHarvest, canFellTimber } from './WeatherSystem';
 import {
@@ -255,7 +255,12 @@ function processHuntLorenz(event: EventData, state: GameState): EventData {
     if (!repeat) flags.clue_mot_lorenz_question = true;
   }
 
-  if (state.nobleTrust >= MARGUERITE_FRAGMENT_TRUST && !state.flags.clue_nob_marguerite) {
+  // GDD 5.5: 玛格丽特 is the gatekeeper of the noble axis, and the gift brought to
+  // her is one of the ways onto it (the +2 dinner gift was written to reach this
+  // line on its own, GDD §4.5). Her clue opens on the two together — the standing
+  // the season granted the steward, plus the regard she personally holds for them.
+  const margueriteRegard = state.nobleTrust + getTrust(state, 'marguerite');
+  if (margueriteRegard >= MARGUERITE_FRAGMENT_TRUST && !state.flags.clue_nob_marguerite) {
     parts.push(v.marguerite);
     flags.clue_nob_marguerite = true;
   }
@@ -585,6 +590,30 @@ function getMarketAfternoonChoices(state: GameState): Choice[] {
   });
 
   return choices;
+}
+
+/**
+ * A fixed event's paid choices are authored in JSON and do not gate themselves the
+ * way the estate tasks do, so a player could once pick 五户全修 (40 金卢 / 10 木材)
+ * with an empty purse: the shortfall clamped to zero and every reward still landed.
+ * Any event choice whose guldmark or timber cost outruns what the steward is holding
+ * is disabled, with the same 不足 microcopy the standing tasks use.
+ */
+export function markUnaffordableChoices(choices: Choice[], resources: Resources): Choice[] {
+  const T = A.estateTasks;
+  return choices.map((choice) => {
+    if (choice.disabled) return choice; // already gated by the event itself
+    const cost = choice.effects ?? {};
+    const needGuldmark = cost.guldmark && cost.guldmark < 0 ? -cost.guldmark : 0;
+    const needTimber = cost.timber && cost.timber < 0 ? -cost.timber : 0;
+    if (needGuldmark > resources.guldmark) {
+      return { ...choice, disabled: true, disabledReason: fill(T.shortGuldmark, { n: needGuldmark }) };
+    }
+    if (needTimber > resources.timber) {
+      return { ...choice, disabled: true, disabledReason: fill(T.shortTimber, { n: needTimber }) };
+    }
+    return choice;
+  });
 }
 
 export function getFreeChoices(state: GameState): Choice[] {
@@ -943,20 +972,20 @@ export function getFreeChoices(state: GameState): Choice[] {
     // call is his working day and pays conversational trust only — the fragments
     // belong to the Thursday vigil (brief appendix 六).
     if (flags.unlockForgeChapel) {
-      // He does not hand anything over on a schedule. If he has decided the player
-      // is worth telling, the visit is where it happens (drafts 2.4, 2.5).
-      const extra = getLorenzChapelExtra(state);
+      // The afternoon call is his working day: it pays conversational trust only.
+      // The fragments he decides to give belong to the Thursday vigil and the Day 21
+      // tree (GDD 5.5 / brief appendix 六) — an ordinary daytime visit must not hand
+      // them over, or the vigil's trade-off against everything else collapses.
       choices.push({
         id: 'visit_lorenz',
         text: A.visitLorenz.text,
         description: A.visitLorenz.description,
         effects: {
           conversationWith: 'lorenz',
-          flags: { lorenzFirstVisitDone: true, ...extra?.flags },
+          flags: { lorenzFirstVisitDone: true },
           nextScene: 'forge_chapel',
-          logEntry: extra?.logEntry ?? A.visitLorenz.log,
+          logEntry: A.visitLorenz.log,
         },
-        ...(extra ? { resultText: extra.resultText } : {}),
       });
     }
 

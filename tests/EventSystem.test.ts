@@ -1,5 +1,8 @@
 import { describe, it, expect } from 'vitest';
-import { getFixedEvent, getFreeChoices, getEventById, getDayEndEffects } from '../src/systems/EventSystem';
+import {
+  getFixedEvent, getFreeChoices, getEventById, getDayEndEffects, markUnaffordableChoices,
+} from '../src/systems/EventSystem';
+import { Choice } from '../src/types/game';
 import { determineEnding } from '../src/systems/EndingSystem';
 import { GameState } from '../src/types/game';
 import { BROKER, HARVESTABLE_TOTAL, FROST_LOSS_RATE } from '../src/data/config';
@@ -47,6 +50,36 @@ describe('getFixedEvent — basic lookup', () => {
     const event = getFixedEvent(3, 'afternoon', makeState({ day: 3 }));
     expect(event?.id).toBe('day3_ledger');
     expect(event?.forced).toBe(true);
+  });
+});
+
+// ── markUnaffordableChoices ────────────────────────────────────────────────
+
+describe('a paid event choice the player cannot cover', () => {
+  const repairAll: Choice = {
+    id: 'repair_all', text: '五户全修', description: '',
+    effects: { guldmark: -40, timber: -10, renown: 2 },
+  };
+  const free: Choice = { id: 'repair_none', text: '推到秋收之后', description: '', effects: { renown: -2 } };
+
+  it('is disabled when the purse falls short', () => {
+    const [gated] = markUnaffordableChoices([repairAll], { grain: 0, guldmark: 1, timber: 10, renown: 0 });
+    expect(gated.disabled).toBe(true);
+    expect(gated.disabledReason).toContain('金卢不足');
+  });
+
+  it('is disabled when the timber falls short even if the coin is there', () => {
+    const [gated] = markUnaffordableChoices([repairAll], { grain: 0, guldmark: 99, timber: 3, renown: 0 });
+    expect(gated.disabled).toBe(true);
+    expect(gated.disabledReason).toContain('木材不足');
+  });
+
+  it('stays takeable once both are covered, and never touches a free choice', () => {
+    const [paid, none] = markUnaffordableChoices(
+      [repairAll, free], { grain: 0, guldmark: 40, timber: 10, renown: 0 },
+    );
+    expect(paid.disabled).toBeUndefined();
+    expect(none.disabled).toBeUndefined();
   });
 
   it('returns null for a day with no fixed event', () => {

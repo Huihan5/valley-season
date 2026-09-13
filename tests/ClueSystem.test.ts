@@ -173,22 +173,28 @@ describe('洛伦茨 says his piece because the player came, not because they ask
     expect(getLorenzChapelExtra(after)?.resultText).not.toContain('我这一行不该靠猜');
   });
 
-  it('rides the forge-hall visit rather than an action of its own', () => {
-    const afternoon = getFreeChoices(makeState({
-      phase: 'afternoon',
-      relationships: { ...ZERO, lorenz: 3 },
-      flags: { unlockForgeChapel: true },
-    })).find(c => c.id === 'visit_lorenz');
-    expect(afternoon?.effects?.flags?.clue_mot_lorenz_question).toBe(true);
-    expect(afternoon?.resultText).toContain('霍特曼也是');
-
-    // Day 11 is a Thursday: he keeps the vigil, so the night visit works too.
+  it('rides the Thursday vigil rather than an action of its own', () => {
+    // Day 11 is a Thursday: he keeps the vigil, and the piece comes because the
+    // player sat with him — not from a dedicated "ask 洛伦茨" action.
     const vigil = getFreeChoices(makeState({
       day: 11,
       relationships: { ...ZERO, lorenz: 3 },
       flags: { unlockForgeChapel: true },
     })).find(c => c.id === 'visit_chapel');
     expect(vigil?.effects?.flags?.clue_mot_lorenz_question).toBe(true);
+    expect(vigil?.resultText).toContain('霍特曼也是');
+  });
+
+  it('does not slip the fragment into an ordinary afternoon call', () => {
+    // The afternoon visit pays conversational trust only (GDD 5.5): the fragment
+    // is reserved for the vigil, or it would undercut the reason to keep it.
+    const afternoon = getFreeChoices(makeState({
+      phase: 'afternoon',
+      relationships: { ...ZERO, lorenz: 3 },
+      flags: { unlockForgeChapel: true },
+    })).find(c => c.id === 'visit_lorenz');
+    expect(afternoon?.effects?.flags?.clue_mot_lorenz_question).toBeUndefined();
+    expect(afternoon?.resultText).toBeUndefined();
   });
 
   it('gives nothing on a night he is not there', () => {

@@ -148,6 +148,8 @@ export const POSITION_LINE_COMPLETE = 4; // 格雷格 three plus 蒂埃里 cross
 
 // Fragments that need someone to have decided you are worth telling (GDD 5.5, 9.1).
 export const LORENZ_FRAGMENT_TRUST = 3;
+// 玛格丽特's clue opens on 贵族信任 + her own regard, taken together (GDD 5.5: she is
+// the axis's gatekeeper, and the +2 dinner gift was written to reach this on its own).
 export const MARGUERITE_FRAGMENT_TRUST = 2;
 export const LORENZ_WHY_TRUST = 4;         // he explains why he broke his own rule
 
