@@ -40,6 +40,7 @@
       "id": "stumps_dont_know",
       "text": "Honestly, I cannot read it. Whether this is over the line, I cannot say",
       "effects": {
+        "nobleTrust": 1,
         "flags": { "thierryDay15": "C", "clue_ofc_thierry_declaration": true },
         "logEntry": "You told the forester you could not judge whether it was over the line."
       },

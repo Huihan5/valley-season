@@ -99,6 +99,16 @@ describe('the forester wants the opposite of what the inspector wants', () => {
     expect(paying.map(c => c.id)).toEqual(['stumps_dont_know']);
   });
 
+  it('is also the boundary chance at 贵族信任: not overreaching reads as 得体', () => {
+    // GDD 5.5: the second of the three noble-trust occasions is handling the
+    // boundary without being a smart-aleck. The restrained answer earns +1; the
+    // land-grab accusation earns nothing.
+    const choices = site().choices ?? [];
+    expect(choices.find(c => c.id === 'stumps_dont_know')?.effects?.nobleTrust).toBe(1);
+    expect(choices.find(c => c.id === 'stumps_accuse')?.effects?.nobleTrust).toBeUndefined();
+    expect(choices.find(c => c.id === 'stumps_internal')?.effects?.nobleTrust).toBeUndefined();
+  });
+
   it('gives the measured diameters against the declared ceiling', () => {
     const answer = site().choices?.find(c => c.id === 'stumps_dont_know');
     expect(answer?.resultText).toContain('胸径上限是三十');

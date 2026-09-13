@@ -40,6 +40,7 @@
       "id": "stumps_dont_know",
       "text": "说实话我看不懂。这算不算越界，我判断不了",
       "effects": {
+        "nobleTrust": 1,
         "flags": { "thierryDay15": "C", "clue_ofc_thierry_declaration": true },
         "logEntry": "你告诉林务官，这算不算越界你判断不了。"
       },
