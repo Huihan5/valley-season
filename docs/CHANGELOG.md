@@ -1,5 +1,22 @@
 # Valley Season — Changelog
 
+## [2026-09-13] — 界面改版：正文内嵌选择（版面 B）
+
+从 A/B/C 三版探索中，作者选定 **B · 正文内嵌选择**：选择离开独立的底部面板，落到正文之后、随正文滚动，让玩家在"读"里做决定，而不是在下方的操作条上点。逻辑层未动，`currentChoices` 照旧，只是呈现随状态切换。浏览器双态实测通过，全库 **547 绿**，tsc 干净。
+
+### Changed
+- **选择内嵌中栏**（`ScenePanel` 接 `children`）：紧接最后一段正文、同一滚动区内。去掉原底部定高选项条。
+- **`ChoicePanel` 按 `mode` 自适应**：日常＝分类紧凑卡片（tab 劳作/往来/休整，显示时段与成本）；事件＝纵向带序号的完整句子、可换行。
+- **记录移出正文与选项之间**（`LogDrawer` 独立成卡，放左栏底部/左下角）：读者不再跨过历史才能回应眼前的事件。中栏顶栏只留卷宗/存档。
+- **`庄园事务` 事件中置灰**并显示"事件处理中 · 无法安排其他事务"（`EstateTaskList` 加 `inEvent`）。
+
+### Added
+- **`ChoicePreview.getChoiceCategory`**：把日常自由行动分入 劳作/往来/休整。采蘑菇、办公室文书留在劳作（有产出的工作，作者定）；和玛莎聊、去马厩（`talk_marta`/`talk_gregor`/`help_horses`）、去炉堂见洛伦茨归往来；炉堂晚间守夜（有交谈）算往来、平时沉思算休整；早点休息归休整。
+- ui 文案（中英成对）：`choicePanel.dailyHeading/eventHeading/tabLabor/tabSocial/tabRest/tabEmpty`、`estateTaskList.inEventTitle/inEventBody`。
+
+### 记忆
+- 版面决策由"待定"改为"已定 B"（见持久记忆 `ui-layout-decision-pending`，含双态实现要点）。
+
 ## [2026-09-13] — 盲测反馈四则：三处接线 bug + 玛格丽特线索闸门
 
 外部盲测者报了三处"文档意图与代码不符"，并追问晚宴礼物的设计意图。逐条核到代码，四条都成立——三条是真 bug，第四条是闸门接错了变量（违背 GDD 5.5 §4.5 的明写意图）。全库 **546 绿**，tsc 干净。
