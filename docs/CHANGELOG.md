@@ -1,5 +1,22 @@
 # Valley Season — Changelog
 
+## [2026-09-13] — 霜冻真正影响收成（补上未实现的核心机制）
+
+设定里"霜冻影响收成"一直没落地：霜冻天气会发生（第 22 日强制、中后期 10%/25%），但 `WEATHER_HARVEST_MOD.frost=0` 且 `applyHarvestWeather()` 是块没人调用的空壳。现按 GDD ch.5.4 忠实实现"抢收"张力。
+
+### Added
+- **立田存粮 `flags.fieldGrain`**（`FlagRegistry`，开局 `HARVESTABLE_TOTAL`）：地里还没收上来的粮食，是全季收割的有限来源。用数字 flag 存（同 `timberFelled`），不升 `SAVE_VERSION`；旧存档读为满仓。
+- **`ResourceSystem.getFieldGrain(state)`** 读剩余立田存粮；**`getFrostDayEndLoss(state)`** 取代原空壳——霜冻日按 `FROST_LOSS_RATE` 折损剩余立田存粮，日终结算一次，收完的人不损失（张力全在于此）。
+- `config.ts`：`HARVESTABLE_TOTAL = 150`（**playtest 2026-09 定，原 GDD 为 140，已同步 GDD ch.5.4**）、`FROST_LOSS_RATE = 0.1`。
+- 文案（中英成对）：`system_lines.frostLoss`（霜冻损耗日志）、`actions.harvest.allIn`（地已收完）、`ui.statusPanel.fieldGrain/fieldGrainCleared`（状态栏"田间待收 / 已收完"）。
+- 测试：`ResourceSystem.test`（田间待收 + 霜冻损耗 7 条）、`EventSystem.test`（收割扣田存粮、封顶、收完退场、霜冻日终结算 6 条）。全库 **540 绿**，tsc 干净。
+
+### Changed
+- **收割选项**（`EventSystem`）：每时段只能收上"还立着"的粮（`min(getHarvestYield, fieldGrain)`），并把收走的量写回 `flags.fieldGrain`；地收完后选项禁用、显示"地里的粮食都收完了"。总收割量因此收敛到 150（GDD 的"可收割总量上限"）。
+- **日终结算**（`getDayEndEffects`）：并入霜冻损耗（与第 7 日晚宴缺席互不冲突，仍按合并写）。
+- **状态栏**（`StatusPanel`）：资源区新增"田间待收"一行；霜冻天该数字转霜蓝（`frost`）以示"今晚开始咬"。
+- 浏览器实测：收割 100→97→94、第 9 日霜冻日终 94→84（损 10）并落一行日志；田间待收随之更新、霜冻日显霜蓝。
+
 ## [2026-09-07] — Playtest 反馈 · 阶段二（UI 强化，已完成）
 
 阶段二全部完成并在浏览器验证：2.1–2.6（D1/D3/D5/D6/D7/D11/P9/P15）＋ 2.7（D12 流言衔接 / D13 狩猎季 UI）＋三个打磨点。2.8（P27）作者延后。全库 528 测试绿，tsc 干净。

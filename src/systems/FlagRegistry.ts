@@ -1,4 +1,5 @@
 import { FlagMap } from '../types/game';
+import { HARVESTABLE_TOTAL } from '../data/config';
 
 /**
  * Narrative flags that gate UI or branch text, declared up front so a typo in one
@@ -55,6 +56,13 @@ export const INITIAL_FLAGS: FlagMap = {
   randomEventVariant: '',
   randomEventRumour: 0,
   lastEventDay: 0,
+
+  /**
+   * 地里还没收上来的粮食（GDD ch.5.4「可收割总量上限」）。收割从这里往仓里搬，
+   * 霜冻日按 FROST_LOSS_RATE 折损剩余的。开局为满仓待收，见 config.HARVESTABLE_TOTAL。
+   * Written by: 收割选项（EventSystem）与霜冻日终结算（getFrostDayEndLoss）。
+   */
+  fieldGrain: HARVESTABLE_TOTAL,
 };
 
 /**

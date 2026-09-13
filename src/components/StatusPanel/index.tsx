@@ -5,6 +5,7 @@ import { getDayOfWeek, isMarketDay } from '../../systems/TimeSystem';
 import {
   getTrust, getKnownNpcs, getTrustTier, getEffectiveTenantTrust, TrustTier,
 } from '../../systems/RelationSystem';
+import { getFieldGrain } from '../../systems/ResourceSystem';
 import {
   GRAIN_EXCELLENT_THRESHOLD, NOBLE_TRUST_MAX, LORD_IMPRESSION_MAX, DAILY_GULDMARK_COST,
 } from '../../data/config';
@@ -49,6 +50,7 @@ function RelationBar({ value }: { value: number }) {
 
 export default function StatusPanel({ state }: Props) {
   const { day, weather, resources, fatigue, nobleTrust, lordImpression } = state;
+  const fieldGrain = getFieldGrain(state);
   const fatigueEffect = getFatigueEffect(fatigue);
   const marketDay = isMarketDay(day);
 
@@ -77,6 +79,21 @@ export default function StatusPanel({ state }: Props) {
         <p className={SECTION_LABEL}>{T.resourcesHeading}</p>
         <div className="space-y-2">
           <ResourceRow icon="🌾" label={ui.resources.grain} value={resources.grain} unit={units(resources.grain)} target={GRAIN_EXCELLENT_THRESHOLD} />
+          {/* The finite crop still standing — the clock behind the 抢收 (GDD 5.4). On a
+              frost day it reads cold, because that is the night it starts to go. */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-1.5">
+              <span className="text-sm">🌾</span>
+              <span className="text-game-dim text-xs">{T.fieldGrain}</span>
+            </div>
+            {fieldGrain > 0 ? (
+              <span className={`text-sm font-serif tabular-nums ${weather === 'frost' ? 'text-frost' : 'text-cream-dim'}`}>
+                {fieldGrain}{` ${units(fieldGrain)}`}
+              </span>
+            ) : (
+              <span className="text-game-dim text-xs">{T.fieldGrainCleared}</span>
+            )}
+          </div>
           <ResourceRow icon="🪙" label={ui.resources.guldmark} value={resources.guldmark} unit="" warnBelow={15} />
           <ResourceRow icon="🪵" label={ui.resources.timber} value={resources.timber} unit={units(resources.timber)} warnBelow={5} />
           <ResourceRow icon="⭐" label={ui.resources.renown} value={resources.renown} unit="" showSign />

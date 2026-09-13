@@ -207,6 +207,12 @@ export const FOREST_STATE_TIERS = [10, 15, 20];
 export const GRAIN_RETAIN_THRESHOLD = 75;    // 留任线：冬季口粮 60 + 税约 13
 export const GRAIN_EXCELLENT_THRESHOLD = 90; // 优秀线：留任线 + 春播种子 15
 
+// 全部耕地的理论总产出——地里立着的、还没收上来的粮食上限（GDD ch.5.4）。
+// playtest 2026-09 定为 150（原 140）。收割从田里往仓里搬，霜冻日损耗的正是这批未收割的。
+export const HARVESTABLE_TOTAL = 150;
+// 霜冻日，未收割作物损失剩余量的比例（GDD ch.5.4，表 5.3「霜冻：未收割作物每日损失剩余量 ×10%」）。
+export const FROST_LOSS_RATE = 0.1;
+
 // Fatigue thresholds (see docs/GDD.md ch.5)
 export const FATIGUE_TIRED_THRESHOLD = 3;
 export const FATIGUE_EXHAUSTED_THRESHOLD = 5;

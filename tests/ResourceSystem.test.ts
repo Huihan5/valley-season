@@ -1,12 +1,15 @@
 import { describe, it, expect } from 'vitest';
-import { getGrainTier, getInsolvencyEffects, getTimberYield } from '../src/systems/ResourceSystem';
-import { Resources, GameState, FlagMap } from '../src/types/game';
+import {
+  getGrainTier, getInsolvencyEffects, getTimberYield, getFieldGrain, getFrostDayEndLoss,
+} from '../src/systems/ResourceSystem';
+import { Resources, GameState, FlagMap, WeatherType } from '../src/types/game';
 import {
   GRAIN_RETAIN_THRESHOLD, GRAIN_EXCELLENT_THRESHOLD, RENOWN_MIN, TENANT_TRUST_MIN,
   TENANT_TRUST_INITIAL,
   INSOLVENCY_RENOWN_PER_DAY, INSOLVENCY_TENANT_PER_DAY,
   INSOLVENCY_DISMISS_RENOWN, INSOLVENCY_DISMISS_TENANT, STEWARD_RESCUE_GULDMARK,
   TIMBER_YIELD, TIMBER_SURVEY_BONUS, TIMBER_TOOLS_BONUS, FATIGUE_TIRED_THRESHOLD,
+  HARVESTABLE_TOTAL, FROST_LOSS_RATE,
 } from '../src/data/config';
 
 // getTimberYield only reads fatigue and flags off the state.
@@ -125,5 +128,43 @@ describe('getInsolvencyEffects', () => {
   it('keeps both dismissal lines at zero rather than at the axes own floors', () => {
     expect(INSOLVENCY_DISMISS_RENOWN).toBe(0);
     expect(INSOLVENCY_DISMISS_TENANT).toBe(0);
+  });
+});
+
+// ── 田间待收 + 霜冻损耗 (GDD ch.5.4 / 设定里"影响收成的东西") ──────────────────
+const frostState = (weather: WeatherType, flags: FlagMap): GameState =>
+  ({ weather, flags } as unknown as GameState);
+
+describe('getFieldGrain', () => {
+  it('reads a full field when nothing has tracked it yet (fresh game / old save)', () => {
+    expect(getFieldGrain(frostState('sunny', {}))).toBe(HARVESTABLE_TOTAL);
+  });
+
+  it('reads what is left standing off the flag', () => {
+    expect(getFieldGrain(frostState('sunny', { fieldGrain: 62 }))).toBe(62);
+  });
+});
+
+describe('getFrostDayEndLoss', () => {
+  it('takes nothing on a day that is not frost', () => {
+    expect(getFrostDayEndLoss(frostState('sunny', { fieldGrain: 100 }))).toBeNull();
+    expect(getFrostDayEndLoss(frostState('rainy', { fieldGrain: 100 }))).toBeNull();
+  });
+
+  it('loses the frost share of the standing crop, floored, and writes it back', () => {
+    const loss = getFrostDayEndLoss(frostState('frost', { fieldGrain: 100 }));
+    // 100 → floor(100 × 0.9) = 90 remaining, 10 lost.
+    expect(loss?.flags?.fieldGrain).toBe(90);
+    expect(loss?.logEntry).toBeTruthy();
+  });
+
+  it('bites harder the more is still out there (compounding across nights)', () => {
+    const remaining = (n: number) => getFrostDayEndLoss(frostState('frost', { fieldGrain: n }))?.flags?.fieldGrain as number;
+    expect(remaining(HARVESTABLE_TOTAL)).toBe(Math.floor(HARVESTABLE_TOTAL * (1 - FROST_LOSS_RATE))); // 150 → 135
+    expect(remaining(135)).toBe(121); // floor(135 × 0.9)
+  });
+
+  it('takes nothing once the harvest is in — the whole of the pressure', () => {
+    expect(getFrostDayEndLoss(frostState('frost', { fieldGrain: 0 }))).toBeNull();
   });
 });

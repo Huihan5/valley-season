@@ -1,4 +1,4 @@
-import { Resources, WeatherType, GameState, FlagMap } from '../types/game';
+import { Resources, GameState, FlagMap, ChoiceEffects } from '../types/game';
 import {
   WEATHER_HARVEST_MOD,
   TIMBER_YIELD,
@@ -24,6 +24,8 @@ import {
   ORCHARD_YIELD_RANGE,
   ORCHARD_FULL_YIELD_LAST_DAY,
   ORCHARD_TENANT_TRUST_CAP,
+  HARVESTABLE_TOTAL,
+  FROST_LOSS_RATE,
 } from '../data/config';
 import DATA from '../data';
 import { fill } from '../utils/text';
@@ -75,6 +77,16 @@ export function getOrchardTenantGain(state: GameState): number {
 
 export function getTimberFelled(state: GameState): number {
   return Number(state.flags.timberFelled ?? 0);
+}
+
+/**
+ * Grain still standing in the fields — the finite harvest the whole season draws on
+ * (GDD ch.5.4「可收割总量上限」). Harvesting carries it into the stores; a frost night
+ * takes a share of whatever is still out there. A save from before the field was
+ * tracked reads as a full field rather than an empty one.
+ */
+export function getFieldGrain(state: GameState): number {
+  return Number(state.flags.fieldGrain ?? HARVESTABLE_TOTAL);
 }
 
 /**
@@ -222,10 +234,22 @@ export function clampResources(resources: Resources, flags: FlagMap = {}): Resou
   };
 }
 
-export function applyHarvestWeather(resources: Resources, weather: WeatherType): Resources {
-  if (weather !== 'frost') return resources;
-  // Frost: remaining unharvested grain concept — we'll represent this as a flag effect
-  return resources;
+/**
+ * The frost night's bite (GDD ch.5.4 / 5.3): on a frost day the crop still standing
+ * in the fields loses FROST_LOSS_RATE of what remains, settled once at day's end.
+ * A player who has the harvest in loses nothing — that is the whole of the pressure.
+ * Returns the flag write and the line to log, or null on a day with no loss to take.
+ */
+export function getFrostDayEndLoss(state: GameState): ChoiceEffects | null {
+  if (state.weather !== 'frost') return null;
+  const standing = getFieldGrain(state);
+  const remaining = Math.floor(standing * (1 - FROST_LOSS_RATE));
+  const lost = standing - remaining;
+  if (lost <= 0) return null;
+  return {
+    flags: { fieldGrain: remaining },
+    logEntry: fill(lines.frostLoss, { lost }),
+  };
 }
 
 export function formatGuldmark(value: number): string {

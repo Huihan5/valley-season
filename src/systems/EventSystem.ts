@@ -6,6 +6,7 @@ import {
   getHarvestYield, getTimberYield, getYieldTierLabel,
   getTimberFelled, getTimberQuotaLeft, getForestTier,
   getForageYield, getOrchardYield, getOrchardTenantGain, getOrchardTenantTotal,
+  getFieldGrain, getFrostDayEndLoss,
 } from './ResourceSystem';
 import { isMarketDay, isVigilNight, getDayOfWeek, isHuntSeason } from './TimeSystem';
 import {
@@ -484,10 +485,21 @@ function process(raw: EventData, state: GameState): EventData {
  * an invitation you did not answer is answered anyway, by your absence.
  */
 export function getDayEndEffects(state: GameState): ChoiceEffects | null {
-  if (state.day === DINNER_DAY && !state.flags.attendedDinner && !state.flags.dinnerMissed) {
-    return getDinnerAbsenceEffects();
+  const dinner = state.day === DINNER_DAY && !state.flags.attendedDinner && !state.flags.dinnerMissed
+    ? getDinnerAbsenceEffects()
+    : null;
+  // A frost night settles at day's end (GDD ch.5.4). It never collides with the
+  // dinner (Day 7 is outside the frost window), but merge rather than assume so.
+  const frost = getFrostDayEndLoss(state);
+  if (dinner && frost) {
+    return {
+      ...dinner,
+      ...frost,
+      flags: { ...dinner.flags, ...frost.flags },
+      logEntry: [dinner.logEntry, frost.logEntry].filter(Boolean).join('\n'),
+    };
   }
-  return null;
+  return frost ?? dinner;
 }
 
 /** The next beat of a chained scene, looked up by id rather than by the clock. */
@@ -590,17 +602,24 @@ export function getFreeChoices(state: GameState): Choice[] {
 
   if (phase === 'morning' || phase === 'afternoon') {
     // The weather penalty is already in getHarvestYield — do not charge it twice.
-    const grainGain = getHarvestYield(state);
+    // A phase can only bring in what is still standing (GDD ch.5.4): once the fields
+    // are in there is nothing left to harvest, and the frost has nothing left to take.
+    const standing = getFieldGrain(state);
+    const grainGain = Math.min(getHarvestYield(state), standing);
+    const fieldsCleared = standing <= 0;
     choices.push({
       id: 'harvest',
       text: A.harvest.text,
-      description: canHarvest(weather)
-        ? fill(A.harvest.estimate, { tier: getYieldTierLabel(grainGain) })
-        : A.harvest.rainedOut,
+      description: fieldsCleared
+        ? A.harvest.allIn
+        : canHarvest(weather)
+          ? fill(A.harvest.estimate, { tier: getYieldTierLabel(grainGain) })
+          : A.harvest.rainedOut,
       effects: {
         grain: grainGain,
         fatigue: 1,
         nextScene: 'fields',
+        flags: { fieldGrain: standing - grainGain },
         logEntry: fill(plural(grainGain, A.harvest.logOne, A.harvest.log), {
           // Mid-sentence, so not the panel's capitalised label.
           phase: phase === 'morning' ? ui.phaseInline.morning : ui.phaseInline.afternoon,
@@ -609,8 +628,8 @@ export function getFreeChoices(state: GameState): Choice[] {
       },
       resultKind: 'harvest',
       resultVars: { n: grainGain },
-      disabled: exhausted,
-      disabledReason: exhausted ? A.common.tooTiredRest : undefined,
+      disabled: exhausted || fieldsCleared,
+      disabledReason: exhausted ? A.common.tooTiredRest : fieldsCleared ? A.harvest.allIn : undefined,
     });
 
     const timberGain = canFellTimber(weather) ? getTimberYield(state) : 0;

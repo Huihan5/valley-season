@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest';
-import { getFixedEvent, getFreeChoices, getEventById } from '../src/systems/EventSystem';
+import { getFixedEvent, getFreeChoices, getEventById, getDayEndEffects } from '../src/systems/EventSystem';
 import { determineEnding } from '../src/systems/EndingSystem';
 import { GameState } from '../src/types/game';
-import { BROKER } from '../src/data/config';
+import { BROKER, HARVESTABLE_TOTAL, FROST_LOSS_RATE } from '../src/data/config';
 
 // ── Helpers ────────────────────────────────────────────────────────────────
 
@@ -642,5 +642,47 @@ describe('Critical path — hunt overnight chain', () => {
     const continueChoice = event?.choices?.find(c => c.id === 'camp_stay');
     expect(continueChoice?.effects?.flags?.huntAttendedDay21).toBe(true);
     expect(continueChoice?.nextEvent).toBe('day21_camp_harvest');
+  });
+});
+
+// ── 收割抢在霜冻前 (GDD ch.5.4 / 设定"影响收成的东西") ─────────────────────────
+describe('harvest draws down the standing crop', () => {
+  const harvest = (state: GameState) => getFreeChoices(state).find(c => c.id === 'harvest');
+
+  it('carries what it reaps out of the field on the flag', () => {
+    const h = harvest(makeState({ phase: 'morning', flags: { fieldGrain: 100 } }));
+    const gained = h?.effects?.grain ?? 0;
+    expect(gained).toBeGreaterThan(0);
+    expect(h?.effects?.flags?.fieldGrain).toBe(100 - gained);
+  });
+
+  it('cannot reap more than is still standing', () => {
+    const h = harvest(makeState({ phase: 'morning', flags: { fieldGrain: 2 } }));
+    expect(h?.effects?.grain).toBe(2);
+    expect(h?.effects?.flags?.fieldGrain).toBe(0);
+  });
+
+  it('retires once the fields are in', () => {
+    const h = harvest(makeState({ phase: 'morning', flags: { fieldGrain: 0 } }));
+    expect(h?.disabled).toBe(true);
+    expect(h?.effects?.grain).toBe(0);
+  });
+
+  it('starts a fresh season with the whole field standing', () => {
+    const h = harvest(makeState({ phase: 'morning', flags: {} }));
+    // Default field is full, so a Day-1 phase never bumps the cap.
+    expect(h?.effects?.flags?.fieldGrain).toBe(HARVESTABLE_TOTAL - (h?.effects?.grain ?? 0));
+  });
+});
+
+describe('getDayEndEffects folds in the frost loss', () => {
+  it('takes the frost share of the standing crop at day end', () => {
+    const eff = getDayEndEffects(makeState({ day: 20, weather: 'frost', flags: { fieldGrain: 100 } }));
+    expect(eff?.flags?.fieldGrain).toBe(Math.floor(100 * (1 - FROST_LOSS_RATE)));
+    expect(eff?.logEntry).toBeTruthy();
+  });
+
+  it('does nothing on a clear day', () => {
+    expect(getDayEndEffects(makeState({ day: 20, weather: 'sunny', flags: { fieldGrain: 100 } }))).toBeNull();
   });
 });
