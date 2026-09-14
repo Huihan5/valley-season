@@ -11,13 +11,20 @@
 > ---
 > ## 🔖 恢复点（compact 之后从这里继续）
 >
-> **2026-09-13 追加（本轮几件事，都已完成/在途，见下）：**
-> - ✅ **霜冻→收成（忠实版）已实现+实测+push**（`8424f66`）。立田存粮 `flags.fieldGrain`（开局 `HARVESTABLE_TOTAL=150`，作者定，GDD ch.5.4 已同步 140→150）；收割扣田、收完退场；`getFrostDayEndLoss` 霜冻日按 `FROST_LOSS_RATE=0.1` 折损剩余；状态栏"田间待收"（霜冻天显霜蓝）。全库 **540 测试绿**。详见 `docs/CHANGELOG.md` 顶部 2026-09-13 条。
-> - ✅ **Git 凭证泄露已处理**：remote URL 内嵌 token 已清、配了 Git Credential Manager、清掉 Windows 凭据管理器里那条过期的 `GitHub for Visual Studio` 记录、作者已浏览器登录成功、push 正常。（这些是仓库/机器层面，不进 CHANGELOG。）
-> - ✅ **盲测交付包已备**：`../valley-season-blind-playtest-2026-09-13/`（code.zip 无剧透 + design-reference 存 docs/；另有全量 `../valley-season-src.zip` 含 docs，勿发测试者）。
-> - 🟡 **UI 版面方向待作者拍板**：三套版面 A(三栏精修)/B(叙事优先单栏)/C(叙事+账册) 做成了 Claude Design 画布 `https://claude.ai/code/artifact/b096bd73-17b8-4dfd-baa9-eee5e320e4ce`（另有静态稿 `5ca99bc2-...`）。作者选定后：把最终版做进主画板、其余挪走；再落到真实组件。**这是当前最主要的开放线程。**
+> **截至 2026-09-13（commit `50eb260`，全部已 push；全库 547 测试绿、tsc 干净）**
 >
-> **阶段三（D2 文本精简）** 仍未开始：压偏长的重复性文本（location 基底/act 变体、行动结果、事件正文），不动机制、不改叙事事实，zh/en 成对改，改完 `tsc` + `npm test`（尤其 `Localization.test.ts` 键对齐）+ 浏览器抽查 + 更新 CHANGELOG，最后 commit。开始前先和作者确认**幅度与优先顺序**（作者：playthrough 偏长，需精简但不必大幅）。作者倾向文本自己动手，我做"打靶/工具/非文字减负"那部分。
+> 已完成（每条详见 `docs/CHANGELOG.md` 顶部的 2026-09-13 条目）：
+> - ✅ **霜冻→收成（忠实版）**：立田存粮 `flags.fieldGrain`（`HARVESTABLE_TOTAL=150`，GDD ch.5.4 已同步）、霜冻日按 `FROST_LOSS_RATE=0.1` 折损未收部分、状态栏"田间待收"。
+> - ✅ **盲测反馈四则 + 边界补齐**：清仓升级 flag 接错（`storageCleared` vs `toolsAndStorage`）、固定事件付费选项无可支付判定（`markUnaffordableChoices`）、下午拜访白给炉堂碎片、玛格丽特线索改判"**贵族信任 + 玛格丽特个人信任 之和 ≥ 2**"（GDD 5.5/9.3/9.1 措辞已同步）；边界"不自作聪明"（`stumps_dont_know`）补 `nobleTrust +1`，贵族信任三次机会齐、容错一次成立。
+> - ✅ **界面改版为版面 B（正文内嵌选择）**：选择内嵌中栏、随正文滚动；日常按 劳作/往来/休整 分类（`ChoicePreview.getChoiceCategory`）；记录移左下折叠抽屉；事件中庄园事务置灰。双态浏览器实测。
+> - ✅ **可读性/可用性**：抬亮 `game-dim`(#b3a68c)/`cream-dim`(#c2b090)、干掉"边框色当文字色"；庄园事务晚间"白天再做"提示（原先亮着却点不动）；宽屏整块封顶居中 `max-w-[78rem]` 消除中右空档；两个马厩行动（`talk_gregor` 寒暄 / `help_horses` 搭把手）改 XOR 显示。
+> - ✅ Git 凭证泄露已处理（机器层面，不进 CHANGELOG）。
+> - ✅ **盲测交付包已刷新到本 commit**：`../valley-season-blind-playtest-2026-09-13/`（code.zip 无剧透 221 文件、design-reference = 当前 docs/、_先读我.txt 有更新说明）。全量 `../valley-season-src.zip` 含 docs、勿发测试者。
+>
+> **开放线程 / 下一步：**
+> - ⬜ **阶段三（D2 文本精简）仍未开始**——压偏长的重复性文本（location 基底/act 变体、行动结果、事件正文），不动机制、不改叙事事实，zh/en 成对，改完 `tsc`+`npm test`（尤其 `Localization.test` 键对齐）+浏览器抽查+CHANGELOG。**作者主导文字，我做打靶/工具/非文字减负**；开始前确认幅度与优先顺序。
+> - ⬜ **后续开发方向**（作者构想，已存记忆 `project-roadmap-ideas` + `project-design-philosophy`）：日历/提前安排、Day22 线索提示、一键整日、随周目解锁人物档案、世界回应过往（后日谈+日常回调）。哲学：不为重复可玩性，而为"知道世界背后"——先降机械层摩擦，再加故事层厚度。
+> - 记忆索引 `~/.claude/.../memory/MEMORY.md`：设计哲学、roadmap、版面 B（已定已建）、main-only 工作流、zh/en 成对。
 > ---
 > 分两大阶段：**先修 playtest 暴露的问题（机制/平衡），再强化 UI**。不擅自扩范围、不动核心玩法。
 > 文中 ★ = **仍需你拍板的小点**（已给默认建议）；⚑ = **要同步改 GDD ch.5**（改前会再找你确认）。
