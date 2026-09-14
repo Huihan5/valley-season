@@ -36,8 +36,11 @@ const POSITION_LINE: FlagMap = {
   clue_pos_horse_condition: true,
   clue_pos_locate: true,
 };
+// The motive line as the full account needs it: 玛莎's summer and 埃莱娜's burning
+// are the two the tier-3 block names by content, so both must be in hand for it.
 const MOTIVE: FlagMap = {
   clue_mot_martha_summer: true,
+  clue_mot_elena_burned: true,
   clue_mot_handwriting: true,
   clue_mot_lorenz_question: true,
 };
@@ -70,7 +73,9 @@ describe('what 维特 can say depends on what the player was told', () => {
   });
 
   it('notices the order is wrong once there are three pieces', () => {
-    const text = scene({ ...MOTIVE });
+    const text = scene({
+      clue_mot_martha_summer: true, clue_mot_handwriting: true, clue_mot_lorenz_question: true,
+    });
     expect(text).toContain('顺序好像不对');
     expect(text).toContain('缺的那几块，应该都在您认识的人手里');
   });
@@ -86,6 +91,19 @@ describe('what 维特 can say depends on what the player was told', () => {
     const text = scene({ ...MOTIVE, ...POSITION_LINE });
     expect(text).toContain('这些都是您自己知道的。”他说，“我没有加任何东西');
     expect(text).toContain('因为我不认识他们');
+  });
+
+  it('holds the full account back unless both the summer and the burning are in hand', () => {
+    // Six pieces, but not 埃莱娜's burning: the tier-3 block names the burning by
+    // its content, so he cannot give it — he counts shapes (tier 2) instead.
+    const sixWithoutBurning = {
+      clue_mot_martha_summer: true, clue_mot_handwriting: true, clue_mot_lorenz_question: true,
+      clue_ofc_timothy_nature: true, clue_ofc_thierry_range: true, clue_nob_marguerite: true,
+    };
+    const text = scene(sixWithoutBurning);
+    expect(text).not.toContain('我把它按顺序说一遍'); // not tier 3
+    expect(text).toContain('顺序好像不对');            // tier 2 instead
+    expect(enters(sixWithoutBurning)).toEqual({ metWynter: true });
   });
 });
 

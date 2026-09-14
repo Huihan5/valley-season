@@ -304,7 +304,17 @@ function processWynter(event: EventData, state: GameState): EventData {
   const parts = [event.sceneText];
   const flags: FlagMap = {};
 
-  if (clues >= WYNTER_FULL_ACCOUNT) {
+  // The full account is the one place the game comes closest to laying it all out,
+  // and it is a single connected block rather than assembled from pieces — so it
+  // names two things by their content: the summer silence and the burning the night
+  // he left. He may give it only to a player who was actually told both, or he would
+  // be putting words in the player's mouth (playtest 2026-09 / round 2). Short of
+  // that, however many pieces there are, he counts shapes (tier 2) and no more.
+  const fullAccount = clues >= WYNTER_FULL_ACCOUNT
+    && !!state.flags.clue_mot_martha_summer
+    && !!state.flags.clue_mot_elena_burned;
+
+  if (fullAccount) {
     parts.push(v.tier3);
     flags.wynterRestated = true;
     if (positionLine >= POSITION_LINE_COMPLETE) {

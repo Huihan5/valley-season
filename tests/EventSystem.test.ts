@@ -664,7 +664,9 @@ describe('Critical path — 霍特曼 investigation (Ending 5)', () => {
       flags: {
         clue_pos_horses_intact: true, clue_pos_horse_returned: true,
         clue_pos_horse_condition: true, clue_mot_martha_summer: true,
-        clue_mot_handwriting: true, clue_ofc_timothy_nature: true,
+        // The full account names 埃莱娜's burning by its content, so it is one of the
+        // two motive pieces that have to be in hand for 维特 to lay the whole out.
+        clue_mot_elena_burned: true, clue_ofc_timothy_nature: true,
       },
     }));
     expect(carrying?.onEnterEffects?.flags?.wynterRestated).toBe(true);
