@@ -11,18 +11,21 @@
 > ---
 > ## 🔖 恢复点（compact 之后从这里继续）
 >
-> **截至 2026-09-13（commit `50eb260`，全部已 push；全库 547 测试绿、tsc 干净）**
+> **截至 2026-09-14（commit `3a241e0`，全部已 push；全库 553 测试绿、tsc 干净）**
 >
-> 已完成（每条详见 `docs/CHANGELOG.md` 顶部的 2026-09-13 条目）：
-> - ✅ **霜冻→收成（忠实版）**：立田存粮 `flags.fieldGrain`（`HARVESTABLE_TOTAL=150`，GDD ch.5.4 已同步）、霜冻日按 `FROST_LOSS_RATE=0.1` 折损未收部分、状态栏"田间待收"。
-> - ✅ **盲测反馈四则 + 边界补齐**：清仓升级 flag 接错（`storageCleared` vs `toolsAndStorage`）、固定事件付费选项无可支付判定（`markUnaffordableChoices`）、下午拜访白给炉堂碎片、玛格丽特线索改判"**贵族信任 + 玛格丽特个人信任 之和 ≥ 2**"（GDD 5.5/9.3/9.1 措辞已同步）；边界"不自作聪明"（`stumps_dont_know`）补 `nobleTrust +1`，贵族信任三次机会齐、容错一次成立。
-> - ✅ **界面改版为版面 B（正文内嵌选择）**：选择内嵌中栏、随正文滚动；日常按 劳作/往来/休整 分类（`ChoicePreview.getChoiceCategory`）；记录移左下折叠抽屉；事件中庄园事务置灰。双态浏览器实测。
-> - ✅ **可读性/可用性**：抬亮 `game-dim`(#b3a68c)/`cream-dim`(#c2b090)、干掉"边框色当文字色"；庄园事务晚间"白天再做"提示（原先亮着却点不动）；宽屏整块封顶居中 `max-w-[78rem]` 消除中右空档；两个马厩行动（`talk_gregor` 寒暄 / `help_horses` 搭把手）改 XOR 显示。
-> - ✅ Git 凭证泄露已处理（机器层面，不进 CHANGELOG）。
-> - ✅ **盲测交付包已刷新到本 commit**：`../valley-season-blind-playtest-2026-09-13/`（code.zip 无剧透 221 文件、design-reference = 当前 docs/、_先读我.txt 有更新说明）。全量 `../valley-season-src.zip` 含 docs、勿发测试者。
+> 上一轮（版面 B + 霜冻 + 盲测四则）已收尾并存档；本轮是**第二轮盲测反馈的六处**（详见 `docs/CHANGELOG.md` 顶部四条 2026-09-14 条目）+ **响应式**：
+> - ✅ **① 晚间结果被跨日清空**：晚间行动会在同一次 dispatch 里跨日、被 `advancePhase` 的跨日重置清掉 `lastResult`。加 `commitAdvance` + `COMMIT_ADVANCE` + `GameState.pendingAdvance`：当日最后时段且有结果可读时延后跨日、加"继续"节拍。浏览器实测过。
+> - ✅ **② 疲劳跳过上午吞掉清晨固定事件**：`hasMorningFixedEvent`——当天有晨间固定事件（Day 18 邀请信、Day 23 来信）时不跳过上午、照播。硬编码 `>=5` 改回 `FATIGUE_EXHAUSTED_THRESHOLD`。
+> - ✅ **③ 移除 `deep_investigate_ledger` 孤儿行动**（v2 调查链遗留，写 `deepInvestigatedLedger`/判 `foundLedgerSource` 均无人读写）。"自己查账目"的真线索是**夜查账目→`clue_mot_handwriting`**（`review_accounts` 第三夜，照旧生效）；付款/磨岭一角按 GDD 9.4 不可主动获得。连带删 `actions.json` 的 `deepLedger`（中英）+ 两条只测可见性的旧断言。
+> - ✅ **④ tier3 加门槛 + 4A 开头改写**：`processWynter` 的 tier3 需 `clue_mot_martha_summer` **且** `clue_mot_elena_burned`（它点名了夏天沉默与焚纸的内容），否则退 tier2；结局 4A 开头不再让玩家交出他没拿到的马匹证据/草茎布包，改为交出"弄明白的那个人"、由蒂埃里去走。门槛（GDD 9.5）不动。**残留**：tier3"教会的/贵族的/公家的"一句未单独守贵族线，按作者定的两条门槛未纳入。
+> - ✅ **⑤ 卷宗可展开原话**：`JournalSystem` 每条线索携带原文段落（住户碎片取 `fragments[key].text`、公务员取选项 `resultText`、玛格丽特取马车整段），`Journal.tsx` 加"展开原话"折叠；夜查笔迹为随机生成结果无定本，只留目录。`fullCandidates` 与 `candidates` 同序对齐。浏览器实测过。
+> - ✅ **⑥ 结算按单一资源判定**：`processDay30` 按粮/金卢/木材各自实际状态分句组装（`settled_grain_full/tight`、`settled_coin_surplus/bare`、`settled_timber_kept/gone`、`settled_tail`）。
+> - ✅ **响应式**：`lg`（1024px）以下三栏叠成一列（正文满宽 → 状态 → 记录）；`App.tsx` 外层 `flex-col lg:flex-row`+`overflow-y-auto lg:overflow-visible`，`ScenePanel`/`StatusPanel` 的 `h-full`/内部 `overflow` 加 `lg:` 前缀。桌面三栏不变、`max-w-[78rem]` 封顶不变。375/750/1280 实测。
+> - ✅ **盲测交付包已刷新到本 commit**：`../valley-season-blind-playtest-2026-09-13/`（code.zip 无剧透 221 文件、六处修复+响应式均已核在包内、design-reference = 当前 docs/、_先读我.txt 有本轮更新说明）。
 >
 > **开放线程 / 下一步：**
 > - ⬜ **阶段三（D2 文本精简）仍未开始**——压偏长的重复性文本（location 基底/act 变体、行动结果、事件正文），不动机制、不改叙事事实，zh/en 成对，改完 `tsc`+`npm test`（尤其 `Localization.test` 键对齐）+浏览器抽查+CHANGELOG。**作者主导文字，我做打靶/工具/非文字减负**；开始前确认幅度与优先顺序。
+> - ⬜ **可选小打磨**：手机满宽状态栏"标签左/数值右"留白偏大，可给状态行加 `max-w` 或手机两列（作者待定）。tier3"贵族的"一句是否补守贵族线（作者待定）。
 > - ⬜ **后续开发方向**（作者构想，已存记忆 `project-roadmap-ideas` + `project-design-philosophy`）：日历/提前安排、Day22 线索提示、一键整日、随周目解锁人物档案、世界回应过往（后日谈+日常回调）。哲学：不为重复可玩性，而为"知道世界背后"——先降机械层摩擦，再加故事层厚度。
 > - 记忆索引 `~/.claude/.../memory/MEMORY.md`：设计哲学、roadmap、版面 B（已定已建）、main-only 工作流、zh/en 成对。
 > ---
