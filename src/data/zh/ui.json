@@ -160,6 +160,7 @@
     "heading": "庄园事务",
     "outstanding": "{n} 项未办",
     "done": "已完成",
+    "daytimeOnly": "白天再做（上午或下午）",
     "inEventTitle": "事件处理中",
     "inEventBody": "当前正在处理事件，无法安排其他事务。"
   },

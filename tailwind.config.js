@@ -19,14 +19,17 @@ export default {
         rust: '#8b4a2a',
         cream: {
           DEFAULT: '#e8dcc8',
-          dim: '#a89878',
+          // Section labels and drawer headings. Lifted from #a89878 (2026-09): under
+          // the narrow-panel B layout they read as switched-off, "hidden on purpose".
+          dim: '#c2b090',
         },
         frost: '#7a9aaa',
         game: {
           text: '#d4c8b0',
-          // Lifted from #8a7e6a: microcopy and section labels sat under 4:1 against
-          // the card and read as disabled text (PlaytestFeedback 2.h.ii).
-          dim: '#9c8f78',
+          // Microcopy and secondary rows. Lifted twice now — from #8a7e6a, then from
+          // #9c8f78 (2026-09) — because at 10–11px on the card it still read as
+          // disabled text. Kept a clear step below game-text so the hierarchy holds.
+          dim: '#b3a68c',
           bright: '#f0e8d8',
           border: '#3a3530',
           'border-light': '#4a4540',

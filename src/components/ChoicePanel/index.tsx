@@ -138,7 +138,7 @@ function DailyChoices({ choices, onChoice, locked }: Omit<Props, 'mode'> & { loc
               className={`pb-1.5 -mb-px text-xs font-serif tracking-wide border-b-2 transition-colors ${
                 active ? 'border-gold text-gold'
                   : count ? 'border-transparent text-game-dim hover:text-cream cursor-pointer'
-                    : 'border-transparent text-game-border cursor-default'
+                    : 'border-transparent text-game-dim/45 cursor-default'
               }`}
             >
               {c.label}

@@ -160,6 +160,7 @@
     "heading": "Estate business",
     "outstanding": "{n} outstanding",
     "done": "Done",
+    "daytimeOnly": "In daylight (morning or afternoon)",
     "inEventTitle": "An event is underway",
     "inEventBody": "You cannot take on other estate work while this is going on."
   },

@@ -71,20 +71,25 @@ export default function EstateTaskList({ state, actionableIds, marketChoice, inE
 
         {tasks.map((task) => {
           const takeable = task.status === 'available' && actionableIds.has(task.id);
+          // Available but not offered this phase — the estate work is a daytime job,
+          // so at night it is a preview, not a button. Say so, or it reads as broken.
+          const notNow = task.status === 'available' && !takeable;
           const body = (
             <>
               <div className="flex items-baseline gap-1.5">
-                <span className={`text-[10px] leading-none ${task.status === 'done' ? 'text-gold-dim' : 'text-game-border'}`}>
+                <span className={`text-[10px] leading-none ${task.status === 'done' || takeable ? 'text-gold-dim' : 'text-game-dim'}`}>
                   {task.status === 'done' ? '✓' : '○'}
                 </span>
                 <span className={`font-serif text-xs ${
-                  task.status === 'blocked' ? 'text-game-dim' : takeable ? 'text-cream' : 'text-game-text'
+                  takeable ? 'text-cream'
+                    : notNow ? 'text-game-text'
+                      : 'text-game-dim'
                 }`}>
                   {task.label}
                 </span>
               </div>
-              <p className={`text-[10px] leading-snug pl-4 transition-colors ${
-                task.status === 'blocked' ? 'text-rust/70'
+              <p className={`text-[11px] leading-snug pl-4 transition-colors ${
+                task.status === 'blocked' ? 'text-rust/80'
                   : takeable ? 'text-game-dim group-hover:text-rust/90'
                     : 'text-game-dim'
               }`}>
@@ -92,6 +97,9 @@ export default function EstateTaskList({ state, actionableIds, marketChoice, inE
                   : task.status === 'blocked' ? task.blockedReason
                     : task.summary}
               </p>
+              {notNow && (
+                <p className="text-[11px] leading-snug pl-4 text-amber/85">{T.daytimeOnly}</p>
+              )}
             </>
           );
 
