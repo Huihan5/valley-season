@@ -954,18 +954,22 @@ export function getFreeChoices(state: GameState): Choice[] {
       },
     });
 
-    // He tells you where you stand and changes nothing by it. Talking to 格雷格
-    // is worth exactly what he thinks talking is worth; the work is what counts.
-    choices.push({
-      id: 'talk_gregor',
-      text: A.talkGregor.text,
-      description: A.talkGregor.description,
-      effects: {
-        greetingFrom: 'gregor',
-        nextScene: 'stable',
-        logEntry: A.talkGregor.log,
-      },
-    });
+    // He tells you where you stand and changes nothing by it — the work is what
+    // counts. When he is at the stable there is a hand to lend (help_horses below,
+    // same phase + condition), and that stands in for the empty greeting, so the
+    // two 马厩 actions never crowd the list together.
+    if (!isGregorAtStable(state)) {
+      choices.push({
+        id: 'talk_gregor',
+        text: A.talkGregor.text,
+        description: A.talkGregor.description,
+        effects: {
+          greetingFrom: 'gregor',
+          nextScene: 'stable',
+          logEntry: A.talkGregor.log,
+        },
+      });
+    }
 
     // v3: 谷火神殿 is no longer a place you can go. 洛伦茨 works the manor's own
     // forge-hall, which opens once he has walked you into it on Day 4. The afternoon

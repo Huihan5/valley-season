@@ -438,11 +438,17 @@ describe('getFreeChoices — hunt season attendance (Day 19-22)', () => {
 // ── getFreeChoices: afternoon ──────────────────────────────────────────────
 
 describe('getFreeChoices — afternoon choices', () => {
-  it('shows marta and gregor choices', () => {
-    const choices = getFreeChoices(makeState({ phase: 'afternoon' }));
-    const ids = choices.map(c => c.id);
-    expect(ids).toContain('talk_marta');
-    expect(ids).toContain('talk_gregor');
+  it('shows the marta talk and the stable, and only greets 格雷格 when he is away', () => {
+    const atStable = getFreeChoices(makeState({ phase: 'afternoon' })).map(c => c.id);
+    expect(atStable).toContain('talk_marta');
+    // He is at the stable, so lending a hand stands in for the empty greeting.
+    expect(atStable).toContain('help_horses');
+    expect(atStable).not.toContain('talk_gregor');
+
+    // Away, the greeting is the only way to see him, and it is back.
+    const away = getFreeChoices(makeState({ phase: 'afternoon', flags: { gregorAway: true } })).map(c => c.id);
+    expect(away).toContain('talk_gregor');
+    expect(away).not.toContain('help_horses');
   });
 
   it('talking counts a conversation instead of handing out action trust', () => {
@@ -452,17 +458,18 @@ describe('getFreeChoices — afternoon choices', () => {
     expect(marta?.effects?.relationships).toBeUndefined();
   });
 
-  it('gives 格雷格 a greeting and nothing else — he decides by the work', () => {
-    const choices = getFreeChoices(makeState({ phase: 'afternoon' }));
-    const talk = choices.find(c => c.id === 'talk_gregor');
-    // He will tell you where you stand. Being told does not move it.
+  it('greets 格雷格 for nothing when he is away — the stable work is what counts', () => {
+    // The greeting only surfaces when he is off the stable; being told where you
+    // stand does not move it.
+    const talk = getFreeChoices(makeState({ phase: 'afternoon', flags: { gregorAway: true } }))
+      .find(c => c.id === 'talk_gregor');
     expect(talk?.effects?.greetingFrom).toBe('gregor');
     expect(talk?.effects?.conversationWith).toBeUndefined();
     expect(talk?.effects?.relationships).toBeUndefined();
     expect(talk?.description).toBe('1 时段 · 不计信任');
 
-    // The stable work is the only thing that counts with him.
-    const work = choices.find(c => c.id === 'help_horses');
+    // At the stable, lending a hand is the only thing that counts with him.
+    const work = getFreeChoices(makeState({ phase: 'afternoon' })).find(c => c.id === 'help_horses');
     expect(work?.effects?.conversationWith).toBe('gregor');
   });
 

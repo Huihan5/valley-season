@@ -547,38 +547,43 @@ export default function App() {
   );
 
   return (
-    <div className="h-screen bg-bg text-game-text flex overflow-hidden p-3 gap-3">
-      {/* Left: the estate's business, and the record beneath it (B) — the log
-          moved out from between the prose and the choices. */}
-      <div className="w-48 shrink-0 hidden lg:flex flex-col gap-3 min-h-0">
-        <div className="flex-1 min-h-0">
-          <EstateTaskList
-            state={state}
-            actionableIds={new Set(state.currentChoices.filter(c => !c.disabled).map(c => c.id))}
-            marketChoice={state.currentChoices.find(c => c.id === 'go_to_market') ?? null}
-            inEvent={state.activeEvent !== null}
-            onTake={(id) => dispatch({ type: 'MAKE_CHOICE', choiceId: id })}
-          />
-        </div>
-        <LogDrawer log={state.log} />
-      </div>
-
-      {/* Centre: the prose, with the choices inline beneath it. */}
-      <div className="flex-1 min-w-0">
-        <ScenePanel
-          state={state}
-          onOpenSaves={() => { refreshManualSaves(); setSavesOpen(true); }}
-          onOpenJournal={() => setJournalOpen(true)}
-        >
-          <div key={`${state.day}-${state.phase}`} className="choices-enter">
-            {choiceArea}
+    <div className="h-screen bg-bg text-game-text flex flex-col overflow-hidden p-3">
+      {/* The whole board is capped and centred: on a wide screen the reading column
+          stays snug against the readouts instead of stranding a gap between them.
+          Below this width the columns simply fill what they are given. */}
+      <div className="flex gap-3 w-full max-w-[78rem] mx-auto flex-1 min-h-0">
+        {/* Left: the estate's business, and the record beneath it (B) — the log
+            moved out from between the prose and the choices. */}
+        <div className="w-48 shrink-0 hidden lg:flex flex-col gap-3 min-h-0">
+          <div className="flex-1 min-h-0">
+            <EstateTaskList
+              state={state}
+              actionableIds={new Set(state.currentChoices.filter(c => !c.disabled).map(c => c.id))}
+              marketChoice={state.currentChoices.find(c => c.id === 'go_to_market') ?? null}
+              inEvent={state.activeEvent !== null}
+              onTake={(id) => dispatch({ type: 'MAKE_CHOICE', choiceId: id })}
+            />
           </div>
-        </ScenePanel>
-      </div>
+          <LogDrawer log={state.log} />
+        </div>
 
-      {/* Right: the estate's readouts. */}
-      <div className="w-64 shrink-0">
-        <StatusPanel state={state} />
+        {/* Centre: the prose, with the choices inline beneath it. */}
+        <div className="flex-1 min-w-0">
+          <ScenePanel
+            state={state}
+            onOpenSaves={() => { refreshManualSaves(); setSavesOpen(true); }}
+            onOpenJournal={() => setJournalOpen(true)}
+          >
+            <div key={`${state.day}-${state.phase}`} className="choices-enter">
+              {choiceArea}
+            </div>
+          </ScenePanel>
+        </div>
+
+        {/* Right: the estate's readouts. */}
+        <div className="w-64 shrink-0">
+          <StatusPanel state={state} />
+        </div>
       </div>
 
       {savesOpen && (
