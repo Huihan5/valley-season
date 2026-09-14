@@ -36,7 +36,7 @@ export default function ScenePanel({ state, onOpenSaves, onOpenJournal, children
   const huntSeason = isHuntSeason(state);
 
   return (
-    <div className={`flex flex-col h-full bg-bg-card border rounded-sm overflow-hidden transition-colors ${huntSeason ? 'border-frost/40' : 'border-game-border'}`}>
+    <div className={`flex flex-col lg:h-full bg-bg-card border rounded-sm overflow-hidden transition-colors ${huntSeason ? 'border-frost/40' : 'border-game-border'}`}>
       {/* The season, pinned above everything while the duchy's hunt is open (D13). */}
       {huntSeason && (
         <div className="px-5 py-1.5 bg-frost/10 border-b border-frost/30 flex items-baseline gap-2">
@@ -74,7 +74,7 @@ export default function ScenePanel({ state, onOpenSaves, onOpenJournal, children
       {/* What just happened, then where you now are. The prose keeps a reading
           measure of its own rather than running the full width of the panel
           (PlaytestFeedback 2.a). */}
-      <div className="flex-1 overflow-y-auto px-5 py-4 space-y-4">
+      <div className="flex-1 lg:overflow-y-auto px-5 py-4 space-y-4">
         {/* The body telling on the player, in the scene itself (D7). Amber while
             merely tired; rust once spent, where 嘴唇发紫 landed. */}
         {fatigueNote && (

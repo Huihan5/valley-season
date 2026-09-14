@@ -587,10 +587,13 @@ export default function App() {
     <div className="h-screen bg-bg text-game-text flex flex-col overflow-hidden p-3">
       {/* The whole board is capped and centred: on a wide screen the reading column
           stays snug against the readouts instead of stranding a gap between them.
-          Below this width the columns simply fill what they are given. */}
-      <div className="flex gap-3 w-full max-w-[78rem] mx-auto flex-1 min-h-0">
+          Below lg the three columns stop being columns — they stack into one scroll
+          (reading first, then the readouts, then the record), because a 375px phone
+          cannot spare 256px to a fixed status rail and still leave a column to read in. */}
+      <div className="flex flex-col lg:flex-row gap-3 w-full max-w-[78rem] mx-auto flex-1 min-h-0 overflow-y-auto lg:overflow-visible">
         {/* Left: the estate's business, and the record beneath it (B) — the log
-            moved out from between the prose and the choices. */}
+            moved out from between the prose and the choices. Desktop only: below lg
+            the tasks already return inside the 劳作 tab and the log stacks at the end. */}
         <div className="w-48 shrink-0 hidden lg:flex flex-col gap-3 min-h-0">
           <div className="flex-1 min-h-0">
             <EstateTaskList
@@ -605,7 +608,7 @@ export default function App() {
         </div>
 
         {/* Centre: the prose, with the choices inline beneath it. */}
-        <div className="flex-1 min-w-0">
+        <div className="min-w-0 lg:flex-1">
           <ScenePanel
             state={state}
             onOpenSaves={() => { refreshManualSaves(); setSavesOpen(true); }}
@@ -617,9 +620,16 @@ export default function App() {
           </ScenePanel>
         </div>
 
-        {/* Right: the estate's readouts. */}
-        <div className="w-64 shrink-0">
+        {/* Right: the estate's readouts — a fixed rail at desktop, a full-width block
+            under the reading when stacked. */}
+        <div className="w-full lg:w-64 shrink-0">
           <StatusPanel state={state} />
+        </div>
+
+        {/* The record: it lives in the left column at desktop, but that column is gone
+            when stacked, so it gets a home at the foot of the scroll on small screens. */}
+        <div className="lg:hidden">
+          <LogDrawer log={state.log} />
         </div>
       </div>
 

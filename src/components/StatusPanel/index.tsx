@@ -55,7 +55,7 @@ export default function StatusPanel({ state }: Props) {
   const marketDay = isMarketDay(day);
 
   return (
-    <div className="flex flex-col h-full bg-bg-card border border-game-border rounded-sm overflow-hidden">
+    <div className="flex flex-col lg:h-full bg-bg-card border border-game-border rounded-sm overflow-hidden">
 
       {/* Date & Weather */}
       <div className="px-4 py-3 border-b border-game-border">
@@ -144,7 +144,7 @@ export default function StatusPanel({ state }: Props) {
       </div>
 
       {/* Relationships — only the people the player has actually met (2.h) */}
-      <div className="px-4 py-3 flex-1 overflow-y-auto">
+      <div className="px-4 py-3 flex-1 lg:overflow-y-auto">
         <p className={SECTION_LABEL}>{T.relationsHeading}</p>
         <div className="space-y-2.5">
           {getKnownNpcs(state, Object.keys(NPC_NAMES) as NpcId[]).map((npc) => {
