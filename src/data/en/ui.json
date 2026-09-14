@@ -146,6 +146,8 @@
     "groupOfficer": "In the offices",
     "groupNoble": "Among the peerage",
     "empty": "Nothing has gone in here yet.",
+    "expand": "In their words",
+    "collapse": "Collapse",
     "mapCaption": "The Duchy of Valewisp",
     "mapAlt": "Map of the Duchy of Valewisp"
   },

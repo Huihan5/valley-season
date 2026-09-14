@@ -146,6 +146,8 @@
     "groupOfficer": "公务上",
     "groupNoble": "贵族那边",
     "empty": "还没有什么可以放进来的。",
+    "expand": "展开原话",
+    "collapse": "收起",
     "mapCaption": "瓦莱维斯普公国",
     "mapAlt": "瓦莱维斯普公国地图"
   },

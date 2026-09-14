@@ -52,11 +52,6 @@
     "descriptionDone": "1 phase · see how the woods stand now",
     "log": "You went through the woods and wrote down what you saw."
   },
-  "deepLedger": {
-    "text": "Trace the payments in the ledger",
-    "description": "That regular “sundry maintenance” — you still have no name to put to it",
-    "log": "You followed the unexplained payment through the ledger. The numbers themselves do not lie, but the way they were entered says a great deal."
-  },
   "market": {
     "go": "Go to market ({weekday})",
     "goDescription": "The ride takes the morning and the afternoon both. The cart carries {cap} units a trip",

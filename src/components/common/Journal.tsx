@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { GameState } from '../../types/game';
-import { getJournal, ClueGroupId } from '../../systems/JournalSystem';
+import { getJournal, ClueGroupId, JournalEntry } from '../../systems/JournalSystem';
 import DATA from '../../data';
 import mapUrl from '../../assets/map_valehold.png';
 
@@ -62,12 +62,7 @@ export default function Journal({ state, onClose }: Props) {
                     </p>
                     <ul className="space-y-2.5">
                       {group.entries.map(entry => (
-                        <li
-                          key={entry.flag}
-                          className="border-l-2 border-gold-dim pl-4 text-game-text font-serif text-sm leading-relaxed max-w-[46rem]"
-                        >
-                          {entry.text}
-                        </li>
+                        <ClueLine key={entry.flag} entry={entry} />
                       ))}
                     </ul>
                   </div>
@@ -87,6 +82,35 @@ export default function Journal({ state, onClose }: Props) {
         </div>
       </div>
     </div>
+  );
+}
+
+/**
+ * One clue: its index line, and — when the passage the player read is a single
+ * block worth keeping — a quiet toggle down to the whole of it. The index alone
+ * used to be the only trace of an evening's dialogue (playtest 2026-09 / round 2).
+ */
+function ClueLine({ entry }: { entry: JournalEntry }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <li className="border-l-2 border-gold-dim pl-4 text-game-text font-serif text-sm leading-relaxed max-w-[46rem]">
+      {entry.text}
+      {entry.full && (
+        <>
+          <button
+            onClick={() => setOpen(o => !o)}
+            className="ml-2 align-baseline text-gold-dim text-xs not-italic hover:text-gold transition-colors"
+          >
+            {open ? T.collapse : T.expand}
+          </button>
+          {open && (
+            <p className="mt-2 whitespace-pre-line text-game-dim border-t border-game-border/60 pt-2">
+              {entry.full}
+            </p>
+          )}
+        </>
+      )}
+    </li>
   );
 }
 

@@ -71,24 +71,42 @@ interface LooseEffects {
   logEntry?: string;
 }
 
+interface LooseChoice {
+  effects?: LooseEffects;
+  resultText?: string;
+}
+
 interface LooseEvent {
   title?: string;
   variants?: Record<string, string>;
   onEnterEffects?: LooseEffects;
-  choices?: ({ effects?: LooseEffects } | null)[] | null;
+  choices?: (LooseChoice | null)[] | null;
+}
+
+/**
+ * One way a clue could have arrived: the short line it left in the record, and —
+ * when the passage the player actually read is a single quotable block — the full
+ * text of it, so the journal can hand back the whole thing, not only the index
+ * line (playtest 2026-09 / round 2). `full` is '' when no single passage exists
+ * (a generated action result, an onEnterEffects clue with no prose of its own).
+ */
+interface ClueLine {
+  log: string;
+  full: string;
 }
 
 /**
  * Every clue flag any choice in the data writes, with the log line that choice
- * leaves behind. A flag can appear more than once: 蒂埃里's range is offered both
- * at the Day 13 market and on the Day 19 ride, and the two log different sentences.
+ * leaves behind and the result prose it showed. A flag can appear more than once:
+ * 蒂埃里's range is offered both at the Day 13 market and on the Day 19 ride, and
+ * the two log — and read — different sentences.
  */
-function harvestFromEvents(): Map<string, string[]> {
-  const found = new Map<string, string[]>();
+function harvestFromEvents(): Map<string, ClueLine[]> {
+  const found = new Map<string, ClueLine[]>();
 
-  const add = (flag: string, line: string | undefined) => {
+  const add = (flag: string, log: string | undefined, full: string | undefined) => {
     const list = found.get(flag) ?? [];
-    if (line && !list.includes(line)) list.push(line);
+    if (log && !list.some(line => line.log === log)) list.push({ log, full: full ?? '' });
     found.set(flag, list);
   };
 
@@ -98,13 +116,14 @@ function harvestFromEvents(): Map<string, string[]> {
   ] as unknown as LooseEvent[];
 
   for (const event of events) {
-    const sources: (LooseEffects | undefined)[] = [
-      event.onEnterEffects,
-      ...(event.choices ?? []).map(choice => choice?.effects),
-    ];
-    for (const effects of sources) {
-      for (const flag of Object.keys(effects?.flags ?? {})) {
-        if (groupOf(flag)) add(flag, effects?.logEntry);
+    // A clue written on entering an event has no choice of its own, so no result
+    // prose to expand; only its log line is captured.
+    for (const flag of Object.keys(event.onEnterEffects?.flags ?? {})) {
+      if (groupOf(flag)) add(flag, event.onEnterEffects?.logEntry, '');
+    }
+    for (const choice of event.choices ?? []) {
+      for (const flag of Object.keys(choice?.effects?.flags ?? {})) {
+        if (groupOf(flag)) add(flag, choice?.effects?.logEntry, choice?.resultText);
       }
     }
   }
@@ -113,16 +132,19 @@ function harvestFromEvents(): Map<string, string[]> {
 }
 
 /** The eight the four residents give, whose lines live in fragments.json. */
-function harvestFromFragments(): Map<string, string> {
-  const fragments = DATA.dialogue.fragments as Record<string, { log: string }>;
-  const found = new Map<string, string>();
+function harvestFromFragments(): Map<string, ClueLine> {
+  const fragments = DATA.dialogue.fragments as Record<string, { log: string; text: string }>;
+  const found = new Map<string, ClueLine>();
+
+  const record = (flag: string, key: string) =>
+    found.set(flag, { log: fragments[key].log, full: fragments[key].text });
 
   for (const spec of ESTATE_FRAGMENTS) {
-    if (spec.flag) found.set(spec.flag, fragments[spec.key].log);
+    if (spec.flag) record(spec.flag, spec.key);
   }
   // 洛伦茨's question has no action of its own — it happens because the player came
   // to the forge-hall and he was there — so it is not in ESTATE_FRAGMENTS.
-  found.set('clue_mot_lorenz_question', fragments.lorenz_question.log);
+  record('clue_mot_lorenz_question', 'lorenz_question');
 
   return found;
 }
@@ -131,19 +153,20 @@ function harvestFromFragments(): Map<string, string> {
  * Two clues are written by `EventSystem` rather than by a choice in the data, so
  * the scan cannot reach them.
  */
-function harvestExplicit(): Record<string, string> {
+function harvestExplicit(): Record<string, ClueLine> {
   const actions = DATA.actions as unknown as { reviewAccounts: { log: string } };
   const carriage = (DATA.events.day21HuntLorenz as unknown as LooseEvent).variants?.marguerite ?? '';
 
   return {
     // Lands on the third night of the ledger. The line is the one that action always
-    // logs rather than one specific to that night, but it is what the player read.
-    clue_mot_handwriting: actions.reviewAccounts.log,
+    // logs rather than one specific to that night, and the passage read is a
+    // generated scene result, so there is no single block to expand.
+    clue_mot_handwriting: { log: actions.reviewAccounts.log, full: '' },
     // Given inside the Day 21 carriage as a block of the event's own prose, with no
     // log line anywhere. Falling back to the event title would print 洛伦茨在猎场
-    // over something 玛格丽特 said, so the journal takes the first paragraph of the
-    // block itself.
-    clue_nob_marguerite: carriage.split('\n\n')[0] ?? '',
+    // over something 玛格丽特 said, so the index takes the first paragraph of the
+    // block and the expansion holds the whole of it.
+    clue_nob_marguerite: { log: carriage.split('\n\n')[0] ?? '', full: carriage },
   };
 }
 
@@ -154,6 +177,8 @@ export interface ClueSource {
   group: ClueGroupId;
   /** Every line that could have delivered this clue; which one did depends on the run. */
   candidates: string[];
+  /** The full passage behind each candidate, aligned by index; '' where there is none. */
+  fullCandidates: string[];
 }
 
 function buildRegistry(): ClueSource[] {
@@ -165,13 +190,18 @@ function buildRegistry(): ClueSource[] {
     const group = groupOf(flag);
     if (!group) return [];
 
-    const candidates = [
+    const lines: ClueLine[] = [
       ...(fromEvents.get(flag) ?? []),
-      ...(fromFragments.has(flag) ? [fromFragments.get(flag) as string] : []),
+      ...(fromFragments.has(flag) ? [fromFragments.get(flag) as ClueLine] : []),
       ...(explicit[flag] ? [explicit[flag]] : []),
-    ].filter(Boolean);
+    ].filter(line => line && line.log);
 
-    return [{ flag, group, candidates }];
+    return [{
+      flag,
+      group,
+      candidates: lines.map(line => line.log),
+      fullCandidates: lines.map(line => line.full),
+    }];
   });
 }
 
@@ -190,7 +220,10 @@ export function scanClueFlags(): string[] {
 
 export interface JournalEntry {
   flag: string;
+  /** The index line — the short record entry the player already read. */
   text: string;
+  /** The full passage behind it, when it is a single block worth expanding to. */
+  full?: string;
 }
 
 export interface JournalGroup {
@@ -198,12 +231,19 @@ export interface JournalGroup {
   entries: JournalEntry[];
 }
 
-/** Which of a clue's possible lines this particular run produced. */
-function resolve(source: ClueSource, log: LogEntry[]): string {
-  const [first] = source.candidates;
-  if (source.candidates.length < 2) return first ?? '';
-  const seen = source.candidates.find(line => log.some(entry => entry.text === line));
-  return seen ?? first;
+/**
+ * Which of a clue's possible lines this particular run produced — and the full
+ * passage that came with it. A clue offered in two places logs (and reads)
+ * different sentences, so the index is matched against the record and the
+ * expansion is taken from the same slot.
+ */
+function resolve(source: ClueSource, log: LogEntry[]): { text: string; full: string } {
+  let idx = 0;
+  if (source.candidates.length >= 2) {
+    const seen = source.candidates.findIndex(line => log.some(entry => entry.text === line));
+    if (seen >= 0) idx = seen;
+  }
+  return { text: source.candidates[idx] ?? '', full: source.fullCandidates[idx] ?? '' };
 }
 
 export function getJournal(state: GameState): JournalGroup[] {
@@ -211,7 +251,11 @@ export function getJournal(state: GameState): JournalGroup[] {
     id,
     entries: CLUE_REGISTRY
       .filter(source => source.group === id && state.flags[source.flag])
-      .map(source => ({ flag: source.flag, text: resolve(source, state.log) })),
+      .map(source => {
+        const { text, full } = resolve(source, state.log);
+        // Only offer to expand when the full passage says more than the index line.
+        return { flag: source.flag, text, full: full && full !== text ? full : undefined };
+      }),
   }));
 }
 

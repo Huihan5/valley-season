@@ -409,24 +409,6 @@ describe('getFreeChoices — morning choices', () => {
     const harvest = choices.find(c => c.id === 'harvest');
     expect(harvest?.disabled).toBe(true);
   });
-
-  it('shows deep_investigate_ledger after Day 3 investigation (before Day 12)', () => {
-    const choices = getFreeChoices(makeState({
-      day: 5,
-      phase: 'morning',
-      flags: { investigatedLedger: true },
-    }));
-    expect(choices.find(c => c.id === 'deep_investigate_ledger')).toBeDefined();
-  });
-
-  it('does NOT show deep_investigate_ledger after Day 12', () => {
-    const choices = getFreeChoices(makeState({
-      day: 13,
-      phase: 'morning',
-      flags: { investigatedLedger: true },
-    }));
-    expect(choices.find(c => c.id === 'deep_investigate_ledger')).toBeUndefined();
-  });
 });
 
 // ── getFreeChoices: hunt season morning ───────────────────────────────────

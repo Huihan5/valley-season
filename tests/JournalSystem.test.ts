@@ -3,6 +3,9 @@ import { GameState, NpcId, FlagMap, LogEntry } from '../src/types/game';
 import {
   CLUE_REGISTRY, CLUE_GROUPS, getJournal, hasAnyClue, scanClueFlags,
 } from '../src/systems/JournalSystem';
+import DATA from '../src/data';
+
+const FRAGMENTS = DATA.dialogue.fragments as Record<string, { log: string; text: string }>;
 
 const ZERO: Record<NpcId, number> = { gregor: 0, marta: 0, elena: 0, marguerite: 0, henk: 0, lorenz: 0 };
 
@@ -120,5 +123,35 @@ describe('a clue with two possible sources', () => {
   it('falls back to the first candidate when the record says nothing', () => {
     const state = makeState({ clue_ofc_thierry_range: true });
     expect(entriesOf(state)[0].text).toBe(range?.candidates[0]);
+  });
+});
+
+describe('the journal keeps the whole passage, not only the index', () => {
+  it("expands a resident's clue to their actual words", () => {
+    // The 322-character line 玛莎 gives — the one the index only used to point at.
+    const [entry] = entriesOf(makeState({ clue_mot_martha_lastwords: true }));
+    expect(entry.text).toBe(FRAGMENTS.marta_lastwords.log);
+    expect(entry.full).toBe(FRAGMENTS.marta_lastwords.text);
+    expect(entry.full).not.toBe(entry.text);
+  });
+
+  it('offers no expansion for a clue with no single passage (the night ledger)', () => {
+    const [entry] = entriesOf(makeState({ clue_mot_handwriting: true }));
+    expect(entry.text.length).toBeGreaterThan(0);
+    expect(entry.full).toBeUndefined();
+  });
+
+  it('expands to the passage from the same source the run used', () => {
+    // 蒂埃里's range has two sources; the expansion must come from the slot whose
+    // log is the one in this run's record, aligned with the index it shows.
+    const source = CLUE_REGISTRY.find(s => s.flag === 'clue_ofc_thierry_range');
+    const i = (source?.candidates.length ?? 0) - 1; // the second source
+    const state = makeState(
+      { clue_ofc_thierry_range: true },
+      [{ day: 19, phase: 'morning', text: source?.candidates[i] ?? '' }],
+    );
+    const [entry] = entriesOf(state);
+    expect(entry.text).toBe(source?.candidates[i]);
+    expect(entry.full).toBe(source?.fullCandidates[i] || undefined);
   });
 });

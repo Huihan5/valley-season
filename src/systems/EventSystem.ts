@@ -850,22 +850,6 @@ export function getFreeChoices(state: GameState): Choice[] {
       disabledReason: exhausted ? A.common.tooTired : undefined,
     });
 
-    if (flags.investigatedLedger && !flags.foundLedgerSource && day < 12) {
-      choices.push({
-        id: 'deep_investigate_ledger',
-        text: A.deepLedger.text,
-        description: A.deepLedger.description,
-        effects: {
-          fatigue: 1,
-          flags: { deepInvestigatedLedger: true },
-          nextScene: 'office',
-          logEntry: A.deepLedger.log,
-        },
-        disabled: exhausted,
-        disabledReason: exhausted ? A.common.tooTired : undefined,
-      });
-    }
-
     // Hunt season does not lock the market out: Day 20 is a Saturday, and giving up
     // that day's hunt to make the trip is a choice the player is allowed to make.
     if (isMarketDay(day) && !flags[`visitedMarket_day${day}`]) {
