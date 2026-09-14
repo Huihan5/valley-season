@@ -172,6 +172,13 @@ export interface GameState {
    */
   lastSpeaker?: NpcId | null;
   currentChoices: Choice[];
+  /**
+   * An action taken in the last phase of a day advances straight into the next
+   * morning, whose day-change reset clears `lastResult` before it can render. When
+   * that action leaves something to read, the advance is deferred and this is set:
+   * the scene holds on the result with a 继续 beat, and COMMIT_ADVANCE turns the day.
+   */
+  pendingAdvance?: boolean;
   activeEvent: EventData | null;
   eventResolved: boolean;
   log: LogEntry[];

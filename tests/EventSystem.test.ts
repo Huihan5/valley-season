@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import {
   getFixedEvent, getFreeChoices, getEventById, getDayEndEffects, markUnaffordableChoices,
+  hasMorningFixedEvent,
 } from '../src/systems/EventSystem';
 import { Choice } from '../src/types/game';
 import { determineEnding } from '../src/systems/EndingSystem';
@@ -333,6 +334,29 @@ describe('getFixedEvent — Day 30', () => {
     expect(text).not.toContain('你把数字算了三遍');
   });
 
+  // The settlement reads each column against its own state — a season that brought
+  // the grain in but left the coin and the woodpile at nothing must not claim a
+  // surplus it does not have (playtest 2026-09).
+  it('settles grain, coin, and timber independently', () => {
+    const rich = getFixedEvent(30, 'evening', makeState({
+      day: 30, resources: { grain: 95, guldmark: 20, timber: 8, renown: 4 },
+    }))?.sceneText ?? '';
+    expect(rich).toContain('还够明年春天下种');
+    expect(rich).toContain('账上还余下几个金卢');
+    expect(rich).toContain('木材也留下了取暖的份');
+
+    const bare = getFixedEvent(30, 'evening', makeState({
+      day: 30, resources: { grain: 75, guldmark: 0, timber: 0, renown: 4 },
+    }))?.sceneText ?? '';
+    // Grain cleared the retain line but not the excellent one: no spring-seed claim.
+    expect(bare).toContain('明年的种子要紧着分');
+    expect(bare).toContain('金卢一分不剩');
+    expect(bare).toContain('木材见了底');
+    // And it must not round the empty columns up to the good version.
+    expect(bare).not.toContain('账上还余下几个金卢');
+    expect(bare).not.toContain('木材也留下了取暖的份');
+  });
+
   it('offers the ride to 磨岭 only to a steward who is short', () => {
     expect(evening(95)?.onEnterEffects?.flags?.day30Short).toBeUndefined();
     expect(evening(60)?.onEnterEffects?.flags?.day30Short).toBe(true);
@@ -345,6 +369,27 @@ describe('getFixedEvent — Day 30', () => {
     expect(evening(95)?.sceneText).not.toContain('还没有对第二个人说过');
     expect(evening(95, { admittedWantToStay: true })?.sceneText)
       .toContain('你到现在还没有对第二个人说过');
+  });
+});
+
+// ── hasMorningFixedEvent: exhaustion must not swallow a dawn event ──────────
+
+describe('hasMorningFixedEvent', () => {
+  it('flags days whose fixed event plays in the morning', () => {
+    // Day 18 (邀请信) and Day 23 (公爵文秘室来信) both come at dawn, and opening the
+    // hunt / the broker channel rides on them firing. Forced rest must keep the
+    // morning on these days rather than skip straight to the afternoon.
+    expect(hasMorningFixedEvent(makeState({ day: 18 }))).toBe(true);
+    expect(hasMorningFixedEvent(makeState({ day: 23 }))).toBe(true);
+  });
+
+  it('does not flag a day whose only fixed beat is later', () => {
+    // 维特 arrives at dusk (evening); skipping the morning cannot lose him.
+    expect(hasMorningFixedEvent(makeState({ day: 22 }))).toBe(false);
+  });
+
+  it('does not flag an ordinary working day', () => {
+    expect(hasMorningFixedEvent(makeState({ day: 9 }))).toBe(false);
   });
 });
 

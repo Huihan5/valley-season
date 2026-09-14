@@ -378,13 +378,24 @@ function processDay30Morning(event: EventData, state: GameState): EventData {
  */
 function processDay30(event: EventData, state: GameState): EventData {
   const v = event.variants ?? {};
-  const short = state.resources.grain < GRAIN_RETAIN_THRESHOLD;
+  const { grain, guldmark, timber } = state.resources;
+  const short = grain < GRAIN_RETAIN_THRESHOLD;
+
+  // The books close per column, not on the grain alone: a season that brought the
+  // harvest in can still leave the coin at nothing and the woodpile bare, and the
+  // page has to say so rather than round every line up to the best of them.
+  const settled = short ? [v.short] : [
+    grain >= GRAIN_EXCELLENT_THRESHOLD ? v.settled_grain_full : v.settled_grain_tight,
+    guldmark > 0 ? v.settled_coin_surplus : v.settled_coin_bare,
+    timber > 0 ? v.settled_timber_kept : v.settled_timber_gone,
+    v.settled_tail,
+  ];
 
   const sceneText = [
     event.sceneText,
     state.flags.admittedWantToStay ? v.admitted : '',
     v.review,
-    short ? v.short : v.settled,
+    ...settled,
   ].filter(Boolean).join('\n\n');
 
   return {
@@ -458,6 +469,22 @@ export function getFixedEvent(day: number, phase: DayPhase, state: GameState): E
 export function hasFixedEventToday(state: GameState): boolean {
   return FIXED_EVENTS.some(
     e => e.day === state.day && (!e.activationFlag || !!state.flags[e.activationFlag])
+  );
+}
+
+/**
+ * A fixed event that plays specifically in the morning (a dawn messenger, a
+ * morning letter). Exhaustion's forced rest skips the morning, and such an event
+ * would be lost with it — getFixedEvent only matches an event to its own phase, so
+ * a morning-only event never resurfaces in the afternoon. Days with one must keep
+ * their morning. Events with no phase of their own play in whatever phase is left,
+ * so they are safe to skip past and are not counted here.
+ */
+export function hasMorningFixedEvent(state: GameState): boolean {
+  return FIXED_EVENTS.some(
+    e => e.day === state.day
+      && eventPhase(e) === 'morning'
+      && (!e.activationFlag || !!state.flags[e.activationFlag])
   );
 }
 

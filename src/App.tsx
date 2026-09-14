@@ -5,6 +5,7 @@ import { nextPhase, isDemoComplete } from './systems/TimeSystem';
 import { applyDailyOperatingCost, clampResources, getInsolvencyEffects } from './systems/ResourceSystem';
 import {
   getFreeChoices, getFixedEvent, getEventById, getDayEndEffects, markUnaffordableChoices,
+  hasMorningFixedEvent,
 } from './systems/EventSystem';
 import { rollRandomEvent, getPendingRandomEvent, markEventDay } from './systems/RandomEventSystem';
 import { determineEnding, getEndingData, composeEnding, EndingId } from './systems/EndingSystem';
@@ -14,7 +15,9 @@ import {
 import { INITIAL_FLAGS } from './systems/FlagRegistry';
 import { getOpeningPage, nextOpeningPage } from './systems/OpeningSystem';
 import { composeScene, getActionResult, getGreeting } from './systems/SceneSystem';
-import { INITIAL_RESOURCES, INITIAL_RELATIONSHIPS, TENANT_TRUST_INITIAL } from './data/config';
+import {
+  INITIAL_RESOURCES, INITIAL_RELATIONSHIPS, TENANT_TRUST_INITIAL, FATIGUE_EXHAUSTED_THRESHOLD,
+} from './data/config';
 import DATA from './data';
 import { interpolate, fill } from './utils/text';
 import ScenePanel from './components/ScenePanel';
@@ -44,6 +47,7 @@ type Action =
   | { type: 'ADVANCE_OPENING' }
   | { type: 'SKIP_OPENING' }
   | { type: 'ADVANCE_DAY_EVENT' }
+  | { type: 'COMMIT_ADVANCE' }
   | { type: 'LOAD_STATE'; state: GameState }
   | { type: 'RESET' };
 
@@ -219,7 +223,7 @@ function gameReducer(state: GameState, action: Action): GameState {
         const chained = chainedEvent(next, choice.nextEvent ?? state.activeEvent.next);
         if (chained) return enterEvent(next, chained);
 
-        return advancesPhase ? advancePhase(next) : buildStateForPhase(next);
+        return commitAdvance(state, next, advancesPhase);
       }
 
       // An action can open onto a scene — riding out to the north woods is one
@@ -228,7 +232,7 @@ function gameReducer(state: GameState, action: Action): GameState {
       if (opened) return enterEvent(next, opened);
 
       // Free choices cost a phase unless they are steps within one (market trades).
-      return (choice.advancesPhase ?? true) ? advancePhase(next) : buildStateForPhase(next);
+      return commitAdvance(state, next, choice.advancesPhase ?? true);
     }
 
     case 'SET_PLAYER_NAME': {
@@ -271,6 +275,11 @@ function gameReducer(state: GameState, action: Action): GameState {
       return advances ? advancePhase(next) : buildStateForPhase(next);
     }
 
+    // The 继续 after an evening action, deferred by commitAdvance: now turn the day.
+    case 'COMMIT_ADVANCE':
+      if (!state.pendingAdvance) return state;
+      return advancePhase({ ...state, pendingAdvance: false });
+
     // A save is a whole state, so loading one is not a merge — it is the season
     // the player left, put back exactly as it was.
     case 'LOAD_STATE':
@@ -282,6 +291,21 @@ function gameReducer(state: GameState, action: Action): GameState {
     default:
       return state;
   }
+}
+
+/**
+ * Turn the phase — but not before the player has read what just happened. An
+ * action taken in the day's last phase advances into the next morning, and the
+ * day-change reset inside advancePhase clears `lastResult`. When such an action
+ * left something to read, defer: hold the scene on the result with a 继续 beat
+ * (rendered from `pendingAdvance`), and COMMIT_ADVANCE turns the day on the click.
+ */
+function commitAdvance(prev: GameState, next: GameState, advances: boolean): GameState {
+  if (!advances) return buildStateForPhase(next);
+  if (nextPhase(prev.day, prev.phase).newDay && next.lastResult) {
+    return { ...next, pendingAdvance: true };
+  }
+  return advancePhase(next);
 }
 
 function advancePhase(state: GameState): GameState {
@@ -354,14 +378,19 @@ function advancePhase(state: GameState): GameState {
         };
       }
     }
-    // Exhausted: forced rest morning
-    if (next.fatigue >= 5) {
-      next = {
-        ...next,
-        fatigue: 0,
-        log: [...next.log, { day: newDay, phase: 'morning', text: lines.exhaustedMorning }],
-      };
-      next = { ...next, phase: 'afternoon' };
+    // Exhausted: the body gives out and the morning's own work is lost. But a
+    // fixed dawn event still happens to the steward — the messenger comes whether
+    // or not they slept in — so skip the morning only when nothing is scheduled to
+    // play in it. Otherwise keep the morning and let the event fire (照播).
+    if (next.fatigue >= FATIGUE_EXHAUSTED_THRESHOLD) {
+      next = { ...next, fatigue: 0 };
+      if (!hasMorningFixedEvent(next)) {
+        next = {
+          ...next,
+          phase: 'afternoon',
+          log: [...next.log, { day: newDay, phase: 'morning', text: lines.exhaustedMorning }],
+        };
+      }
     }
   }
 
@@ -534,6 +563,14 @@ export default function App() {
   ) : isNarrativeOnly ? (
     <button
       onClick={() => dispatch({ type: 'ADVANCE_DAY_EVENT' })}
+      className="px-8 py-2.5 border border-gold-dim text-cream font-serif text-sm rounded-sm hover:bg-bg-hover hover:border-gold transition-all"
+    >
+      {ui.app.continue}
+    </button>
+  ) : state.pendingAdvance ? (
+    // An evening action's outcome is on screen; the day turns only on the click.
+    <button
+      onClick={() => dispatch({ type: 'COMMIT_ADVANCE' })}
       className="px-8 py-2.5 border border-gold-dim text-cream font-serif text-sm rounded-sm hover:bg-bg-hover hover:border-gold transition-all"
     >
       {ui.app.continue}
