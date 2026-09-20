@@ -122,8 +122,7 @@
     "eventHeading": "你决定……",
     "tabLabor": "劳作",
     "tabSocial": "往来",
-    "tabRest": "休整",
-    "tabEmpty": "这个时段没有这类事可做。"
+    "tabRest": "休整"
   },
   "logDrawer": {
     "heading": "— 记录 —",

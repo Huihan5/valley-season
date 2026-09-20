@@ -493,7 +493,7 @@ describe('getFreeChoices — afternoon choices', () => {
     expect(talk?.effects?.greetingFrom).toBe('gregor');
     expect(talk?.effects?.conversationWith).toBeUndefined();
     expect(talk?.effects?.relationships).toBeUndefined();
-    expect(talk?.description).toBe('1 时段 · 不计信任');
+    expect(talk?.description).toBe('1 时段 · 只是打个招呼');
 
     // At the stable, lending a hand is the only thing that counts with him.
     const work = getFreeChoices(makeState({ phase: 'afternoon' })).find(c => c.id === 'help_horses');

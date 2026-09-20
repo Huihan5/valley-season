@@ -255,7 +255,7 @@ describe('去马厩搭把手 is the route that carries 格雷格 to 4', () => {
 
   it('costs a phase, gives nothing back but the point', () => {
     const choice = stableHelp();
-    expect(choice?.description).toBe('1 时段 · 计一次与格雷格的交谈');
+    expect(choice?.description).toBe('1 时段 · 搭把手，和格雷格处一处');
     expect(choice?.effects?.conversationWith).toBe('gregor');
     expect(choice?.effects?.fatigue).toBeUndefined();
     expect(choice?.effects?.guldmark).toBeUndefined();

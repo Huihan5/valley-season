@@ -93,7 +93,7 @@ const SPECS: TaskSpec[] = [
     requires: (s) => {
       if (!s.flags.storageCleared) return TEXT.tenantMeeting.needsStorage;
       if (getEffectiveTenantTrust(s) < TENANT_MEETING_MIN_TRUST) {
-        return fill(TEXT.tenantMeeting.needsTrust, { n: TENANT_MEETING_MIN_TRUST });
+        return TEXT.tenantMeeting.needsTrust;
       }
       return null;
     },

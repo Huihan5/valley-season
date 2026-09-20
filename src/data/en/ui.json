@@ -122,8 +122,7 @@
     "eventHeading": "You decide…",
     "tabLabor": "Work",
     "tabSocial": "People",
-    "tabRest": "Rest",
-    "tabEmpty": "Nothing of this kind to do just now."
+    "tabRest": "Rest"
   },
   "logDrawer": {
     "heading": "— Record —",

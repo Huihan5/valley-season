@@ -714,7 +714,7 @@ export function getFreeChoices(state: GameState): Choice[] {
         ? A.fellTimber.rainedOut
         : breaksPromise
           ? fill(A.fellTimber.brokePromise, {
-            tier: getYieldTierLabel(timberGain), trust: TIMBER_BROKEN_PROMISE_TRUST,
+            tier: getYieldTierLabel(timberGain),
           })
           : overruns
             ? fill(A.fellTimber.overruns, {
@@ -827,7 +827,7 @@ export function getFreeChoices(state: GameState): Choice[] {
       choices.push({
         id: 'survey_fields',
         text: A.surveyFields.text,
-        description: A.common.noYield,
+        description: A.surveyFields.description,
         effects: {
           fatigue: 1,
           flags: { surveyedFields: true },

@@ -1,7 +1,6 @@
 {
   "common": {
     "onePhase": "1 时段",
-    "noYield": "1 时段 · 无产出",
     "tooTired": "你过于疲惫",
     "tooTiredRest": "你过于疲惫，需要先休息"
   },
@@ -16,7 +15,7 @@
   "fellTimber": {
     "text": "前往林地采伐",
     "rainedOut": "阴雨天，林地工作暂停",
-    "brokePromise": "预计采伐 {tier} · 你说过就到二十单位 · 格雷格信任 {trust}",
+    "brokePromise": "预计采伐 {tier} · 你说过就到二十单位 · 格雷格会记在心里",
     "overruns": "预计采伐 {tier} · 超出本季额度 · 声望 {renown}",
     "pastQuota": "预计采伐 {tier} · 已超出本季额度",
     "withinQuota": "预计采伐 {tier}，本季额度还剩 {n} 单位",
@@ -27,23 +26,24 @@
   },
   "forage": {
     "text": "去林地采集蘑菇草药",
-    "description": "1 时段 · 计一次与玛莎的交谈",
+    "description": "1 时段 · 顺道和玛莎搭上话",
     "log": "你采了一趟，换了 {n} 金卢。"
   },
   "orchard": {
     "text": "去果园采摘",
     "description": "1 时段",
-    "tenantBonus": " · 佃户整体信任 +1",
+    "tenantBonus": " · 佃户领这份情",
     "overripe": "（果子过熟，收益减半）",
     "log": "你在果园摘了一趟，换了 {n} 金卢。"
   },
   "office": {
     "text": "处理办公室文书",
-    "description": "1 时段 · 计一次与埃莱娜的交谈",
+    "description": "1 时段 · 顺道和埃莱娜照面",
     "log": "你在办公室处理了一上午的文书。"
   },
   "surveyFields": {
     "text": "巡视农田",
+    "description": "1 时段 · 亲眼看过每块地，往后田里的事你心里有数",
     "log": "你把每一块地都走了一遍。"
   },
   "surveyForest": {
@@ -102,30 +102,30 @@
   },
   "talkGregor": {
     "text": "去马厩找格雷格",
-    "description": "1 时段 · 不计信任",
+    "description": "1 时段 · 只是打个招呼",
     "log": "你去马厩和格雷格待了一段时间。"
   },
   "helpHorses": {
     "text": "去马厩搭把手",
-    "description": "1 时段 · 计一次与格雷格的交谈",
+    "description": "1 时段 · 搭把手，和格雷格处一处",
     "log": "你在马厩跟着格雷格干了半天活。"
   },
   "visitLorenz": {
     "text": "去炉堂见洛伦茨",
-    "description": "1 时段 · 计一次与洛伦茨的交谈",
+    "description": "1 时段 · 和洛伦茨说会儿话",
     "log": "你去炉堂找洛伦茨说了一会儿话。"
   },
   "chapel": {
     "vigilText": "去炉堂陪洛伦茨守夜",
     "text": "前往庄园炉堂",
-    "vigilDescription": "1 时段 · 计一次与洛伦茨的交谈",
+    "vigilDescription": "1 时段 · 陪洛伦茨守夜，说得上话",
     "description": "1 时段 · 疲劳归零",
     "vigilLog": "你在炉堂陪洛伦茨守了一夜的火。",
     "log": "你在庄园炉堂守火冥想了片刻。"
   },
   "reviewAccounts": {
     "text": "夜间审查账目",
-    "description": "1 时段 · 疲劳 +1 · 无产出",
+    "description": "1 时段 · 疲劳 +1 · 在灯下把这本账过一遍",
     "log": "你在灯下审查了账目到深夜。"
   },
   "rest": {
@@ -177,19 +177,19 @@
       "label": "召开佃户会议",
       "effect": "收割 {from}→{to}",
       "needsStorage": "需先清理仓储",
-      "needsTrust": "佃户整体信任需 ≥ {n}"
+      "needsTrust": "佃户整体信任未达"
     },
     "repairStable": {
       "label": "修缮马厩屋顶",
-      "effect": "格雷格信任 +1"
+      "effect": "格雷格记着这份好"
     },
     "giftMarguerite": {
       "label": "河谷城风尚伴手礼（赠玛格丽特）",
-      "effect": "玛格丽特信任 +1"
+      "effect": "玛格丽特领这份情"
     },
     "giftHenk": {
       "label": "河谷城风尚伴手礼（赠亨克）",
-      "effect": "亨克信任 +1"
+      "effect": "亨克领这份情"
     },
     "attire": {
       "label": "瓦莱维斯普秋装",

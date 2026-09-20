@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Choice } from '../../types/game';
 import {
   getEffectChips, hasEstimatedYield, getChoiceCategory, ChoiceCategory,
@@ -107,7 +106,11 @@ function EventChoices({ choices, onChoice, locked }: Omit<Props, 'mode'> & { loc
   );
 }
 
-// ── Daily: a categorised grid ───────────────────────────────────────────────
+// ── Daily: the categories stacked, each under its own label ──────────────────
+// The player was clicking through tabs and forgetting a whole category was there;
+// with the cards already grouped, showing all three at once (labor / social /
+// rest) reads in one pass and suits the single reading column (P-round-3). Empty
+// categories drop out so a phase only shows the labels it actually has.
 
 const CATS: { key: ChoiceCategory; label: string }[] = [
   { key: 'labor', label: C.tabLabor },
@@ -118,57 +121,40 @@ const CATS: { key: ChoiceCategory; label: string }[] = [
 function DailyChoices({ choices, onChoice, locked }: Omit<Props, 'mode'> & { locked: boolean }) {
   const byCat: Record<ChoiceCategory, Choice[]> = { labor: [], social: [], rest: [] };
   choices.forEach((c) => byCat[getChoiceCategory(c)].push(c));
-  // Open on the first tab that has anything — the component remounts each phase
-  // (keyed on day+phase in App), so this re-picks as the day's actions change.
-  const [tab, setTab] = useState<ChoiceCategory>(CATS.find((c) => byCat[c.key].length > 0)?.key ?? 'labor');
-  const shown = byCat[tab];
 
   return (
     <div>
-      <p className="text-cream-dim text-xs tracking-wider mb-2">{C.dailyHeading}</p>
-      <div className="flex items-center gap-5 border-b border-game-border mb-3">
-        {CATS.map((c) => {
-          const active = c.key === tab;
-          const count = byCat[c.key].length;
+      <p className="text-cream-dim text-xs tracking-wider mb-3">{C.dailyHeading}</p>
+      <div className="space-y-4 max-w-[46rem]">
+        {CATS.map(({ key, label }) => {
+          const group = byCat[key];
+          if (group.length === 0) return null;
           return (
-            <button
-              key={c.key}
-              onClick={() => count && setTab(c.key)}
-              disabled={!count}
-              className={`pb-1.5 -mb-px text-xs font-serif tracking-wide border-b-2 transition-colors ${
-                active ? 'border-gold text-gold'
-                  : count ? 'border-transparent text-game-dim hover:text-cream cursor-pointer'
-                    : 'border-transparent text-game-dim/45 cursor-default'
-              }`}
-            >
-              {c.label}
-            </button>
+            <section key={key}>
+              <p className="text-game-dim text-[11px] font-serif tracking-widest uppercase mb-1.5">{label}</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                {group.map((choice) => {
+                  const off = locked || !!choice.disabled;
+                  return (
+                    <button
+                      key={choice.id}
+                      onClick={() => !off && onChoice(choice.id)}
+                      disabled={off}
+                      className={`${buttonClass(off)} px-4 py-3 ${delegatedToSidebar(choice.id) ? 'lg:hidden' : ''}`}
+                    >
+                      <p className={`text-sm font-serif mb-0.5 ${off ? 'text-game-dim' : 'text-cream group-hover:text-gold'}`}>
+                        {choice.text}
+                      </p>
+                      <ChoiceNote choice={choice} locked={locked} />
+                      {!choice.disabled && choice.description ? <EffectChips choice={choice} /> : null}
+                    </button>
+                  );
+                })}
+              </div>
+            </section>
           );
         })}
       </div>
-      {shown.length === 0 ? (
-        <p className="text-game-dim text-xs italic py-2">{C.tabEmpty}</p>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-w-[46rem]">
-          {shown.map((choice) => {
-            const off = locked || !!choice.disabled;
-            return (
-              <button
-                key={choice.id}
-                onClick={() => !off && onChoice(choice.id)}
-                disabled={off}
-                className={`${buttonClass(off)} px-4 py-3 ${delegatedToSidebar(choice.id) ? 'lg:hidden' : ''}`}
-              >
-                <p className={`text-sm font-serif mb-0.5 ${off ? 'text-game-dim' : 'text-cream group-hover:text-gold'}`}>
-                  {choice.text}
-                </p>
-                <ChoiceNote choice={choice} locked={locked} />
-                {!choice.disabled && choice.description ? <EffectChips choice={choice} /> : null}
-              </button>
-            );
-          })}
-        </div>
-      )}
     </div>
   );
 }

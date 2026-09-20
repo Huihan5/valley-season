@@ -136,10 +136,12 @@ describe('gift and attire', () => {
   });
 });
 
-describe('microcopy is mechanical, never narrated (GDD 11.6)', () => {
-  it('states the phase, the cost and the effect, and nothing else', () => {
+describe('microcopy states costs mechanically; relationship gains are worded, not numbered (GDD 11.6 / D3)', () => {
+  it('states the phase and the costs as numbers, and the effect', () => {
     expect(task(makeState(), 'task_repair_tools').summary).toBe('1 时段 · 15 金卢 · 收割 3→5 · 伐木 +1');
-    expect(task(makeState(), 'task_repair_stable').summary).toBe('1 时段 · 12 金卢 · 3 木材 · 格雷格信任 +1');
+    // The stable roof's cost stays numeric; its 格雷格 payoff reads as words, not a +1 —
+    // trust is never a number the player sees (D3, StatusPanel).
+    expect(task(makeState(), 'task_repair_stable').summary).toBe('1 时段 · 12 金卢 · 3 木材 · 格雷格记着这份好');
   });
 
   it('omits a cost the task does not have', () => {

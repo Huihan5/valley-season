@@ -1,7 +1,6 @@
 {
   "common": {
     "onePhase": "1 phase",
-    "noYield": "1 phase · no yield",
     "tooTired": "You are too worn out",
     "tooTiredRest": "You are too worn out; rest first"
   },
@@ -16,7 +15,7 @@
   "fellTimber": {
     "text": "Cut timber in the woods",
     "rainedOut": "Rain. No work in the woods today",
-    "brokePromise": "Expect a {tier} cut · you said twenty units and no more · Gregor’s trust {trust}",
+    "brokePromise": "Expect a {tier} cut · you said twenty units and no more · Gregor will remember it",
     "overruns": "Expect a {tier} cut · past the season’s allowance · renown {renown}",
     "pastQuota": "Expect a {tier} cut · already past the season’s allowance",
     "withinQuota": "Expect a {tier} cut, {n} units left of the season’s allowance",
@@ -27,23 +26,24 @@
   },
   "forage": {
     "text": "Forage the woods for mushrooms and herbs",
-    "description": "1 phase · counts as a talk with Martha",
+    "description": "1 phase · a word with Martha along the way",
     "log": "You went out foraging and turned it into {n} guldmark."
   },
   "orchard": {
     "text": "Pick in the orchard",
     "description": "1 phase",
-    "tenantBonus": " · tenant trust +1",
+    "tenantBonus": " · the tenants take it kindly",
     "overripe": " (the fruit is past its best, half yield)",
     "log": "You picked a load in the orchard and turned it into {n} guldmark."
   },
   "office": {
     "text": "See to the office papers",
-    "description": "1 phase · counts as a talk with Elena",
+    "description": "1 phase · you cross paths with Elena",
     "log": "You spent the morning in the office with the papers."
   },
   "surveyFields": {
     "text": "Walk the fields",
+    "description": "1 phase · see every plot for yourself, so you know the ground when it comes up",
     "log": "You walked every plot of it."
   },
   "surveyForest": {
@@ -102,30 +102,30 @@
   },
   "talkGregor": {
     "text": "Find Gregor at the stable",
-    "description": "1 phase · earns no trust",
+    "description": "1 phase · just a greeting",
     "log": "You spent a while at the stable with Gregor."
   },
   "helpHorses": {
     "text": "Lend a hand at the stable",
-    "description": "1 phase · counts as a talk with Gregor",
+    "description": "1 phase · time alongside Gregor",
     "log": "You worked half the day at the stable alongside Gregor."
   },
   "visitLorenz": {
     "text": "See Lorenz at the forge-chapel",
-    "description": "1 phase · counts as a talk with Lorenz",
+    "description": "1 phase · a while talking with Lorenz",
     "log": "You went to the forge-chapel and talked with Lorenz a while."
   },
   "chapel": {
     "vigilText": "Keep the vigil with Lorenz at the forge-chapel",
     "text": "Go to the estate forge-chapel",
-    "vigilDescription": "1 phase · counts as a talk with Lorenz",
+    "vigilDescription": "1 phase · the vigil gives you Lorenz’s ear",
     "description": "1 phase · fatigue to zero",
     "vigilLog": "You sat the night’s fire with Lorenz at the forge-chapel.",
     "log": "You tended the fire at the estate forge-chapel a while, and thought."
   },
   "reviewAccounts": {
     "text": "Go over the accounts at night",
-    "description": "1 phase · fatigue +1 · no yield",
+    "description": "1 phase · fatigue +1 · go through the ledger by lamplight",
     "log": "You went over the accounts by lamplight, late."
   },
   "rest": {
@@ -177,19 +177,19 @@
       "label": "Call a tenants’ meeting",
       "effect": "harvest {from}→{to}",
       "needsStorage": "Clear the stores first",
-      "needsTrust": "Tenant trust must be ≥ {n}"
+      "needsTrust": "Tenant trust isn’t there yet"
     },
     "repairStable": {
       "label": "Mend the stable roof",
-      "effect": "Gregor’s trust +1"
+      "effect": "Gregor won’t forget it"
     },
     "giftMarguerite": {
       "label": "Valehold-fashion gift (for Marguerite)",
-      "effect": "Marguerite’s trust +1"
+      "effect": "Marguerite takes it kindly"
     },
     "giftHenk": {
       "label": "Valehold-fashion gift (for Henk)",
-      "effect": "Henk’s trust +1"
+      "effect": "Henk takes it kindly"
     },
     "attire": {
       "label": "Valewisp autumn dress",
