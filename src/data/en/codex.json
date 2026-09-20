@@ -1,0 +1,112 @@
+{
+  "heading": "— The Compendium —",
+  "open": "Compendium",
+  "close": "Close",
+  "count": "{unlocked} / {total}",
+  "lockedPerson": "Unmet",
+  "lockedLore": "Unrecorded",
+  "layerLocked": "Not yet",
+  "empty": "Nothing on this shelf yet.",
+  "categories": {
+    "people": "People",
+    "marigni": "Marigni",
+    "valewisp": "Valewisp"
+  },
+  "layerLabels": {
+    "face": "At a glance",
+    "inside": "Beneath",
+    "archetype": "The type"
+  },
+  "entries": {
+    "gregor": {
+      "title": "Gregor",
+      "subtitle": "Stable master",
+      "silhouette": "The man at the stable",
+      "layers": {
+        "face": "The stable at Maplegate is his, and has been for thirty years. He barely speaks — the day you arrived he carried your bag and drove the cart, said nothing the whole way, and at the door left you three words, Martha’s inside, before leading the horse off.",
+        "inside": "He has been here longer than anyone, and remembers every master and steward the estate has turned over. About horses he is almost stubbornly particular; about people he keeps his opinion, and reads them well. The horse the last steward left behind — he knows something of it.",
+        "archetype": "A Valewisp groom is an old kind of post: not quite a servant, not quite hired labour, more a sinew between the estate and its land. Rational feudalism writes each person’s place into a contract; a man like him is the order that gathers outside it, out of years and craft."
+      }
+    },
+    "marta": {
+      "title": "Martha",
+      "subtitle": "Head of the kitchen",
+      "silhouette": "The one who runs the kitchen",
+      "layers": {
+        "face": "The kitchen is hers, and there is always flour on the apron. She talks, and plainly; you were looked over head to foot the moment you came in.",
+        "inside": "Nothing on the estate moves without her knowing it — who is at odds with whom, where the accounts run thin. Whether she says so depends on whether you ask, and whether it is worth the telling.",
+        "archetype": "On a Valewisp estate the head of the kitchen is often the house’s real hub: masters come and go, the hearth stays lit. What she holds is not authority but news, and goodwill."
+      }
+    },
+    "elena": {
+      "title": "Elena",
+      "subtitle": "Clerk",
+      "silhouette": "The one with the papers upstairs",
+      "layers": {
+        "face": "She keeps the papers. Quiet, sparing with words; she barely spoke showing you up to the room.",
+        "inside": "Accounts, contracts, the letters in and out all pass through her hands. She knows more than she lets on. That faded rectangle on your desk — she would know what used to stand there.",
+        "archetype": "The clerk is the estate’s nearest thing to an archive — rational feudalism sets everything down on paper, and whoever handles the paper often holds more than the post itself."
+      }
+    },
+    "lorenz": {
+      "title": "Master Lorenz",
+      "subtitle": "The estate forge-chapel",
+      "silhouette": "The master at the forge-chapel",
+      "layers": {
+        "face": "The master of the Maplegate forge-chapel. In the Temple Forged by the Sacred Flame the clergy are craftsmen, not pastors; what he keeps is the fire in the hearth, not a pulpit.",
+        "inside": "He keeps the vigil at the forge-chapel on Thursdays. He presses no belief on anyone; he simply treats the fire as a thing that ought to be tended. When there is a quarrel on the estate, people tend to go to him first.",
+        "archetype": "In Valewisp faith is closer to respect for the natural order than to doctrine. The master is what that local faith looks like: at the kingdom’s centre the institution is a sanctum and a minting seal; here it is one man keeping a fire."
+      }
+    },
+    "marguerite": {
+      "title": "Baroness Marguerite",
+      "subtitle": "Thornwall",
+      "silhouette": "The lady of Thornwall",
+      "layers": {
+        "face": "The lady of Thornwall. You will most likely meet her at the hunt or a dinner.",
+        "inside": "Valehold fashion, which household is due a call, which dinner cannot be missed — she has it all straight. She is measured with people, and she remembers a kindness.",
+        "archetype": "The baroness is a hub of Valewisp’s noble society — to miss the hunt is to say something is wrong, and it is usually the lady of the house who arranges these occasions."
+      }
+    },
+    "henk": {
+      "title": "Baron Henk",
+      "subtitle": "Thornwall",
+      "silhouette": "The baron of Thornwall",
+      "layers": {
+        "face": "The Baron of Thornwall, Marguerite’s husband, one of the hosts at the hunt and the dinner.",
+        "inside": "He cares more for the woods, the hunting ground and appearances; the accounts he mostly leaves to others.",
+        "archetype": "A baron is one link in rational feudalism’s chain of contract: duties upward, a guarantee downward — as Ludwig stood guarantor for you."
+      }
+    },
+    "rational_feudalism": {
+      "title": "Rational Feudalism",
+      "subtitle": "Kingdom of Marigni",
+      "silhouette": "Marigni’s polity",
+      "text": "What sets the Kingdom of Marigni apart: monarch, council and parliament coexist, and feudal contracts run inside a modern legal frame. It is ancient, restrained, intensely private, its politics unbroken since medieval times. The currency is the Guldmark. The guarantee letter between you and Baron von Alde is this system in its everyday form — favour and law in force at once."
+    },
+    "sacred_flame": {
+      "title": "Temple Forged by the Sacred Flame",
+      "subtitle": "Marigni’s faith",
+      "silhouette": "The local faith",
+      "text": "It venerates the Sacred Fire and the act of forging — the self as raw iron to be shaped. Its clergy are masters and forge-keepers, not pastors; a place of worship has a hearth, not an altar, the fire set into the floor at the centre. At the kingdom’s heart it is institution — sanctum, minting seal, the authentication of contracts; here in Valewisp it is closer to respect for the seasons and the natural order."
+    },
+    "valewisp_duchy": {
+      "title": "Valewisp",
+      "subtitle": "The river duchy",
+      "silhouette": "The duchy you are bound for",
+      "text": "Marigni’s largest duchy — a temperate valley, rich farmland, mixed woods. Its economy is grain, timber, livestock, a little wine. It prizes courtesy, bloodline and the rhythm of the seasons — to be hasty is an insult, to be idle no more forgivable; time runs by season, not by clock. It thinks itself the most noble of the duchies: not from arrogance, but from living closest to the order of the land."
+    },
+    "maplegate": {
+      "title": "Maplegate",
+      "subtitle": "North of Valehold",
+      "silhouette": "The estate you are to keep",
+      "text": "A middling estate in the district north of Valehold, Baron von Alde’s holding. Stone walls, timber tiles, an avenue of maples burning with autumn. The last steward left suddenly, with no handover at all; the harvest is near and the estate’s work has stood three weeks. You have thirty days."
+    },
+    "millridge": {
+      "title": "Millridge",
+      "subtitle": "",
+      "silhouette": "",
+      "text": "(Placeholder · spoiler thread: bound up with that unaccountable line in the ledger and where the money went. This entry unlocks with the investigation; its body is to be written to the truth line.)"
+    }
+  }
+}

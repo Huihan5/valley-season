@@ -1,5 +1,36 @@
 # Valley Season — Changelog
 
+## [2026-09-20] — 见闻：跨周目档案层脚手架（roadmap C · schema + 样板）
+
+第三轮盲测 C 组"加厚故事层，让重玩有回报"。作者定：与调查卷宗分成**两个面板、两种寿命**——卷宗每局重置，见闻跨周目累积；缺口按**方案乙 + 精修**显示。本条是**机制脚手架 + 一版粗填内容**，正文待作者的新文档替换。全库 **566 绿**，tsc 干净，浏览器实测标题页与局内两处、人物 / 玛里尼 / 瓦莱维斯普三栏均通过。
+
+### Added
+- **`见闻` 跨周目档案面板**（`CodexPanel` + `CodexSystem`）。三栏：人物 / 玛里尼 / 瓦莱维斯普。
+  - **持久化照 `CollectionSystem`（结局收集册）**：自有 `localStorage` 键 `valley-season:codex`，存一组"已解锁键"（`gregor` 或 `gregor:inside`），刻意不进 `GameState`——它跨周目、与存档解绑。显示 = **本局满足 ∪ 历来记录**：一局里随进度实时填，跨周目永久留；局内开面板或到结局时落盘。
+  - **解锁 = 本局信息触发、跨周目记住**：`fromStart` / `met`（复用 `isNpcKnown`——三位住户开局即识，洛伦茨与两位贵族凭 `unlockForgeChapel` / `attendedDinner` / `huntAttendedDay18` 旗标）/ `trust` / `flag`。人物分三层：照面（识）、底细（信任 ≥ 2）、原型（信任 ≥ 4）——原型即"原型在世界观里的定位"那层，最深、最该留给重玩。
+  - **缺口按方案乙 + 精修**：未解锁的 `silhouette` 条目留灰槽、显剪影词、计入"3 / 6"（露形状不露正文）；`hidden` 条目（如挂在 `clue_mot_handwriting` 上的「磨岭」）解锁前整条不显、不计数（不预告暗线）；已解锁人物的更深层就地上锁、显"尚未解锁"。
+  - 入口：局内场景头加「见闻」按钮，标题页加「见闻」按钮（`state=null` 时只显跨周目记录 + `fromStart` 基线世界知识）。
+- **数据分层**：结构（id / 分类 / reveal / 解锁条件）在 `src/data/codex.ts`（locale-neutral，同 `config.ts`）；正文在 `data/<locale>/codex.json`（中英成对、按 id 键）。当前 11 条：6 人物 + 玛里尼 2（理性封建、圣火铸造教）+ 瓦莱维斯普 3（公国、枫径庄园、磨岭 · hidden）。**内容是粗填占位，待作者文档替换。**
+
+### Tests
+- `CodexSystem.test`（10 条）：结构 ↔ 正文中英不漂移；`currentUnlocks` 的 fromStart/met/trust/flag；方案乙 + 精修的显隐与计数；跨周目落盘 / 幂等 / 清除。
+
+### 备注
+- 内容为占位草稿（作者将发文档据以 update）。贵族解锁走 `met` 旗标；样板以住户 / 洛伦茨演示逐层解锁，「磨岭」正文是明标的剧透占位。
+- 与 GDD：新系统，稳定后宜补一节记分类表与解锁规则（作者的地盘，未动）。
+
+## [2026-09-20] — 日程视图：状态栏加一张只读月历（roadmap B · 日历）
+
+第三轮盲测 B 组"降低机械层摩擦"的第一项、也是成本最低的一项。状态栏"日期天气"下加一张 30 天月历：当天高亮、集市日（周六）标琥珀、过去的日子淡出，底下两行"距季末 N 天 / 下个集市 · M 天后"。全是 day 号的**纯函数派生——结构上就无从剧透**（强制事件的具体日子根本不进这个视图）。集市周六本就是公国公开张贴的时刻表（开场车站那张"本季集市时间表"），故可显；守夜（周四 · 洛伦茨）属人物私routine，刻意不画。全库 **556 绿**，tsc 干净，浏览器实测 Day 1 / Day 2：当天金环、过去淡出、集市琥珀、两行摘要都随 day 实时更新。
+
+### Added
+- **`TimeSystem` 两个纯 helper**：`daysUntilSeasonEnd(day)` = `TOTAL_DAYS − day`（末日为 0）；`daysUntilNextMarket(day)` = 到下一个季内周六的天数（当天为 0，季内再无则 `null`）。皆为 day 号的确定性周期算术，可脱离 `GameState` 测。
+- **`StatusPanel` 的 `CalendarSection`**：Day 1 是周一，30 天正好落进周一起始的 7 宽网格、无前导空格。当天 = 金环＋金/15 底、过去 = `game-dim/40` 淡出、集市周六 = 琥珀、其余 = `cream-dim`；下方两行摘要走 `plural` + `fill`。
+- **`ui.json` 的 `calendar` 段（中英）**：`heading`、`weekdayShort`（1-indexed 数组）、`daysLeft/One`、`nextMarket/One`、`lastDay`、`marketToday`、`noMoreMarket`。
+
+### Tests
+- `TimeSystem.test`：`daysUntilSeasonEnd`(1/30/31)=29/0/0；`daysUntilNextMarket`(1/6/7/27)=5/0/6/0；28、30 → `null`。
+
 ## [2026-09-20] — 第三轮盲测：行动微文案去数字化 + 每日选项由 tab 改为分组堆叠
 
 第三轮盲测反馈的三处（①开场压缩暂缓，属作者叙事取舍）。核心：卡面文案不该把机制（`信任 +1`、`计一次交谈`、`无产出`）写在脸上——这本就与游戏既定的 **D3（关系从不以数字示人**，见 `StatusPanel` / `ChoicePreview` 只发资源与声望 chip）自相矛盾；且每日选项的 tab 让人懒得点、反而忘了整类事的存在。全库 **553 绿**，tsc 干净，浏览器实测 Day 1 上午（劳作单栏）/ 下午（劳作＋往来双栏）文案与堆叠均通过。

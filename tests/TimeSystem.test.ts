@@ -1,5 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import { nextPhase, isMarketDay, getDayOfWeek } from '../src/systems/TimeSystem';
+import {
+  nextPhase, isMarketDay, getDayOfWeek, daysUntilSeasonEnd, daysUntilNextMarket,
+} from '../src/systems/TimeSystem';
 
 describe('TimeSystem', () => {
   it('advances morning → afternoon within same day', () => {
@@ -31,5 +33,24 @@ describe('TimeSystem', () => {
     expect(getDayOfWeek(1)).toBe('周一');
     expect(getDayOfWeek(7)).toBe('周日');
     expect(getDayOfWeek(8)).toBe('周一');
+  });
+
+  it('counts the days left to the season end, 0 on the last day', () => {
+    expect(daysUntilSeasonEnd(1)).toBe(29);
+    expect(daysUntilSeasonEnd(30)).toBe(0);
+    expect(daysUntilSeasonEnd(31)).toBe(0);
+  });
+
+  it('counts the days to the next market — 0 on a market day', () => {
+    expect(daysUntilNextMarket(1)).toBe(5);   // Mon → the Day-6 Saturday
+    expect(daysUntilNextMarket(6)).toBe(0);   // on the market day itself
+    expect(daysUntilNextMarket(7)).toBe(6);   // → the Day-13 Saturday
+    expect(daysUntilNextMarket(27)).toBe(0);  // the last market day
+  });
+
+  it('returns null once the season has no market left', () => {
+    // Day 27 is the last Saturday; nothing after it falls inside the 30 days.
+    expect(daysUntilNextMarket(28)).toBeNull();
+    expect(daysUntilNextMarket(30)).toBeNull();
   });
 });

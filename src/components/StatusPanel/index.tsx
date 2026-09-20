@@ -1,16 +1,18 @@
 import { GameState, NpcId } from '../../types/game';
 import { WEATHER_LABELS, WEATHER_ICONS } from '../../systems/WeatherSystem';
 import { getFatigueLabel, getFatigueEffect } from '../../systems/FatigueSystem';
-import { getDayOfWeek, isMarketDay } from '../../systems/TimeSystem';
+import {
+  getDayOfWeek, isMarketDay, daysUntilSeasonEnd, daysUntilNextMarket,
+} from '../../systems/TimeSystem';
 import {
   getTrust, getKnownNpcs, getTrustTier, getEffectiveTenantTrust, TrustTier,
 } from '../../systems/RelationSystem';
 import { getFieldGrain } from '../../systems/ResourceSystem';
 import {
-  GRAIN_EXCELLENT_THRESHOLD, NOBLE_TRUST_MAX, LORD_IMPRESSION_MAX, DAILY_GULDMARK_COST,
+  GRAIN_EXCELLENT_THRESHOLD, NOBLE_TRUST_MAX, LORD_IMPRESSION_MAX, DAILY_GULDMARK_COST, TOTAL_DAYS,
 } from '../../data/config';
 import DATA from '../../data';
-import { plural } from '../../utils/text';
+import { plural, fill } from '../../utils/text';
 
 const ui = DATA.ui;
 
@@ -19,6 +21,7 @@ const SECTION_LABEL = 'text-cream-dim text-xs tracking-wider mb-2';
 
 const NPC_NAMES: Record<NpcId, string> = ui.npc;
 const T = ui.statusPanel;
+const CAL = ui.calendar;
 
 /**
  * Relationships read as words, not numbers (PlaytestFeedback 2026-09 / D3): the exact
@@ -73,6 +76,11 @@ export default function StatusPanel({ state }: Props) {
           )}
         </div>
       </div>
+
+      {/* Schedule — the season's deterministic cycle only: today, the market
+          Saturdays (a timetable the duchy posts publicly), and how far off the end
+          is. Nothing about what happens on a given day, so it cannot spoil. */}
+      <CalendarSection day={day} />
 
       {/* Resources */}
       <div className="px-4 py-3 border-b border-game-border">
@@ -160,6 +168,65 @@ export default function StatusPanel({ state }: Props) {
             );
           })}
         </div>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * A month at a glance. Day 1 is a Monday, so the 30 days drop straight into a
+ * Monday-first 7-wide grid with no leading blanks. Today is ringed; days gone by
+ * fade; the market Saturdays carry the amber the rest of the panel gives the market.
+ * Everything here is a pure function of the day number — no event data reaches it.
+ */
+function CalendarSection({ day }: { day: number }) {
+  const left = daysUntilSeasonEnd(day);
+  const toMarket = daysUntilNextMarket(day);
+  const daysLeftLine = left === 0
+    ? CAL.lastDay
+    : fill(plural(left, CAL.daysLeftOne, CAL.daysLeft), { n: left });
+  const marketLine = toMarket === null
+    ? CAL.noMoreMarket
+    : toMarket === 0
+      ? CAL.marketToday
+      : fill(plural(toMarket, CAL.nextMarketOne, CAL.nextMarket), { n: toMarket });
+
+  return (
+    <div className="px-4 py-3 border-b border-game-border">
+      <p className={SECTION_LABEL}>{CAL.heading}</p>
+      <div className="grid grid-cols-7 gap-1 mb-1">
+        {CAL.weekdayShort.slice(1).map((w, i) => (
+          <span key={i} className={`text-center text-[10px] ${i === 5 ? 'text-amber/70' : 'text-game-dim/70'}`}>
+            {w}
+          </span>
+        ))}
+      </div>
+      <div className="grid grid-cols-7 gap-1">
+        {Array.from({ length: 35 }).map((_, i) => {
+          const d = i + 1;
+          if (d > TOTAL_DAYS) return <span key={i} aria-hidden="true" />;
+          const today = d === day;
+          const tone = today
+            ? 'bg-gold/15 text-gold border-gold'
+            : d < day
+              ? 'text-game-dim/40 border-transparent'
+              : isMarketDay(d)
+                ? 'text-amber border-transparent'
+                : 'text-cream-dim border-transparent';
+          return (
+            <span
+              key={i}
+              aria-current={today ? 'date' : undefined}
+              className={`text-center text-[10px] tabular-nums leading-none py-1 rounded-sm border ${tone}`}
+            >
+              {d}
+            </span>
+          );
+        })}
+      </div>
+      <div className="mt-2 space-y-0.5">
+        <p className="text-game-dim text-xs">{daysLeftLine}</p>
+        <p className="text-amber/80 text-xs">{marketLine}</p>
       </div>
     </div>
   );

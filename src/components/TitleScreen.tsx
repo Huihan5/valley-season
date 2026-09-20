@@ -15,6 +15,7 @@ interface Props {
   onContinue: () => void;
   onOpenSaves: () => void;
   onOpenGallery: () => void;
+  onOpenCodex: () => void;
 }
 
 /**
@@ -23,7 +24,7 @@ interface Props {
  * bilingual build will need (PlaytestFeedback 3.a). Both live here.
  */
 export default function TitleScreen({
-  auto, hasManualSaves, onNew, onContinue, onOpenSaves, onOpenGallery,
+  auto, hasManualSaves, onNew, onContinue, onOpenSaves, onOpenGallery, onOpenCodex,
 }: Props) {
   const resumable = auto && !auto.finished;
   const locale = getLocale();
@@ -71,6 +72,13 @@ export default function TitleScreen({
           className="px-6 py-2.5 border border-game-border text-game-text font-serif text-sm rounded-sm hover:bg-bg-hover hover:border-gold-dim transition-all"
         >
           {ui.gallery.open}
+        </button>
+
+        <button
+          onClick={onOpenCodex}
+          className="px-6 py-2.5 border border-game-border text-game-text font-serif text-sm rounded-sm hover:bg-bg-hover hover:border-gold-dim transition-all"
+        >
+          {DATA.codex.open}
         </button>
 
         {/* Changing language reloads: the text is wired in at module load, and the

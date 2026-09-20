@@ -116,6 +116,17 @@
       "embraced": "Close"
     }
   },
+  "calendar": {
+    "heading": "— Schedule —",
+    "weekdayShort": ["", "Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"],
+    "daysLeft": "{n} days to the season’s end",
+    "daysLeftOne": "{n} day to the season’s end",
+    "lastDay": "The last day of the season",
+    "nextMarket": "Next market · in {n} days",
+    "nextMarketOne": "Next market · in {n} day",
+    "marketToday": "Market day today",
+    "noMoreMarket": "No more markets this season"
+  },
   "choicePanel": {
     "heading": "— Choices —",
     "dailyHeading": "What will you do today?",

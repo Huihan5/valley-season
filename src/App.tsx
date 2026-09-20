@@ -32,6 +32,8 @@ import TitleScreen from './components/TitleScreen';
 import SaveMenu from './components/common/SaveMenu';
 import Journal from './components/common/Journal';
 import EndingGallery from './components/common/EndingGallery';
+import CodexPanel from './components/common/CodexPanel';
+import { recordCodex, currentUnlocks } from './systems/CodexSystem';
 import {
   AUTO_SLOT, ManualSlot, SaveSummary,
   writeSlot, readSlot, clearSlot, readSlotSummary, listManualSlots,
@@ -413,6 +415,7 @@ export default function App() {
   const [savesOpen, setSavesOpen] = useState(false);
   const [journalOpen, setJournalOpen] = useState(false);
   const [galleryOpen, setGalleryOpen] = useState(false);
+  const [codexOpen, setCodexOpen] = useState(false);
   const [autoSave, setAutoSave] = useState<SaveSummary | null>(() => readSlotSummary(AUTO_SLOT));
   const [manualSaves, setManualSaves] = useState<(SaveSummary | null)[]>(() => listManualSlots());
   const [seenEndings, setSeenEndings] = useState<EndingId[]>(() => readSeenEndings());
@@ -425,6 +428,14 @@ export default function App() {
     if (!state.demoComplete || !state.endingId) return;
     recordEnding(state.endingId as EndingId);
     setSeenEndings(readSeenEndings());
+  }, [state.demoComplete, state.endingId]);
+
+  // The codex is a browser record like the gallery: whatever a run has unlocked is
+  // written the moment it reaches an ending, so it carries into the next season even
+  // if the 见闻 panel was never opened this time.
+  useEffect(() => {
+    if (!state.demoComplete || !state.endingId) return;
+    recordCodex(currentUnlocks(state));
   }, [state.demoComplete, state.endingId]);
 
   // The autosave follows every change, including the ones inside an event: the
@@ -501,6 +512,7 @@ export default function App() {
           onContinue={continueSeason}
           onOpenSaves={() => setSavesOpen(true)}
           onOpenGallery={() => setGalleryOpen(true)}
+          onOpenCodex={() => setCodexOpen(true)}
         />
         {savesOpen && (
           <SaveMenu
@@ -514,6 +526,9 @@ export default function App() {
         )}
         {galleryOpen && (
           <EndingGallery seen={seenEndings} onClose={() => setGalleryOpen(false)} />
+        )}
+        {codexOpen && (
+          <CodexPanel state={null} onClose={() => setCodexOpen(false)} />
         )}
       </>
     );
@@ -613,6 +628,7 @@ export default function App() {
             state={state}
             onOpenSaves={() => { refreshManualSaves(); setSavesOpen(true); }}
             onOpenJournal={() => setJournalOpen(true)}
+            onOpenCodex={() => { recordCodex(currentUnlocks(state)); setCodexOpen(true); }}
           >
             <div key={`${state.day}-${state.phase}`} className="choices-enter">
               {choiceArea}
@@ -646,6 +662,10 @@ export default function App() {
 
       {journalOpen && (
         <Journal state={state} onClose={() => setJournalOpen(false)} />
+      )}
+
+      {codexOpen && (
+        <CodexPanel state={state} onClose={() => setCodexOpen(false)} />
       )}
     </div>
   );

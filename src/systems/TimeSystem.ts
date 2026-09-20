@@ -1,5 +1,5 @@
 import { DayPhase, GameState } from '../types/game';
-import { DEMO_MAX_DAYS, HUNT_FIRST_DAY, HUNT_LAST_DAY } from '../data/config';
+import { DEMO_MAX_DAYS, HUNT_FIRST_DAY, HUNT_LAST_DAY, TOTAL_DAYS } from '../data/config';
 import DATA from '../data';
 import { fill } from '../utils/text';
 
@@ -46,6 +46,23 @@ export function isVigilNight(day: number): boolean {
 
 export function getDayOfWeek(day: number): string {
   return ui.weekdays[getWeekdayNumber(day)];
+}
+
+/** Whole days between today and the end of the 30-day season (0 on the last day). */
+export function daysUntilSeasonEnd(day: number): number {
+  return Math.max(0, TOTAL_DAYS - day);
+}
+
+/**
+ * Days from today to the next market (Saturday) still inside the season — 0 when
+ * today is a market day, null when none is left. Pure cycle arithmetic, so the
+ * schedule view can read it without any knowledge of what happens on those days.
+ */
+export function daysUntilNextMarket(day: number): number | null {
+  for (let d = Math.max(1, day); d <= TOTAL_DAYS; d++) {
+    if (isMarketDay(d)) return d - day;
+  }
+  return null;
 }
 
 export function isDemoComplete(day: number): boolean {

@@ -7,6 +7,7 @@
  * sibling directory together.
  */
 import actions from './actions.json';
+import codex from './codex.json';
 import opening from './opening.json';
 import systemLines from './system_lines.json';
 import ui from './ui.json';
@@ -63,6 +64,7 @@ import eventsRandomRandomWell from './events/random/random_well.json';
 
 const bundle = {
   actions: actions,
+  codex: codex,
   opening: opening,
   systemLines: systemLines,
   ui: ui,

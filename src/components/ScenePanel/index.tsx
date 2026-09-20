@@ -20,11 +20,12 @@ interface Props {
   state: GameState;
   onOpenSaves: () => void;
   onOpenJournal: () => void;
+  onOpenCodex: () => void;
   /** The choices, rendered inline under the prose and scrolling with it (B). */
   children?: ReactNode;
 }
 
-export default function ScenePanel({ state, onOpenSaves, onOpenJournal, children }: Props) {
+export default function ScenePanel({ state, onOpenSaves, onOpenJournal, onOpenCodex, children }: Props) {
   const { day, phase, activeEvent, currentSceneText, lastResult } = state;
   // Overwork the player can see in the scene, not only as a bar in the panel (D7).
   const fatigueNote = getFatigueNote(state.fatigue);
@@ -58,8 +59,14 @@ export default function ScenePanel({ state, onOpenSaves, onOpenJournal, children
           </>
         )}
         <button
-          onClick={onOpenJournal}
+          onClick={onOpenCodex}
           className="ml-auto text-game-dim text-xs hover:text-cream transition-colors shrink-0"
+        >
+          {DATA.codex.open}
+        </button>
+        <button
+          onClick={onOpenJournal}
+          className="text-game-dim text-xs hover:text-cream transition-colors shrink-0"
         >
           {ui.scenePanel.journal}
         </button>
