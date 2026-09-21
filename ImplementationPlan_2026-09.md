@@ -11,7 +11,7 @@
 > ---
 > ## 🔖 恢复点（compact 之后从这里继续）
 >
-> **截至 2026-09-20（commit `d01f2f0`，全部已 push；全库 570 测试绿、tsc 干净、工作树干净）**
+> **截至 2026-09-21（commit `08e5a12`，全部已 push；全库 576 测试绿、tsc 干净、工作树干净）**
 >
 > 第二轮盲测六处 + 响应式已收尾（更早条目）。本轮做了**第三轮盲测反馈** + **roadmap B/C 前两项 + 声画接缝 + 离线交付**（详见 `docs/CHANGELOG.md` 顶部五条 2026-09-20 条目）：
 > - ✅ **第三轮盲测（commit `8f9f295`）**：行动/任务卡**去数字化**——关系"奖励"用人话（`格雷格记着这份好` / `X领这份情`）、交谈计数改自然说法（`顺道和X搭上话`）、毁约伐木不显 −2、佃户会议门槛 `信任 ≥ N`→`信任未达`（保留资源/收割 tier/**声望**等功能性数字）；「无产出」两张卡改为说清用途（巡视农田置 `surveyedFields`、夜查账目第三夜出 `clue_mot_handwriting`）；每日选项 **tab → 分组堆叠**（`ChoicePanel`，空类别隐去）。**GDD 11.6 张力**：微文案"机械不叙事"对关系收益放宽（向 D3"关系不显数字"收敛），GDD 未改、待作者择机并入。
@@ -20,13 +20,20 @@
 > - ✅ **声画数据接缝（SFX/VFX，commit `da25e6a`）**：`data/cues.ts`（cue 注册表 + 天气/场景→cue 映射）+ `CueSystem.resolveCues`（纯函数）。**无资源、无播放器、UI 未接**——只是接缝，日后点亮只改数据+播放器。共识：安静的游戏，声画只做 diegetic、克制。
 > - ✅ **离线单文件构建 + 盲测包刷新（commit `d01f2f0`）**：`npm run build:standalone`（vite `--mode standalone` + `vite-plugin-singlefile`）出**一个自包含 `dist-standalone/index.html`**（全内联、`file://` 双击即玩、也能上静态托管）。盲测包**已改名 `../valley-season-blind-playtest-2026-09-20/`**：`河谷季.html`（双击玩）、`valley-season-code.zip`（源码 230 文件无剧透）、`valley-season-itch.zip`（itch 上传，index.html 在根）、`design-reference/`（私）、`_先读我.txt`（含 itch 部署步骤）。见 [[project-blind-playtest-package]]。
 >
+> **本轮新增（`60163b8` 之后，2026-09-21）：**
+> - ✅ **第四轮盲测修复（`268bb54`）**：跨语言读档语言锁（存档元数据记 `locale`、不进 `GameState`；读档若语言不符先 `setLocale`（reload）+ `valley-season:resume` 一次性标记重开该槽；语言开关只在标题页故不破坏局内）；结局 4A `rites_open`「圣火节之后第三天」→「之前」（归火在前，对齐 `festival_mirror`）；磨岭见闻占位去剧透。`SaveSystem`+`App.openSlot`，`SaveSystem.test` +6，浏览器实测。
+> - ✅ **见闻六人物正稿（`b84309e` → 精修 `08e5a12`）**：据作者私稿 `design-drafts/update0920/Project VALE`（Timothy 段=三段模板，正好对上 照面/底细/原型 三层）写 gregor/marta/elena/lorenz/marguerite/henk 三层 zh+en。**对照游戏文本订正两处占位硬伤**：Elena=女仆（非文书，day12）、Henk=磨岭男爵（非棘墙玛格丽特之夫，day18）。再按 `humanizer-zh`/humanizer 精修 + 贴原文（去自造比喻/暴力词）。
+> - ✅ **中文标点规范（`08e5a12`）**：全库 43 zh 文件用全角中文标点 + 中文引号 “”，唯 codex 残留角括号「」→ 全换 “”（全库唯一异类已清）。**立为长期标准** → 记忆 `text-punctuation-standard`（zh 全角+“”、en 弯引号 ’、每次跑 humanizer、贴作者原文）。
+> - ✅ **归火神学进 WORLDBOOK（`08e5a12`，作者批准）**：`docs/WORLDBOOK.md` 加「归火」（人生=锻造、死亡=交还圣火；火葬"接纳" vs 火刑"审判"；火刑留而不用=太神圣——**结局 4A + 洛伦茨底层**）+「身份证件」两节。
+> - ✅ **itch 封面 `1800446`**（`src/assets/cover_valley_season.jpg`，未 import 不进 build）；**盲测包刷新+改名 `../valley-season-blind-playtest-2026-09-21/`**（三件套重建到 `08e5a12`、grep 体检无泄漏含新见闻文案；**惯例**：每次刷新此包=改名到当天日期 + 同步 `_先读我` 标题日期）。itch **Public 现为作者选择**（已核实包内无设计稿）。
+>
 > **开放线程 / 下一步：**
-> - ⬜ **见闻正文替换（最近的下一步）**：作者会发档案文档；据以替换 `data/{zh,en}/codex.json`，id 与 `codex.ts` 对齐、zh/en 成对；改完 `tsc`+`npm test`（`Localization.test` 键对齐 + `CodexSystem.test` 结构↔正文）+浏览器抽查。结构/解锁/UI 已定，只改内容。
+> - ⬜ **见闻世界知识条目（最近的下一步）**：六人物已成正稿；`sacred_flame`/`valewisp_duchy`/`rational_feudalism`/`maplegate` 仍是较早版本，可按同一套标准（humanizer + 中文标点 + 贴 `design-drafts/update0920/Marigni：一个国家.docx` 素材，尤其归火/Valewisp 身份）精修；改 `codex.json` 内容层、跑 `Localization`+`CodexSystem`。人物文字是**第一版正稿**，作者或微调措辞。
 > - ⬜ **roadmap C 余项**：Day22 线索提示（读 `getClueGroups`，别把"给予而非搜寻"摊平）、一键整日/缩短中段（只跳真空时段的窄版；动的是刚修稳的推进管线，要小心）；世界回应过往（后日谈+日常回调，与见闻同属"加厚故事层"）。
 > - ⬜ **SFX/VFX**：接缝已就绪；真做时补资源 + 播放器 + 静音开关 + 自动播放限制处理（注意会撑大单文件体积）。作者的美术/方向取舍。
 > - ⬜ **阶段三（D2 文本精简）仍未开始**——作者主导文字，我做打靶/工具/非文字减负；开始前确认幅度与优先顺序。
 > - ⬜ **可选小打磨**：手机满宽状态栏留白偏大；tier3"贵族的"一句是否补守贵族线（作者待定）。
-> - 记忆索引 `~/.claude/.../memory/MEMORY.md`：设计哲学、roadmap（日历已 SHIPPED）、见闻设计（`project-codex-design`）、版面 B、main-only 工作流、zh/en 成对、盲测包。
+> - 记忆：新增 `text-punctuation-standard`（zh 全角+“”、en 弯引号、跑 humanizer、贴原文）；`project-codex-design`（已更：6 人物正稿、lore 待精修）、`project-blind-playtest-package`（路径 09-21 + 改名惯例 + Public 放宽）、设计哲学、roadmap（日历 SHIPPED）、版面 B、main-only、zh/en 成对。私稿 `神君侧影`=王室层，仅作 canon 参考、不进游戏/WORLDBOOK。
 > ---
 > 分两大阶段：**先修 playtest 暴露的问题（机制/平衡），再强化 UI**。不擅自扩范围、不动核心玩法。
 > 文中 ★ = **仍需你拍板的小点**（已给默认建议）；⚑ = **要同步改 GDD ch.5**（改前会再找你确认）。
