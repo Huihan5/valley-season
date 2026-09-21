@@ -76,6 +76,28 @@ NOT Christianity. A craft-based institutional religion native to Marigni.
 
 ---
 
+## Death and the Return to the Flame (归火)
+
+The orthodox funeral. It is not called cremation; the term **归火** ("return to the flame") frames it as giving a life-worn body back to the Sacred Fire. It follows the forging metaphor directly: a person begins as ore (birth), is tempered by the trials of living, offers devotion through service, and reaches toward eternity; at the end the body is returned to the flame — the last step of the forging, reception rather than destruction. The fire does not consume the body so much as take it back.
+
+- The rite is led by a forge-keeper / Master (匠师), with set prayers and a set order. The flame must be kindled from the local shrine's Sacred Fire, so the fire that receives the body is ritually linked to the Sanctum (永恒锻造圣堂) in Forgehold.
+- A body **not** returned to the flame is a crack in the order. Within the faith's frame the absence unsettles more than the death itself — this is the weight carried by a death that receives no 归火.
+- **Funeral vs. execution.** The state's ultimate penalty, death by fire (火刑), is the same fire turned to the opposite meaning. A funeral is the fire *accepting* you — gratitude, solemnity; an execution is the fire *judging* you — the purification of an unforgivable crime. The same fire is both the mother's embrace and the absolute law.
+- 火刑 stays in the law but is effectively never carried out — not because it is too cruel but because it is too sacred. To invoke it spends the fire's authority as judge, and a fire used often as punishment stops being held in awe. It is kept and left unused: a sword that is never drawn.
+
+**For the game**: Master Lorenz is the community forge-keeper and conducts these rites for Maplegate, Thornwall and Millridge. In Valewisp the practice runs warmer than the capital's, folded into the seasons and the land. This is the theology under ending 4A — a body found too late, and the rite that must still be done.
+
+---
+
+## Identity and Papers (身份证件)
+
+Marigni issues one passport design nationwide, but the national **ID card** is where each duchy asserts itself within a common format the duchies fought over in parliament — Valewisp works a plant motif into the card's border. Land does not change hands freely here; one cannot truly "buy" a plot, and belonging is not primarily an administrative fact.
+
+- The player holds no ID card but a **temporary work permit**, attached to Baron von Alde's personal guarantee — time-limited, its force resting entirely on the lord's surety. The clerk at the office has not seen the format before.
+- A Valewisp identity card, if it is ever earned, weighs less as paperwork than as belonging. To become "a person of the valley" (a 河谷的人) is closer to a contract whose terms you have read in full: the autumn maples, and the winter silence.
+
+---
+
 ## Relevant for In-Game References
 
 Things NPCs might mention, and how they should frame them:
