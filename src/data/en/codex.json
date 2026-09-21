@@ -23,9 +23,9 @@
       "subtitle": "Stable master",
       "silhouette": "The man at the stable",
       "layers": {
-        "face": "The stable at Maplegate is his, and has been for thirty years. He barely speaks — the day you arrived he carried your bag and drove the cart, said nothing the whole way, and at the door left you three words, Martha’s inside, before leading the horse off.",
-        "inside": "He has been here longer than anyone, and remembers every master and steward the estate has turned over. About horses he is almost stubbornly particular; about people he keeps his opinion, and reads them well. The horse the last steward left behind — he knows something of it.",
-        "archetype": "A Valewisp groom is an old kind of post: not quite a servant, not quite hired labour, more a sinew between the estate and its land. Rational feudalism writes each person’s place into a contract; a man like him is the order that gathers outside it, out of years and craft."
+        "face": "The stable at Maplegate is his, and has been for thirty years. In his fifties, he barely speaks — a day’s words might not run past twenty, and each one lands. The day you arrived he carried your bag and drove the cart, said nothing the whole way, and at the door left you three words, Martha’s inside, before leading the horse off.",
+        "inside": "He has been here longer than anyone, and remembers every master and steward the estate has turned over. His loyalty is not to whoever holds the estate but to the stable and this land — grown out of thirty years of work, not written into a contract. Ten kind words will not earn his trust; a mended stable roof will. The horse the last steward left behind — he knows something of it.",
+        "archetype": "A Valewisp groom is an old kind of post: not quite a servant, not quite hired labour, more a sinew between the estate and its land. Rational feudalism writes each person’s place into a contract; a man like him is the order that gathers outside it, out of years and craft. The morning you come for your horse and find it already set right, the tack on the near hook, no word said — that is him counting you as one of his own."
       }
     },
     "marta": {
@@ -33,19 +33,19 @@
       "subtitle": "Head of the kitchen",
       "silhouette": "The one who runs the kitchen",
       "layers": {
-        "face": "The kitchen is hers, and there is always flour on the apron. She talks, and plainly; you were looked over head to foot the moment you came in.",
-        "inside": "Nothing on the estate moves without her knowing it — who is at odds with whom, where the accounts run thin. Whether she says so depends on whether you ask, and whether it is worth the telling.",
-        "archetype": "On a Valewisp estate the head of the kitchen is often the house’s real hub: masters come and go, the hearth stays lit. What she holds is not authority but news, and goodwill."
+        "face": "The kitchen is hers, and there is always flour on the apron. In her forties, a big voice and a bigger laugh, plain and direct; you were looked over head to foot the moment you came in.",
+        "inside": "Nothing on the estate moves without her knowing it — who is at odds with whom, where the accounts run thin. Whether she says so depends on whether you ask, and whether it is worth the telling. The big voice makes her seem unable to keep a thing, which is its own cover: she always says less than she knows.",
+        "archetype": "On a Valewisp estate the head of the kitchen is often the house’s real hub: masters come and go, the hearth stays lit. The whole of the duchy’s dignity rests on hospitality, and the one who can read a table — what to serve, and when — holds not authority but news, and goodwill. The day she remembers what you will not eat and quietly cooks to your taste, saying nothing of it, that is her way."
       }
     },
     "elena": {
       "title": "Elena",
-      "subtitle": "Clerk",
-      "silhouette": "The one with the papers upstairs",
+      "subtitle": "Maid",
+      "silhouette": "The maid upstairs",
       "layers": {
-        "face": "She keeps the papers. Quiet, sparing with words; she barely spoke showing you up to the room.",
-        "inside": "Accounts, contracts, the letters in and out all pass through her hands. She knows more than she lets on. That faded rectangle on your desk — she would know what used to stand there.",
-        "archetype": "The clerk is the estate’s nearest thing to an archive — rational feudalism sets everything down on paper, and whoever handles the paper often holds more than the post itself."
+        "face": "The maid of the main house — cleaning, laundry, and the tidying of the office besides. Quiet, sparing with words; she barely spoke showing you up to the room, but the eyes are sharp.",
+        "inside": "Because the rooms and the papers on the desks all pass under her hands, more reaches her than anyone credits a maid with seeing. She knows more than she lets on. That faded rectangle on your desk — she would know what used to stand there.",
+        "archetype": "Whoever tends the rooms is the estate’s quietest archive — rational feudalism sets everything down on paper, and the one who dusts the paper sees the whole house without being seen."
       }
     },
     "lorenz": {
@@ -53,9 +53,9 @@
       "subtitle": "The estate forge-chapel",
       "silhouette": "The master at the forge-chapel",
       "layers": {
-        "face": "The master of the Maplegate forge-chapel. In the Temple Forged by the Sacred Flame the clergy are craftsmen, not pastors; what he keeps is the fire in the hearth, not a pulpit.",
-        "inside": "He keeps the vigil at the forge-chapel on Thursdays. He presses no belief on anyone; he simply treats the fire as a thing that ought to be tended. When there is a quarrel on the estate, people tend to go to him first.",
-        "archetype": "In Valewisp faith is closer to respect for the natural order than to doctrine. The master is what that local faith looks like: at the kingdom’s centre the institution is a sanctum and a minting seal; here it is one man keeping a fire."
+        "face": "The master of the Maplegate forge-chapel, who serves Thornwall and Millridge besides. Past fifty. In the Temple Forged by the Sacred Flame the clergy are craftsmen, not pastors; what he keeps is the fire in the hearth, not a pulpit.",
+        "inside": "He keeps the vigil at the forge-chapel on Thursdays. He presses no belief on anyone; he simply treats the fire as a thing that ought to be tended. Weddings, funerals, a quarrel between neighbours — people tend to bring them to him first. He could have stayed at the capital’s sanctum and climbed; in the end he chose to come back.",
+        "archetype": "In Valewisp faith is closer to respect for the natural order than to doctrine. The master is what that local faith looks like: at the kingdom’s centre the institution is a sanctum and a minting seal; here it is one man keeping a fire. When a life ends here, it is he who returns it to the flame. He knows a great deal, and volunteers none of it."
       }
     },
     "marguerite": {
@@ -63,19 +63,19 @@
       "subtitle": "Thornwall",
       "silhouette": "The lady of Thornwall",
       "layers": {
-        "face": "The lady of Thornwall. You will most likely meet her at the hunt or a dinner.",
-        "inside": "Valehold fashion, which household is due a call, which dinner cannot be missed — she has it all straight. She is measured with people, and she remembers a kindness.",
-        "archetype": "The baroness is a hub of Valewisp’s noble society — to miss the hunt is to say something is wrong, and it is usually the lady of the house who arranges these occasions."
+        "face": "The lady of Thornwall. In her sixties, silver hair kept without a strand loose. You will most likely meet her at the hunt or a dinner — she need not raise her voice to still a room.",
+        "inside": "Valehold fashion, which household is due a call, which dinner cannot be missed — she has it all straight. She is measured with people, and she remembers a kindness. Her word carries weight: a person she will vouch for needs little other proof.",
+        "archetype": "The baroness is a hub of Valewisp’s noble society and its quiet arbiter — to miss the hunt is to say something is wrong, and it is usually the lady of the house who arranges these occasions. She has lived in the valley long enough to have watched two generations of it change, and to know that each year’s fire is not the same fire."
       }
     },
     "henk": {
       "title": "Baron Henk",
-      "subtitle": "Thornwall",
-      "silhouette": "The baron of Thornwall",
+      "subtitle": "Millridge",
+      "silhouette": "The baron of Millridge",
       "layers": {
-        "face": "The Baron of Thornwall, Marguerite’s husband, one of the hosts at the hunt and the dinner.",
-        "inside": "He cares more for the woods, the hunting ground and appearances; the accounts he mostly leaves to others.",
-        "archetype": "A baron is one link in rational feudalism’s chain of contract: duties upward, a guarantee downward — as Ludwig stood guarantor for you."
+        "face": "The Baron of Millridge, a little past forty. Always smiling, always proposing something — it was his letter that drew you into the hunt. His warmth is easy as sunlight, and does not quite outlast his turning away.",
+        "inside": "He cares more for the woods, the hunting ground and appearances, and is the most active host of the season — a farther stag, a new trail, another dish at dinner — the talk threaded with small arrangements made in the gaps. Whether an invitation from him is a welcome or a way to keep the new steward where he can be watched is a fair thing to weigh.",
+        "archetype": "He is the kind of baron who is perfectly fluent in the web of contract and turns it to his own account without once breaking a rule — harder to deal with than a man who breaks them, because you cannot quite tell him from the system itself. Every noble here owes duties upward and a guarantee downward, the way Baron von Alde stood surety for you; Henk only reads that ledger of obligations closer than most."
       }
     },
     "rational_feudalism": {
