@@ -4,8 +4,10 @@ import {
   SAVE_VERSION, AUTO_SLOT, MANUAL_SLOTS, SaveStorage,
   packSave, unpackSave, readSummary,
   writeSlot, readSlot, readSlotSummary, clearSlot, listManualSlots,
+  setPendingResume, takePendingResume,
 } from '../src/systems/SaveSystem';
 import { INITIAL_FLAGS } from '../src/systems/FlagRegistry';
+import { getLocale } from '../src/data/locale';
 
 const ZERO: Record<NpcId, number> = { gregor: 0, marta: 0, elena: 0, marguerite: 0, henk: 0, lorenz: 0 };
 
@@ -108,6 +110,47 @@ describe('packSave / unpackSave', () => {
   it('marks a finished season as finished', () => {
     const done = makeState({ demoComplete: true, endingId: 'ending2' });
     expect(readSummary(packSave(AUTO_SLOT, done))?.finished).toBe(true);
+  });
+});
+
+// ── 语言（跨语言读档的前提） ──────────────────────────────────────────────────
+
+describe('save locale', () => {
+  it('stamps the current language onto the save', () => {
+    // Under vitest there is no localStorage, so getLocale falls through to zh.
+    expect(readSummary(packSave(AUTO_SLOT, makeState()))?.locale).toBe(getLocale());
+  });
+
+  it('carries an explicit language through', () => {
+    expect(readSummary(packSave(AUTO_SLOT, makeState(), undefined, 'en'))?.locale).toBe('en');
+  });
+
+  it('reads a save written before the field existed as the current language', () => {
+    const raw = JSON.parse(packSave(AUTO_SLOT, makeState()));
+    delete raw.locale;
+    // No forced switch for a legacy save — it loads the way it always did.
+    expect(readSummary(JSON.stringify(raw))?.locale).toBe(getLocale());
+  });
+});
+
+// ── 跨语言续档标记 ────────────────────────────────────────────────────────────
+
+describe('pending resume', () => {
+  it('remembers a slot and hands it back exactly once', () => {
+    const storage = fakeStorage();
+    setPendingResume('slot2', storage);
+    expect(takePendingResume(storage)).toBe('slot2');
+    // Cleared in the same breath, so a resume can never loop.
+    expect(takePendingResume(storage)).toBeNull();
+  });
+
+  it('has nothing to hand back when none was set', () => {
+    expect(takePendingResume(fakeStorage())).toBeNull();
+  });
+
+  it('does not throw when there is no storage at all', () => {
+    expect(() => setPendingResume('slot1', null)).not.toThrow();
+    expect(takePendingResume(null)).toBeNull();
   });
 });
 

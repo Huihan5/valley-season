@@ -1,5 +1,6 @@
 import { GameState, DayPhase } from '../types/game';
 import { INITIAL_FLAGS } from './FlagRegistry';
+import { Locale, getLocale } from '../data/locale';
 
 /**
  * Saving is a copy of the state and nothing else (PlaytestFeedback 4.h).
@@ -29,6 +30,15 @@ export interface SaveSummary {
   savedAt: string;
   /** True once the season has ended — the slot holds an ending, not a position. */
   finished: boolean;
+  /**
+   * The language the save was written in. It is meta, not part of `GameState`
+   * (see the note in data/locale.ts): every scene line and action label in the
+   * state is already resolved into this language when the phase is built, so a
+   * save can only be read back honestly under the same language. The shell uses
+   * this to switch the UI to match before it opens the season, rather than show
+   * an English chrome around Chinese text.
+   */
+  locale: Locale;
 }
 
 interface SaveFile extends SaveSummary {
@@ -54,13 +64,19 @@ function defaultStorage(): SaveStorage | null {
 
 // ── 纯函数（可在 node 下测） ────────────────────────────────────────────────
 
-export function packSave(slot: string, state: GameState, savedAt = new Date().toISOString()): string {
+export function packSave(
+  slot: string,
+  state: GameState,
+  savedAt = new Date().toISOString(),
+  locale: Locale = getLocale(),
+): string {
   const file: SaveFile = {
     slot,
     day: state.day,
     phase: state.phase,
     savedAt,
     finished: state.demoComplete,
+    locale,
     version: SAVE_VERSION,
     state,
   };
@@ -101,6 +117,9 @@ export function readSummary(raw: string | null): SaveSummary | null {
     phase: (file.phase ?? file.state.phase) as DayPhase,
     savedAt: String(file.savedAt ?? ''),
     finished: !!file.finished,
+    // A save written before this field existed is read as the current language,
+    // so it loads with no forced switch — the old behaviour, for old saves only.
+    locale: (file.locale as Locale) ?? getLocale(),
   };
 }
 
@@ -148,4 +167,32 @@ export function clearSlot(slot: string, storage = defaultStorage()): void {
 /** The three manual slots in order, with null for the empty ones. */
 export function listManualSlots(storage = defaultStorage()): (SaveSummary | null)[] {
   return MANUAL_SLOTS.map(slot => readSlotSummary(slot, storage));
+}
+
+// ── 跨语言续档 ────────────────────────────────────────────────────────────────
+
+// Opening a save whose language differs from the current one has to switch the UI
+// language first, and switching reloads the page. This one key carries which slot
+// to reopen across that reload; it is read once and cleared, so a resume never loops.
+const RESUME_KEY = 'valley-season:resume';
+
+export function setPendingResume(slot: string, storage = defaultStorage()): void {
+  if (!storage) return;
+  try {
+    storage.setItem(RESUME_KEY, slot);
+  } catch {
+    // Without it the reload simply lands on the title, where 继续 is still there.
+  }
+}
+
+/** Returns the slot to reopen and clears it in the same breath, so it fires once. */
+export function takePendingResume(storage = defaultStorage()): string | null {
+  if (!storage) return null;
+  try {
+    const slot = storage.getItem(RESUME_KEY);
+    storage.removeItem(RESUME_KEY);
+    return slot;
+  } catch {
+    return null;
+  }
 }

@@ -37,7 +37,9 @@ import { recordCodex, currentUnlocks } from './systems/CodexSystem';
 import {
   AUTO_SLOT, ManualSlot, SaveSummary,
   writeSlot, readSlot, clearSlot, readSlotSummary, listManualSlots,
+  setPendingResume, takePendingResume,
 } from './systems/SaveSystem';
+import { getLocale, setLocale } from './data/locale';
 import { readSeenEndings, recordEnding } from './systems/CollectionSystem';
 
 const ui = DATA.ui;
@@ -422,6 +424,18 @@ export default function App() {
 
   const refreshManualSaves = useCallback(() => setManualSaves(listManualSlots()), []);
 
+  // Opening a save in another language reloads the page to switch the UI first; the
+  // slot it was opening is reopened here, now under its own language, so the season
+  // never shows up with its chrome and its text in two different languages.
+  useEffect(() => {
+    const slot = takePendingResume();
+    if (!slot) return;
+    const saved = readSlot(slot);
+    if (!saved) return;
+    dispatch({ type: 'LOAD_STATE', state: saved });
+    setAtTitle(false);
+  }, []);
+
   // The gallery is a record of the browser, not of the season, so an ending goes in
   // the moment it is reached — including one reached by loading a finished save.
   useEffect(() => {
@@ -467,19 +481,31 @@ export default function App() {
     setAtTitle(false);
   };
 
-  const continueSeason = () => {
-    const saved = readSlot(AUTO_SLOT);
-    if (!saved) return;
+  // A save's text is frozen in the language it was written in, so it can only be
+  // opened under that language — otherwise the chrome is one language and the scene
+  // another. If they differ, switch first (which reloads) and reopen this slot on
+  // the way back in; openSlot returns false when it has handed off to that reload.
+  const openSlot = (slot: string): boolean => {
+    const summary = readSlotSummary(slot);
+    if (!summary) return false;
+    if (summary.locale !== getLocale()) {
+      setPendingResume(slot);
+      setLocale(summary.locale);
+      return false;
+    }
+    const saved = readSlot(slot);
+    if (!saved) return false;
     dispatch({ type: 'LOAD_STATE', state: saved });
     setAtTitle(false);
+    return true;
+  };
+
+  const continueSeason = () => {
+    openSlot(AUTO_SLOT);
   };
 
   const loadManual = (slot: ManualSlot) => {
-    const saved = readSlot(slot);
-    if (!saved) return;
-    dispatch({ type: 'LOAD_STATE', state: saved });
-    setSavesOpen(false);
-    setAtTitle(false);
+    if (openSlot(slot)) setSavesOpen(false);
   };
 
   const saveManual = (slot: ManualSlot) => {
