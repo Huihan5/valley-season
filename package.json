@@ -10,7 +10,9 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "text:export": "node scripts/text-export.mjs",
+    "text:import": "node scripts/text-import.mjs"
   },
   "dependencies": {
     "react": "^18.2.0",

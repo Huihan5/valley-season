@@ -6,3 +6,7 @@ dist-standalone/
 
 # Design source material — drafts, GDD revisions, art. Not for publication.
 design-drafts/
+
+# Editable text mirror — regenerated from src/data by `npm run text:export`.
+# Working surface for prose edits; src/data stays the single source of truth.
+text-review/

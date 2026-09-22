@@ -1,5 +1,18 @@
 # Valley Season — Changelog
 
+## [2026-09-21] — 文本编辑工作台：`src/data` ↔ 可读镜像的无损往返工具
+
+作者希望"直接看到每段文本是什么、用在哪，并能直接改，改完我填回去"。做了一套导出/导入工具，把散在 55 对 `src/data/{zh,en}/**.json`（1414 段字符串）里的文本摊平成一个中英并排、带上下文的可编辑镜像。
+
+### Added
+- **`scripts/text-export.mjs`**（`npm run text:export`）：把 `src/data` 摊平进 `text-review/`，结构镜像原树；每段一个块，含稳定键 `<!--k:path-->`、角色说明（开场/选项/结果/卷宗日志/见闻分层…）、中英并排在 `〖zh〗/〖en〗/〖end〗` 之间；多段落与占位符原样保留。生成 `INDEX.md` 总目录（按 序章/对话/场景/事件/结局 分组 + 段数 + "是什么"）。**排除逻辑锚点**（`id`/`next`/`timing`/旗标/选项字母等，共约 270 段）——只呈现真正显示给玩家的文本（**1144 段**）。
+- **`scripts/text-import.mjs`**（`npm run text:import`）：把 `text-review/` 的改动写回 `src/data`；只重写确有改动的字符串，键序/缩进/结构不动。逐段跑与 `Localization.test` 同源的校验并报告：中英成对、占位符一致、段落数一致、zh 全角中文标点（禁 `「」`/半角）、en 无 CJK + 弯撇号。未知键/结构改动跳过并提示"请改代码"。
+- **`文本编辑指南.md`**（仓库根，已进 git）：三步工作流、编辑格式、标点规范、domain map、排除项、往返保证。
+
+### 说明
+- **无损往返已验证**：不改任何字 export→import，`src/data` 零 diff；有效改动正确落回中英两侧；三类坏改动（`「」`/en 里 CJK/直撇号）都被校验拦下。
+- **单一真相**：`text-review/` 进 `.gitignore`（可再生的工作台），`src/data` 仍是唯一真相；改动靠 import 写回后**提交 `src/data`** 留存。协作方式：作者在镜像里改字、我跑 import 填回并过 `npm test`。
+
 ## [2026-09-21] — 见闻世界知识条目精修（据 `Marigni：一个国家` 原文）+ README 刷新
 
 接上一轮人物精修，把见闻里的**世界知识三条**按同一套标准（`humanizer-zh` + 中文标点规范 + 靠拢作者源文档 `design-drafts/update0920/Marigni：一个国家.docx`）过一遍，中英成对。`maplegate` 已紧且完全扎根游戏正文、`millridge` 是调查解锁的隐藏占位——两条不动。全库 **576 绿**，tsc 干净，浏览器 5173 实测中英两版 `rational_feudalism` / `valewisp_duchy`（fromStart 已解锁）渲染、全角引号与弯撇号均通过；测试后已还原玩家 locale。
