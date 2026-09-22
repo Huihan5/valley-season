@@ -11,7 +11,7 @@
 > ---
 > ## 🔖 恢复点（compact 之后从这里继续）
 >
-> **截至 2026-09-21（commit `08e5a12`，全部已 push；全库 576 测试绿、tsc 干净、工作树干净）**
+> **截至 2026-09-21（commit `0a3f22c`，全部已 push；全库 576 测试绿、tsc 干净、工作树干净）**
 >
 > 第二轮盲测六处 + 响应式已收尾（更早条目）。本轮做了**第三轮盲测反馈** + **roadmap B/C 前两项 + 声画接缝 + 离线交付**（详见 `docs/CHANGELOG.md` 顶部五条 2026-09-20 条目）：
 > - ✅ **第三轮盲测（commit `8f9f295`）**：行动/任务卡**去数字化**——关系"奖励"用人话（`格雷格记着这份好` / `X领这份情`）、交谈计数改自然说法（`顺道和X搭上话`）、毁约伐木不显 −2、佃户会议门槛 `信任 ≥ N`→`信任未达`（保留资源/收割 tier/**声望**等功能性数字）；「无产出」两张卡改为说清用途（巡视农田置 `surveyedFields`、夜查账目第三夜出 `clue_mot_handwriting`）；每日选项 **tab → 分组堆叠**（`ChoicePanel`，空类别隐去）。**GDD 11.6 张力**：微文案"机械不叙事"对关系收益放宽（向 D3"关系不显数字"收敛），GDD 未改、待作者择机并入。
@@ -27,13 +27,18 @@
 > - ✅ **归火神学进 WORLDBOOK（`08e5a12`，作者批准）**：`docs/WORLDBOOK.md` 加「归火」（人生=锻造、死亡=交还圣火；火葬"接纳" vs 火刑"审判"；火刑留而不用=太神圣——**结局 4A + 洛伦茨底层**）+「身份证件」两节。
 > - ✅ **itch 封面 `1800446`**（`src/assets/cover_valley_season.jpg`，未 import 不进 build）；**盲测包刷新+改名 `../valley-season-blind-playtest-2026-09-21/`**（三件套重建到 `08e5a12`、grep 体检无泄漏含新见闻文案；**惯例**：每次刷新此包=改名到当天日期 + 同步 `_先读我` 标题日期）。itch **Public 现为作者选择**（已核实包内无设计稿）。
 >
+> **本次会话续（compact 之后，2026-09-21，`3105a77`→`0a3f22c`）：**
+> - ✅ **见闻世界知识三条精修（`3105a77`）**：`rational_feudalism`/`sacred_flame`/`valewisp_duchy` 按同一标准（humanizer-zh + 中文标点 + 贴 `Marigni：一个国家.docx`）中英成对精修——理性封建补"对上有义务对下有担保"、圣火补"锻造·淬炼·奉献·永恒"四概念 + 生铁→原矿、Valewisp 补"社交围着猎季与马匹转"并保留源文档 grounded 对比。`maplegate` 已紧扎根游戏正文、`millridge` 隐藏占位——两条不动。浏览器实测中英两版渲染、全角引号、弯撇号。**踩坑**：Edit 工具改中文引号时曾把结构引号/内层引号混成 ASCII/全角不一致弄坏 JSON，改用 Node 脚本以 `"`/`“”` 转义重写。
+> - ✅ **README 刷新（`3105a77`）**：补中英双语 + 见闻 + 调查线 + `build:standalone` + 状态表；无剧透（README 随盲测包发出）。
+> - ✅ **文本编辑工作台（`3960ee6`）+ zh-only 分工文档（`0a3f22c`）**：`scripts/text-export.mjs`/`text-import.mjs`（npm `text:export`/`text:import`）把 55 对 `src/data/{zh,en}` JSON（1414 段，排除逻辑锚点后 **1144 段**可编辑）摊平成 gitignore 的 `text-review/` 中英并排镜像，无损往返（空跑零 diff 已验证），import 跑 `Localization` 同源校验。指南 `文本编辑指南.md`（根，已 git）。**作者确认默认分工：只改中文，英文由我 import 前翻译+humanizer 润色**（注意 stale en 结构上仍能过测试，必须我来补，别指望 suite）。见 [[project-text-workbench]]。
+>
 > **开放线程 / 下一步：**
-> - ⬜ **见闻世界知识条目（最近的下一步）**：六人物已成正稿；`sacred_flame`/`valewisp_duchy`/`rational_feudalism`/`maplegate` 仍是较早版本，可按同一套标准（humanizer + 中文标点 + 贴 `design-drafts/update0920/Marigni：一个国家.docx` 素材，尤其归火/Valewisp 身份）精修；改 `codex.json` 内容层、跑 `Localization`+`CodexSystem`。人物文字是**第一版正稿**，作者或微调措辞。
+> - ⬜ **见闻**：11 条全部成第一版正稿（6 人物 + 3 世界知识 + maplegate + 隐藏 millridge）；作者或微调措辞。要改就走文本工作台（作者改中文、我补英文）。
 > - ⬜ **roadmap C 余项**：Day22 线索提示（读 `getClueGroups`，别把"给予而非搜寻"摊平）、一键整日/缩短中段（只跳真空时段的窄版；动的是刚修稳的推进管线，要小心）；世界回应过往（后日谈+日常回调，与见闻同属"加厚故事层"）。
 > - ⬜ **SFX/VFX**：接缝已就绪；真做时补资源 + 播放器 + 静音开关 + 自动播放限制处理（注意会撑大单文件体积）。作者的美术/方向取舍。
 > - ⬜ **阶段三（D2 文本精简）仍未开始**——作者主导文字，我做打靶/工具/非文字减负；开始前确认幅度与优先顺序。
 > - ⬜ **可选小打磨**：手机满宽状态栏留白偏大；tier3"贵族的"一句是否补守贵族线（作者待定）。
-> - 记忆：新增 `text-punctuation-standard`（zh 全角+“”、en 弯引号、跑 humanizer、贴原文）；`project-codex-design`（已更：6 人物正稿、lore 待精修）、`project-blind-playtest-package`（路径 09-21 + 改名惯例 + Public 放宽）、设计哲学、roadmap（日历 SHIPPED）、版面 B、main-only、zh/en 成对。私稿 `神君侧影`=王室层，仅作 canon 参考、不进游戏/WORLDBOOK。
+> - 记忆：`text-punctuation-standard`（zh 全角+“”、en 弯引号、跑 humanizer、贴原文）；**新增 `project-text-workbench`（text:export/import 往返 + 作者改中文我补英文的分工）**；`project-codex-design`（已更：11 条全成正稿 + 引号踩坑）、`project-blind-playtest-package`（路径 09-21 + 改名惯例 + Public 放宽）、设计哲学、roadmap（日历 SHIPPED）、版面 B、main-only、zh/en 成对。私稿 `神君侧影`=王室层，仅作 canon 参考、不进游戏/WORLDBOOK。
 > ---
 > 分两大阶段：**先修 playtest 暴露的问题（机制/平衡），再强化 UI**。不擅自扩范围、不动核心玩法。
 > 文中 ★ = **仍需你拍板的小点**（已给默认建议）；⚑ = **要同步改 GDD ch.5**（改前会再找你确认）。
