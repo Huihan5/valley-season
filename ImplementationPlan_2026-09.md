@@ -11,26 +11,25 @@
 > ---
 > ## 🔖 恢复点（compact 之后从这里继续）
 >
-> **最新（2026-10-08 之后；全库 796 测试绿、tsc 干净；续九已提交并 push）**
+> **最新（2026-10-08 收尾；全库 805 测试绿、`tsc` 干净、`npm run build` 与 `build:standalone` 通过；全部已 commit 并 push，代码与测试停在 `9944622`，之后只有文档提交，工作树干净）**
 >
-> - ✅ **盲测包已刷新**（2026-10-08，从 commit 9944622）：`../valley-season-blind-playtest-2026-10-08/`（河谷季.html、code.zip、itch.zip、design-reference、_先读我.txt；`text-review.zip` 也按当天的镜像重打了（60 个文件，路径用正斜杠））。做法见记忆 `project-blind-playtest-package`。
-> - ✅ **结局后的"这一季没有走到的地方"**（CHANGELOG `续九`）：结局下面一行折起来的小字，点开至多三句方向（事、人、地、岔路四类取三类，种子定），人那几句可点进见闻；27 句文字是我起草的（续十补了第 3 天账目、第 12 天埃莱娜、第 20 天篝火夜七句），请作者读、改（文本工作台 `endings/missed`）。新标记 `visitedChapelNight`。规则在 GDD_NEXT 10.5，`src/systems/MissedSystem.ts`。
-> - ✅ **固定日的天气写定**（CHANGELOG `续八`）：Day 21 霜、27 晴、28–30 霜（像 Day 22）；Day 28、29 是我为 Day 30 的"这几天每天都有霜"补的，作者没点名。底部短句加到五句（加了烟囱、霜化）。⑥ 的审查因此全部清完。
-> - ✅ **⑦ 前两条：点人物进见闻、中栏底部短句**（CHANGELOG `续七`）：右栏关系里的人名是按钮，点开见闻落在那个人的条目上（`CodexSystem.codexEntryOf`、`CodexPanel` 的 `focus`），不多开放任何层次。选项下面日常时段偶尔一句环境短句（`src/systems/BottomLineSystem.ts`，按赛季种子、日期、时段定一次，不碰引擎随机数；条件 `config.ts` 的 `BOTTOM_LINE_RULES`，文字 `scenes/bottom_lines.json`）；现在五句，都是闲笔原句。**还没提交时请先 `git status` 看。**
+> 这一天做完了 `docs/DEVELOPMENT_PLAN.md` §2 的第 1–7 项；每一件的来龙去脉在 `docs/CHANGELOG.md` 的 2026-10-08 各条（`续` … `续十`），规则在 `docs/GDD_NEXT.md`，工作方式在记忆里。
 >
-> - ✅ **差异提示**（作者在三个示例里挑了"读过的淡一档"）：取决于世界状态的句子（地点底文、格雷格在马厩、人物招呼按信任档位、林地现状、集市到达/排队/买卖/归途）与它上一回出现相比没变，就淡一档（`game.known` = `#9c917a`）；随机句永远不淡。逻辑在 `src/systems/SeenSystem.ts` 与 `SceneSystem` 的 `*Parts` 函数，记录在 `GameState.seen`；场景按时段定"上一回"，行动结果按动作（`step`）定。文字与随机数取用顺序都没变。规则在 GDD_NEXT 13.1，实施在 CHANGELOG `2026-10-08，续` 与 `续三`，没接入的两处在 `DEVELOPMENT_PLAN` 3.1。
-> - ✅ **行囊**（CHANGELOG `续二`）：标题栏入口"卷宗"改为"行囊"，里面三页：卷宗（线索与地图）、文书（5）、物品（10）。不跨周目，显示时由现成的标记读出（`src/systems/InventorySystem.ts`、`src/components/common/Inventory.tsx`、`src/data/{zh,en}/inventory.json`）；新增标记 `henkCoin`、`henkPurse`。名字 行囊 / Satchel、物品 / Belongings 是我取的；"册页里的干枯小枝"并不在玩家手里，已在 CHANGELOG 里标给作者。
-> - ✅ **头像与说话人**（CHANGELOG `续四`）：事件、结局、集市正文里每一段话是谁说的，段首写 `{@id}`（`src/utils/speech.ts`），界面在他开口的地方显示头像和名字（`src/components/ScenePanel/Passage.tsx`）；标了 330 段（中文由子任务按上下文判，英文照搬），`tests/SpeechData.test.ts` 查两种语言一致。提莫西、蒂埃里头像接入；其余七人没有肖像只显示名字；开场序章没接。**以后新写有人说话的段落要在段首补标记。**
-> - ✅ **⑥ 文本"这句话什么时候成立"的审查第一轮**（CHANGELOG `续五`、`续六`）：`npm run audit` 出清单，作者定了修法，已改——日历错误、休整三段、Day 15、"上个月"→"月初"、五段"阳光"底文；只在某种条件下成立的氛围／行动结果／天气句在 `config.ts` 加了出现条件（`AMBIENT_RULES` 等，按句子在池里的位置记，`tests/LineRules.test.ts` 守着位置）。固定日写死的天气已按作者的决定写定（续八）。
+> - **结局**：判定重排（粮食 <60 硬线 → 4B → 4A → 三 → 二 → 兜底一，库存线逐级降低）、磨岭求援对所有人开放、种子模拟（`npm run sim -- --seeds 200`）、4A/4B 前的"把整理出的判断交给蒂埃里"一键（`ending_handover`）。GDD_NEXT 10.1–10.4。
+> - **玩家看得见的层**（都由现成的状态在显示时读出，没有新存档字段，重放安全）：
+>   - 差异提示"读过的淡一档"（`SeenSystem`，GDD_NEXT 13.1）；
+>   - 行囊：卷宗／文书／物品（`InventorySystem`）；
+>   - 头像与说话人：段首 `{@id}`（`src/utils/speech.ts`、`Passage.tsx`），**新写有人说话的段落要补标记**；
+>   - 点右栏人名进见闻（`CodexSystem.codexEntryOf`、`CodexPanel` 的 `focus`，不多开放任何层次）；
+>   - 中栏底部短句（`BottomLineSystem`，5 句，条件在 `config.ts` 的 `BOTTOM_LINE_RULES`）；
+>   - 结局之后折起来的"这一季没有走到的地方"（`MissedSystem`，27 句，事／人／地／岔路四类取三类，`endings/missed.json`；新标记 `visitedChapelNight`）。GDD_NEXT 10.5。
+> - **文本审查**：`npm run audit` 列出"这句话什么时候成立"的疑点；随机句的出现条件在 `config.ts`（`AMBIENT_RULES` / `RESULT_RULES` / `WEATHER_LINE_RULES`，按句子位置记，`tests/LineRules.test.ts` 守着）；固定剧情日的天气写定（`FORCED_WEATHER`：Day 21、22、28、29、30 霜冻，Day 27 晴）。**新写的随机句如果只在某种条件下才成立，要补一条出现条件。**
+> - **盲测包**：已刷新到 `../valley-season-blind-playtest-2026-10-08/`（`河谷季.html`、`valley-season-code.zip`、`valley-season-itch.zip`、`text-review.zip`、`design-reference/`、`_先读我.txt`），从 commit `9944622` 构建；做法见记忆 `project-blind-playtest-package`（`design-reference` 与 `text-review.zip` 含剧透，不外发）。
+> - **文本工作台镜像** `text-review/`（gitignore）已重新导出（1239 条），与 `src/data` 一致。**以后改了 `src/data` 里的文字，要在作者动镜像之前重新 `npm run text:export`，否则作者导入旧镜像会把新文字改回去。**
 >
-> 之前会话做完了 `docs/DEVELOPMENT_PLAN.md` 的前两项，细节见 `docs/CHANGELOG.md` 的 2026-10-08、2026-10-07 续两条。
-> - ✅ **结局规则重排**（`EndingSystem.determineEnding`；GDD_NEXT 10.1 / 5.12 / 8.1 / 8.3 已同步）：粮食 <60 硬线 → 一；然后 4B、4A、三、二；兜底 → 一。4A/4B：声望 ≥3；三：粮食 ≥90、声望 ≥5、贵族信任 ≥1、三人信任 ≥3；二：粮食 ≥75（印象 ≥1 时 73）。**库存线逐级降低：二 金卢 50/木材 12 > 三 20/5 > 真相 10/3**（作者要求"二砍一点、三四也加"，数字我按模拟定，已批准为起点）。
-> - ✅ **磨岭求援对所有人开放**（`day30Short` 取消）；Day 30 结账的"短" = `determineEnding(state) === 'ending1'`；账平时钱和柴按称职线读"余下几个"或"不多"（`settled_coin_thin` / `settled_timber_thin`）；Day 23 来信按三条线；状态栏粮食 75 / 金卢 50 / 木材 12 变金色。
-> - ✅ **种子模拟**：`npm run sim -- --seeds 200`（`tests/helpers/simulation.ts` 八个模拟玩家、`scripts/simulate.ts`、`tests/Simulation.test.ts`）。改经济、事件或结局数字后要跑。结局三靠模拟玩家自己到不了，资助后 98% 能到（卡的是钱）。
-> - ✅ **结局时刻的按钮**：4A/4B 判定后 `GameEngine.advancePhase` 先进入 `ending_handover`（只有"把整理出的判断交给蒂埃里"一个选项，记入历史），点击才写结局；4A/4B 开头改成玩家在场（4A 跟他走三天、下到墙根；4B 一起上山、一夜、一起抬回来）。中文是我写的，作者说这么小的中文我自己写就好，原句尽量保留。
-> - ✅ **文本工作台镜像已重新导出**（2026-10-08，1155 条）：镜像里没有未导入的作者改动，所以现在 `text-review/` 与 `src/data` 一致，含 4A/4B 新开头、Day 30 新句和 `ending_handover`。**以后改了 `src/data` 里的文字，要在作者动镜像之前重新 `npm run text:export`，否则作者导入旧镜像会把新文字改回去。**
+> **等作者读／改的（我起草的文字）：** 330 段说话人标注；行囊的名字（行囊／Satchel、物品／Belongings）和每件一句话（"册页里的干枯小枝"并不在玩家手里）；五段地点底文；"没有走到的地方"的 27 句（改走文本工作台 `endings/missed`）；Day 28、29 补的霜冻（作者没点名，可以撤，同时把 Day 30 那句"这几天每天都有霜"改轻）；界面小字"翻到见闻里的这一页"。
 >
-> **下一步（以 `docs/DEVELOPMENT_PLAN.md` §2 为准）：** ~~③ 差异提示~~、~~④ 收集物（行囊）~~、~~⑤ 头像/说话人~~、~~⑥ 文本审查第一轮~~（已做）（⑥ 清完）；⑦ ~~点人物进见闻~~、~~底部短句~~（已做），~~结局后"可能错过什么"~~（已做）；⑧ 待做任务（右栏、场景图、itch 截图）。
+> **下一步（以 `docs/DEVELOPMENT_PLAN.md` §2 为准）：** ⑧ 待做任务——右栏布局（作者要看可比较的界面示例，旧方案不实施）、场景图、itch 页面与截图（等 UI 与美术）。**不要自己动手做右栏，等作者说。** 另有一些留着的小项，在计划 3.1–3.7：点人物的其他入口（头像、说话人名、卷宗）；提莫西与蒂埃里没有见闻条目；七位没有肖像的人（亨克、玛格丽特、路德维希、维特、公爵、霍特曼、老文德）；开场序章没接说话人；"少了一句"（格雷格不在）没有提示；炉堂晚间那一句整句是一个槽位；第 20 天下午猎场上的鹿没有写"没走的路"；底部短句想再加就要新写环境观察（新写世界文字由作者定）。
 >
 > **要注意的几点：**
 > - `docs/GDD_NEXT.md` 是设计权威（2026-10-07 接替 `GDD.md`，`CLAUDE.md`、`config.ts` 已指向它）；语言切换靠存档里的种子与操作历史重放整季（`src/systems/GameEngine.ts` 的 `replaySeason`），引擎内不能有 `Math.random`。
@@ -38,7 +37,7 @@
 > - 模拟玩家按选项 id 排序，选项 id 变了会卡住（"nothing to choose"）。
 > - 不要静默改作者写的世界与人物文字，改了要标出来（CHANGELOG 里单列"新增文字"）。
 > - 作者说 `npm run lint` 因仓库没有 ESLint 配置跑不起来，不必理会。
-> - 记忆：`dev-plan-2026-10`（计划与已定数值）、`project-simulation-tool`、`seeded-replay-engine`、`gdd-next-authority`、`project-text-workbench`；新增两条工作方式：`feedback-patching-with-write-tool`、`feedback-minor-zh-claude-writes`。
+> - 记忆（`~/.claude/projects/.../memory/`，`MEMORY.md` 是索引）：`project-dev-plan-2026-10`（计划与已定数值）、`project-difference-hints`、`project-inventory-satchel`、`project-speaker-marks`、`project-text-audit`、`project-bottom-lines-codex-click`、`project-missed-lines`、`project-simulation-tool`、`project-seeded-replay-engine`、`project-gdd-next-authority`、`project-text-workbench`、`project-blind-playtest-package`；工作方式：`feedback-patching-with-write-tool`（Bash 会吞双反斜杠，改文件用 Write／Edit 工具，ui.json 别用 JSON 往返）、`feedback-minor-zh-claude-writes`（零碎中文我写，作者主导大段）。
 >
 > ---
 > **较早的恢复点（2026-09-21），保留供查：**
