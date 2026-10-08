@@ -16,7 +16,8 @@ A text-based estate management game set in the Duchy of Valewisp, Kingdom of Mar
 valley-season/
 ├── CLAUDE.md                # You are here — project rules
 ├── docs/                    # Design documents (READ-ONLY reference)
-│   ├── GDD.md               # GDD v3.0 — sole design authority, numbers live in ch.5
+│   ├── GDD_NEXT.md          # Current GDD — sole design authority (succeeds GDD.md, 2026-10); numbers live in ch.5
+│   ├── GDD.md               # GDD v3.0 — superseded, kept for history and for passages not yet carried over
 │   ├── DELTA_v2_to_v3.md    # v2→v3 change manifest
 │   ├── V3_BUILD_BRIEF.md    # Phased implementation brief for the v3 rebuild
 │   ├── WORLDBOOK.md         # Kingdom of Marigni setting bible
@@ -61,8 +62,8 @@ valley-season/
 
 ### Numerical Values
 - NEVER hardcode game balance numbers in system files
-- All values (harvest rates, costs, thresholds, weather probabilities) come from `src/data/config.ts`, which mirrors **GDD ch.5**
-- GDD v3 is the sole numerical authority — the standalone `NUMBERS.md` was retired when v3 folded its tables into ch.5
+- All values (harvest rates, costs, thresholds, weather probabilities) come from `src/data/config.ts`, which mirrors **GDD_NEXT ch.5**
+- `docs/GDD_NEXT.md` is the sole numerical authority (it succeeded GDD v3, whose tables were already folded into ch.5 — the standalone `NUMBERS.md` is long retired)
 
 ### Writing Standards (for narrative content in src/data/)
 - Refer to `docs/STYLE_GUIDE.md` for tone, sensory palette, and voice samples

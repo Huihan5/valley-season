@@ -93,7 +93,7 @@ The orthodox funeral. It is not called cremation; the term **归火** ("return t
 
 Marigni issues one passport design nationwide, but the national **ID card** is where each duchy asserts itself within a common format the duchies fought over in parliament — Valewisp works a plant motif into the card's border. Land does not change hands freely here; one cannot truly "buy" a plot, and belonging is not primarily an administrative fact.
 
-- The player holds no ID card but a **temporary work permit**, attached to Baron von Alde's personal guarantee — time-limited, its force resting entirely on the lord's surety. The clerk at the office has not seen the format before.
+- The player holds no ID card but a **temporary work permit**, attached to Baron von Alder's personal guarantee — time-limited, its force resting entirely on the lord's surety. The clerk at the office has not seen the format before.
 - A Valewisp identity card, if it is ever earned, weighs less as paperwork than as belonging. To become "a person of the valley" (a 河谷的人) is closer to a contract whose terms you have read in full: the autumn maples, and the winter silence.
 
 ---
