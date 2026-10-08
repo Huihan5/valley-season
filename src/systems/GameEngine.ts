@@ -12,7 +12,7 @@ import {
   adjustActionTrust, adjustNobleTrust, adjustLordImpression, adjustTenantTrust, recordConversation,
 } from './RelationSystem';
 import { INITIAL_FLAGS } from './FlagRegistry';
-import { composeSceneParts, getActionResultParts, getGreetingParts } from './SceneSystem';
+import { composeSceneParts, getActionResultParts, getGreetingParts, lineContextOf } from './SceneSystem';
 import { instantOf, markKnown, partsText } from './SeenSystem';
 import { nextOpeningPage } from './OpeningSystem';
 import {
@@ -194,7 +194,7 @@ function reduceSeason(state: GameState, action: SeasonAction, rng: Rng): GameSta
       // read the merchant's line twice, and the second time it is not news.
       const keyed = choice.resultParts
         ?? (choice.resultText ? null
-          : choice.resultKind ? getActionResultParts(choice.resultKind, rng, choice.resultVars)
+          : choice.resultKind ? getActionResultParts(choice.resultKind, rng, choice.resultVars, lineContextOf(state))
             : speaker ? getGreetingParts(next, speaker, rng) : null);
       if (keyed) {
         const read = markKnown(keyed, next.seen, (state.step ?? 0) + 1);

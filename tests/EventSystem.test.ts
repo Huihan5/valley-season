@@ -293,7 +293,7 @@ describe('getFixedEvent — Day 23 letter assembly', () => {
   it('lets the player notice the date is now two deadlines', () => {
     const text = letter(80, 20);
     expect(text).toContain('它同时是另一个东西的期限');
-    expect(text).toContain('还有八天');
+    expect(text).toContain('还有七天');
   });
 
   it('opens the broker channel in the same breath', () => {

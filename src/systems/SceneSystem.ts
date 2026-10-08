@@ -8,6 +8,10 @@ import {
   AMBIENT_CHANCE,
   MARKET_RUMOURS_MIN,
   MARKET_RUMOURS_MAX,
+  AMBIENT_RULES,
+  RESULT_RULES,
+  WEATHER_LINE_RULES,
+  LineRule,
 } from '../data/config';
 
 import DATA from '../data';
@@ -74,6 +78,37 @@ function paragraphs(...layers: KeyedPart[][]): KeyedPart[] {
 /** A line with no state behind it: a random draw, never compared. */
 function drawn(text: string | undefined): KeyedPart[] {
   return text ? [{ text }] : [];
+}
+
+/** The moment a line is drawn for: the hour, the weather, the day. */
+export interface LineContext {
+  phase: DayPhase;
+  weather: WeatherType;
+  day: number;
+}
+
+export function lineContextOf(state: Pick<GameState, 'phase' | 'weather' | 'day'>): LineContext {
+  return { phase: state.phase, weather: state.weather, day: state.day };
+}
+
+export function fits(rule: LineRule | undefined, at: LineContext | undefined): boolean {
+  if (!rule || !at) return true;
+  if (rule.phases && !rule.phases.includes(at.phase)) return false;
+  if (rule.weathers && !rule.weathers.includes(at.weather)) return false;
+  if (rule.from !== undefined && at.day < rule.from) return false;
+  if (rule.to !== undefined && at.day > rule.to) return false;
+  return true;
+}
+
+/**
+ * One line of a pool that is true at this moment (config.LineRules). It still takes exactly
+ * one draw, so the rest of a season's draws do not move. Should nothing fit, the lines that
+ * are true anywhere are used, and failing those, none.
+ */
+function pickFitting(pool: string[], rules: Record<number, LineRule> | undefined, at: LineContext | undefined, rng: () => number): string | undefined {
+  if (!rules || !at) return pick(pool, rng);
+  const open = pool.filter((_, i) => fits(rules[i], at));
+  return pick(open.length > 0 ? open : pool.filter((_, i) => !rules[i]), rng);
 }
 
 /** Draws `count` distinct entries without reordering the source pool. */
@@ -148,8 +183,8 @@ export function countClues(state: GameState): number {
 
 // ── 天气插入句 ──────────────────────────────────────────────────────────────
 
-export function getWeatherLine(weather: WeatherType, rng: () => number): string {
-  return pick(WEATHER[weather] ?? [], rng) ?? '';
+export function getWeatherLine(weather: WeatherType, rng: () => number, at?: LineContext): string {
+  return pickFitting(WEATHER[weather] ?? [], WEATHER_LINE_RULES[weather], at, rng) ?? '';
 }
 
 // ── 闲笔 ────────────────────────────────────────────────────────────────────
@@ -165,9 +200,9 @@ export function shouldPlayAmbient(state: GameState, rng: () => number): boolean 
   return calmWeather && rested && quietDay && rng() < AMBIENT_CHANCE;
 }
 
-export function getAmbient(sceneKey: string, rng: () => number): string {
-  const pool = AMBIENT[sceneKey] ?? AMBIENT.default;
-  return pick(pool, rng) ?? '';
+export function getAmbient(sceneKey: string, rng: () => number, at?: LineContext): string {
+  const key = AMBIENT[sceneKey] ? sceneKey : 'default';
+  return pickFitting(AMBIENT[key], AMBIENT_RULES[key], at, rng) ?? '';
 }
 
 // ── 招呼语 ──────────────────────────────────────────────────────────────────
@@ -200,7 +235,10 @@ export function getActionResultParts(
   kind: string,
   rng: () => number,
   vars: Record<string, string | number> = {},
+  at?: LineContext,
 ): KeyedPart[] {
+  const poolLine = (pool: string): string | undefined =>
+    pickFitting(RESULTS[pool] ?? [], RESULT_RULES[pool], at, rng);
   if (kind === 'market_rumours') {
     const { intro, lines } = getMarketRumours(rng);
     return paragraphs(drawn(intro), drawn(RUMOURS.lead as string), ...lines.map(drawn));
@@ -209,19 +247,19 @@ export function getActionResultParts(
   // four bands the walk reads, chosen by the total *after* this day's work.
   if (kind.startsWith('fell_timber_')) {
     const tier = Number(kind.slice('fell_timber_'.length));
-    const felled = pick(RESULTS.fell_timber ?? [], rng);
+    const felled = poolLine('fell_timber');
     return paragraphs(drawn(felled ? fillVars(felled, vars) : ''), forestStateParts(tier));
   }
   // Walking the woods ends on what they look like now, which is not a number.
   if (kind.startsWith('survey_forest_')) {
     const tier = Number(kind.slice('survey_forest_'.length));
-    return paragraphs(drawn(pick(RESULTS.survey_forest, rng)), forestStateParts(tier));
+    return paragraphs(drawn(poolLine('survey_forest')), forestStateParts(tier));
   }
   // The third afternoon in the stable carries an extra beat on the end of it.
   if (kind === 'stable_help_third') {
-    return paragraphs(drawn(pick(RESULTS.stable_help, rng)), drawn(RESULTS.stable_help_third?.[0]));
+    return paragraphs(drawn(poolLine('stable_help')), drawn(RESULTS.stable_help_third?.[0]));
   }
-  const template = pick(RESULTS[kind] ?? [], rng);
+  const template = poolLine(kind);
   if (!template) return [];
   return drawn(fillVars(template, vars));
 }
@@ -230,8 +268,9 @@ export function getActionResult(
   kind: string,
   rng: () => number,
   vars: Record<string, string | number> = {},
+  at?: LineContext,
 ): string {
-  return plain(getActionResultParts(kind, rng, vars));
+  return plain(getActionResultParts(kind, rng, vars, at));
 }
 
 function fillVars(template: string, vars: Record<string, string | number>): string {
@@ -347,9 +386,10 @@ export function composeSceneParts(state: GameState, sceneKey: string, rng: () =>
       : getMarketArrivalParts(state, 'market:arrivalScene');
   }
 
-  const layers = [getLocationParts(state, sceneKey), drawn(getWeatherLine(state.weather, rng))];
+  const at = lineContextOf(state);
+  const layers = [getLocationParts(state, sceneKey), drawn(getWeatherLine(state.weather, rng, at))];
   if (shouldPlayAmbient(state, rng)) {
-    layers.push(drawn(getAmbient(sceneKey, rng)));
+    layers.push(drawn(getAmbient(sceneKey, rng, at)));
   }
   return paragraphs(...layers);
 }

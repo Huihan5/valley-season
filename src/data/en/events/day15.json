@@ -4,7 +4,7 @@
   "timing": "midday",
   "forced": true,
   "title": "Word from the Woods",
-  "sceneText": "A tenant sends word over at dusk that there is something going on in the north woods.\n\nHe cannot say what, exactly. “Trees down,” he says. “Not the wind.”",
+  "sceneText": "A tenant sends word over before lunch that there is something going on in the north woods.\n\nHe cannot say what, exactly. “Trees down,” he says. “Not the wind.”",
   "variants": {
     "unmet": "You go through Hartmann’s records. The boundary between the north woods and Millridge is genuinely disputed. A survey was made last year and the conclusion was “the stream to be the boundary”. But that stream changed its course after the spring flood.\n\nThe record stops there. How the boundary is to be reckoned after the course changed is not written down anywhere in the file.",
     "met": "You go through Hartmann’s records and find the conclusion of that survey: the stream to be the boundary.\n\nThe same stream Thierry spoke about at the market. He said that whether it goes by the old bed or the new one after the change is not in the file, because whoever wrote the file did not expect a river to move.\n\nAnd now there are “trees down” in that wood."

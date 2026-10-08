@@ -3,35 +3,35 @@
     "label": "The steward’s office",
     "act1": {
       "morning": "Early light comes in at a slant through the window that faces Maplegate Avenue and lands on the stack of papers Hartmann left on the desk. From here you can see everyone who comes in or goes out.",
-      "afternoon": "The afternoon sun makes the room duller than it was this morning. The papers are still there, waiting on you.",
+      "afternoon": "The room is duller in the afternoon than it was this morning. The papers are still there, waiting on you.",
       "evening": "The lamp blurs the writing in the ledger. The last of the noise from the kitchen has gone quiet too."
     },
     "act2": {
-      "morning": "The light comes in lower than it did last month. Same hour, same window, and the bright patch on the desk has moved half a foot inward. The papers are in three stacks now: to be done, done, and the ones you have not decided about.",
+      "morning": "The light comes in lower than it did at the start of the month. Same hour, same window, and the bright patch on the desk has moved half a foot inward. The papers are in three stacks now: to be done, done, and the ones you have not decided about.",
       "afternoon": "The afternoon light reaches half the desk. The other half is in shadow, under this quarter’s receipts. Out on Maplegate Avenue the leaves have started to gather, and nobody is sweeping them.",
       "evening": "The figures look worse by lamplight than they do by day. You worked them twice and got the same answer twice. There is still noise from the kitchen; Martha is getting tomorrow ready."
     },
     "act3": {
       "morning": "You have to light the lamp to come in here in the morning now. It gets light later and later, and there is more and more to do. The undecided stack in the corner is taller than the other two together.",
       "afternoon": "By three the light is already going. You have to move the paper over to the window to work the accounts. Your fingers are cold.",
-      "evening": "The lamp oil goes faster than it did last month. The nights are longer. When you look up, the glass has misted over — your breath on the inside, frost on the outside."
+      "evening": "The lamp oil goes faster than it did at the start of the month. The nights are longer. When you look up, the glass has misted over — your breath on the inside, frost on the outside."
     }
   },
   "fields": {
     "label": "The fields",
     "act1": {
       "morning": "The morning fog has not fully gone and there are fine beads of water on the stalks. The wheat runs down the slope in a sheet of deep gold, the full heads swaying a little in the wind. It is the busy season; the tenants were out before it was properly light.",
-      "afternoon": "The afternoon sun makes the whole field bright to the point of glare. The sound of sickles going through wheat comes from every side, in a regular rhythm that settles a person. The smell of apples drifts over from the orchard.",
+      "afternoon": "The fields are full of people this afternoon. The sound of sickles going through wheat comes from every side, in a regular rhythm that settles a person. The smell of apples drifts over from the orchard.",
       "evening": "The fields have gone quiet. The tenants have gone home and there is one lamp burning far off, some old man waiting up for a son. In the dusk the cut stubble looks like a field of black files."
     },
     "act2": {
-      "morning": "The fog is thicker than it was last month and slower to go. Half the wheat is down. On the cut side there is short even stubble and turned black earth; the other side is still waiting. Two colours with a line between them.",
-      "afternoon": "The sound of cutting comes from every side, faster than last month. You can hear where there are not enough hands: over there the rhythm breaks. The smell from the orchard has thinned; the apples are mostly in.",
-      "evening": "The lamps in the fields burn later than they did last month. A few holdings are still bringing it in while the rain holds off. In the dusk the cut stubble looks like a field of black files."
+      "morning": "The fog is thicker than it was at the start of the month and slower to go. Half the wheat is down. On the cut side there is short even stubble and turned black earth; the other side is still waiting. Two colours with a line between them.",
+      "afternoon": "The sound of cutting comes from every side, faster than at the start of the month. You can hear where there are not enough hands: over there the rhythm breaks. The smell from the orchard has thinned; the apples are mostly in.",
+      "evening": "The lamps in the fields burn later than they did at the start of the month. A few holdings are still bringing it in with the last of the light. In the dusk the cut stubble looks like a field of black files."
     },
     "act3": {
       "morning": "There is a white coat of frost on the stubble and it makes a sound underfoot. Not much is left standing, and what is stands dark, the heads hanging lower than they hang at harvest. That is not weight. That is past ripe.",
-      "afternoon": "There are fewer people in the fields than last month. Everything that could be got in has been got in; what is left is what is hard to get. Someone is bent over in the furthest plot, too far away to make out.",
+      "afternoon": "There are fewer people in the fields than at the start of the month. Everything that could be got in has been got in; what is left is what is hard to get. Someone is bent over in the furthest plot, too far away to make out.",
       "evening": "It goes dark too fast and there is nobody in the fields. The far lamp is not lit tonight. That household has finished what it had to bring in, or will not finish it."
     }
   },
@@ -39,16 +39,16 @@
     "label": "The woods",
     "act1": {
       "morning": "There is fog in the woods in the morning, white as smoke among the oaks and beeches. The crowns are copper-gold, the middle storey deep amber, the low scrub dark red. Your feet on the leaf litter make a soft sound. The air is cool and wet and smells of leaf mould and mushrooms.",
-      "afternoon": "The afternoon sun comes through a canopy that is thinning, and throws moving patches on the ground like a net turning slowly. There is wind in the trees, but by the time it reaches the ground it has become stillness.",
+      "afternoon": "The canopy is thinning, the gaps between the branches opening a little more each day, like a net turning slowly. There is wind in the trees, but by the time it reaches the ground it has become stillness.",
       "evening": "The woods, and you at the edge of them. You do not go in after dark. That is not superstition, only a risk with nothing on the other side of it. Behind you the trees have become a black wall, with one line of the last daylight left along the tops."
     },
     "act2": {
-      "morning": "The crowns have gone from copper-gold to deep brown. The fallen leaves are ankle-deep and loud to walk through; the soft rustle of last month is gone, and what is left is dry and brittle.",
-      "afternoon": "The sun comes through a thinner canopy and the patches on the ground are larger than last month, and closer together. When the wind goes over, the sound of the whole wood travels downward.",
-      "evening": "It goes dark earlier than last month. That line of daylight along the tops is down to a thread, and the dark wall stands lower."
+      "morning": "The crowns have gone from copper-gold to deep brown. The fallen leaves are ankle-deep and loud to walk through; the soft rustle of the first days of the month is gone, and what is left is dry and brittle.",
+      "afternoon": "The canopy is thinner and the gaps between the branches are larger than at the start of the month, and there are more of them. When the wind goes over, the sound of the whole wood travels downward.",
+      "evening": "It goes dark earlier than at the start of the month. That line of daylight along the tops is down to a thread, and the dark wall stands lower."
     },
     "act3": {
-      "morning": "There is less than a third of the leaf left on the trees, and you can see the sky and the bones of the branches. The litter on the ground has been packed down by frost and gone black. The woods are lighter than last month, and colder.",
+      "morning": "There is less than a third of the leaf left on the trees, and you can see the sky and the bones of the branches. The litter on the ground has been packed down by frost and gone black. The woods are lighter than at the start of the month, and colder.",
       "afternoon": "The light reaches the ground direct now; there is nothing left to stop it. But it is a cold light and lands on you without warmth. The wood is quiet enough that you hear something fall a long way off.",
       "evening": "By five the wood is black through. You stand at the edge and look in and see nothing — not because it is dark, but because there is nothing in there left to look at."
     }
@@ -57,18 +57,18 @@
     "label": "The stable",
     "act1": {
       "morning": "The smell of horses and the smell of hay, mixed. Eight of them in their own stalls, eating quietly.",
-      "afternoon": "The afternoon sun comes in at a slant from the high vents and turns the dust in the stable into gold hanging in the air.",
+      "afternoon": "A little afternoon light comes in from the high vents, and the dust in the stable hangs in it like gold.",
       "evening": "The horses have gone quiet in the dusk. Only now and then a snort."
     },
     "act2": {
-      "morning": "You can see their breath in the mornings now. The hay smells stronger than last month; the new cut has been stacked in on top of the old.",
+      "morning": "You can see their breath in the mornings now. The hay smells stronger than at the start of the month; the new cut has been stacked in on top of the old.",
       "afternoon": "The light from the vents comes in hard on the slant and the dust turns in it. This is the quietest hour in the stable: fed, and not yet time to muck out.",
       "evening": "The horses have settled in the dusk. The last round is fed and the tools are back where they belong. This place is the same at this hour every day."
     },
     "act3": {
       "morning": "It is warmer in the stable than outside, and you feel it as soon as you are through the door. Eight of them packed into their places, none of them moving. There is a ring of half-melted ice around the trough.",
-      "afternoon": "Not much of the afternoon light gets in. There is a lamp burning in the stable. The straw on the floor is twice as thick as it was last month, and that is for the winter.",
-      "evening": "The door shuts tighter than it did last month, with straw stuffed in the gaps. The stable is warm at night, with the smell that only comes of living animals packed close."
+      "afternoon": "Not much of the afternoon light gets in. There is a lamp burning in the stable. The straw on the floor is twice as thick as it was at the start of the month, and that is for the winter.",
+      "evening": "The door shuts tighter than it did at the start of the month, with straw stuffed in the gaps. The stable is warm at night, with the smell that only comes of living animals packed close."
     },
     "gregorPresent": {
       "morning": "He is at the far end with his back to the door, working through a chestnut’s mane, slow and even. He hears you come in and does not turn round.",
@@ -85,12 +85,12 @@
     },
     "act2": {
       "morning": "There is a layer of sourness under the bread and the smoked meat now; the pickling jars are backed up to the wall. The range has not been out since morning.",
-      "afternoon": "The quiet after lunch is shorter than it was last month. It is cleared and the next job starts, because this year’s work has to be finished before the frosts.",
+      "afternoon": "The quiet after lunch is shorter than it was at the start of the month. It is cleared and the next job starts, because this year’s work has to be finished before the frosts.",
       "evening": "The kitchen is still the last room to go dark. Tomorrow’s work is laid out on the board, each thing squared away in its place."
     },
     "act3": {
       "morning": "The heat hits you at the door. The windows are running with it. A batch of the finished jars has been carried off, and dry goods for the winter are stacked where they stood.",
-      "afternoon": "There are more people in the kitchen this afternoon than there were last month. Women from the tenant households have come to help, and the talking and the chopping and the water coming to the boil are all in it together. This room is the liveliest place on the estate now.",
+      "afternoon": "There are more people in the kitchen this afternoon than there were at the start of the month. Women from the tenant households have come to help, and the talking and the chopping and the water coming to the boil are all in it together. This room is the liveliest place on the estate now.",
       "evening": "The lamp burns very late. Martha is counting the stores: counts once, writes a line, counts again. She has been counting for thirty years and she still counts everything twice."
     }
   },
@@ -102,8 +102,8 @@
       "evening": "At night this is the quietest place on the estate. The flame in the hearth is sharper in the dark than it is by day. You do not know why Hartmann came here so often in his last few weeks, and in this silence you can feel the weight of the question."
     },
     "act2": {
-      "morning": "The stone is colder than it was last month. The fire in the hearth is always that size; somebody comes every day and feeds it, not more and not less.",
-      "afternoon": "The light from the high window falls on the lip of the hearth, a little further over than it did last month. Nothing else in this room has changed at all.",
+      "morning": "The stone is colder than it was at the start of the month. The fire in the hearth is always that size; somebody comes every day and feeds it, not more and not less.",
+      "afternoon": "The light from the high window falls on the lip of the hearth, a little further over than it did at the start of the month. Nothing else in this room has changed at all.",
       "evening": "This is the quietest place at night. The flame is sharper in the dark than by day. Standing here, your head clears a little more than it does in the office."
     },
     "act3": {
@@ -121,9 +121,9 @@
       "evening": "Dusk, and the estate’s chimneys have begun to smoke."
     },
     "act2": {
-      "morning": "October is half gone and the days are getting shorter.",
-      "afternoon": "October is half gone and the days are getting shorter.",
-      "evening": "October is half gone and the days are getting shorter."
+      "morning": "October is in its middle stretch and the days are getting shorter.",
+      "afternoon": "October is in its middle stretch and the days are getting shorter.",
+      "evening": "October is in its middle stretch and the days are getting shorter."
     },
     "act3": {
       "morning": "There have been several frosts. A few more days and it is November.",

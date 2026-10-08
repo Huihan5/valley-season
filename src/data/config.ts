@@ -1,6 +1,6 @@
 // All numerical values mirror docs/GDD_NEXT.md ch.5 — never hardcode game balance elsewhere.
 // (GDD v3 retired the standalone NUMBERS.md; ch.5 is the sole numerical authority.)
-import { WeatherType } from '../types/game';
+import { DayPhase, WeatherType } from '../types/game';
 
 export const DEMO_MAX_DAYS = 30;
 
@@ -359,6 +359,79 @@ export const RANDOM_EVENT_WINDOWS: Record<string, RandomEventWindow> = {
 // ── 场景层 (GDD ch.13.1) ────────────────────────────────────────────────────
 // 闲笔 stay rare on purpose: two or three a week, never a reward, never a lead.
 export const AMBIENT_CHANCE = 0.18;
+
+// ── 句子的出现条件 (text audit, 2026-10) ──────────────────────────────────────
+// Some lines in the random pools are only true at some hours, in some weather, or from a
+// certain day: a rain that starts halfway through the reaping, "到傍晚清点" in a morning's
+// work. The text stays as written and the draw only takes lines that fit the moment. The
+// key is the line's position in its pool (the same in zh and en); a line with no entry fits
+// anywhere. tests/LineRules.test.ts checks the positions still point at the lines meant.
+export interface LineRule {
+  phases?: DayPhase[];
+  weathers?: WeatherType[];
+  /** First and last day it can be drawn. */
+  from?: number;
+  to?: number;
+}
+export type LineRules = Record<string, Record<number, LineRule>>;
+
+const DAYTIME: DayPhase[] = ['morning', 'afternoon'];
+
+/** scenes/ambient.json, by place. */
+export const AMBIENT_RULES: LineRules = {
+  fields: {
+    0: { phases: DAYTIME, to: 22 },        // 割麦的时候有人在唱：第三幕田里已经没有麦
+    2: { phases: ['morning'], from: 11 },  // 早上霜化：霜从第 11 天起才会下
+  },
+  forest: {
+    0: { phases: DAYTIME },                // 倒木上的蘑菇：天黑后你只到林地边缘
+    1: { phases: DAYTIME },                // 林子深处的鹿
+  },
+  stable: {
+    1: { phases: ['evening'] },            // 夜里进马厩
+  },
+  kitchen: {
+    0: { phases: DAYTIME },                // 玛莎教女孩切东西
+  },
+  default: {
+    0: { from: 11 },                       // 枫叶下得像下雪：落叶要到第二幕
+    1: { phases: ['afternoon'] },          // 埃莱娜晒被子
+    2: { phases: ['evening'] },            // 傍晚没有风的时候
+  },
+};
+
+/** scenes/action_results.json, by action. */
+export const RESULT_RULES: LineRules = {
+  harvest: {
+    0: { phases: ['morning'] },            // 到中午的时候手上已经磨出了印子
+    1: { phases: ['afternoon'] },          // 到傍晚清点
+    2: { weathers: ['rainy'] },            // 割到一半下起了毛毛雨
+  },
+  fell_timber: {
+    2: { phases: ['afternoon'] },          // 收工的时候天已经暗了
+  },
+  forage: {
+    1: { phases: ['morning'] },            // 你采了一上午
+    2: { from: 15 },                       // 这个季节快过去了
+  },
+  orchard: {
+    0: { phases: ['morning'] },            // 摘了一整个上午
+  },
+  survey_forest: {
+    1: { weathers: ['fog'] },              // 林子里今天有雾
+  },
+};
+
+/** scenes/weather_lines.json, by weather. */
+export const WEATHER_LINE_RULES: LineRules = {
+  sunny: { 1: { phases: DAYTIME } },       // 到了下午，被晒过的石头摸上去还是温的
+  rainy: { 0: { phases: ['afternoon', 'evening'] } }, // 雨下了一整天
+  frost: {
+    0: { phases: ['morning'] },            // 早上出门，草上有一层白
+    2: { phases: ['morning'] },            // 水槽边缘结了一圈薄冰，中午才化
+  },
+  fog: { 4: { phases: ['morning'] } },     // 雾要到中午才散
+};
 // The forge-hall's evening line poses a question about 霍特曼; past this many clues
 // the player already knows the answer, so the line switches to its settled version.
 export const CHAPEL_INFORMED_CLUE_COUNT = 2;
