@@ -4,7 +4,7 @@ import {
 import { canHarvest, canFellTimber } from './WeatherSystem';
 import {
   getHarvestYield, getTimberYield, getYieldTierLabel,
-  getTimberFelled, getTimberQuotaLeft, getForestTier,
+  getTimberFelled, getTimberQuotaLeft, getForestTierAt,
   getForageYield, getOrchardYield, getOrchardTenantGain, getOrchardTenantTotal,
   getFieldGrain, getFrostDayEndLoss,
 } from './ResourceSystem';
@@ -30,16 +30,17 @@ import {
   OUTING_FATIGUE, MARKET_TRADE_FATIGUE,
   DINNER_DAY, PETITION_INFORMED_TRUST, ECHO_DECOROUS_AT,
   HUNT_LAST_DAY, LORENZ_FRAGMENT_TRUST, MARGUERITE_FRAGMENT_TRUST,
-  WYNTER_PARTIAL_ACCOUNT, WYNTER_FULL_ACCOUNT, POSITION_LINE_COMPLETE,
+  WYNTER_PARTIAL_ACCOUNT, WYNTER_FULL_ACCOUNT, WYNTER_POSITION_KNOWN,
   GRAIN_RETAIN_THRESHOLD, GRAIN_EXCELLENT_THRESHOLD, LETTER_GOOD_GULDMARK,
   ELENA_QUILTS_TRUST, MILLRIDGE_TRUST, MILLRIDGE_CASH, MILLRIDGE_TIMBER, MILLRIDGE_SPRING_SEED,
-  SURVEY_FIELDS_LAST_DAY, TIMBER_SEASON_QUOTA,
+  TIMBER_SEASON_QUOTA,
   TIMBER_OVERRUN_RENOWN, TIMBER_BROKEN_PROMISE_TRUST,
   ORCHARD_FULL_YIELD_LAST_DAY, NIGHT_LEDGER_CLUE_AT,
-  HORSE_CARE_TRUST_AT, OFFICE_FOLIO_AT, TIMBER_RESTRAINT_AT,
+  HORSE_CARE_TRUST_AT, OFFICE_FOLIO_AT, TIMBER_RESTRAINT_AT, FATIGUE_EXHAUSTED_THRESHOLD,
 } from '../data/config';
 import DATA from '../data';
 import { fill, plural } from '../utils/text';
+import { seededRng } from '../utils/rng';
 
 const ui = DATA.ui;
 const lines = DATA.systemLines;
@@ -317,7 +318,7 @@ function processWynter(event: EventData, state: GameState): EventData {
   if (fullAccount) {
     parts.push(v.tier3);
     flags.wynterRestated = true;
-    if (positionLine >= POSITION_LINE_COMPLETE) {
+    if (positionLine >= WYNTER_POSITION_KNOWN) {
       parts.push(v.tier4);
       flags.wynterKnowsYouKnow = true;
     }
@@ -479,6 +480,20 @@ export function getFixedEvent(day: number, phase: DayPhase, state: GameState): E
 export function hasFixedEventToday(state: GameState): boolean {
   return FIXED_EVENTS.some(
     e => e.day === state.day && (!e.activationFlag || !!state.flags[e.activationFlag])
+  );
+}
+
+/**
+ * Whether a scheduled event is already booked into `phase` of today. A random event
+ * that landed on the same phase would be shadowed by it (buildStateForPhase plays the
+ * fixed one) and then lost for good, so the random pool must not offer it.
+ */
+export function fixedEventTakesPhase(state: GameState, phase: DayPhase | undefined): boolean {
+  if (!phase) return false;
+  return FIXED_EVENTS.some(
+    e => e.day === state.day
+      && eventPhase(e) === phase
+      && (!e.activationFlag || !!state.flags[e.activationFlag])
   );
 }
 
@@ -655,7 +670,7 @@ export function markUnaffordableChoices(choices: Choice[], resources: Resources)
 
 export function getFreeChoices(state: GameState): Choice[] {
   const { phase, weather, fatigue, day, flags, resources } = state;
-  const exhausted = fatigue >= 5;
+  const exhausted = fatigue >= FATIGUE_EXHAUSTED_THRESHOLD;
   const inHuntSeason = isHuntSeason(state);
   const choices: Choice[] = [];
 
@@ -678,9 +693,11 @@ export function getFreeChoices(state: GameState): Choice[] {
       text: A.harvest.text,
       description: fieldsCleared
         ? A.harvest.allIn
-        : canHarvest(weather)
-          ? fill(A.harvest.estimate, { tier: getYieldTierLabel(grainGain) })
-          : A.harvest.rainedOut,
+        // Rain does not stop the reaping, it only thins it (-2): the button names the
+        // weather and still says what the day will actually bring in.
+        : fill(canHarvest(weather) ? A.harvest.estimate : A.harvest.rainedOut, {
+          tier: getYieldTierLabel(grainGain),
+        }),
       effects: {
         grain: grainGain,
         fatigue: 1,
@@ -741,7 +758,8 @@ export function getFreeChoices(state: GameState): Choice[] {
         },
         logEntry: fill(plural(timberGain, A.fellTimber.logOne, A.fellTimber.log), { n: timberGain }),
       },
-      resultKind: 'fell_timber',
+      // The woods as they stand after this day's cutting, so every felling shows the progress.
+      resultKind: `fell_timber_${getForestTierAt(felledAfter)}`,
       resultVars: { n: timberGain, r: Math.max(0, quotaLeft - timberGain) },
       // Crossing 20 is where he stops counting and says the thing about sixty years.
       ...(felledAfter >= TIMBER_RESTRAINT_AT && !flags.timberRestraintAnswered
@@ -822,43 +840,7 @@ export function getFreeChoices(state: GameState): Choice[] {
       ...(findsFolio ? { nextEvent: 'office_folio' } : {}),
     });
 
-    // 巡视是限时的一次性行动：用途只有对应的那一个事件，过期就不能再做。
-    if (!flags.surveyedFields && day <= SURVEY_FIELDS_LAST_DAY) {
-      choices.push({
-        id: 'survey_fields',
-        text: A.surveyFields.text,
-        description: A.surveyFields.description,
-        effects: {
-          fatigue: 1,
-          flags: { surveyedFields: true },
-          nextScene: 'fields',
-          logEntry: A.surveyFields.log,
-        },
-        resultKind: 'survey_fields',
-        disabled: exhausted,
-        disabledReason: exhausted ? A.common.tooTired : undefined,
-      });
-    }
-
-    // Unlike the fields, this one repeats and never expires: the woods change as
-    // they are cut, and going to look before deciding is the point of it. The
-    // first walk is still what lets Day 15 tell a fresh stump from an old one.
-    choices.push({
-      id: 'survey_forest',
-      text: A.surveyForest.text,
-      // The first walk unlocks a standing felling bonus (D8); once taken, the action
-      // still repeats for the Day 15 narrative and to read the woods as they change.
-      description: flags.surveyedForest ? A.surveyForest.descriptionDone : A.surveyForest.description,
-      effects: {
-        fatigue: 1,
-        flags: { surveyedForest: true },
-        nextScene: 'forest',
-        logEntry: A.surveyForest.log,
-      },
-      resultKind: `survey_forest_${getForestTier(state)}`,
-      disabled: exhausted,
-      disabledReason: exhausted ? A.common.tooTired : undefined,
-    });
+    // 巡视农田 / 巡视林地 are one-off estate tasks now (EstateTaskSystem), not daily choices.
 
     // Hunt season does not lock the market out: Day 20 is a Saturday, and giving up
     // that day's hunt to make the trip is a choice the player is allowed to make.
@@ -873,7 +855,8 @@ export function getFreeChoices(state: GameState): Choice[] {
             visitingMarketToday: day,
             [`visitedMarket_day${day}`]: true,
             // Drawn once, on the way in — see drawRumours.
-            [rumoursFlagKey(day)]: encodeRumours(drawRumours(Math.random)),
+            // Drawn from the season's seed, not the clock: a replayed season hears the same queue.
+            [rumoursFlagKey(day)]: encodeRumours(drawRumours(seededRng(state.seed ?? 0, 'rumours', day))),
           },
           nextScene: 'market',
           logEntry: A.market.goLog,
@@ -1014,7 +997,7 @@ export function getFreeChoices(state: GameState): Choice[] {
       });
     }
 
-    // ── 经纪人换货渠道 (Day 24-30, unlocked by lord's letter) ────────────
+    // ── 经纪人换货渠道 (afternoons from the Day 23 letter through Day 30) ────────────
     // Rates live in config.BROKER (D10); descriptions are templates filled from them,
     // so the numbers a player reads can never drift from the numbers they pay.
     if (flags.brokerUnlocked && day <= 30) {

@@ -74,11 +74,18 @@ export default function EstateTaskList({ state, actionableIds, marketChoice, inE
           // Available but not offered this phase — the estate work is a daytime job,
           // so at night it is a preview, not a button. Say so, or it reads as broken.
           const notNow = task.status === 'available' && !takeable;
+          // The two walks cost no money, only a phase and a point of fatigue: a clock
+          // for the marker and a tag, so the price reads as time rather than coin.
+          const isWalk = task.kind === 'survey';
           const body = (
             <>
               <div className="flex items-baseline gap-1.5">
-                <span className={`text-[10px] leading-none ${task.status === 'done' || takeable ? 'text-gold-dim' : 'text-game-dim'}`}>
-                  {task.status === 'done' ? '✓' : '○'}
+                <span className={`text-[10px] leading-none ${
+                  task.status === 'done' ? 'text-gold-dim'
+                    : isWalk && task.status !== 'blocked' ? 'text-amber/90'
+                      : takeable ? 'text-gold-dim' : 'text-game-dim'
+                }`}>
+                  {task.status === 'done' ? '✓' : isWalk ? '◷' : '○'}
                 </span>
                 <span className={`font-serif text-xs ${
                   takeable ? 'text-cream'
@@ -87,6 +94,11 @@ export default function EstateTaskList({ state, actionableIds, marketChoice, inE
                 }`}>
                   {task.label}
                 </span>
+                {isWalk && task.status !== 'done' && (
+                  <span className="ml-auto shrink-0 text-[9px] leading-4 px-1 rounded-sm border border-amber/30 text-amber/80">
+                    {T.timeOnly}
+                  </span>
+                )}
               </div>
               <p className={`text-[11px] leading-snug pl-4 transition-colors ${
                 task.status === 'blocked' ? 'text-rust/80'

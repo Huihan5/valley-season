@@ -128,6 +128,12 @@ export interface EventData {
    * only the choosing lives in the system.
    */
   variants?: Record<string, string>;
+  /**
+   * Conditions on those variants, for the ones that only make sense on some days:
+   * a rain that lets up needs rain to have fallen; an end-of-day summary belongs to
+   * dusk, not midday. Variants without a rule fit anywhere the event does.
+   */
+  variantRules?: Record<string, { weather?: WeatherType[]; timing?: EventTiming }>;
   letterOpening?: string;
   letterParagraphs?: ConditionalParagraph[];
   letterClosing?: string;
@@ -138,6 +144,18 @@ export interface LogEntry {
   phase: DayPhase;
   text: string;
 }
+
+/**
+ * What a player can do to a season. Every one of these is recorded in
+ * `GameState.history`, and replaying them from the season's seed rebuilds the season.
+ */
+export type SeasonAction =
+  | { type: 'MAKE_CHOICE'; choiceId: string }
+  | { type: 'SET_PLAYER_NAME'; name: string }
+  | { type: 'ADVANCE_OPENING' }
+  | { type: 'SKIP_OPENING' }
+  | { type: 'ADVANCE_DAY_EVENT' }
+  | { type: 'COMMIT_ADVANCE' };
 
 export interface GameState {
   day: number;
@@ -184,4 +202,17 @@ export interface GameState {
   log: LogEntry[];
   demoComplete: boolean;
   endingId: string | null;
+  /**
+   * The season's seed. Every random draw comes from it, so a season is a function of
+   * (seed, history). Absent on saves from before seeding; those cannot be replayed.
+   */
+  seed?: number;
+  /** Actions taken so far; the draws of action n come from (seed, n). */
+  step?: number;
+  /**
+   * Everything the player did, in order. Every line of text in the state was resolved
+   * in one language when it was built; replaying this under the other language rebuilds
+   * the same season in the new one (GameEngine.replaySeason). Undefined on older saves.
+   */
+  history?: SeasonAction[];
 }

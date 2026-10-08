@@ -2,7 +2,7 @@
   "id": "office_folio",
   "day": 0,
   "forced": true,
-  "advancesPhase": false,
+  "advancesPhase": true,
   "title": "Something Pressed Between the Leaves",
   "sceneText": "Going through last year’s files, you come to a folio with no number on it.\n\nIt is not accounts. There are loose things inside it: two receipts, a copy of a contract, several notes written half through.\n\nThe hand on the notes is Hartmann’s.\n\nWhen you reach the middle, something slides out from between the leaves.\n\nA small sprig of a dried plant. Pressed very flat, the colour gone to pale brown, the edges whole. It was put in there carefully. It did not fall in by chance.\n\nYou hold it up to the light.\n\nThis folio is in this room. This room is cleaned by Elena. And the way the thing has been laid between the leaves says that whoever laid it there wanted it to stay flat.",
   "choices": [

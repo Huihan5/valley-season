@@ -75,14 +75,14 @@
       "layers": {
         "face": "The Baron of Millridge, a little past forty. Always smiling, always proposing something — it was his letter that drew you into the hunt. His warmth is easy as sunlight, and does not quite outlast his turning away.",
         "inside": "What he minds is the woods, the hunting ground, and appearances, and he is the season’s most active host: a farther stag, a new trail, another dish at dinner — and in the gaps of the talk, a small bargain quietly closed. Whether his invitation is a welcome or a way to keep the new steward where he can be watched is worth your weighing.",
-        "archetype": "He is the kind of baron who knows the web of contract by heart and turns it to his own account without once breaking a rule — harder to deal with than a man who breaks them, because you cannot tell him from the system itself. Every noble here owes duties upward and a guarantee downward, the way Baron von Alde stood surety for you; Henk only reads that web of favour and interest closer than most."
+        "archetype": "He is the kind of baron who knows the web of contract by heart and turns it to his own account without once breaking a rule — harder to deal with than a man who breaks them, because you cannot tell him from the system itself. Every noble here owes duties upward and a guarantee downward, the way Baron von Alder stood surety for you; Henk only reads that web of favour and interest closer than most."
       }
     },
     "rational_feudalism": {
       "title": "Rational Feudalism",
       "subtitle": "Kingdom of Marigni",
       "silhouette": "Marigni’s polity",
-      "text": "Monarch, council and parliament coexist, and feudal contracts run on inside a modern legal frame — Marigni calls this rational feudalism. The kingdom is ancient, restrained, intensely private, its politics unbroken since medieval times; the coin in use is the Guldmark. Every lord owes duties upward and stands surety downward, and the guarantee letter between you and Baron von Alde is the most everyday corner of that system — favour and law in force at once."
+      "text": "Monarch, council and parliament coexist, and feudal contracts run on inside a modern legal frame — Marigni calls this rational feudalism. The kingdom is ancient, restrained, intensely private, its politics unbroken since medieval times; the coin in use is the Guldmark. Every lord owes duties upward and stands surety downward, and the guarantee letter between you and Baron von Alder is the most everyday corner of that system — favour and law in force at once."
     },
     "sacred_flame": {
       "title": "Temple Forged by the Sacred Flame",
@@ -100,7 +100,7 @@
       "title": "Maplegate",
       "subtitle": "North of Valehold",
       "silhouette": "The estate you are to keep",
-      "text": "A middling estate in the district north of Valehold, Baron von Alde’s holding. Stone walls, timber tiles, an avenue of maples burning with autumn. The last steward left suddenly, with no handover at all; the harvest is near and the estate’s work has stood three weeks. You have thirty days."
+      "text": "A middling estate in the district north of Valehold, Baron von Alder’s holding. Stone walls, timber tiles, an avenue of maples burning with autumn. The last steward left suddenly, with no handover at all; the harvest is near and the estate’s work has stood three weeks. You have thirty days."
     },
     "millridge": {
       "title": "Millridge",

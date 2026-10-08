@@ -106,6 +106,21 @@ describe('the dinner is one outing and three decisions', () => {
   });
 });
 
+describe('亨克’s timber offer at the table', () => {
+  const answer = (id: string) => getEventById('day7_dinner_arrival', makeState({ day: 7 }))
+    ?.choices?.find(c => c.id === id);
+
+  it('closes the 磨岭 agreement when the player takes it', () => {
+    expect(answer('dinner1_accept')?.effects?.flags?.millridgeDealSigned).toBe(true);
+    expect(answer('dinner1_accept')?.effects?.relationships?.henk).toBe(1);
+  });
+
+  it('leaves the market at the plain rate when the player refuses or puts it off', () => {
+    expect(answer('dinner1_refuse')?.effects?.flags?.millridgeDealSigned).toBeUndefined();
+    expect(answer('dinner1_defer')?.effects?.flags?.millridgeDealSigned).toBeUndefined();
+  });
+});
+
 describe('what the evening settles', () => {
   it('counts only the answers the drafts mark 得体', () => {
     expect(getDinnerPicksCorrect(makeState({ flags: DECOROUS }))).toBe(3);

@@ -755,3 +755,30 @@ describe('getDayEndEffects folds in the frost loss', () => {
     expect(getDayEndEffects(makeState({ day: 20, weather: 'sunny', flags: { fieldGrain: 100 } }))).toBeNull();
   });
 });
+
+describe('the harvest button in the rain', () => {
+  const harvest = (state: GameState) => getFreeChoices(state).find(c => c.id === 'harvest')!;
+
+  it('still lets you reap — rain only thins the yield', () => {
+    const rainy = harvest(makeState({ weather: 'rainy' }));
+    expect(rainy.disabled).toBeFalsy();
+    expect(rainy.effects?.grain).toBeGreaterThan(0);
+  });
+
+  it('names the weather and says what the day will actually bring in', () => {
+    // Unprepared: 3 - 2 = 1 -> meagre. Fully prepared: 7 - 2 = 5 -> fair.
+    const thin = harvest(makeState({ weather: 'rainy' }));
+    const prepared = harvest(makeState({ weather: 'rainy', flags: { fullyPrepared: true } }));
+    expect(thin.description).toContain('阴雨');
+    expect(thin.description).toContain('微薄');
+    expect(prepared.description).toContain('阴雨');
+    expect(prepared.description).toContain('尚可');
+    expect(prepared.description).not.toContain('微薄');
+  });
+
+  it('says the same thing in fine weather, without the rain', () => {
+    const fine = harvest(makeState({ weather: 'sunny', flags: { fullyPrepared: true } }));
+    expect(fine.description).toContain('丰厚');
+    expect(fine.description).not.toContain('阴雨');
+  });
+});

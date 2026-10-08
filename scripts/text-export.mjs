@@ -21,7 +21,7 @@ const OUT = path.join(ROOT, 'text-review');
 // data: these keys never hold CJK and always hold ascii identifiers.
 const IDENT_KEYS = new Set([
   'id', 'next', 'nextScene', 'nextEvent', 'timing', 'phase', 'kind',
-  'activationFlag', 'requiresFlag', 'dateLocale',
+  'activationFlag', 'requiresFlag', 'dateLocale', 'weather',
   'huntDay18Pick', 'timothyDay12', 'timothyDay6',
   'thierryDay13', 'thierryDay15', 'thierryDay19',
   'banquetAnswer', 'stagPick', 'petitionFairness',

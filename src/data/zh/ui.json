@@ -173,6 +173,7 @@
     "outstanding": "{n} 项未办",
     "done": "已完成",
     "daytimeOnly": "白天再做（上午或下午）",
+    "timeOnly": "只花时间",
     "inEventTitle": "事件处理中",
     "inEventBody": "当前正在处理事件，无法安排其他事务。"
   },
@@ -199,7 +200,9 @@
     "overwrite": "覆盖",
     "save": "存入",
     "load": "读取",
-    "delete": "删除"
+    "delete": "删除",
+    "toTitle": "返回主界面",
+    "toTitleNote": "本季已自动保存，可在主界面继续。"
   },
   "opening": {
     "signatureLabel": "被担保人签署",

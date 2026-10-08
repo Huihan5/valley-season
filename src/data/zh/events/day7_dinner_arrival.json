@@ -19,7 +19,7 @@
       "text": "这听起来很划算，我们可以试试",
       "effects": {
         "relationships": { "henk": 1 },
-        "flags": { "dinnerPick1": "A", "consideringMillridgeDeal": true },
+        "flags": { "dinnerPick1": "A", "millridgeDealSigned": true },
         "logEntry": "你在晚宴上当场应下了亨克的木材提议。"
       }
     },

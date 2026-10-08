@@ -190,6 +190,57 @@ describe('when the event reaches the screen', () => {
   });
 });
 
+// ── 事件不撞档 ──────────────────────────────────────────────────────────────
+
+describe('a random event never lands where a scheduled one already is', () => {
+  it('offers nothing in the afternoon of the petition day, which the petition holds', () => {
+    // Day 10 midday is the tenants' petition; the ox, the pedlar and the well would all
+    // land on the same slot and be played over, then lost.
+    expect(idsOn(10)).toEqual([]);
+  });
+
+  it('offers the same events on a day whose scheduled event is in the morning', () => {
+    // Day 11 only has the echo of the petition at dawn.
+    expect(idsOn(11)).toContain('random_forge_city_merchant');
+    expect(idsOn(11)).toContain('random_well');
+  });
+
+  it('offers the pedlar, the well and the merchant on Day 20 when the player stayed home', () => {
+    expect(idsOn(20).sort()).toEqual(['random_forge_city_merchant', 'random_tool_pedlar', 'random_well']);
+  });
+
+  it('offers none of them when the stag hunt holds the afternoon and the camp holds dusk', () => {
+    // Midday events would land on the stag, the merchant at dusk on the night in camp.
+    expect(idsOn(20, { huntAttendedDay20: true })).toEqual([]);
+  });
+});
+
+// ── 变体的条件 ──────────────────────────────────────────────────────────────
+
+describe('the third-act day only says what its day can bear', () => {
+  const draw = (weather: GameState['weather'], pick: number) => {
+    const rolled = rollRandomEvent(
+      makeState({ day: 24, weather, flags: { lastEventDay: 20 } }),
+      scripted(0, pick),
+    );
+    return { pending: rolled?.randomEventPending, variant: rolled?.randomEventVariant };
+  };
+
+  it('never draws the rain that lets up on a day it did not rain', () => {
+    for (const weather of ['sunny', 'cloudy', 'frost', 'fog'] as const) {
+      for (const pick of [0, 0.34, 0.5, 0.67, 0.99]) {
+        const { pending, variant } = draw(weather, pick);
+        if (pending === 'random_quiet_day') expect(variant).not.toBe('two');
+      }
+    }
+  });
+
+  it('can draw it when it rained', () => {
+    const variants = [0, 0.34, 0.5, 0.67, 0.99].map(pick => draw('rainy', pick).variant);
+    expect(variants).toContain('two');
+  });
+});
+
 // ── 事件内容 ────────────────────────────────────────────────────────────────
 
 describe('what the five events do', () => {
@@ -197,7 +248,15 @@ describe('what the five events do', () => {
     getPendingRandomEvent(makeState({ phase, flags: { randomEventPending: id, ...flags } }));
 
   it('gives the third-act day the variant that was drawn', () => {
-    const event = pendingAt('random_quiet_day', 'afternoon', { randomEventVariant: 'three' });
+    const event = pendingAt('random_quiet_day', 'afternoon', { randomEventVariant: 'one' });
+    expect(event?.sceneText).toContain('田里有两个人在吵架');
+    expect(event?.choices).toBeNull();
+  });
+
+  it('holds the day-end variant of the third-act day until dusk, when its evening has begun', () => {
+    const flags = { randomEventVariant: 'three' };
+    expect(pendingAt('random_quiet_day', 'afternoon', flags)).toBeNull();
+    const event = pendingAt('random_quiet_day', 'evening', flags);
     expect(event?.sceneText).toContain('今天没有出任何事。');
     expect(event?.choices).toBeNull();
   });

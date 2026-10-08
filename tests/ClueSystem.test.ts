@@ -5,6 +5,8 @@ import {
   getClueGroups, hasAllClueGroups, isPositionLineComplete,
 } from '../src/systems/ClueSystem';
 import { getFreeChoices } from '../src/systems/EventSystem';
+import { getEstateTaskChoices } from '../src/systems/EstateTaskSystem';
+import { getActionResult } from '../src/systems/SceneSystem';
 import { TIMBER_OVERRUN_RENOWN, TIMBER_BROKEN_PROMISE_TRUST } from '../src/data/config';
 
 const ZERO: Record<NpcId, number> = { gregor: 0, marta: 0, elena: 0, marguerite: 0, henk: 0, lorenz: 0 };
@@ -300,8 +302,8 @@ describe('the woods keep a record of what was taken out of them', () => {
     getFreeChoices(makeState({ phase: 'morning', weather: 'sunny', flags: { timberFelled: felled } }))
       .find(c => c.id === 'fell_timber');
   const survey = (felled: number) =>
-    getFreeChoices(makeState({ phase: 'morning', flags: { timberFelled: felled } }))
-      .find(c => c.id === 'survey_forest');
+    getEstateTaskChoices(makeState({ phase: 'morning', flags: { timberFelled: felled } }))
+      .find(c => c.id === 'task_survey_forest');
 
   it('reads the four bands off what has been cut', () => {
     expect(survey(0)?.resultKind).toBe('survey_forest_0');
@@ -310,6 +312,26 @@ describe('the woods keep a record of what was taken out of them', () => {
     expect(survey(15)?.resultKind).toBe('survey_forest_2');
     expect(survey(20)?.resultKind).toBe('survey_forest_3');
     expect(survey(30)?.resultKind).toBe('survey_forest_3');
+  });
+
+  it('ends every felling on the woods as they stand after that day’s cutting', () => {
+    // A felling here yields 3. 0+3 stays in the first band; 8+3 = 11 is the second;
+    // 12+3 = 15 the third; 17+3 = 20 the last.
+    expect(fell(0)?.resultKind).toBe('fell_timber_0');
+    expect(fell(6)?.resultKind).toBe('fell_timber_0');
+    expect(fell(8)?.resultKind).toBe('fell_timber_1');
+    expect(fell(12)?.resultKind).toBe('fell_timber_2');
+    expect(fell(17)?.resultKind).toBe('fell_timber_3');
+    expect(fell(40)?.resultKind).toBe('fell_timber_3');
+  });
+
+  it('writes the day’s yield and the state of the woods into that result', () => {
+    const rng = () => 0;
+    const text = getActionResult('fell_timber_2', rng, { n: 3, r: 5 });
+    expect(text).toContain('3 单位');
+    expect(text).not.toContain('{n}');
+    expect(text).toContain('从这头能看见那头了'); // the third band
+    expect(getActionResult('fell_timber_0', rng, { n: 3, r: 22 })).toContain('林地里光进不来');
   });
 
   it('lets the player cut past the allowance, and prices it up front', () => {

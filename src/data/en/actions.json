@@ -7,7 +7,7 @@
   "harvest": {
     "text": "Reap in the fields",
     "estimate": "Expect a {tier} harvest",
-    "rainedOut": "Rain. The fields are mud and next to nothing can be got in",
+    "rainedOut": "Rain, and the fields are mud · expect a {tier} harvest",
     "allIn": "The fields are in — nothing left to reap",
     "log": "You reaped the fields in the {phase} and brought in {n} units.",
     "logOne": "You reaped the fields in the {phase} and brought in {n} unit."
@@ -40,17 +40,6 @@
     "text": "See to the office papers",
     "description": "1 phase · you cross paths with Elena",
     "log": "You spent the morning in the office with the papers."
-  },
-  "surveyFields": {
-    "text": "Walk the fields",
-    "description": "1 phase · see every plot for yourself, so you know the ground when it comes up",
-    "log": "You walked every plot of it."
-  },
-  "surveyForest": {
-    "text": "Walk the woods",
-    "description": "1 phase · learn where the good stands are — you cut more timber per phase afterwards",
-    "descriptionDone": "1 phase · see how the woods stand now",
-    "log": "You went through the woods and wrote down what you saw."
   },
   "market": {
     "go": "Go to market ({weekday})",
@@ -195,6 +184,17 @@
       "label": "Valewisp autumn dress",
       "effect": "renown +1"
     },
+    "surveyFields": {
+      "label": "Walk the fields",
+      "effect": "see every plot for yourself, so you know the ground when it comes up",
+      "log": "You walked every plot of it."
+    },
+    "surveyForest": {
+      "label": "Walk the woods",
+      "effect": "learn where the good stands are — you cut more timber per phase afterwards",
+      "log": "You went through the woods and wrote down what you saw."
+    },
+    "costFatigue": "fatigue +{n}",
     "costGuldmark": "{n} guldmark",
     "costTimber": "{n} timber",
     "shortGuldmark": "Not enough guldmark (needs {n})",

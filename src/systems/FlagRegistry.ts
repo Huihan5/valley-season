@@ -27,9 +27,8 @@ export const INITIAL_FLAGS: FlagMap = {
   met_thierry: false,
 
   /**
-   * The 磨岭 timber agreement is closed, lifting the market rate to 4 金卢/unit (GDD ch.5.4).
-   * Day 7 only sets `consideringMillridgeDeal`; nothing closes the deal yet.
-   * Written by: 亨克 arc (阶段四).
+   * The 磨岭 timber agreement is closed, lifting the market rate to 4 金卢/unit (GDD_NEXT 5.8).
+   * Written by: the Day 7 dinner, when the player takes 亨克's timber offer (dinner1_accept).
    */
   millridgeDealSigned: false,
 

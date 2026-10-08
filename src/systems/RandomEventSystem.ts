@@ -1,5 +1,5 @@
 import { GameState, EventData, FlagMap } from '../types/game';
-import { eventPhase, eventAdvancesPhase, hasFixedEventToday } from './EventSystem';
+import { eventPhase, eventAdvancesPhase, hasFixedEventToday, fixedEventTakesPhase } from './EventSystem';
 import { drawKingdomRumour, readKingdomRumour } from './SceneSystem';
 import {
   RANDOM_EVENT_CHANCE, RANDOM_EVENT_CHANCE_WITH_FIXED, RANDOM_EVENT_CHANCE_QUIET,
@@ -38,12 +38,41 @@ function inWindow(id: string, day: number): boolean {
     : day >= window.from && day <= window.to;
 }
 
-/** Each of the five happens at most once a season — the pool is too small to repeat. */
+/** An event with nothing to decide says one of several things instead (and has no choices). */
+function picksVariant(event: EventData): boolean {
+  return !event.choices && !!event.variants;
+}
+
+/** The event as it lands: a variant may carry its own time of day (see EventData.variantRules). */
+function landing(event: EventData, variant?: string): EventData {
+  const timing = variant ? event.variantRules?.[variant]?.timing : undefined;
+  return timing ? { ...event, timing } : event;
+}
+
+/**
+ * The variants that fit today: right weather, and a time of day no scheduled event has
+ * already taken. An event without variants has one unnamed way to play, ''.
+ */
+function openVariants(event: EventData, state: GameState): string[] {
+  const keys = picksVariant(event) ? Object.keys(event.variants ?? {}) : [''];
+  return keys.filter(key => {
+    const rule = key ? event.variantRules?.[key] : undefined;
+    if (rule?.weather && !rule.weather.includes(state.weather)) return false;
+    return !fixedEventTakesPhase(state, eventPhase(landing(event, key)));
+  });
+}
+
+/**
+ * Each of the five happens at most once a season — the pool is too small to repeat.
+ * An event is offered only if it can land somewhere free: a scheduled event in the
+ * same phase would play first and the random one would silently vanish.
+ */
 export function getEligibleRandomEvents(state: GameState): EventData[] {
   return RANDOM_EVENTS.filter(event =>
     !state.flags[`event_done_${event.id}`]
     && inWindow(event.id, state.day)
     && (PRECONDITIONS[event.id]?.(state) ?? true)
+    && openVariants(event, state).length > 0
   );
 }
 
@@ -77,8 +106,8 @@ export function rollRandomEvent(state: GameState, rng: () => number): FlagMap | 
   flags.randomEventPending = drawn.id;
 
   // An event with nothing to decide says one of several things instead.
-  if (!drawn.choices && drawn.variants) {
-    const keys = Object.keys(drawn.variants);
+  if (picksVariant(drawn)) {
+    const keys = openVariants(drawn, state);
     flags.randomEventVariant = keys[Math.floor(rng() * keys.length)];
   }
   if (drawn.id === 'random_forge_city_merchant') {
@@ -99,11 +128,12 @@ export function getPendingRandomEvent(state: GameState): EventData | null {
   const raw = RANDOM_EVENTS.find(e => e.id === id);
   if (!raw) return null;
 
+  const placed = landing(raw, picksVariant(raw) ? String(state.flags.randomEventVariant ?? '') : undefined);
   const event: EventData = {
-    ...raw,
+    ...placed,
     day: state.day,
-    phase: eventPhase(raw),
-    advancesPhase: eventAdvancesPhase(raw),
+    phase: eventPhase(placed),
+    advancesPhase: eventAdvancesPhase(placed),
   };
   if (event.phase !== state.phase) return null;
 

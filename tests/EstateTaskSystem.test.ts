@@ -10,6 +10,7 @@ import {
   SURVEY_FIELDS_LAST_DAY,
   ORCHARD_FULL_YIELD_LAST_DAY,
   NIGHT_LEDGER_CLUE_AT,
+  FATIGUE_EXHAUSTED_THRESHOLD,
 } from '../src/data/config';
 
 const ZERO: Record<NpcId, number> = { gregor: 0, marta: 0, elena: 0, marguerite: 0, henk: 0, lorenz: 0 };
@@ -149,35 +150,71 @@ describe('microcopy states costs mechanically; relationship gains are worded, no
   });
 });
 
-describe('the two surveys', () => {
+describe('the two walks are one-off estate tasks', () => {
+  const taskIds = (s: GameState) => getEstateTaskChoices(s).map(c => c.id);
+
+  it('are no longer among the day’s own choices', () => {
+    const ids = getFreeChoices(makeState()).map(c => c.id);
+    expect(ids).not.toContain('survey_fields');
+    expect(ids).not.toContain('survey_forest');
+  });
+
   it('closes the fields window on its own schedule', () => {
-    const inWindow = getFreeChoices(makeState({ day: SURVEY_FIELDS_LAST_DAY })).map(c => c.id);
-    expect(inWindow).toContain('survey_fields');
-
-    const fieldsGone = getFreeChoices(makeState({ day: SURVEY_FIELDS_LAST_DAY + 1 })).map(c => c.id);
-    expect(fieldsGone).not.toContain('survey_fields');
+    expect(taskIds(makeState({ day: SURVEY_FIELDS_LAST_DAY }))).toContain('task_survey_fields');
+    expect(taskIds(makeState({ day: SURVEY_FIELDS_LAST_DAY + 1 }))).not.toContain('task_survey_fields');
+    // Not offered at all once the window has shut, rather than shown as an empty promise.
+    expect(getEstateTasks(makeState({ day: SURVEY_FIELDS_LAST_DAY + 1 })).map(t => t.id))
+      .not.toContain('task_survey_fields');
   });
 
-  it('keeps the woods open all season, because the woods keep changing', () => {
+  it('keeps the woods walk open all season', () => {
     for (const day of [1, 15, 28]) {
-      expect(getFreeChoices(makeState({ day })).map(c => c.id), String(day))
-        .toContain('survey_forest');
+      expect(taskIds(makeState({ day })), String(day)).toContain('task_survey_forest');
     }
-    // Walking them again is the whole point; only the fields survey retires.
-    expect(getFreeChoices(makeState({ flags: { surveyedForest: true } })).map(c => c.id))
-      .toContain('survey_forest');
   });
 
-  it('retires the fields survey once it is done', () => {
-    const done = getFreeChoices(makeState({ flags: { surveyedFields: true } })).map(c => c.id);
-    expect(done).not.toContain('survey_fields');
+  it('retires each walk once it is done, and lists it as done', () => {
+    const done = makeState({ day: 12, flags: { surveyedFields: true, surveyedForest: true } });
+    expect(taskIds(done)).not.toContain('task_survey_fields');
+    expect(taskIds(done)).not.toContain('task_survey_forest');
+    expect(task(done, 'task_survey_fields').status).toBe('done');
+    expect(task(done, 'task_survey_forest').status).toBe('done');
   });
 
-  it('produce no resources at all', () => {
-    const survey = getFreeChoices(makeState()).find(c => c.id === 'survey_fields');
-    expect(survey?.effects?.guldmark).toBeUndefined();
-    expect(survey?.effects?.grain).toBeUndefined();
-    expect(survey?.effects?.timber).toBeUndefined();
+  it('cost a phase and a point of fatigue, and no resources at all', () => {
+    for (const id of ['task_survey_fields', 'task_survey_forest']) {
+      const choice = getEstateTaskChoices(makeState()).find(c => c.id === id);
+      expect(choice?.effects?.fatigue, id).toBe(1);
+      expect(choice?.effects?.guldmark, id).toBeUndefined();
+      expect(choice?.effects?.grain, id).toBeUndefined();
+      expect(choice?.effects?.timber, id).toBeUndefined();
+      expect(task(makeState(), id).kind).toBe('survey');
+      expect(task(makeState(), id).summary).toMatch(/^1 时段 · 疲劳 \+1 · /);
+    }
+  });
+
+  it('set the flags the Day 10 petition and the felling bonus read', () => {
+    const ids: Record<string, string> = {
+      task_survey_fields: 'surveyedFields', task_survey_forest: 'surveyedForest',
+    };
+    for (const [id, flag] of Object.entries(ids)) {
+      const choice = getEstateTaskChoices(makeState()).find(c => c.id === id);
+      expect(choice?.effects?.flags?.[flag], id).toBe(true);
+    }
+  });
+
+  it('cannot be taken when the body has given out', () => {
+    const spent = makeState({ fatigue: FATIGUE_EXHAUSTED_THRESHOLD });
+    expect(task(spent, 'task_survey_forest').status).toBe('blocked');
+    expect(getEstateTaskChoices(spent).find(c => c.id === 'task_survey_forest')?.disabled).toBe(true);
+  });
+
+  it('are the only tasks marked as walks', () => {
+    const kinds = Object.fromEntries(getEstateTasks(makeState()).map(t => [t.id, t.kind]));
+    expect(kinds.task_survey_fields).toBe('survey');
+    expect(kinds.task_survey_forest).toBe('survey');
+    expect(kinds.task_repair_tools).toBe('work');
+    expect(kinds.task_attire).toBe('work');
   });
 });
 

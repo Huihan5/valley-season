@@ -8,10 +8,13 @@ import {
   TENANT_MEETING_MIN_TRUST,
   HARVEST_YIELD,
   DINNER_DAY,
+  SURVEY_FIELDS_LAST_DAY,
+  FATIGUE_EXHAUSTED_THRESHOLD,
 } from '../data/config';
 import DATA from '../data';
 import { fill } from '../utils/text';
 import { getEffectiveTenantTrust } from './RelationSystem';
+import { getForestTier } from './ResourceSystem';
 
 const actions = DATA.actions;
 
@@ -26,9 +29,16 @@ const TEXT = actions.estateTasks;
  * shop screen would remove the only trade worth making.
  *
  * All are one-off, so nothing here recurs and the time system needs no new rules.
+ *
+ * Two of them are not bought but walked: 巡视农田 and 巡视林地 cost no money, only a
+ * phase and a point of fatigue. They are one-off like the rest, so they live in the
+ * same list; the list marks them (`kind: 'survey'`) so the cost reads as time.
  */
 
 export type TaskStatus = 'available' | 'done' | 'blocked';
+
+/** 'survey' tasks cost time and fatigue but no coin; the list draws them differently. */
+export type TaskKind = 'work' | 'survey';
 
 export interface EstateTask {
   id: string;
@@ -36,13 +46,19 @@ export interface EstateTask {
   /** Mechanical microcopy only — cost and effect, never a narrated sentence (GDD 11.6). */
   summary: string;
   status: TaskStatus;
+  kind: TaskKind;
   /** Why it cannot be taken yet; only set when blocked. */
   blockedReason?: string;
   guldmark: number;
   timber: number;
+  fatigue: number;
   doneFlag: string;
   /** Set when the task names a recipient, e.g. who the gift goes to. */
   recipient?: NpcId;
+  /** Where the scene goes once it is done, and what is said about it. */
+  nextScene?: string;
+  resultKind?: string;
+  log?: string;
 }
 
 interface TaskSpec {
@@ -51,15 +67,55 @@ interface TaskSpec {
   effect: string;
   guldmark: number;
   timber?: number;
+  fatigue?: number;
+  kind?: TaskKind;
   doneFlag: string;
   recipient?: NpcId;
+  nextScene?: string;
+  /** The result text family, read when the task is taken (so it can depend on the state then). */
+  resultKind?: (state: GameState) => string;
+  log?: string;
   /** Extra condition beyond affording it. */
   requires?: (state: GameState) => string | null;
   /** When absent the task is always listed; when present it is only listed if this returns true. */
   visible?: (state: GameState) => boolean;
 }
 
+const tooTired = (s: GameState): string | null =>
+  s.fatigue >= FATIGUE_EXHAUSTED_THRESHOLD ? actions.common.tooTired : null;
+
 const SPECS: TaskSpec[] = [
+  // The two walks come first: they are the first things a new steward does, and the
+  // fields one runs out on Day 9.
+  {
+    id: 'task_survey_fields',
+    label: TEXT.surveyFields.label,
+    effect: TEXT.surveyFields.effect,
+    guldmark: 0,
+    fatigue: 1,
+    kind: 'survey',
+    doneFlag: 'surveyedFields',
+    nextScene: 'fields',
+    resultKind: () => 'survey_fields',
+    log: TEXT.surveyFields.log,
+    requires: tooTired,
+    // It prepares the Day 10 petition and nothing else; past Day 9 it simply is not offered.
+    visible: (s) => !!s.flags.surveyedFields || s.day <= SURVEY_FIELDS_LAST_DAY,
+  },
+  {
+    id: 'task_survey_forest',
+    label: TEXT.surveyForest.label,
+    effect: TEXT.surveyForest.effect,
+    guldmark: 0,
+    fatigue: 1,
+    kind: 'survey',
+    doneFlag: 'surveyedForest',
+    nextScene: 'forest',
+    // Walking ends on what the woods look like now; every felling after it does too.
+    resultKind: (s) => `survey_forest_${getForestTier(s)}`,
+    log: TEXT.surveyForest.log,
+    requires: tooTired,
+  },
   {
     id: 'task_repair_tools',
     label: TEXT.repairTools.label,
@@ -142,6 +198,7 @@ const REPAIR_TASKS = new Set(['task_repair_tools', 'task_clear_storage', 'task_r
 
 function describe(spec: TaskSpec): string {
   const parts = [actions.common.onePhase];
+  if (spec.fatigue) parts.push(fill(TEXT.costFatigue, { n: spec.fatigue }));
   if (spec.guldmark) parts.push(fill(TEXT.costGuldmark, { n: spec.guldmark }));
   if (spec.timber) parts.push(fill(TEXT.costTimber, { n: spec.timber }));
   parts.push(spec.effect);
@@ -175,11 +232,16 @@ export function getEstateTasks(state: GameState): EstateTask[] {
       label: spec.label,
       summary: describe(spec),
       status,
+      kind: spec.kind ?? 'work',
       blockedReason,
       guldmark: spec.guldmark,
       timber,
+      fatigue: spec.fatigue ?? 0,
       doneFlag: spec.doneFlag,
       recipient: spec.recipient,
+      nextScene: spec.nextScene,
+      resultKind: spec.resultKind?.(state),
+      log: spec.log,
     };
   });
 }
@@ -188,26 +250,31 @@ export function getEstateTasks(state: GameState): EstateTask[] {
 export function getEstateTaskChoices(state: GameState): Choice[] {
   return getEstateTasks(state)
     .filter((task) => task.status !== 'done')
-    .map((task) => ({
-      id: task.id,
-      text: task.label,
-      description: task.status === 'blocked' ? task.blockedReason ?? '' : task.summary,
-      disabled: task.status === 'blocked',
-      disabledReason: task.blockedReason,
-      effects: {
-        guldmark: task.guldmark ? -task.guldmark : undefined,
-        timber: task.timber ? -task.timber : undefined,
-        ...(task.recipient ? { relationships: { [task.recipient]: 1 } } : {}),
-        ...(task.id === 'task_attire' ? { renown: 1 } : {}),
-        ...(task.id === 'task_repair_stable' ? { relationships: { gregor: 1 } } : {}),
-        flags: { [task.doneFlag]: true },
-        logEntry: fill(TEXT.log, { label: task.label, summary: task.summary }),
-      },
+    .map((task) => {
       // The three physical repairs share the 维修 result text; the two purchases do not.
-      ...(REPAIR_TASKS.has(task.id)
-        ? { resultKind: 'repair', resultVars: { item: task.label } }
-        : {}),
-    }));
+      const resultKind = task.resultKind ?? (REPAIR_TASKS.has(task.id) ? 'repair' : undefined);
+      return {
+        id: task.id,
+        text: task.label,
+        description: task.status === 'blocked' ? task.blockedReason ?? '' : task.summary,
+        disabled: task.status === 'blocked',
+        disabledReason: task.blockedReason,
+        effects: {
+          guldmark: task.guldmark ? -task.guldmark : undefined,
+          timber: task.timber ? -task.timber : undefined,
+          ...(task.fatigue ? { fatigue: task.fatigue } : {}),
+          ...(task.nextScene ? { nextScene: task.nextScene } : {}),
+          ...(task.recipient ? { relationships: { [task.recipient]: 1 } } : {}),
+          ...(task.id === 'task_attire' ? { renown: 1 } : {}),
+          ...(task.id === 'task_repair_stable' ? { relationships: { gregor: 1 } } : {}),
+          flags: { [task.doneFlag]: true },
+          logEntry: task.log ?? fill(TEXT.log, { label: task.label, summary: task.summary }),
+        },
+        ...(resultKind
+          ? { resultKind, ...(REPAIR_TASKS.has(task.id) ? { resultVars: { item: task.label } } : {}) }
+          : {}),
+      };
+    });
 }
 
 /**

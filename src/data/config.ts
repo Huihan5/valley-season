@@ -1,4 +1,4 @@
-// All numerical values mirror docs/GDD.md ch.5 — never hardcode game balance elsewhere.
+// All numerical values mirror docs/GDD_NEXT.md ch.5 — never hardcode game balance elsewhere.
 // (GDD v3 retired the standalone NUMBERS.md; ch.5 is the sole numerical authority.)
 import { WeatherType } from '../types/game';
 
@@ -28,6 +28,10 @@ export const HARVEST_YIELD = {
   fullyPrepared: 7,
 } as const;
 
+// Standing at or below this costs the harvest a point: unhappy tenants work slower
+// (GDD_NEXT 5.4, 声望修正).
+export const RENOWN_HARVEST_PENALTY_AT = -3;
+
 // Weather modifier to harvest yield
 export const WEATHER_HARVEST_MOD: Record<string, number> = {
   sunny: 1,
@@ -43,7 +47,10 @@ export const TIMBER_YIELD = 3;
 // PlaytestFeedback 2026-09 (D8): felling gets a preparation path of its own, so it
 // is no longer a flat 3 with no way to improve. Both bonuses reuse existing actions
 // and stack: walking the woods scouts the best stands, a repaired tool set cuts faster.
-export const TIMBER_SURVEY_BONUS = 1;  // after 巡视林地 (surveyedForest)
+// 巡视林地 is a one-off task that costs a phase and a point of fatigue, so what it buys
+// has to be worth the walk: with the tools repaired a felling is 3 + 2 + 1 = 6, the same
+// "heavy" tier the harvest reaches at its best.
+export const TIMBER_SURVEY_BONUS = 2;  // after 巡视林地 (surveyedForest)
 export const TIMBER_TOOLS_BONUS = 1;   // after 修工具 (toolsRepaired)
 
 // Seasonal felling quota set by ducal decree (GDD ch.5.4). Exceeding it costs renown.
@@ -144,7 +151,10 @@ export const LETTER_GOOD_GULDMARK = 15;
 // order depends on how many pieces there are (drafts 4.11).
 export const WYNTER_PARTIAL_ACCOUNT = 3; // he can tell the order is wrong
 export const WYNTER_FULL_ACCOUNT = 6;    // he can lay the whole thing out
-export const POSITION_LINE_COMPLETE = 4; // 格雷格 three plus 蒂埃里 cross-fix
+export const POSITION_LINE_COMPLETE = 4; // 格雷格 three plus 蒂埃里 cross-fix (4A/4B)
+// What 维特 lists on Day 22 — the horse that came back, the worn shoe, the black mud, the
+// plant in the mane — is all 格雷格's three; 蒂埃里's cross-fix does not exist until Day 27.
+export const WYNTER_POSITION_KNOWN = 3;
 
 // Fragments that need someone to have decided you are worth telling (GDD 5.5, 9.1).
 export const LORENZ_FRAGMENT_TRUST = 3;
@@ -187,6 +197,7 @@ export const SURVEY_FIELDS_LAST_DAY = 9;   // prepares the Day 10 petition
 export const FORAGE_YIELD_RANGE = [2, 3];  // 金卢
 export const ORCHARD_YIELD_RANGE = [2, 5]; // 金卢
 export const ORCHARD_FULL_YIELD_LAST_DAY = 15; // after this the fruit is on the ground
+export const ORCHARD_LATE_YIELD_RATIO = 0.5;   // ... and what is left is worth this share
 
 // Reviewing the ledger at night pays off only once it becomes a habit.
 export const NIGHT_LEDGER_CLUE_AT = 3;
@@ -265,7 +276,6 @@ export const TALKS_PER_TRUST_POINT_BY_NPC: Record<string, number> = { elena: 2 }
 export const NOBLE_TRUST_MIN = 0;
 export const NOBLE_TRUST_MAX = 3;
 export const NOBLE_TRUST_ENDING3_MIN = 1;  // 结局三的必要条件之一
-export const NOBLE_TRUST_CLUE_MIN = 2;     // 狩猎季结算时解锁玛格丽特的碎片
 
 // 领主印象 (GDD ch.5.6)
 export const LORD_IMPRESSION_MIN = 0;
@@ -287,7 +297,7 @@ export const MARKET_TIMBER_PRICE_MILLRIDGE = 4;   // after the 磨岭 agreement 
 export const MARKET_TRANSPORT_CAP = 40;           // grain + timber combined, per trip (cart capacity)
 export const MARKET_LOT_SIZES = [4, 10];          // fixed lots offered alongside a sell-max option
 
-// ── 经纪人换货 (Day 24-30，领主来信后解锁) ──────────────────────────────────
+// ── 经纪人换货 (Day 23 来信后的下午起至 Day 30，领主来信后解锁) ──────────────────────────────────
 // An emergency channel, always worse than the market. PlaytestFeedback 2026-09 (D10):
 // previously every option consumed timber and none produced it, and the rates felt
 // punishing day after day. Added a buy-timber channel, and eased the rates a little

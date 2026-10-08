@@ -2,7 +2,7 @@
   "id": "timber_restraint",
   "day": 0,
   "forced": true,
-  "advancesPhase": false,
+  "advancesPhase": true,
   "title": "Twenty Units",
   "sceneText": "When today’s load is in, Gregor counts it over in the yard. He counts slowly, and when he has finished he counts it again.\n\n“Twenty,” he says.\n\nYou say the allowance is twenty-five.\n\n“Mm.”\n\nHe puts the marking pencil back in his pocket and looks at the stack.\n\n“Twenty-five is what the decree says. The decree is written for the whole north district.”\n\nHe pauses.\n\n“Oak on this slope takes sixty years to come to a size worth cutting. Cut twenty-five this year and next year you cut further north. What is further north is a steep face. Cut that and the soil will not hold.”\n\nThen he goes to see to the horses.\n\nHe did not say not to cut it. He only said the thing once.",
   "choices": [

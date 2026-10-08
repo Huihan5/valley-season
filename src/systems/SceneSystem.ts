@@ -154,6 +154,14 @@ export function getActionResult(
     const { intro, lines } = getMarketRumours(rng);
     return [intro, RUMOURS.lead, ...lines].join('\n\n');
   }
+  // Every felling ends on what the woods look like now, so the cutting shows: the same
+  // four bands the walk reads, chosen by the total *after* this day's work.
+  if (kind.startsWith('fell_timber_')) {
+    const tier = Number(kind.slice('fell_timber_'.length));
+    const felled = pick(RESULTS.fell_timber ?? [], rng);
+    return [felled ? fillVars(felled, vars) : '', RESULTS.forest_state?.[tier]]
+      .filter(Boolean).join('\n\n');
+  }
   // Walking the woods ends on what they look like now, which is not a number.
   if (kind.startsWith('survey_forest_')) {
     const tier = Number(kind.slice('survey_forest_'.length));
@@ -167,6 +175,10 @@ export function getActionResult(
   }
   const template = pick(RESULTS[kind] ?? [], rng);
   if (!template) return '';
+  return fillVars(template, vars);
+}
+
+function fillVars(template: string, vars: Record<string, string | number>): string {
   return Object.entries(vars).reduce(
     (text, [key, value]) => text.split(`{${key}}`).join(String(value)),
     template,

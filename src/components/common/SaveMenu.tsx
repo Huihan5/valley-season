@@ -14,6 +14,8 @@ interface Props {
   onSave: (slot: ManualSlot) => void;
   onLoad: (slot: ManualSlot) => void;
   onDelete: (slot: ManualSlot) => void;
+  /** Leave the season for the title, keeping it. Offered only while a season is in progress. */
+  onLeave?: () => void;
   onClose: () => void;
 }
 
@@ -30,7 +32,7 @@ function savedAtLabel(iso: string): string {
  * its own; these exist so a run can be branched — stand on Day 27 and take the
  * other road, without playing the month again.
  */
-export default function SaveMenu({ slots, canSave, onSave, onLoad, onDelete, onClose }: Props) {
+export default function SaveMenu({ slots, canSave, onSave, onLoad, onDelete, onLeave, onClose }: Props) {
   return (
     <div
       className="fixed inset-0 bg-bg/80 flex items-center justify-center z-50 p-6"
@@ -99,6 +101,18 @@ export default function SaveMenu({ slots, canSave, onSave, onLoad, onDelete, onC
             );
           })}
         </div>
+
+        {onLeave && (
+          <div className="px-5 py-3 border-t border-game-border flex items-center justify-between gap-3">
+            <p className="text-game-dim text-xs">{T.toTitleNote}</p>
+            <button
+              onClick={onLeave}
+              className="px-3 py-1.5 border border-game-border text-game-text font-serif text-xs rounded-sm hover:bg-bg-hover hover:border-gold-dim transition-all shrink-0"
+            >
+              {T.toTitle}
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

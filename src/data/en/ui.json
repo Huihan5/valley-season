@@ -173,6 +173,7 @@
     "outstanding": "{n} outstanding",
     "done": "Done",
     "daytimeOnly": "In daylight (morning or afternoon)",
+    "timeOnly": "Time only",
     "inEventTitle": "An event is underway",
     "inEventBody": "You cannot take on other estate work while this is going on."
   },
@@ -199,7 +200,9 @@
     "overwrite": "Overwrite",
     "save": "Save",
     "load": "Load",
-    "delete": "Delete"
+    "delete": "Delete",
+    "toTitle": "Return to title",
+    "toTitleNote": "This season is saved; continue it from the title."
   },
   "opening": {
     "signatureLabel": "Signature of the Guaranteed Party",

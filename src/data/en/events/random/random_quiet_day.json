@@ -5,10 +5,14 @@
   "timing": "midday",
   "title": "A Day in the Third Act",
   "sceneText": "",
+  "variantRules": {
+    "two": { "weather": ["rainy"] },
+    "three": { "timing": "dusk" }
+  },
   "variants": {
     "one": "Two men were arguing in the fields this morning.\n\nThe argument was over which plot got cut first. The two holdings sit side by side and share one bank, and whoever cuts first gets his cart along it first.\n\nBy the time you arrived they had stopped. Seeing you, both of them said it was nothing.\n\nNeither of them mentioned it again for the rest of the month.",
     "two": "The rain let up around midday and the sun was out for half an hour.\n\nEveryone in the fields went faster at the same moment. Nobody called out and nobody was directing them. Half an hour later the cloud closed again, and the pace came down.\n\nYou stood on the bank and watched that half hour.",
-    "three": "Nothing happened today.\n\nThe weather was ordinary, there were hands enough, what wanted cutting was cut and what wanted entering was entered. You finished the accounts in the evening and the figures came out near enough to what you had guessed yesterday.\n\nYou sat on in the office a while before going up. There was no sound at all outside the window."
+    "three": "Nothing happened today.\n\nThe weather was ordinary, there were hands enough, what wanted cutting was cut and what wanted entering was entered. The figures stood near enough to what you had guessed yesterday.\n\nIt was getting dark. There was no sound at all outside the window."
   },
   "choices": null
 }

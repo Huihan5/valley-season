@@ -1,5 +1,7 @@
 import { Resources, GameState, FlagMap, ChoiceEffects } from '../types/game';
 import {
+  HARVEST_YIELD,
+  RENOWN_HARVEST_PENALTY_AT,
   WEATHER_HARVEST_MOD,
   TIMBER_YIELD,
   TIMBER_SURVEY_BONUS,
@@ -23,6 +25,7 @@ import {
   FORAGE_YIELD_RANGE,
   ORCHARD_YIELD_RANGE,
   ORCHARD_FULL_YIELD_LAST_DAY,
+  ORCHARD_LATE_YIELD_RATIO,
   ORCHARD_TENANT_TRUST_CAP,
   HARVESTABLE_TOTAL,
   FROST_LOSS_RATE,
@@ -63,7 +66,7 @@ export function getForageYield(state: GameState): number {
 export function getOrchardYield(state: GameState): number {
   const [min, max] = ORCHARD_YIELD_RANGE;
   const full = spread(state, 3, min, max);
-  return state.day > ORCHARD_FULL_YIELD_LAST_DAY ? full / 2 : full;
+  return state.day > ORCHARD_FULL_YIELD_LAST_DAY ? full * ORCHARD_LATE_YIELD_RATIO : full;
 }
 
 /** How much tenant trust the orchard has already contributed, against its own ceiling. */
@@ -98,10 +101,14 @@ export function getTimberQuotaLeft(state: GameState): number {
   return Math.max(0, TIMBER_SEASON_QUOTA - getTimberFelled(state));
 }
 
-/** What the woods look like now, as a band rather than a number. */
-export function getForestTier(state: GameState): number {
-  const felled = getTimberFelled(state);
+/** What the woods look like once `felled` units have been taken, as a band rather than a number. */
+export function getForestTierAt(felled: number): number {
   return FOREST_STATE_TIERS.filter(edge => felled >= edge).length;
+}
+
+/** What the woods look like now. */
+export function getForestTier(state: GameState): number {
+  return getForestTierAt(getTimberFelled(state));
 }
 
 /** 未达留任线 / 留任线 / 优秀线 — the two numbers a player can work out for themselves (GDD ch.5.4). */
@@ -115,20 +122,20 @@ export function getGrainTier(grain: number): GrainTier {
 
 export function getHarvestYield(state: GameState): number {
   const flags = state.flags;
-  let base = 3; // unprepared
-  if (flags.fullyPrepared) base = 7;
+  let base: number = HARVEST_YIELD.unprepared;
+  if (flags.fullyPrepared) base = HARVEST_YIELD.fullyPrepared;
   // Clearing the storeroom is the second rung. The task writes storageCleared
   // (which also lifts the grain cap); the old read of a never-written
   // toolsAndStorage flag left this rung dead, capping a prepared steward at 5.
-  else if (flags.storageCleared) base = 6;
-  else if (flags.toolsRepaired) base = 5;
+  else if (flags.storageCleared) base = HARVEST_YIELD.toolsAndStorage;
+  else if (flags.toolsRepaired) base = HARVEST_YIELD.toolsRepaired;
 
   const weatherMod = WEATHER_HARVEST_MOD[state.weather] ?? 0;
 
   const fatiguePenalty = state.fatigue >= FATIGUE_TIRED_THRESHOLD ? 1 : 0;
 
   // Renown penalty: ≤-3 means unhappy tenants
-  const renownPenalty = state.resources.renown <= -3 ? 1 : 0;
+  const renownPenalty = state.resources.renown <= RENOWN_HARVEST_PENALTY_AT ? 1 : 0;
 
   return Math.max(0, base + weatherMod - fatiguePenalty - renownPenalty);
 }

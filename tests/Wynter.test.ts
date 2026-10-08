@@ -108,7 +108,23 @@ describe('what 维特 can say depends on what the player was told', () => {
 });
 
 describe('the fourth tier is the position line, and nothing else', () => {
-  it('stays silent about where he is unless all four pieces are held', () => {
+  const GREGOR_THREE: FlagMap = {
+    clue_pos_horses_intact: true, clue_pos_horse_returned: true, clue_pos_horse_condition: true,
+  };
+
+  it('speaks once 格雷格’s three are in hand — the cross-fix does not exist until Day 27', () => {
+    const text = scene({ ...MOTIVE, ...GREGOR_THREE });
+    expect(text).toContain('您知道他在哪儿');
+    expect(enters({ ...MOTIVE, ...GREGOR_THREE }).wynterKnowsYouKnow).toBe(true);
+  });
+
+  it('stays silent with only two of the three', () => {
+    const text = scene({ ...MOTIVE, clue_pos_horses_intact: true, clue_pos_horse_returned: true });
+    expect(text).toContain('我把它按顺序说一遍');
+    expect(text).not.toContain('您知道他在哪儿');
+  });
+
+  it('stays silent about where he is when there is no position line at all', () => {
     const sixWithoutPosition = { ...MOTIVE, clue_ofc_timothy_nature: true, clue_ofc_thierry_range: true, clue_nob_marguerite: true };
     const text = scene(sixWithoutPosition);
     expect(text).toContain('我把它按顺序说一遍');

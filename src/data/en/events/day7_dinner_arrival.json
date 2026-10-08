@@ -19,7 +19,7 @@
       "text": "That sounds like good value. We could try it",
       "effects": {
         "relationships": { "henk": 1 },
-        "flags": { "dinnerPick1": "A", "consideringMillridgeDeal": true },
+        "flags": { "dinnerPick1": "A", "millridgeDealSigned": true },
         "logEntry": "You accepted Henk’s timber proposal on the spot at the dinner."
       }
     },

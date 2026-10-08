@@ -7,7 +7,7 @@
   "harvest": {
     "text": "前往农田收割",
     "estimate": "预计收割 {tier}",
-    "rainedOut": "阴雨天气，田地泥泞，收割效率极低",
+    "rainedOut": "阴雨天气，田地泥泞 · 预计收割 {tier}",
     "allIn": "地里的粮食都收完了",
     "log": "你在{phase}收割了农田，收上来 {n} 单位。",
     "logOne": "你在{phase}收割了农田，收上来 {n} 单位。"
@@ -40,17 +40,6 @@
     "text": "处理办公室文书",
     "description": "1 时段 · 顺道和埃莱娜照面",
     "log": "你在办公室处理了一上午的文书。"
-  },
-  "surveyFields": {
-    "text": "巡视农田",
-    "description": "1 时段 · 亲眼看过每块地，往后田里的事你心里有数",
-    "log": "你把每一块地都走了一遍。"
-  },
-  "surveyForest": {
-    "text": "巡视林地",
-    "description": "1 时段 · 摸清哪几片林子好下手——此后每次伐木多出一些",
-    "descriptionDone": "1 时段 · 看看眼下林子成什么样了",
-    "log": "你在林地里走了一趟，把看见的都记下来了。"
   },
   "market": {
     "go": "前往集市（{weekday}）",
@@ -195,6 +184,17 @@
       "label": "瓦莱维斯普秋装",
       "effect": "声望 +1"
     },
+    "surveyFields": {
+      "label": "巡视农田",
+      "effect": "亲眼看过每块地，往后田里的事你心里有数",
+      "log": "你把每一块地都走了一遍。"
+    },
+    "surveyForest": {
+      "label": "巡视林地",
+      "effect": "摸清哪几片林子好下手——此后每次伐木多出一些",
+      "log": "你在林地里走了一趟，把看见的都记下来了。"
+    },
+    "costFatigue": "疲劳 +{n}",
     "costGuldmark": "{n} 金卢",
     "costTimber": "{n} 木材",
     "shortGuldmark": "金卢不足（需 {n}）",
