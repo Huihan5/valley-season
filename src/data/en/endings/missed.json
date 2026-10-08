@@ -1,0 +1,26 @@
+{
+  "heading": "What the season did not reach",
+  "codex": "Open the Compendium",
+  "lines": {
+    "dinner": "On the seventh evening a table was laid at Thornwall. You were not at it.",
+    "hunt": "In Millridge’s hunting grounds, those days, there was no horse of yours.",
+    "millridge": "The road to Millridge after dark: you did not take it.",
+    "thierry": "A man keeps the woods here, and you never once met him.",
+    "timothy": "The man the chancery sent: you never met him face to face.",
+    "gregor_none": "You never groomed a horse for Gregor.",
+    "gregor_some": "Two brushes hang in the stable. Gregor only ever let you use one.",
+    "marta_word": "Martha is still holding a sentence back from you.",
+    "elena_late": "Elena has something she will only say late at night. You did not wait for that night.",
+    "lorenz_never": "You never went to the forge-chapel at night.",
+    "lorenz_vigil": "The forge-chapel was empty whenever you came by night. On one night it was not.",
+    "lorenz_closed": "The manor’s forge-chapel has a door you never pushed open.",
+    "marguerite_word": "The lady of Thornwall never needs to raise her voice. There is a sentence of hers you did not wait for.",
+    "marguerite_unmet": "The lady of Thornwall, whom you never met.",
+    "henk_unmet": "The baron of Millridge: you only ever heard him spoken of.",
+    "ledger_none": "You never left a lamp lit in the office at night.",
+    "ledger_some": "You turned the night ledger for a few evenings and did not come to the end of it.",
+    "boundary": "Word came from the north woods. You did not walk out along it.",
+    "stumps": "You looked at the stumps at the edge of the woods and wrote nothing down.",
+    "market": "On market Saturdays you mostly stayed at the manor."
+  }
+}

@@ -475,3 +475,12 @@ export const YIELD_TIER_FAIR_MAX = 5;    // ≤ this reads 尚可, above reads �
 
 // Day range for the full game
 export const TOTAL_DAYS = 30;
+
+// ── 结局之后：这一季没有走到的地方 (DEVELOPMENT_PLAN 3.7) ──────────────────────
+// A closed line under the ending: up to this many directions, each naming a person, a place
+// or an hour the season did not reach, never what was there. The lines are picked from the
+// ones that are true of this run, one from each kind in turn, so a run that missed a lot
+// does not read three of the same sort.
+export const MISSED_LINES_MAX = 3;
+// "集市的周六你大多留在了庄园": the four market Saturdays, and at most this many were visited.
+export const MISSED_MARKET_VISITS_FEW = 1;

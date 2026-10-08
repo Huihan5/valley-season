@@ -15,6 +15,7 @@ import ui from './ui.json';
 import dialogueFragments from './dialogue/fragments.json';
 import dialogueGreetings from './dialogue/greetings.json';
 import endingsEndings from './endings/endings.json';
+import endingsMissed from './endings/missed.json';
 import scenesActionResults from './scenes/action_results.json';
 import scenesAmbient from './scenes/ambient.json';
 import scenesBottomLines from './scenes/bottom_lines.json';
@@ -78,6 +79,7 @@ const bundle = {
   },
   endings: {
     endings: endingsEndings,
+    missed: endingsMissed,
   },
   scenes: {
     actionResults: scenesActionResults,

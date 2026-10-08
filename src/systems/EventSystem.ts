@@ -1160,12 +1160,13 @@ export function getFreeChoices(state: GameState): Choice[] {
           ? {
             conversationWith: 'lorenz',
             ...(flags.satVigilWithLorenz ? {} : { relationships: { lorenz: 1 } }),
-            flags: { satVigilWithLorenz: true, ...extra?.flags },
+            flags: { satVigilWithLorenz: true, visitedChapelNight: true, ...extra?.flags },
             nextScene: 'forge_chapel',
             logEntry: extra?.logEntry ?? A.chapel.vigilLog,
           }
           : {
             fatigue: -99,
+            flags: { visitedChapelNight: true },
             nextScene: 'forge_chapel',
             logEntry: A.chapel.log,
           },

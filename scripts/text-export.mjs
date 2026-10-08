@@ -110,6 +110,7 @@ function fileTitle(rel, zhJson) {
     'opening': '开场序章 · opening / prologue',
     'codex': '见闻 · the Compendium',
     'endings/endings': '五个结局脚本 · the five endings',
+    'endings/missed': '结局之后“这一季没有走到的地方” · after the ending: what the season did not reach',
     'dialogue/greetings': 'NPC 招呼语（按信任阶） · greetings by trust tier',
     'dialogue/fragments': 'NPC 对话片段 · dialogue fragments',
     'scenes/locations': '地点描写 · location descriptions',

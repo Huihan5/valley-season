@@ -18,6 +18,7 @@ import SaveMenu from './components/common/SaveMenu';
 import Inventory from './components/common/Inventory';
 import EndingGallery from './components/common/EndingGallery';
 import CodexPanel from './components/common/CodexPanel';
+import Missed from './components/common/Missed';
 import { recordCodex, currentUnlocks } from './systems/CodexSystem';
 import {
   AUTO_SLOT, ManualSlot, SaveSummary,
@@ -43,6 +44,11 @@ export default function App() {
   // opening starts from the top again.
   const [codexFocus, setCodexFocus] = useState<string | undefined>(undefined);
   const closeCodex = () => { setCodexOpen(false); setCodexFocus(undefined); };
+  const openCodexAt = (entryId?: string) => {
+    if (state) recordCodex(currentUnlocks(state));
+    setCodexFocus(entryId);
+    setCodexOpen(true);
+  };
   const [autoSave, setAutoSave] = useState<SaveSummary | null>(() => readSlotSummary(AUTO_SLOT));
   const [manualSaves, setManualSaves] = useState<(SaveSummary | null)[]>(() => listManualSlots());
   const [seenEndings, setSeenEndings] = useState<EndingId[]>(() => readSeenEndings());
@@ -238,6 +244,8 @@ export default function App() {
       >
         {ui.app.restart}
       </button>
+      {/* The ending keeps its own close; this sits apart from it and stays shut until opened. */}
+      <Missed state={state} onOpenCodex={openCodexAt} />
     </div>
   ) : pendingInput ? (
     <NameInput
@@ -310,7 +318,7 @@ export default function App() {
         <div className="w-full lg:w-64 shrink-0">
           <StatusPanel
             state={state}
-            onOpenCodex={(entryId) => { recordCodex(currentUnlocks(state)); setCodexFocus(entryId); setCodexOpen(true); }}
+            onOpenCodex={openCodexAt}
           />
         </div>
 

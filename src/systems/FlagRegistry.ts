@@ -12,6 +12,13 @@ export const INITIAL_FLAGS: FlagMap = {
   /** 炉堂 opens only after the Day 4 hearth-feeding event. Written by: Day 4 (阶段四). */
   unlockForgeChapel: false,
 
+  /**
+   * The player has been to the forge-chapel in the evening, on any night: the vigil or the
+   * empty room. Read by the after-ending note on what the season did not reach (MissedSystem).
+   * Written by: the evening chapel visit.
+   */
+  visitedChapelNight: false,
+
   /** Day 30 night visit to 磨岭 — the player accepted 亨克's gift. Written by: Day 30 evening (阶段四). */
   tookHenkDeal: false,
 
