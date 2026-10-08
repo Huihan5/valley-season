@@ -25,6 +25,33 @@ interface Props {
  * deeper layers stay locked in place until their trust is reached (scheme 乙 + 精修).
  */
 export default function CodexPanel({ state, focus, onClose }: Props) {
+  return (
+    <div
+      className="fixed inset-0 bg-bg/80 flex items-center justify-center z-50 p-6"
+      onClick={onClose}
+    >
+      <div
+        className="bg-bg-card border border-gold-dim rounded-sm w-full max-w-3xl max-h-[85vh] flex flex-col"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="px-5 py-3 border-b border-game-border flex items-center gap-4">
+          <span className="text-cream-dim text-xs tracking-wider">{T.heading}</span>
+          <button onClick={onClose} className="ml-auto text-game-dim text-xs hover:text-cream">
+            {T.close}
+          </button>
+        </div>
+        <CodexBrowser state={state} focus={focus} />
+      </div>
+    </div>
+  );
+}
+
+/**
+ * The shelves and what is on them, without a frame: the strip of categories and the
+ * page under it. The in-season panel and 回望 on the title page both put it inside
+ * their own frame, so the two cannot drift apart.
+ */
+export function CodexBrowser({ state, focus }: { state: GameState | null; focus?: string }) {
   const cats = getCodex(state);
   const [active, setActive] = useState<CodexCategory>(
     (focus && codexCategoryOf(focus)) || cats[0]?.id || 'people',
@@ -39,50 +66,36 @@ export default function CodexPanel({ state, focus, onClose }: Props) {
   }, []);
 
   return (
-    <div
-      className="fixed inset-0 bg-bg/80 flex items-center justify-center z-50 p-6"
-      onClick={onClose}
-    >
-      <div
-        className="bg-bg-card border border-gold-dim rounded-sm w-full max-w-3xl max-h-[85vh] flex flex-col"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="px-5 py-3 border-b border-game-border flex items-center gap-4 flex-wrap">
-          <span className="text-cream-dim text-xs tracking-wider">{T.heading}</span>
-          <div className="flex gap-4">
-            {cats.map((c) => (
-              <Tab
-                key={c.id}
-                label={c.label}
-                count={fill(T.count, { unlocked: c.unlockedCount, total: c.total })}
-                active={c.id === active}
-                onClick={() => setActive(c.id)}
+    <>
+      <div className="px-5 py-2 border-b border-game-border flex gap-4 flex-wrap">
+        {cats.map((c) => (
+          <Tab
+            key={c.id}
+            label={c.label}
+            count={fill(T.count, { unlocked: c.unlockedCount, total: c.total })}
+            active={c.id === active}
+            onClick={() => setActive(c.id)}
+          />
+        ))}
+      </div>
+
+      <div className="overflow-y-auto px-5 py-4 flex-1">
+        {!cat || cat.entries.length === 0 ? (
+          <p className="text-game-dim font-serif text-sm py-8 text-center">{T.empty}</p>
+        ) : (
+          <div className="space-y-5">
+            {cat.entries.map((e) => (
+              <Entry
+                key={e.id}
+                entry={e}
+                focused={e.id === focus}
+                anchor={e.id === focus ? focused : undefined}
               />
             ))}
           </div>
-          <button onClick={onClose} className="ml-auto text-game-dim text-xs hover:text-cream">
-            {T.close}
-          </button>
-        </div>
-
-        <div className="overflow-y-auto px-5 py-4">
-          {!cat || cat.entries.length === 0 ? (
-            <p className="text-game-dim font-serif text-sm py-8 text-center">{T.empty}</p>
-          ) : (
-            <div className="space-y-5">
-              {cat.entries.map((e) => (
-                <Entry
-                  key={e.id}
-                  entry={e}
-                  focused={e.id === focus}
-                  anchor={e.id === focus ? focused : undefined}
-                />
-              ))}
-            </div>
-          )}
-        </div>
+        )}
       </div>
-    </div>
+    </>
   );
 }
 

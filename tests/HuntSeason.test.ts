@@ -283,6 +283,23 @@ describe('the tree, and what people decide to tell you', () => {
     expect(shy.onEnterEffects?.flags?.clue_nob_marguerite).toBeUndefined();
   });
 
+  // At the fire she only headed Henk off for the steward who answered "I have not thought"
+  // (C); to the other two answers she did nothing, so there is nothing to say she did
+  // (outside review, 2026-10).
+  it('thanks nobody for an evening she did not step in at', () => {
+    const carriage = (answer?: string) =>
+      tree(answer ? { banquetAnswer: answer } : {}, {}, 3).sceneText;
+
+    expect(carriage('C')).toContain('你不用觉得欠我什么');
+    for (const other of ['A', 'B', undefined]) {
+      const text = carriage(other);
+      expect(text, String(other)).not.toContain('欠我什么');
+      expect(text, String(other)).toContain('上来坐一会儿');
+      expect(text, String(other)).toContain('霍特曼也来找过我');
+      expect(text, String(other)).toContain('这就是那个问题');
+    }
+  });
+
   it('does not hand out the carriage twice', () => {
     const held = tree({ clue_nob_marguerite: true }, {}, 3);
     expect(held.sceneText).not.toContain('上来坐一会儿');

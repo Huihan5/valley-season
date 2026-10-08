@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, useEffect, useRef } from 'react';
 import { GameState } from '../../types/game';
 import { PHASE_LABELS, dayName, isHuntSeason } from '../../systems/TimeSystem';
 import { getFatigueNote, getFatigueStatus } from '../../systems/FatigueSystem';
@@ -29,8 +29,22 @@ export default function ScenePanel({ state, onOpenSaves, onOpenInventory, onOpen
   const huntSeason = isHuntSeason(state);
   const bottomLine = getBottomLine(state);
 
+  // The choices sit at the foot of the reading, so a click on a long scene would leave the
+  // next one opened part-way down. When the scene, the hour or what just happened changes,
+  // the reading goes back to its first line. Below lg it is the page that scrolls, not
+  // this column, so the panel is brought back into view instead when it has been left above.
+  const panelRef = useRef<HTMLDivElement>(null);
+  const readingRef = useRef<HTMLDivElement>(null);
+  const mounted = useRef(false);
+  useEffect(() => {
+    if (!mounted.current) { mounted.current = true; return; }
+    if (readingRef.current) readingRef.current.scrollTop = 0;
+    const panel = panelRef.current;
+    if (panel && panel.getBoundingClientRect().top < 0) panel.scrollIntoView?.({ block: 'start' });
+  }, [day, phase, activeEvent?.id, lastResult, currentSceneText]);
+
   return (
-    <div className={`flex flex-col lg:h-full bg-bg-card border rounded-sm overflow-hidden transition-colors ${huntSeason ? 'border-frost/40' : 'border-game-border'}`}>
+    <div ref={panelRef} className={`flex flex-col lg:h-full bg-bg-card border rounded-sm overflow-hidden transition-colors ${huntSeason ? 'border-frost/40' : 'border-game-border'}`}>
       {/* The season, pinned above everything while the duchy's hunt is open (D13). */}
       {huntSeason && (
         <div className="px-5 py-1.5 bg-frost/10 border-b border-frost/30 flex items-baseline gap-2">
@@ -74,7 +88,7 @@ export default function ScenePanel({ state, onOpenSaves, onOpenInventory, onOpen
       {/* What just happened, then where you now are. The prose keeps a reading
           measure of its own rather than running the full width of the panel
           (PlaytestFeedback 2.a). */}
-      <div className="flex-1 lg:overflow-y-auto px-5 py-4 flex flex-col gap-4">
+      <div ref={readingRef} className="flex-1 lg:overflow-y-auto px-5 py-4 flex flex-col gap-4">
         {/* The body telling on the player, in the scene itself (D7). Amber while
             merely tired; rust once spent, where 嘴唇发紫 landed. */}
         {fatigueNote && (

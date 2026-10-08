@@ -115,11 +115,8 @@
     "fieldGrain": "田间待收",
     "fieldGrainCleared": "已收完",
     "statusHeading": "— 状态 —",
-    "standingHeading": "— 处境 —",
     "relationsHeading": "— 关系 —",
     "openCodex": "翻到见闻里的这一页",
-    "nobleTrust": "贵族信任",
-    "lordImpression": "领主印象",
     "tenants": "佃户",
     "purseEmpty": "账上已经空了。",
     "purseLow": "账上不够明天的日常开销。",
@@ -130,6 +127,14 @@
       "accepted": "渐熟",
       "trusted": "信任",
       "embraced": "亲近"
+    },
+    "renownTiers": {
+      "estranged": "名声很坏",
+      "cold": "口碑不佳",
+      "neutral": "尚无声名",
+      "accepted": "渐有名声",
+      "trusted": "颇有名望",
+      "embraced": "名闻河谷"
     }
   },
   "calendar": {
@@ -184,11 +189,14 @@
     "empty": "还没有什么可以放进来的。"
   },
   "gallery": {
-    "heading": "— 结局 —",
-    "close": "关闭",
-    "open": "已见的结局",
     "unseen": "未见",
     "empty": "还没有走完过一季。"
+  },
+  "retrospect": {
+    "heading": "— 回望 —",
+    "open": "回望",
+    "tabEndings": "结局",
+    "close": "关闭"
   },
   "estateTaskList": {
     "heading": "庄园事务",

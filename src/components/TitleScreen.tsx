@@ -14,8 +14,7 @@ interface Props {
   onNew: () => void;
   onContinue: () => void;
   onOpenSaves: () => void;
-  onOpenGallery: () => void;
-  onOpenCodex: () => void;
+  onOpenRetrospect: () => void;
 }
 
 /**
@@ -24,7 +23,7 @@ interface Props {
  * bilingual build will need (PlaytestFeedback 3.a). Both live here.
  */
 export default function TitleScreen({
-  auto, hasManualSaves, onNew, onContinue, onOpenSaves, onOpenGallery, onOpenCodex,
+  auto, hasManualSaves, onNew, onContinue, onOpenSaves, onOpenRetrospect,
 }: Props) {
   const resumable = auto && !auto.finished;
   const locale = getLocale();
@@ -67,18 +66,13 @@ export default function TitleScreen({
           </button>
         )}
 
+        {/* The 见闻 and the endings reached, as one place to look back (not offered inside
+            a season, where the 见闻 has its own button in the header). */}
         <button
-          onClick={onOpenGallery}
+          onClick={onOpenRetrospect}
           className="px-6 py-2.5 border border-game-border text-game-text font-serif text-sm rounded-sm hover:bg-bg-hover hover:border-gold-dim transition-all"
         >
-          {ui.gallery.open}
-        </button>
-
-        <button
-          onClick={onOpenCodex}
-          className="px-6 py-2.5 border border-game-border text-game-text font-serif text-sm rounded-sm hover:bg-bg-hover hover:border-gold-dim transition-all"
-        >
-          {DATA.codex.open}
+          {ui.retrospect.open}
         </button>
 
         {/* Changing language reloads: the text is wired in at module load, and the

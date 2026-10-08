@@ -16,7 +16,7 @@ import OpeningSequence from './components/OpeningSequence';
 import TitleScreen from './components/TitleScreen';
 import SaveMenu from './components/common/SaveMenu';
 import Inventory from './components/common/Inventory';
-import EndingGallery from './components/common/EndingGallery';
+import Retrospect from './components/common/Retrospect';
 import CodexPanel from './components/common/CodexPanel';
 import Missed from './components/common/Missed';
 import { recordCodex, currentUnlocks } from './systems/CodexSystem';
@@ -38,7 +38,7 @@ export default function App() {
   const [atTitle, setAtTitle] = useState(true);
   const [savesOpen, setSavesOpen] = useState(false);
   const [inventoryOpen, setInventoryOpen] = useState(false);
-  const [galleryOpen, setGalleryOpen] = useState(false);
+  const [retroOpen, setRetroOpen] = useState(false);
   const [codexOpen, setCodexOpen] = useState(false);
   // The entry a clicked name asked for; cleared when the codex closes, so the next plain
   // opening starts from the top again.
@@ -186,8 +186,7 @@ export default function App() {
           onNew={startNewSeason}
           onContinue={continueSeason}
           onOpenSaves={() => setSavesOpen(true)}
-          onOpenGallery={() => setGalleryOpen(true)}
-          onOpenCodex={() => setCodexOpen(true)}
+          onOpenRetrospect={() => setRetroOpen(true)}
         />
         {savesOpen && (
           <SaveMenu
@@ -199,11 +198,8 @@ export default function App() {
             onClose={() => setSavesOpen(false)}
           />
         )}
-        {galleryOpen && (
-          <EndingGallery seen={seenEndings} onClose={() => setGalleryOpen(false)} />
-        )}
-        {codexOpen && (
-          <CodexPanel state={null} onClose={closeCodex} />
+        {retroOpen && (
+          <Retrospect seen={seenEndings} onClose={() => setRetroOpen(false)} />
         )}
       </>
     );

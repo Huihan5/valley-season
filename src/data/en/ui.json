@@ -115,11 +115,8 @@
     "fieldGrain": "In the fields",
     "fieldGrainCleared": "All in",
     "statusHeading": "— Condition —",
-    "standingHeading": "— Standing —",
     "relationsHeading": "— Relations —",
     "openCodex": "Turn to their page in the Compendium",
-    "nobleTrust": "Noble trust",
-    "lordImpression": "Lord’s regard",
     "tenants": "Tenants",
     "purseEmpty": "The account is empty.",
     "purseLow": "Not enough on the account for tomorrow’s running costs.",
@@ -130,6 +127,14 @@
       "accepted": "Warming",
       "trusted": "Trusts you",
       "embraced": "Close"
+    },
+    "renownTiers": {
+      "estranged": "Ill-famed",
+      "cold": "Ill-regarded",
+      "neutral": "Unknown",
+      "accepted": "Spoken of",
+      "trusted": "Respected",
+      "embraced": "Renowned"
     }
   },
   "calendar": {
@@ -184,11 +189,14 @@
     "empty": "Nothing has gone in here yet."
   },
   "gallery": {
-    "heading": "— Endings —",
-    "close": "Close",
-    "open": "Endings Seen",
     "unseen": "Not yet seen",
     "empty": "No season has been played to its end."
+  },
+  "retrospect": {
+    "heading": "— In Retrospect —",
+    "open": "In Retrospect",
+    "tabEndings": "Endings",
+    "close": "Close"
   },
   "estateTaskList": {
     "heading": "Estate business",

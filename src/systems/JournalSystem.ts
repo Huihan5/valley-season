@@ -156,7 +156,10 @@ function harvestFromFragments(): Map<string, ClueLine> {
  */
 function harvestExplicit(): Record<string, ClueLine> {
   const actions = DATA.actions as unknown as { reviewAccounts: { log: string } };
-  const carriage = (DATA.events.day21HuntLorenz as unknown as LooseEvent).variants?.marguerite ?? '';
+  // The carriage as every steward who gets in it hears it. The thanks for the evening before
+  // is added only for the one who was helped at the fire, so the record leaves it out.
+  const carriageParts = (DATA.events.day21HuntLorenz as unknown as LooseEvent).variants;
+  const carriage = [carriageParts?.marguerite_open, carriageParts?.marguerite_clue].filter(Boolean).join('\n\n');
 
   return {
     // Lands on the third night of the ledger. The line is the one that action always

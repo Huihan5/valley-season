@@ -11,7 +11,7 @@ import { getFieldGrain } from '../../systems/ResourceSystem';
 import { codexEntryOf } from '../../systems/CodexSystem';
 import {
   GRAIN_RETAIN_THRESHOLD, ENDING2_GULDMARK, ENDING2_TIMBER,
-  NOBLE_TRUST_MAX, LORD_IMPRESSION_MAX, DAILY_GULDMARK_COST, TOTAL_DAYS,
+  DAILY_GULDMARK_COST, TOTAL_DAYS,
 } from '../../data/config';
 import DATA from '../../data';
 import { plural, fill } from '../../utils/text';
@@ -32,6 +32,15 @@ const CAL = ui.calendar;
  */
 const TIER_LABELS: Record<TrustTier, string> = ui.statusPanel.trustTiers;
 const tierWord = (value: number): string => TIER_LABELS[getTrustTier(value)];
+
+/**
+ * Renown reads the same way, in its own words. It borrows the trust tiers' steps because the
+ * two lines the endings draw (3 for the truth, 5 for the valley) sit exactly on them: the
+ * word changes where it matters, and the player is never told the number
+ * (`tests/RelationSystem.test.ts` pins the alignment).
+ */
+const RENOWN_LABELS: Record<TrustTier, string> = ui.statusPanel.renownTiers;
+const renownWord = (value: number): string => RENOWN_LABELS[getTrustTier(value)];
 const tierColor = (value: number): string =>
   value > 0 ? 'text-gold-dim' : value < 0 ? 'text-rust' : 'text-game-dim';
 
@@ -56,7 +65,7 @@ function RelationBar({ value }: { value: number }) {
 }
 
 export default function StatusPanel({ state, onOpenCodex }: Props) {
-  const { day, weather, resources, fatigue, nobleTrust, lordImpression } = state;
+  const { day, weather, resources, fatigue } = state;
   const fieldGrain = getFieldGrain(state);
   const fatigueEffect = getFatigueEffect(fatigue);
   const marketDay = isMarketDay(day);
@@ -111,7 +120,17 @@ export default function StatusPanel({ state, onOpenCodex }: Props) {
           </div>
           <ResourceRow icon="🪙" label={ui.resources.guldmark} value={resources.guldmark} unit="" target={ENDING2_GULDMARK} warnBelow={15} />
           <ResourceRow icon="🪵" label={ui.resources.timber} value={resources.timber} unit={units(resources.timber)} target={ENDING2_TIMBER} warnBelow={5} />
-          <ResourceRow icon="⭐" label={ui.resources.renown} value={resources.renown} unit="" showSign />
+          {/* What the valley thinks of the steward — renown and the tenants' regard — reads as
+              a word, like each person's does, never the raw number (PlaytestFeedback 2026-09
+              / D3). The two standings with the nobles and the lord have no readout at all:
+              what they bought shows in the letters and the carriage. */}
+          <WordRow icon="⭐" label={ui.resources.renown} word={renownWord(resources.renown)} tone={tierColor(resources.renown)} />
+          <WordRow
+            icon="🏠"
+            label={T.tenants}
+            word={tierWord(getEffectiveTenantTrust(state))}
+            tone={tierColor(getEffectiveTenantTrust(state))}
+          />
         </div>
         {/* An empty purse used to pass in silence (PlaytestFeedback 4.a.iii). */}
         {resources.guldmark < DAILY_GULDMARK_COST && (
@@ -139,23 +158,6 @@ export default function StatusPanel({ state, onOpenCodex }: Props) {
         {fatigueEffect && (
           <p className="text-rust text-xs mt-1">{fatigueEffect}</p>
         )}
-      </div>
-
-      {/* Standing: the two axes that are not renown */}
-      <div className="px-4 py-3 border-b border-game-border">
-        <p className={SECTION_LABEL}>{T.standingHeading}</p>
-        <div className="space-y-1.5">
-          {/* 佃户整体信任 had no readout at all before (D3). It reads as a word, like
-              the individual relationships — never the raw number. */}
-          <div className="flex items-center justify-between">
-            <span className="text-game-dim text-xs">{T.tenants}</span>
-            <span className={`text-xs ${tierColor(getEffectiveTenantTrust(state))}`}>
-              {tierWord(getEffectiveTenantTrust(state))}
-            </span>
-          </div>
-          <PipRow label={T.nobleTrust} value={nobleTrust} max={NOBLE_TRUST_MAX} />
-          <PipRow label={T.lordImpression} value={lordImpression} max={LORD_IMPRESSION_MAX} />
-        </div>
       </div>
 
       {/* Relationships — only the people the player has actually met (2.h) */}
@@ -255,18 +257,15 @@ function CalendarSection({ day }: { day: number }) {
   );
 }
 
-function PipRow({ label, value, max }: { label: string; value: number; max: number }) {
+/** A row whose reading is a word: how the valley holds the steward, not a count. */
+function WordRow({ icon, label, word, tone }: { icon: string; label: string; word: string; tone: string }) {
   return (
     <div className="flex items-center justify-between">
-      <span className="text-game-dim text-xs">{label}</span>
-      <div className="flex gap-1">
-        {Array.from({ length: max }).map((_, i) => (
-          <div
-            key={i}
-            className={`w-2 h-2 rounded-full ${i < value ? 'bg-gold-dim' : 'bg-game-border'}`}
-          />
-        ))}
+      <div className="flex items-center gap-1.5">
+        <span className="text-sm">{icon}</span>
+        <span className="text-game-dim text-xs">{label}</span>
       </div>
+      <span className={`text-sm font-serif ${tone}`}>{word}</span>
     </div>
   );
 }
@@ -278,10 +277,9 @@ interface ResourceRowProps {
   unit: string;
   target?: number;
   warnBelow?: number;
-  showSign?: boolean;
 }
 
-function ResourceRow({ icon, label, value, unit, target, warnBelow, showSign }: ResourceRowProps) {
+function ResourceRow({ icon, label, value, unit, target, warnBelow }: ResourceRowProps) {
   const isLow = warnBelow !== undefined && value < warnBelow;
   const isGood = target !== undefined && value >= target;
   const color = isGood ? 'text-gold' : isLow ? 'text-rust' : 'text-cream';
@@ -293,7 +291,7 @@ function ResourceRow({ icon, label, value, unit, target, warnBelow, showSign }: 
         <span className="text-game-dim text-xs">{label}</span>
       </div>
       <span className={`text-sm font-serif ${color}`}>
-        {showSign && value > 0 ? '+' : ''}{value}{unit && ` ${unit}`}
+        {value}{unit && ` ${unit}`}
       </span>
     </div>
   );

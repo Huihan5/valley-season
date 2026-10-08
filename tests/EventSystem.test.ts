@@ -414,6 +414,44 @@ describe('getFixedEvent — Day 30', () => {
     expect(thinWood).toContain('木材也不多');
   });
 
+  // The truth endings ask only that the estate was not left bare (60), so a season can reach
+  // the last evening above the winter's rations and below the dues (outside review, 2026-10):
+  // the page must not say the tax is covered. The line is the retain line, 75, or 73 with the
+  // lord's good opinion.
+  it('does not say the dues are covered below the retain line', () => {
+    const truth = (grain: number, over: Partial<GameState> = {}) => getFixedEvent(30, 'evening', makeState({
+      day: 30,
+      resources: { grain, guldmark: ENDING_TRUTH_GULDMARK, timber: ENDING_TRUTH_TIMBER, renown: 3 },
+      flags: CLUES_FOUND,
+      ...over,
+    }))?.sceneText ?? '';
+
+    const thin = truth(63);
+    expect(thin).toContain('缴上今年的税还差一截');
+    expect(thin).not.toContain('也够缴上今年的税');
+    expect(thin).not.toContain('这个冬天不慌');
+
+    expect(truth(GRAIN_RETAIN_THRESHOLD)).toContain('也够缴上今年的税');
+    expect(truth(GRAIN_RETAIN_THRESHOLD - 1)).toContain('还差一截');
+    expect(truth(73, { lordImpression: 1 })).toContain('也够缴上今年的税');
+    expect(truth(72, { lordImpression: 1 })).toContain('还差一截');
+  });
+
+  // The frost on the quilts is a look back at the morning, which only shows them when 埃莱娜
+  // is close enough to expect the steward at the end of the month.
+  it('looks back at the quilts in the evening only when the morning showed them', () => {
+    for (const elena of [0, 3, 4, 5]) {
+      const relationships = { gregor: 0, marta: 0, elena, marguerite: 0, henk: 0, lorenz: 0 };
+      const morning = getFixedEvent(30, 'morning', makeState({ day: 30, relationships }))?.sceneText ?? '';
+      const night = getFixedEvent(30, 'evening', makeState({
+        day: 30, relationships, resources: { grain: 95, guldmark: 70, timber: 20, renown: 4 },
+      }))?.sceneText ?? '';
+      expect(night.includes('被子'), `elena ${elena}`).toBe(morning.includes('被子'));
+      expect(night, `elena ${elena}`).toContain('霜已经开始落在院子里');
+      expect(night, `elena ${elena}`).toContain('但今晚这本账是平的');
+    }
+  });
+
   // Every ending that keeps the steward asks for some coin and some wood, so a season with
   // an empty purse or an empty woodpile never reaches the "settled" columns: it is short.
   it('reads an empty purse or woodpile as short, whatever the grain', () => {

@@ -13,6 +13,9 @@ import {
   isNpcKnown,
   getKnownNpcs,
 } from '../src/systems/RelationSystem';
+import { RENOWN_HARVEST_PENALTY_AT, ENDING_TRUTH_MIN_RENOWN, ENDING3_RENOWN } from '../src/data/config';
+import zhUi from '../src/data/zh/ui.json';
+import enUi from '../src/data/en/ui.json';
 
 const ZERO: Record<NpcId, number> = { gregor: 0, marta: 0, elena: 0, marguerite: 0, henk: 0, lorenz: 0 };
 
@@ -140,6 +143,30 @@ describe('trust tiers', () => {
     expect(getTrustTier(2)).toBe('accepted');
     expect(getTrustTier(4)).toBe('trusted');
     expect(getTrustTier(5)).toBe('embraced');
+  });
+});
+
+// The status panel shows renown as a word and borrows the trust tiers' steps to do it. That
+// only works while the steps fall where the game draws its lines: the harvest penalty, the
+// truth endings' floor and the valley ending's line.
+describe('renown reads in the trust tiers', () => {
+  it('changes word exactly at the numbers that matter', () => {
+    expect(getTrustTier(RENOWN_HARVEST_PENALTY_AT)).toBe('estranged');
+    expect(getTrustTier(RENOWN_HARVEST_PENALTY_AT + 1)).toBe('cold');
+    expect(getTrustTier(ENDING_TRUTH_MIN_RENOWN - 1)).toBe('accepted');
+    expect(getTrustTier(ENDING_TRUTH_MIN_RENOWN)).toBe('trusted');
+    expect(getTrustTier(ENDING3_RENOWN - 1)).toBe('trusted');
+    expect(getTrustTier(ENDING3_RENOWN)).toBe('embraced');
+  });
+
+  it('has a word for every tier in both languages, none repeated', () => {
+    for (const ui of [zhUi, enUi]) {
+      const tiers = Object.keys(ui.statusPanel.trustTiers).sort();
+      expect(Object.keys(ui.statusPanel.renownTiers).sort()).toEqual(tiers);
+      const words = Object.values(ui.statusPanel.renownTiers);
+      expect(words.every(w => w.length > 0)).toBe(true);
+      expect(new Set(words).size).toBe(words.length);
+    }
   });
 });
 

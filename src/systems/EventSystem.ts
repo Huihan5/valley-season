@@ -264,7 +264,13 @@ function processHuntLorenz(event: EventData, state: GameState): EventData {
   // the season granted the steward, plus the regard she personally holds for them.
   const margueriteRegard = state.nobleTrust + getTrust(state, 'marguerite');
   if (margueriteRegard >= MARGUERITE_FRAGMENT_TRUST && !state.flags.clue_nob_marguerite) {
-    parts.push(v.marguerite);
+    // She thanks nobody for the evening unless she stepped in at it: at the fire she only
+    // headed Henk off when asked "how long" and answered "I have not thought" (C).
+    parts.push(
+      v.marguerite_open,
+      state.flags.banquetAnswer === 'C' ? v.marguerite_thanks : '',
+      v.marguerite_clue,
+    );
     flags.clue_nob_marguerite = true;
   }
 
@@ -381,11 +387,16 @@ function processDay23(event: EventData, state: GameState): EventData {
 // She has not asked anyone whether that is still worth doing.
 function processDay30Morning(event: EventData, state: GameState): EventData {
   const v = event.variants ?? {};
-  const close = getTrust(state, 'elena') >= ELENA_QUILTS_TRUST;
+  const close = airedQuilts(state);
   return {
     ...event,
     sceneText: [event.sceneText, close ? v.elena_close : v.elena_distant].filter(Boolean).join('\n\n'),
   };
+}
+
+/** Whether the quilts were out on the wall that morning; the evening looks back at them. */
+function airedQuilts(state: GameState): boolean {
+  return getTrust(state, 'elena') >= ELENA_QUILTS_TRUST;
 }
 
 /**
@@ -409,11 +420,20 @@ function processDay30(event: EventData, state: GameState): EventData {
   // steward asks for some, but only the competent one asks for plenty), and the page has
   // to say so rather than round every line up to the best of them. "Plenty" is the
   // competent line; below it the column reads thin.
+  // Grain has three readings, not two: the truth endings ask only that the estate was not
+  // left bare (GRAIN_DISMISS_THRESHOLD), so a steward can arrive here above the winter's
+  // rations and below the dues. Without the third the page would say the tax is covered.
+  const grainLine = grain >= GRAIN_EXCELLENT_THRESHOLD ? v.settled_grain_full
+    : grain >= getRetainFloor(state) ? v.settled_grain_tight
+    : v.settled_grain_thin;
   const settled = short ? [v.short] : [
-    grain >= GRAIN_EXCELLENT_THRESHOLD ? v.settled_grain_full : v.settled_grain_tight,
+    grainLine,
     guldmark >= ENDING2_GULDMARK ? v.settled_coin_surplus : v.settled_coin_thin,
     timber >= ENDING2_TIMBER ? v.settled_timber_kept : v.settled_timber_thin,
-    v.settled_tail,
+    v.settled_tail_open,
+    // The frost on the quilts looks back at the morning, so only a steward who saw them out.
+    airedQuilts(state) ? v.settled_tail_window : v.settled_tail_window_plain,
+    v.settled_tail_close,
   ];
 
   const sceneText = [
