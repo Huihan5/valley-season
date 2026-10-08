@@ -142,10 +142,8 @@ export const MILLRIDGE_TRUST: Record<string, number> = {
 };
 export const MILLRIDGE_CASH = 20;       // enough to clear the winter's margin
 export const MILLRIDGE_TIMBER = 10;
-export const MILLRIDGE_SPRING_SEED = 15; // 优秀线 minus 留任线: seed for the spring
+export const MILLRIDGE_SPRING_SEED = 15; // what is left in the barn for the spring, once the winter is covered
 
-// The chancery calls the season "如常" only if both the grain and the cash are there.
-export const LETTER_GOOD_GULDMARK = 15;
 
 // 维特 restates what the player already holds; how much of it he can put in
 // order depends on how many pieces there are (drafts 4.11).
@@ -180,8 +178,9 @@ export const FRAGMENT_TRUST = {
 export const CLUE_ESTATE_REQUIRED = 4;   // clue_pos_ + clue_mot_
 export const CLUE_OFFICER_REQUIRED = 3;  // clue_ofc_
 export const CLUE_NOBLE_REQUIRED = 1;    // clue_nob_
-export const ENDING_TRUTH_MIN_RENOWN = 0;
-export const ENDING3_RENOWN = 8;
+// Standing: 河谷的人 asks the most of it, the truth endings a middling amount, 称职的外来者 none.
+export const ENDING_TRUTH_MIN_RENOWN = 3;
+export const ENDING3_RENOWN = 5;
 export const ENDING3_DEEP_TRUST = 3;      // 信任 ≥ 3 …
 export const ENDING3_DEEP_TRUST_COUNT = 3; // … held by at least this many NPCs
 // 领主印象 ≥ 1 buys one margin of error at the 留任线 (GDD 5.6). Two units down
@@ -215,10 +214,25 @@ export const TIMBER_BROKEN_PROMISE_TRUST = -2;
 // What the woods look like, by units taken this season. Four bands, no advice.
 export const FOREST_STATE_TIERS = [10, 15, 20];
 
-// Two-tier grain thresholds (GDD ch.5.4 / 10.1).
-// Below 留任线 → dismissed. 留任线 to 优秀线 → ending 2 at best. 优秀线 and above → ending 3 / 4A / 4B eligible.
+// Grain lines (GDD ch.5.4 / 10.1). Three of them, each its own test:
+//   below the 底线 nothing can save the season (a hard line, ahead of everything else);
+//   the 留任线 is what 称职的外来者 asks, and is winter rations plus tax;
+//   the 优秀线 is what 河谷的人 asks, and is the 留任线 plus seed for the spring.
+export const GRAIN_DISMISS_THRESHOLD = 60;   // 底线：低于它直接解雇；真相结局也以它为粮食线
 export const GRAIN_RETAIN_THRESHOLD = 75;    // 留任线：冬季口粮 60 + 税约 13
 export const GRAIN_EXCELLENT_THRESHOLD = 90; // 优秀线：留任线 + 春播种子 15
+
+// Every ending that keeps the steward also asks for real stock behind the grain (GDD 10.1):
+// a steward who ground out the harvest and left nothing in the purse or the woodpile has
+// not kept the estate in order. The lines step down with how much the ending is about
+// the estate: 称职的外来者 is the estate in order and asks the most; 河谷的人 is the valley
+// and asks less; the truth endings only ask that the estate was not left bare.
+export const ENDING2_GULDMARK = 50;
+export const ENDING2_TIMBER = 12;
+export const ENDING3_GULDMARK = 20;
+export const ENDING3_TIMBER = 5;
+export const ENDING_TRUTH_GULDMARK = 10;
+export const ENDING_TRUTH_TIMBER = 3;
 
 // 全部耕地的理论总产出——地里立着的、还没收上来的粮食上限（GDD ch.5.4）。
 // playtest 2026-09 定为 150（原 140）。收割从田里往仓里搬，霜冻日损耗的正是这批未收割的。

@@ -9,7 +9,8 @@ import {
 } from '../../systems/RelationSystem';
 import { getFieldGrain } from '../../systems/ResourceSystem';
 import {
-  GRAIN_EXCELLENT_THRESHOLD, NOBLE_TRUST_MAX, LORD_IMPRESSION_MAX, DAILY_GULDMARK_COST, TOTAL_DAYS,
+  GRAIN_RETAIN_THRESHOLD, ENDING2_GULDMARK, ENDING2_TIMBER,
+  NOBLE_TRUST_MAX, LORD_IMPRESSION_MAX, DAILY_GULDMARK_COST, TOTAL_DAYS,
 } from '../../data/config';
 import DATA from '../../data';
 import { plural, fill } from '../../utils/text';
@@ -86,7 +87,10 @@ export default function StatusPanel({ state }: Props) {
       <div className="px-4 py-3 border-b border-game-border">
         <p className={SECTION_LABEL}>{T.resourcesHeading}</p>
         <div className="space-y-2">
-          <ResourceRow icon="🌾" label={ui.resources.grain} value={resources.grain} unit={units(resources.grain)} target={GRAIN_EXCELLENT_THRESHOLD} />
+          {/* A number turns gold once it clears the line a competent season is held to, so
+              the player can see which of the three is still behind without being told what
+              the line is for. Grain, coin and wood each have one (GDD 10.1). */}
+          <ResourceRow icon="🌾" label={ui.resources.grain} value={resources.grain} unit={units(resources.grain)} target={GRAIN_RETAIN_THRESHOLD} />
           {/* The finite crop still standing — the clock behind the 抢收 (GDD 5.4). On a
               frost day it reads cold, because that is the night it starts to go. */}
           <div className="flex items-center justify-between">
@@ -102,8 +106,8 @@ export default function StatusPanel({ state }: Props) {
               <span className="text-game-dim text-xs">{T.fieldGrainCleared}</span>
             )}
           </div>
-          <ResourceRow icon="🪙" label={ui.resources.guldmark} value={resources.guldmark} unit="" warnBelow={15} />
-          <ResourceRow icon="🪵" label={ui.resources.timber} value={resources.timber} unit={units(resources.timber)} warnBelow={5} />
+          <ResourceRow icon="🪙" label={ui.resources.guldmark} value={resources.guldmark} unit="" target={ENDING2_GULDMARK} warnBelow={15} />
+          <ResourceRow icon="🪵" label={ui.resources.timber} value={resources.timber} unit={units(resources.timber)} target={ENDING2_TIMBER} warnBelow={5} />
           <ResourceRow icon="⭐" label={ui.resources.renown} value={resources.renown} unit="" showSign />
         </div>
         {/* An empty purse used to pass in silence (PlaytestFeedback 4.a.iii). */}

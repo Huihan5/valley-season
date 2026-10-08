@@ -106,6 +106,7 @@ When working autonomously:
 - Dev server: `npm run dev`
 - Build: `npm run build`
 - Test: `npm test`
+- Simulated stewards (ending reach and economy report, run on the real engine): `npm run sim -- --seeds 200` — run it after touching the economy, the events or the ending numbers
 - Lint: `npm run lint`
 
 ## World Context (brief — see docs/ for full reference)

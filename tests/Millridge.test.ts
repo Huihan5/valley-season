@@ -1,7 +1,11 @@
 import { describe, it, expect } from 'vitest';
 import { GameState, EventData, NpcId } from '../src/types/game';
-import { getEventById } from '../src/systems/EventSystem';
-import { GRAIN_RETAIN_THRESHOLD, MILLRIDGE_CASH } from '../src/data/config';
+import { getEventById, getFixedEvent } from '../src/systems/EventSystem';
+import { createInitialState, gameReducer } from '../src/systems/GameEngine';
+import {
+  GRAIN_RETAIN_THRESHOLD, MILLRIDGE_CASH, MILLRIDGE_TIMBER, MILLRIDGE_SPRING_SEED,
+  ENDING2_GULDMARK, ENDING2_TIMBER, ENDING_TRUTH_GULDMARK, ENDING_TRUTH_TIMBER,
+} from '../src/data/config';
 
 const ZERO: Record<NpcId, number> = { gregor: 0, marta: 0, elena: 0, marguerite: 0, henk: 0, lorenz: 0 };
 
@@ -19,7 +23,7 @@ function makeState(henk: number, grain = 60): GameState {
     nobleTrust: 0,
     lordImpression: 0,
     tenantTrust: -2,
-    flags: { day30Short: true, rodeToMillridge: true },
+    flags: { rodeToMillridge: true },
     currentSceneText: '',
     currentScene: 'default',
     lastResult: null,
@@ -91,5 +95,101 @@ describe('what he gives depends on where you actually stand with him', () => {
     expect(left?.effects?.flags).toBeUndefined();
     expect(left?.resultText).toContain('但那个笑今天晚上第一次显得不合身');
     expect(left?.resultText).toContain('整个河谷明天都会知道你去过');
+  });
+});
+
+// ── The ride is anyone's to take, and what it buys is the player's to weigh ─────────
+
+describe('a steward whose grain already clears the line can still ask', () => {
+  it('has nothing to make up in grain, and is not charged for the gap that is not there', () => {
+    const goods = choice(2, 'millridge_goods', GRAIN_RETAIN_THRESHOLD + 10);
+    expect(goods?.effects?.grain ?? 0).toBe(0);
+    expect(goods?.effects?.timber).toBe(MILLRIDGE_TIMBER);
+    const all = choice(4, 'millridge_everything', GRAIN_RETAIN_THRESHOLD + 10);
+    expect(all?.effects?.grain).toBe(MILLRIDGE_SPRING_SEED);
+  });
+});
+
+/** Day 30 evening with the books and the trust given, the way the engine would put the player there. */
+function atTheLedger(over: Partial<GameState>): GameState {
+  const base = createInitialState(1);
+  const state: GameState = {
+    ...base,
+    day: 30,
+    phase: 'evening',
+    openingPage: null,
+    playerName: '安',
+    ...over,
+  };
+  const event = getFixedEvent(30, 'evening', state)!;
+  return {
+    ...state,
+    activeEvent: event,
+    currentSceneText: event.sceneText,
+    currentChoices: event.choices ?? [],
+  };
+}
+
+describe('the night ride changes how the season ends', () => {
+  // Over the grain line, short of coin and wood: dismissed, unless the ride is taken and
+  // Henk says yes. This is the antidote the ride is for.
+  const books = { grain: 80, guldmark: ENDING2_GULDMARK - 15, timber: ENDING2_TIMBER - 7, renown: 1 };
+  // Henk's "everything" is worth exactly what the competent line is missing here.
+  expect(books.guldmark + MILLRIDGE_CASH).toBeGreaterThanOrEqual(ENDING2_GULDMARK);
+  expect(books.timber + MILLRIDGE_TIMBER).toBeGreaterThanOrEqual(ENDING2_TIMBER);
+
+  const ride = (henk: number, ask: string, over: Partial<GameState> = {}) => {
+    let s = atTheLedger({
+      resources: books, relationships: { ...ZERO, henk }, ...over,
+    });
+    s = gameReducer(s, { type: 'MAKE_CHOICE', choiceId: 'day30_ride_millridge' });
+    s = gameReducer(s, { type: 'MAKE_CHOICE', choiceId: ask });
+    if (s.pendingAdvance) s = gameReducer(s, { type: 'COMMIT_ADVANCE' });
+    return s;
+  };
+
+  it('is dismissal without it', () => {
+    let s = atTheLedger({ resources: books, relationships: { ...ZERO, henk: 4 } });
+    s = gameReducer(s, { type: 'MAKE_CHOICE', choiceId: 'day30_close_book' });
+    if (s.pendingAdvance) s = gameReducer(s, { type: 'COMMIT_ADVANCE' });
+    expect(s.demoComplete).toBe(true);
+    expect(s.endingId).toBe('ending1');
+  });
+
+  it('turns a thin purse and woodpile into a competent season, for a steward Henk trusts', () => {
+    const s = ride(4, 'millridge_everything');
+    expect(s.demoComplete).toBe(true);
+    expect(s.endingId).toBe('ending2');
+    expect(s.resources.guldmark).toBeGreaterThanOrEqual(ENDING2_GULDMARK);
+    expect(s.resources.timber).toBeGreaterThanOrEqual(ENDING2_TIMBER);
+  });
+
+  it('costs a point of standing, which is the trap in it', () => {
+    const s = ride(4, 'millridge_everything');
+    expect(s.resources.renown).toBe(books.renown - 1);
+  });
+
+  it('can cost the season it was meant to save, if the standing was exactly on a line', () => {
+    // 4A at renown 3 is one point from losing the truth ending. The ride takes that point.
+    const clues = {
+      clue_pos_horses_intact: true, clue_pos_horse_returned: true, clue_pos_horse_condition: true,
+      clue_mot_martha_summer: true, clue_mot_handwriting: true,
+      clue_ofc_timothy_person: true, clue_ofc_timothy_nature: true, clue_ofc_thierry_range: true,
+      clue_nob_marguerite: true,
+    };
+    const quiet = { grain: 70, guldmark: ENDING_TRUTH_GULDMARK, timber: ENDING_TRUTH_TIMBER, renown: 3 };
+    let stay = atTheLedger({ resources: quiet, flags: { ...clues } });
+    stay = gameReducer(stay, { type: 'MAKE_CHOICE', choiceId: 'day30_close_book' });
+    if (stay.pendingAdvance) stay = gameReducer(stay, { type: 'COMMIT_ADVANCE' });
+    expect(stay.endingId).toBe('ending4a');
+
+    const rode = ride(4, 'millridge_nothing', { resources: quiet, flags: { ...clues } });
+    expect(rode.endingId).not.toBe('ending4a');
+  });
+
+  it('gives a steward with no standing at Millridge a coin for the horse and nothing else', () => {
+    const s = ride(1, 'millridge_everything');
+    expect(s.endingId).toBe('ending1');
+    expect(s.resources.guldmark).toBe(books.guldmark + 1);
   });
 });

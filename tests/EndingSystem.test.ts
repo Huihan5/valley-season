@@ -1,10 +1,12 @@
 import { describe, it, expect } from 'vitest';
 import { GameState, NpcId, FlagMap } from '../src/types/game';
 import {
-  determineEnding, composeEnding, getEndingData, getRetainFloor, meetsEnding3, EndingId,
+  determineEnding, composeEnding, getEndingData, getRetainFloor, meetsEnding2, meetsEnding3, EndingId,
 } from '../src/systems/EndingSystem';
 import {
-  GRAIN_RETAIN_THRESHOLD, GRAIN_EXCELLENT_THRESHOLD, RETAIN_MARGIN,
+  GRAIN_DISMISS_THRESHOLD, GRAIN_RETAIN_THRESHOLD, GRAIN_EXCELLENT_THRESHOLD, RETAIN_MARGIN,
+  ENDING2_GULDMARK, ENDING2_TIMBER, ENDING3_GULDMARK, ENDING3_TIMBER,
+  ENDING_TRUTH_GULDMARK, ENDING_TRUTH_TIMBER, ENDING_TRUTH_MIN_RENOWN, ENDING3_RENOWN,
 } from '../src/data/config';
 
 const ZERO: Record<NpcId, number> = { gregor: 0, marta: 0, elena: 0, marguerite: 0, henk: 0, lorenz: 0 };
@@ -46,27 +48,72 @@ function makeState(over: Partial<GameState> = {}): GameState {
   };
 }
 
-/** 声望 8, 贵族信任 1, three people at trust 3 — the valley has decided about you. */
+/** 声望 5, 贵族信任 1, three people at trust 3 — the valley has decided about you. */
 const valleyState = (over: Partial<GameState> = {}): GameState => makeState({
-  resources: { grain: GRAIN_EXCELLENT_THRESHOLD, guldmark: 20, timber: 6, renown: 8 },
+  resources: {
+    grain: GRAIN_EXCELLENT_THRESHOLD, guldmark: ENDING3_GULDMARK, timber: ENDING3_TIMBER, renown: ENDING3_RENOWN,
+  },
   nobleTrust: 1,
   relationships: { ...ZERO, gregor: 3, marta: 3, lorenz: 3 },
   ...over,
 });
 
+/** The books of a steward who cleared every line 称职的外来者 asks, with nothing to spare. */
+const COMPETENT = {
+  grain: GRAIN_RETAIN_THRESHOLD, guldmark: ENDING2_GULDMARK, timber: ENDING2_TIMBER, renown: 0,
+};
+/** A season that fell short of everything but did not fall apart: over every floor the truth asks, no more. */
+const SCRAPED = {
+  grain: GRAIN_DISMISS_THRESHOLD, guldmark: ENDING_TRUTH_GULDMARK, timber: ENDING_TRUTH_TIMBER,
+  renown: ENDING_TRUTH_MIN_RENOWN,
+};
+
 const text = (id: EndingId, state: GameState) => composeEnding(state, id);
 
 // ── 判定 ────────────────────────────────────────────────────────────────────
 
-describe('the 留任线 is the only thing that can end the season badly', () => {
-  it('dismisses below 75', () => {
+describe('the hard line: below it nothing else is looked at', () => {
+  it('dismisses below 60 whatever else is true', () => {
+    const everythingElse = {
+      flags: CLUES_4B,
+      nobleTrust: 3,
+      relationships: { ...ZERO, gregor: 5, marta: 5, lorenz: 5 },
+      lordImpression: 3,
+      resources: { grain: GRAIN_DISMISS_THRESHOLD - 1, guldmark: 200, timber: 50, renown: 10 },
+    };
+    expect(determineEnding(makeState(everythingElse))).toBe('ending1');
+  });
+
+  it('is the same number for the truth endings as for the dismissal', () => {
+    // 60 and up is "the estate did not fall apart"; it is not a separate bar to clear.
+    expect(determineEnding(makeState({ flags: CLUES_4A, resources: SCRAPED }))).toBe('ending4a');
     expect(determineEnding(makeState({
-      resources: { grain: GRAIN_RETAIN_THRESHOLD - 1, guldmark: 40, timber: 9, renown: 10 },
+      flags: CLUES_4A, resources: { ...SCRAPED, grain: GRAIN_DISMISS_THRESHOLD - 1 },
+    }))).toBe('ending1');
+  });
+});
+
+describe('称职的外来者 asks for stock behind the grain, not the grain alone', () => {
+  it('keeps a steward who cleared grain, coin and wood', () => {
+    expect(meetsEnding2(makeState({ resources: COMPETENT }))).toBe(true);
+    expect(determineEnding(makeState({ resources: COMPETENT }))).toBe('ending2');
+  });
+
+  it('dismisses a harvest with an empty purse or an empty woodpile behind it', () => {
+    expect(determineEnding(makeState({
+      resources: { ...COMPETENT, guldmark: ENDING2_GULDMARK - 1 },
+    }))).toBe('ending1');
+    expect(determineEnding(makeState({
+      resources: { ...COMPETENT, timber: ENDING2_TIMBER - 1 },
+    }))).toBe('ending1');
+    // The one who ground out wood and left the barn bare, too.
+    expect(determineEnding(makeState({
+      resources: { grain: 70, guldmark: 200, timber: 80, renown: 10 },
     }))).toBe('ending1');
   });
 
-  it('keeps a steward the lord already thinks well of two units further down', () => {
-    const short = { grain: GRAIN_RETAIN_THRESHOLD - RETAIN_MARGIN, guldmark: 5, timber: 1, renown: 0 };
+  it('keeps a steward the lord already thinks well of two units further down on the grain', () => {
+    const short = { ...COMPETENT, grain: GRAIN_RETAIN_THRESHOLD - RETAIN_MARGIN };
     expect(determineEnding(makeState({ resources: short }))).toBe('ending1');
     expect(determineEnding(makeState({ resources: short, lordImpression: 1 }))).toBe('ending2');
     // 73 is rations plus tax and nothing else. One unit under that, nobody can help.
@@ -75,30 +122,44 @@ describe('the 留任线 is the only thing that can end the season badly', () => 
     }))).toBe('ending1');
   });
 
-  it('reads the floor off 领主印象, not off the goodwill of the moment', () => {
+  it('reads the grain floor off 领主印象, not off the goodwill of the moment', () => {
     expect(getRetainFloor(makeState())).toBe(GRAIN_RETAIN_THRESHOLD);
     expect(getRetainFloor(makeState({ lordImpression: 1 }))).toBe(73);
     expect(getRetainFloor(makeState({ lordImpression: 3 }))).toBe(73);
   });
 
-  it('gives 称职的外来者 to everyone who cleared the line and nothing more', () => {
-    expect(determineEnding(makeState({
-      resources: { grain: 120, guldmark: 60, timber: 20, renown: 6 },
-    }))).toBe('ending2');
+  it('does not ask for standing', () => {
+    expect(determineEnding(makeState({ resources: { ...COMPETENT, renown: -3 } }))).toBe('ending2');
   });
 });
 
-describe('the truth endings ask for the fragments, not for standing', () => {
-  it('needs the 优秀线, all three groups, and a renown that is merely not negative', () => {
-    expect(determineEnding(makeState({ flags: CLUES_4A }))).toBe('ending4a');
+describe('the truth endings ask for the fragments, and only a middling standing', () => {
+  it('needs the hard line, all three groups, and a renown of at least three', () => {
+    expect(determineEnding(makeState({ flags: CLUES_4A, resources: SCRAPED }))).toBe('ending4a');
     expect(determineEnding(makeState({
-      flags: CLUES_4A,
-      resources: { grain: GRAIN_EXCELLENT_THRESHOLD - 1, guldmark: 20, timber: 6, renown: 2 },
-    }))).toBe('ending2');
+      flags: CLUES_4A, resources: { ...SCRAPED, renown: ENDING_TRUTH_MIN_RENOWN - 1 },
+    }))).toBe('ending1');
+  });
+
+  it('is not held to the competent line: only a little coin, a little wood, not even the 留任线', () => {
+    expect(SCRAPED.grain).toBeLessThan(GRAIN_RETAIN_THRESHOLD);
+    expect(SCRAPED.guldmark).toBeLessThan(ENDING3_GULDMARK);
+    expect(SCRAPED.timber).toBeLessThan(ENDING3_TIMBER);
+    expect(determineEnding(makeState({ flags: CLUES_4A, resources: SCRAPED }))).toBe('ending4a');
+    expect(determineEnding(makeState({ flags: CLUES_4B, resources: SCRAPED }))).toBe('ending4b');
+  });
+
+  it('still wants the estate not left bare: an empty purse or an empty woodpile is a dismissal', () => {
     expect(determineEnding(makeState({
-      flags: CLUES_4A,
-      resources: { grain: 95, guldmark: 20, timber: 6, renown: -1 },
-    }))).toBe('ending2');
+      flags: CLUES_4B, resources: { ...SCRAPED, guldmark: ENDING_TRUTH_GULDMARK - 1 },
+    }))).toBe('ending1');
+    expect(determineEnding(makeState({
+      flags: CLUES_4B, resources: { ...SCRAPED, timber: ENDING_TRUTH_TIMBER - 1 },
+    }))).toBe('ending1');
+    // ...unless the books are good enough for something lesser than the truth.
+    expect(determineEnding(makeState({
+      flags: CLUES_4B, resources: { ...COMPETENT, guldmark: ENDING_TRUTH_GULDMARK - 1 },
+    }))).toBe('ending1');
   });
 
   it('turns on the position line and on nothing else', () => {
@@ -106,20 +167,29 @@ describe('the truth endings ask for the fragments, not for standing', () => {
     expect(determineEnding(makeState({ flags: CLUES_4A, resources: rich }))).toBe('ending4a');
     expect(determineEnding(makeState({ flags: CLUES_4B, resources: rich }))).toBe('ending4b');
     // Same evidence, a season scraped through: still 4B.
-    expect(determineEnding(makeState({
-      flags: CLUES_4B,
-      resources: { grain: GRAIN_EXCELLENT_THRESHOLD, guldmark: 0, timber: 0, renown: 0 },
-    }))).toBe('ending4b');
+    expect(determineEnding(makeState({ flags: CLUES_4B, resources: SCRAPED }))).toBe('ending4b');
   });
 
   it('will not open on two groups out of three', () => {
     const { clue_nob_marguerite: _noNoble, ...twoGroups } = CLUES_4B;
-    expect(determineEnding(makeState({ flags: twoGroups }))).toBe('ending2');
+    // Not competent either, so the dismissal catches it.
+    expect(determineEnding(makeState({ flags: twoGroups, resources: SCRAPED }))).toBe('ending1');
+    // ...and a competent one falls to the lesser ending.
+    expect(determineEnding(makeState({ flags: twoGroups, resources: { ...COMPETENT, renown: 3 } })))
+      .toBe('ending2');
   });
 
-  it('outranks 河谷的人 when both are true', () => {
+  it('outranks 河谷的人 and 称职的外来者 when more than one is true', () => {
     expect(determineEnding(valleyState())).toBe('ending3');
     expect(determineEnding(valleyState({ flags: CLUES_4B }))).toBe('ending4b');
+    expect(determineEnding(makeState({
+      flags: CLUES_4A, resources: { grain: 120, guldmark: 90, timber: 25, renown: 4 },
+    }))).toBe('ending4a');
+    // The truth outranks 河谷的人 only if it clears its own floors; short of them the valley's ending is next.
+    expect(determineEnding(valleyState({
+      flags: CLUES_4B,
+      resources: { grain: 90, guldmark: ENDING_TRUTH_GULDMARK - 1, timber: ENDING3_TIMBER, renown: ENDING3_RENOWN },
+    }))).toBe('ending1');
   });
 });
 
@@ -128,7 +198,7 @@ describe('河谷的人 is a test of standing, taken separately', () => {
     expect(meetsEnding3(valleyState())).toBe(true);
     expect(meetsEnding3(valleyState({ nobleTrust: 0 }))).toBe(false);
     expect(meetsEnding3(valleyState({
-      resources: { grain: 90, guldmark: 20, timber: 6, renown: 7 },
+      resources: { grain: 90, guldmark: 20, timber: 6, renown: ENDING3_RENOWN - 1 },
     }))).toBe(false);
     expect(meetsEnding3(valleyState({
       relationships: { ...ZERO, gregor: 3, marta: 3 },
@@ -143,9 +213,50 @@ describe('河谷的人 is a test of standing, taken separately', () => {
   });
 
   it('still needs the 优秀线 under it', () => {
+    // 80 is competent grain but not the valley's: this falls to what the books can carry.
     expect(determineEnding(valleyState({
-      resources: { grain: 80, guldmark: 20, timber: 6, renown: 8 },
+      resources: { grain: 80, guldmark: 20, timber: 6, renown: ENDING3_RENOWN },
+    }))).toBe('ending1');
+    expect(determineEnding(valleyState({
+      resources: { grain: 80, guldmark: ENDING2_GULDMARK, timber: ENDING2_TIMBER, renown: ENDING3_RENOWN },
     }))).toBe('ending2');
+  });
+
+  it('asks for less of the purse and woodpile than a competent steward does', () => {
+    expect(ENDING3_GULDMARK).toBeLessThan(ENDING2_GULDMARK);
+    expect(ENDING3_TIMBER).toBeLessThan(ENDING2_TIMBER);
+    expect(determineEnding(valleyState({
+      resources: { grain: 90, guldmark: ENDING3_GULDMARK, timber: ENDING3_TIMBER, renown: ENDING3_RENOWN },
+    }))).toBe('ending3');
+    expect(determineEnding(valleyState({
+      resources: { grain: 90, guldmark: ENDING3_GULDMARK - 1, timber: ENDING3_TIMBER, renown: ENDING3_RENOWN },
+    }))).toBe('ending1');
+    expect(determineEnding(valleyState({
+      resources: { grain: 90, guldmark: ENDING3_GULDMARK, timber: ENDING3_TIMBER - 1, renown: ENDING3_RENOWN },
+    }))).toBe('ending1');
+  });
+
+  it('keeps the mirror in the truth endings a question of the valley alone, not of the purse', () => {
+    // meetsEnding3 is what the 4A/4B mirror paragraph reads; it must not start asking for stock.
+    expect(meetsEnding3(valleyState({
+      resources: { grain: 90, guldmark: 0, timber: 0, renown: ENDING3_RENOWN },
+    }))).toBe(true);
+  });
+});
+
+describe('the ladders', () => {
+  it('asks the most standing of 河谷的人, a middling amount of the truth, and nothing of the rest', () => {
+    expect(ENDING3_RENOWN).toBeGreaterThan(ENDING_TRUTH_MIN_RENOWN);
+    expect(ENDING_TRUTH_MIN_RENOWN).toBeGreaterThan(0);
+  });
+
+  it('asks the most stock of 称职的外来者, less of 河谷的人, least of the truth', () => {
+    expect(ENDING2_GULDMARK).toBeGreaterThan(ENDING3_GULDMARK);
+    expect(ENDING3_GULDMARK).toBeGreaterThan(ENDING_TRUTH_GULDMARK);
+    expect(ENDING2_TIMBER).toBeGreaterThan(ENDING3_TIMBER);
+    expect(ENDING3_TIMBER).toBeGreaterThan(ENDING_TRUTH_TIMBER);
+    expect(ENDING_TRUTH_GULDMARK).toBeGreaterThan(0);
+    expect(ENDING_TRUTH_TIMBER).toBeGreaterThan(0);
   });
 });
 
@@ -153,10 +264,10 @@ describe('all five endings are reachable', () => {
   it('reaches each one from a state a player could actually be in', () => {
     const reached = new Set([
       determineEnding(makeState({ resources: { grain: 40, guldmark: 2, timber: 0, renown: -2 } })),
-      determineEnding(makeState({ resources: { grain: 82, guldmark: 18, timber: 4, renown: 3 } })),
+      determineEnding(makeState({ resources: { ...COMPETENT, renown: 1 } })),
       determineEnding(valleyState()),
-      determineEnding(makeState({ flags: CLUES_4A })),
-      determineEnding(makeState({ flags: CLUES_4B })),
+      determineEnding(makeState({ flags: CLUES_4A, resources: SCRAPED })),
+      determineEnding(makeState({ flags: CLUES_4B, resources: SCRAPED })),
     ]);
     expect([...reached].sort()).toEqual(
       ['ending1', 'ending2', 'ending3', 'ending4a', 'ending4b'],

@@ -20,6 +20,7 @@ import {
 import { getTrust } from './RelationSystem';
 import { countFlagsWithPrefix, countClues, CLUE_PREFIXES } from './FlagRegistry';
 import { getFragmentChoices, getLorenzChapelExtra } from './ClueSystem';
+import { determineEnding, meetsEnding2, getRetainFloor } from './EndingSystem';
 import {
   getMarketArrival, getMarketTradeResult, getMarketReturn, getMarketNoTrade,
   drawRumours, encodeRumours, rumoursFlagKey,
@@ -31,7 +32,7 @@ import {
   DINNER_DAY, PETITION_INFORMED_TRUST, ECHO_DECOROUS_AT,
   HUNT_LAST_DAY, LORENZ_FRAGMENT_TRUST, MARGUERITE_FRAGMENT_TRUST,
   WYNTER_PARTIAL_ACCOUNT, WYNTER_FULL_ACCOUNT, WYNTER_POSITION_KNOWN,
-  GRAIN_RETAIN_THRESHOLD, GRAIN_EXCELLENT_THRESHOLD, LETTER_GOOD_GULDMARK,
+  GRAIN_RETAIN_THRESHOLD, GRAIN_EXCELLENT_THRESHOLD, ENDING2_GULDMARK, ENDING2_TIMBER,
   ELENA_QUILTS_TRUST, MILLRIDGE_TRUST, MILLRIDGE_CASH, MILLRIDGE_TIMBER, MILLRIDGE_SPRING_SEED,
   TIMBER_SEASON_QUOTA,
   TIMBER_OVERRUN_RENOWN, TIMBER_BROKEN_PROMISE_TRUST,
@@ -355,14 +356,18 @@ function processWynter(event: EventData, state: GameState): EventData {
  * Day 23. The chancery writes about the harvest and about the guarantee running
  * out in the same letter, because both come out of the same office. That is the
  * moment the 30th stops being only a work deadline.
+ *
+ * The three tiers are the same test a competent season is held to at the end — grain,
+ * coin and wood — so the letter reads as a reminder of where the books stand: "如常"
+ * when all three are there, a warning about the winter when only the harvest is, and
+ * a copy to the lord when even that is behind.
  */
 function processDay23(event: EventData, state: GameState): EventData {
   const v = event.variants ?? {};
-  const { grain, guldmark } = state.resources;
 
-  const tier = grain >= GRAIN_EXCELLENT_THRESHOLD && guldmark >= LETTER_GOOD_GULDMARK
+  const tier = meetsEnding2(state)
     ? 'good'
-    : grain >= GRAIN_RETAIN_THRESHOLD ? 'fair' : 'poor';
+    : state.resources.grain >= getRetainFloor(state) ? 'fair' : 'poor';
 
   const sceneText = [event.sceneText, v[tier], v.renewal, v.after, v.broker]
     .filter(Boolean)
@@ -383,22 +388,30 @@ function processDay30Morning(event: EventData, state: GameState): EventData {
 }
 
 /**
- * Day 30 evening. Either the books balance, or they are short by exactly the
- * amount one more morning two weeks ago would have covered — and then there is
- * one person left to ask.
+ * Day 30 evening. Either the books carry the steward, or they are short by exactly
+ * the amount one more morning two weeks ago would have covered. Either way there is
+ * one person who could be asked, and whether to ask is the player's to decide: the
+ * ride is on offer to everyone, and costs the evening and some standing whatever the
+ * books say.
+ *
+ * "Short" is the ending asked of the engine as things stand tonight — grain, coin,
+ * wood, the truth, the valley — rather than any one column, so the text cannot call
+ * the books balanced for a season that is about to be dismissed.
  */
 function processDay30(event: EventData, state: GameState): EventData {
   const v = event.variants ?? {};
   const { grain, guldmark, timber } = state.resources;
-  const short = grain < GRAIN_RETAIN_THRESHOLD;
+  const short = determineEnding(state) === 'ending1';
 
-  // The books close per column, not on the grain alone: a season that brought the
-  // harvest in can still leave the coin at nothing and the woodpile bare, and the
-  // page has to say so rather than round every line up to the best of them.
+  // The books close per column, not on the grain alone: a season carried by the truth or
+  // by the valley can leave the purse and the woodpile thin (every ending that keeps the
+  // steward asks for some, but only the competent one asks for plenty), and the page has
+  // to say so rather than round every line up to the best of them. "Plenty" is the
+  // competent line; below it the column reads thin.
   const settled = short ? [v.short] : [
     grain >= GRAIN_EXCELLENT_THRESHOLD ? v.settled_grain_full : v.settled_grain_tight,
-    guldmark > 0 ? v.settled_coin_surplus : v.settled_coin_bare,
-    timber > 0 ? v.settled_timber_kept : v.settled_timber_gone,
+    guldmark >= ENDING2_GULDMARK ? v.settled_coin_surplus : v.settled_coin_thin,
+    timber >= ENDING2_TIMBER ? v.settled_timber_kept : v.settled_timber_thin,
     v.settled_tail,
   ];
 
@@ -409,15 +422,17 @@ function processDay30(event: EventData, state: GameState): EventData {
     ...settled,
   ].filter(Boolean).join('\n\n');
 
-  return {
-    ...event,
-    sceneText,
-    // The ride to 磨岭 is offered only to a steward who needs it.
-    onEnterEffects: {
-      ...event.onEnterEffects,
-      flags: { ...event.onEnterEffects?.flags, ...(short ? { day30Short: true } : {}) },
-    },
-  };
+  // A steward whose books are short needs no explanation of why the horse is being
+  // saddled. One whose books are fine is told where it would be going, and that
+  // closing the ledger is simply that.
+  const choices = (event.choices ?? []).map(choice => {
+    if (short) return choice;
+    if (choice.id === 'day30_ride_millridge') return { ...choice, description: v.ride_note };
+    if (choice.id === 'day30_close_book') return { ...choice, resultText: v.close_settled };
+    return choice;
+  });
+
+  return { ...event, sceneText, choices };
 }
 
 /**

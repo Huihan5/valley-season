@@ -6,7 +6,10 @@ import {
 import { Choice } from '../src/types/game';
 import { determineEnding } from '../src/systems/EndingSystem';
 import { GameState } from '../src/types/game';
-import { BROKER, HARVESTABLE_TOTAL, FROST_LOSS_RATE } from '../src/data/config';
+import {
+  BROKER, HARVESTABLE_TOTAL, FROST_LOSS_RATE, GRAIN_RETAIN_THRESHOLD, ENDING2_GULDMARK, ENDING2_TIMBER,
+  ENDING_TRUTH_GULDMARK, ENDING_TRUTH_TIMBER,
+} from '../src/data/config';
 
 // ── Helpers ────────────────────────────────────────────────────────────────
 
@@ -255,16 +258,20 @@ describe('getFixedEvent — Day 22 维特', () => {
 // ── processDay23: the chancery writes about two deadlines at once ─────────
 
 describe('getFixedEvent — Day 23 letter assembly', () => {
-  const letter = (grain: number, guldmark: number) =>
+  const letter = (grain: number, guldmark: number, timber: number = ENDING2_TIMBER) =>
     getFixedEvent(23, 'morning', makeState({
-      day: 23, resources: { grain, guldmark, timber: 10, renown: 3 },
+      day: 23, resources: { grain, guldmark, timber, renown: 3 },
     }))?.sceneText ?? '';
 
-  it('calls the season 如常 only when the grain and the cash are both there', () => {
-    expect(letter(95, 20)).toContain('列为如常');
+  // The letter holds the season to the same three lines a competent ending does.
+  it('calls the season 如常 only when the grain, the coin and the wood are all there', () => {
+    expect(letter(GRAIN_RETAIN_THRESHOLD, ENDING2_GULDMARK)).toContain('列为如常');
+    expect(letter(GRAIN_RETAIN_THRESHOLD, ENDING2_GULDMARK - 1)).not.toContain('列为如常');
+    expect(letter(GRAIN_RETAIN_THRESHOLD, ENDING2_GULDMARK, ENDING2_TIMBER - 1)).not.toContain('列为如常');
+    expect(letter(GRAIN_RETAIN_THRESHOLD - 1, ENDING2_GULDMARK)).not.toContain('列为如常');
   });
 
-  it('warns without copying anyone in when the harvest is merely behind', () => {
+  it('warns without copying anyone in when the harvest is in but the stock behind it is not', () => {
     const text = letter(80, 5);
     expect(text).toContain('低于本区平均');
     expect(text).not.toContain('抄送');
@@ -277,7 +284,7 @@ describe('getFixedEvent — Day 23 letter assembly', () => {
   });
 
   it('always carries the renewal clause, whatever the harvest looks like', () => {
-    for (const text of [letter(95, 20), letter(80, 5), letter(40, 5)]) {
+    for (const text of [letter(95, 80), letter(80, 5), letter(40, 5)]) {
       expect(text).toContain('十月三十日届满');
       expect(text).toContain('届满前七日内提交');
     }
@@ -306,10 +313,22 @@ describe('getFixedEvent — Day 23 letter assembly', () => {
 // ── processDay30: the last day, and the one person left to ask ────────────
 
 describe('getFixedEvent — Day 30', () => {
-  const evening = (grain: number, flags: GameState["flags"] = {}) =>
+  const evening = (
+    grain: number,
+    flags: GameState["flags"] = {},
+    over: Partial<GameState["resources"]> = {},
+  ) =>
     getFixedEvent(30, 'evening', makeState({
-      day: 30, resources: { grain, guldmark: 20, timber: 8, renown: 4 }, flags,
+      day: 30, resources: { grain, guldmark: 20, timber: 8, renown: 4, ...over }, flags,
     }));
+
+  /** Every clue group cleared; renown at the truth line is the caller's to set. */
+  const CLUES_FOUND: GameState["flags"] = {
+    clue_pos_horses_intact: true, clue_pos_horse_returned: true, clue_pos_horse_condition: true,
+    clue_mot_martha_summer: true, clue_mot_handwriting: true,
+    clue_ofc_timothy_person: true, clue_ofc_timothy_nature: true, clue_ofc_thierry_range: true,
+    clue_nob_marguerite: true,
+  };
 
   it('leaves the last day a working day', () => {
     const morning = getFixedEvent(30, 'morning', makeState({ day: 30 }));
@@ -329,9 +348,22 @@ describe('getFixedEvent — Day 30', () => {
   });
 
   it('closes the books when the season came in', () => {
-    const text = evening(95)?.sceneText ?? '';
+    const text = evening(95, {}, { guldmark: 70, timber: 20 })?.sceneText ?? '';
     expect(text).toContain('但今晚这本账是平的');
     expect(text).not.toContain('你把数字算了三遍');
+  });
+
+  // "Short" is the whole ending asked of the engine, not the grain alone: a harvest that
+  // came in over the line with nothing left in the purse is a dismissal all the same.
+  it('counts the books as short when coin or wood will not carry the season', () => {
+    expect(evening(95)?.sceneText).toContain('你把数字算了三遍');
+    expect(evening(95, {}, { guldmark: 70, timber: 5 })?.sceneText).toContain('你把数字算了三遍');
+    expect(evening(95, {}, { guldmark: 20, timber: 20 })?.sceneText).toContain('你把数字算了三遍');
+  });
+
+  it('does not call a season short that the truth is about to carry', () => {
+    const found = evening(65, CLUES_FOUND, { guldmark: ENDING_TRUTH_GULDMARK, timber: ENDING_TRUTH_TIMBER, renown: 3 });
+    expect(found?.sceneText).not.toContain('你把数字算了三遍');
   });
 
   // The settlement reads each column against its own state — a season that brought
@@ -339,30 +371,77 @@ describe('getFixedEvent — Day 30', () => {
   // surplus it does not have (playtest 2026-09).
   it('settles grain, coin, and timber independently', () => {
     const rich = getFixedEvent(30, 'evening', makeState({
-      day: 30, resources: { grain: 95, guldmark: 20, timber: 8, renown: 4 },
+      day: 30, resources: { grain: 95, guldmark: 70, timber: 20, renown: 4 },
     }))?.sceneText ?? '';
     expect(rich).toContain('还够明年春天下种');
     expect(rich).toContain('账上还余下几个金卢');
     expect(rich).toContain('木材也留下了取暖的份');
 
-    const bare = getFixedEvent(30, 'evening', makeState({
-      day: 30, resources: { grain: 75, guldmark: 0, timber: 0, renown: 4 },
+    // The truth carries this season, so the books are read column by column.
+    const lean = getFixedEvent(30, 'evening', makeState({
+      day: 30,
+      resources: { grain: 75, guldmark: ENDING_TRUTH_GULDMARK, timber: ENDING_TRUTH_TIMBER, renown: 4 },
+      flags: CLUES_FOUND,
     }))?.sceneText ?? '';
     // Grain cleared the retain line but not the excellent one: no spring-seed claim.
-    expect(bare).toContain('明年的种子要紧着分');
-    expect(bare).toContain('金卢一分不剩');
-    expect(bare).toContain('木材见了底');
-    // And it must not round the empty columns up to the good version.
-    expect(bare).not.toContain('账上还余下几个金卢');
-    expect(bare).not.toContain('木材也留下了取暖的份');
+    expect(lean).toContain('明年的种子要紧着分');
+    expect(lean).not.toContain('还够明年春天下种');
+    // Coin and wood cleared the floor the truth asks, not the competent line: they read thin.
+    expect(lean).toContain('账上的金卢不多');
+    expect(lean).toContain('木材也不多');
+    expect(lean).not.toContain('账上还余下几个金卢');
+    expect(lean).not.toContain('木材也留下了取暖的份');
   });
 
-  it('offers the ride to 磨岭 only to a steward who is short', () => {
-    expect(evening(95)?.onEnterEffects?.flags?.day30Short).toBeUndefined();
-    expect(evening(60)?.onEnterEffects?.flags?.day30Short).toBe(true);
-    for (const choice of evening(60)?.choices ?? []) {
-      expect(choice.requiresFlag).toBe('day30Short');
+  // A season that the books carry always has some coin and some wood, so "thin" is what the
+  // lowest of them reads like, and "plenty" starts at the competent line — on each column
+  // separately.
+  it('switches each column from thin to plenty at the competent line', () => {
+    const books = (guldmark: number, timber: number) => getFixedEvent(30, 'evening', makeState({
+      day: 30, resources: { grain: 95, guldmark, timber, renown: 4 }, flags: CLUES_FOUND,
+    }))?.sceneText ?? '';
+
+    const both = books(ENDING2_GULDMARK, ENDING2_TIMBER);
+    expect(both).toContain('账上还余下几个金卢');
+    expect(both).toContain('木材也留下了取暖的份');
+
+    const thinCoin = books(ENDING2_GULDMARK - 1, ENDING2_TIMBER);
+    expect(thinCoin).toContain('账上的金卢不多');
+    expect(thinCoin).toContain('木材也留下了取暖的份');
+
+    const thinWood = books(ENDING2_GULDMARK, ENDING2_TIMBER - 1);
+    expect(thinWood).toContain('账上还余下几个金卢');
+    expect(thinWood).toContain('木材也不多');
+  });
+
+  // Every ending that keeps the steward asks for some coin and some wood, so a season with
+  // an empty purse or an empty woodpile never reaches the "settled" columns: it is short.
+  it('reads an empty purse or woodpile as short, whatever the grain', () => {
+    const empty = getFixedEvent(30, 'evening', makeState({
+      day: 30, resources: { grain: 120, guldmark: 0, timber: 0, renown: 4 }, flags: CLUES_FOUND,
+    }))?.sceneText ?? '';
+    expect(empty).toContain('你把数字算了三遍');
+    expect(empty).not.toContain('账上的金卢不多');
+  });
+
+  // The ride is the player's to take, whatever the books say: a steward whose books are
+  // fine can still go, and the evening it costs is the whole price of finding out.
+  it('offers the ride to 磨岭 to everyone, short or not', () => {
+    for (const event of [evening(60), evening(95, {}, { guldmark: 70, timber: 20 })]) {
+      const ids = (event?.choices ?? []).map(c => c.id);
+      expect(ids).toEqual(['day30_ride_millridge', 'day30_close_book']);
+      for (const choice of event?.choices ?? []) expect(choice.requiresFlag).toBeUndefined();
     }
+  });
+
+  it('says where the horse is going to a steward who has no shortfall to explain it', () => {
+    const fine = evening(95, {}, { guldmark: 70, timber: 20 })?.choices ?? [];
+    expect(fine.find(c => c.id === 'day30_ride_millridge')?.description).toContain('磨岭');
+    expect(fine.find(c => c.id === 'day30_close_book')?.resultText).toContain('不欠谁');
+
+    const short = evening(60)?.choices ?? [];
+    expect(short.find(c => c.id === 'day30_ride_millridge')?.description).toBeUndefined();
+    expect(short.find(c => c.id === 'day30_close_book')?.resultText).toContain('数字就是数字');
   });
 
   it('remembers what the player admitted on a street in 河谷城', () => {
@@ -674,11 +753,12 @@ describe('Critical path — 霍特曼 investigation (Ending 5)', () => {
 
   it('no longer routes the ending through a chain of investigation flags', () => {
     // Stage 5 retired the 账本 → 树桩 → 维特 chain as a determination input. Doing
-    // all three and reaching the 留任线 gets the player kept on, nothing more —
-    // the truth endings are counted off the clue groups (see EndingSystem.test).
+    // all three and clearing the 留任线 with a competent purse and woodpile gets the
+    // player kept on, nothing more — the truth endings are counted off the clue groups
+    // (see EndingSystem.test).
     const reached = determineEnding(makeState({
       day: 30,
-      resources: { grain: 80, guldmark: 20, timber: 5, renown: 3 },
+      resources: { grain: 80, guldmark: 70, timber: 16, renown: 3 },
       flags: {
         investigatedLedger: true,
         documentedStumps: true,
