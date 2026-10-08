@@ -8,6 +8,7 @@ import {
   getTrust, getKnownNpcs, getTrustTier, getEffectiveTenantTrust, TrustTier,
 } from '../../systems/RelationSystem';
 import { getFieldGrain } from '../../systems/ResourceSystem';
+import { codexEntryOf } from '../../systems/CodexSystem';
 import {
   GRAIN_RETAIN_THRESHOLD, ENDING2_GULDMARK, ENDING2_TIMBER,
   NOBLE_TRUST_MAX, LORD_IMPRESSION_MAX, DAILY_GULDMARK_COST, TOTAL_DAYS,
@@ -39,6 +40,8 @@ const units = (n: number) => plural(n, ui.resources.unitOne, ui.resources.unit);
 
 interface Props {
   state: GameState;
+  /** A name in the relations list opens that person's page in the codex. */
+  onOpenCodex?: (entryId: string) => void;
 }
 
 function RelationBar({ value }: { value: number }) {
@@ -52,7 +55,7 @@ function RelationBar({ value }: { value: number }) {
   );
 }
 
-export default function StatusPanel({ state }: Props) {
+export default function StatusPanel({ state, onOpenCodex }: Props) {
   const { day, weather, resources, fatigue, nobleTrust, lordImpression } = state;
   const fieldGrain = getFieldGrain(state);
   const fatigueEffect = getFatigueEffect(fatigue);
@@ -161,14 +164,30 @@ export default function StatusPanel({ state }: Props) {
         <div className="space-y-2.5">
           {getKnownNpcs(state, Object.keys(NPC_NAMES) as NpcId[]).map((npc) => {
             const val = getTrust(state, npc);
-            return (
-              <div key={npc}>
+            const entry = codexEntryOf(npc);
+            const row = (
+              <>
                 <div className="flex items-center justify-between mb-0.5">
                   <span className="text-game-text text-xs">{NPC_NAMES[npc]}</span>
                   <span className={`text-xs ${tierColor(val)}`}>{tierWord(val)}</span>
                 </div>
                 <RelationBar value={val} />
-              </div>
+              </>
+            );
+            // Someone the codex has a page for is a button; the page opens at what the
+            // player already holds, so a click gives nothing away.
+            return entry && onOpenCodex ? (
+              <button
+                key={npc}
+                type="button"
+                title={T.openCodex}
+                onClick={() => onOpenCodex(entry)}
+                className="block w-full text-left rounded-sm -mx-1 px-1 py-0.5 hover:bg-bg-hover transition-colors"
+              >
+                {row}
+              </button>
+            ) : (
+              <div key={npc}>{row}</div>
             );
           })}
         </div>

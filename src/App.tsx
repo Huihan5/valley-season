@@ -39,6 +39,10 @@ export default function App() {
   const [inventoryOpen, setInventoryOpen] = useState(false);
   const [galleryOpen, setGalleryOpen] = useState(false);
   const [codexOpen, setCodexOpen] = useState(false);
+  // The entry a clicked name asked for; cleared when the codex closes, so the next plain
+  // opening starts from the top again.
+  const [codexFocus, setCodexFocus] = useState<string | undefined>(undefined);
+  const closeCodex = () => { setCodexOpen(false); setCodexFocus(undefined); };
   const [autoSave, setAutoSave] = useState<SaveSummary | null>(() => readSlotSummary(AUTO_SLOT));
   const [manualSaves, setManualSaves] = useState<(SaveSummary | null)[]>(() => listManualSlots());
   const [seenEndings, setSeenEndings] = useState<EndingId[]>(() => readSeenEndings());
@@ -193,7 +197,7 @@ export default function App() {
           <EndingGallery seen={seenEndings} onClose={() => setGalleryOpen(false)} />
         )}
         {codexOpen && (
-          <CodexPanel state={null} onClose={() => setCodexOpen(false)} />
+          <CodexPanel state={null} onClose={closeCodex} />
         )}
       </>
     );
@@ -304,7 +308,10 @@ export default function App() {
         {/* Right: the estate's readouts — a fixed rail at desktop, a full-width block
             under the reading when stacked. */}
         <div className="w-full lg:w-64 shrink-0">
-          <StatusPanel state={state} />
+          <StatusPanel
+            state={state}
+            onOpenCodex={(entryId) => { recordCodex(currentUnlocks(state)); setCodexFocus(entryId); setCodexOpen(true); }}
+          />
         </div>
 
         {/* The record: it lives in the left column at desktop, but that column is gone
@@ -331,7 +338,7 @@ export default function App() {
       )}
 
       {codexOpen && (
-        <CodexPanel state={state} onClose={() => setCodexOpen(false)} />
+        <CodexPanel state={state} focus={codexFocus} onClose={closeCodex} />
       )}
     </div>
   );

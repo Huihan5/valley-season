@@ -17,6 +17,7 @@ import dialogueGreetings from './dialogue/greetings.json';
 import endingsEndings from './endings/endings.json';
 import scenesActionResults from './scenes/action_results.json';
 import scenesAmbient from './scenes/ambient.json';
+import scenesBottomLines from './scenes/bottom_lines.json';
 import scenesLocations from './scenes/locations.json';
 import scenesMarket from './scenes/market.json';
 import scenesRumors from './scenes/rumors.json';
@@ -81,6 +82,7 @@ const bundle = {
   scenes: {
     actionResults: scenesActionResults,
     ambient: scenesAmbient,
+    bottomLines: scenesBottomLines,
     locations: scenesLocations,
     market: scenesMarket,
     rumors: scenesRumors,

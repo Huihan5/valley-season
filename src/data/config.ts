@@ -360,7 +360,18 @@ export const RANDOM_EVENT_WINDOWS: Record<string, RandomEventWindow> = {
 // 闲笔 stay rare on purpose: two or three a week, never a reward, never a lead.
 export const AMBIENT_CHANCE = 0.18;
 
-// ── 句子的出现条件 (text audit, 2026-10) ──────────────────────────────────────
+// ── 中栏底部短句 (DEVELOPMENT_PLAN 3.6) ───────────────────────────────────────
+// One quiet line under the choices on an ordinary day: company, not a clue. Each hour of
+// each day decides once, from the season's seed, whether it has one and which; it never
+// changes on a reload, a language switch or a replay. Events and endings show none.
+export const BOTTOM_LINE_CHANCE = 0.5;
+
+/** A line that fits only some places, hours, weather and days, keyed by its id in scenes/bottom_lines.json. */
+export interface BottomLineRule extends LineRule {
+  /** `state.currentScene` values it may be shown in. */
+  scenes: string[];
+}
+
 // Some lines in the random pools are only true at some hours, in some weather, or from a
 // certain day: a rain that starts halfway through the reaping, "到傍晚清点" in a morning's
 // work. The text stays as written and the draw only takes lines that fit the moment. The
@@ -398,6 +409,16 @@ export const AMBIENT_RULES: LineRules = {
     1: { phases: ['afternoon'] },          // 埃莱娜晒被子
     2: { phases: ['evening'] },            // 傍晚没有风的时候
   },
+};
+
+/** scenes/bottom_lines.json, by id. A line with no entry here is never shown. */
+export const BOTTOM_LINE_RULES: Record<string, BottomLineRule> = {
+  // 厨房窗上的水汽：厨房里，哪个时段都有。
+  kitchen_window: { scenes: ['kitchen'] },
+  // 风从坡上下来：林地里，白天，天气安静的时候；下雨时林子里先是雨声。
+  wind_slope: { scenes: ['forest'], phases: DAYTIME, weathers: ['sunny', 'cloudy', 'frost'] },
+  // 枫叶下得像下雪：庭院里，白天；落叶要到第二幕才多起来。
+  maple_snow: { scenes: ['default'], phases: DAYTIME, from: 11 },
 };
 
 /** scenes/action_results.json, by action. */

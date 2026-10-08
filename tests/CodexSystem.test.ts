@@ -1,9 +1,9 @@
 import { describe, it, expect } from 'vitest';
-import { GameState } from '../src/types/game';
+import { GameState, NpcId } from '../src/types/game';
 import { SaveStorage } from '../src/systems/SaveSystem';
 import { CODEX_ENTRIES } from '../src/data/codex';
 import {
-  currentUnlocks, getCodex, readCodex, recordCodex, clearCodex,
+  currentUnlocks, getCodex, readCodex, recordCodex, clearCodex, codexEntryOf, codexCategoryOf,
 } from '../src/systems/CodexSystem';
 import zh from '../src/data/zh';
 import en from '../src/data/en';
@@ -176,5 +176,42 @@ describe('the codex outlives the run', () => {
     expect(readCodex(storage).sort()).toEqual(['gregor', 'gregor:face']);
     clearCodex(storage);
     expect(readCodex(storage)).toEqual([]);
+  });
+});
+
+// ── a name elsewhere opens its page ──────────────────────────────────────────
+
+describe('a clicked name goes to that person’s page', () => {
+  const NPCS: NpcId[] = ['gregor', 'marta', 'elena', 'marguerite', 'henk', 'lorenz'];
+
+  it('every person in the relations list has a page of their own', () => {
+    for (const npc of NPCS) {
+      const id = codexEntryOf(npc);
+      expect(id, npc).toBe(npc);
+      expect(codexCategoryOf(id!), npc).toBe('people');
+    }
+  });
+
+  it('a lore entry that unlocks on meeting someone is not their page', () => {
+    expect(codexEntryOf('lorenz')).toBe('lorenz');           // not 'sacred_flame'
+    expect(codexCategoryOf('sacred_flame')).toBe('marigni');
+  });
+
+  it('an id the codex does not hold opens nothing', () => {
+    expect(codexCategoryOf('timothy')).toBeNull();
+    expect(codexCategoryOf('')).toBeNull();
+  });
+
+  it('opening the page gives away nothing beyond what the run already holds', () => {
+    // The panel reads the same view whether or not a name was clicked: the click only picks
+    // the shelf and the scroll, so the layers stay locked until their trust is reached.
+    const run = makeState({ relationships: { gregor: 1, marta: 0, elena: 0, marguerite: 0, henk: 0, lorenz: 0 } });
+    const before = getCodex(run, fakeStorage());
+    const entry = find(before, 'people', codexEntryOf('gregor')!)!;
+    expect(entry.unlocked).toBe(true);
+    expect(entry.layers.find(l => l.id === 'face')!.locked).toBe(false);
+    expect(entry.layers.find(l => l.id === 'inside')!.locked).toBe(true);
+    expect(entry.layers.find(l => l.id === 'archetype')!.locked).toBe(true);
+    expect(getCodex(run, fakeStorage())).toEqual(before);
   });
 });

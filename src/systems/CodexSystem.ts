@@ -124,6 +124,22 @@ export function unlockedKeys(state: GameState | null, storage = defaultStorage()
   return new Set([...persisted, ...live]);
 }
 
+/**
+ * The codex entry that profiles this person, or null when the codex has none. Clicking a
+ * name elsewhere in the game goes through this, so a person without an entry opens nothing
+ * rather than somebody else's page. Only people count: a lore entry that merely unlocks on
+ * meeting them (the Sacred Flame, on Lorenz) is not their profile.
+ */
+export function codexEntryOf(npc: NpcId): string | null {
+  const entry = CODEX_ENTRIES.find((e) => e.category === 'people' && e.unlock.met === npc);
+  return entry ? entry.id : null;
+}
+
+/** The shelf an entry stands on, so the panel can open on it. */
+export function codexCategoryOf(entryId: string): CodexCategory | null {
+  return CODEX_ENTRIES.find((e) => e.id === entryId)?.category ?? null;
+}
+
 // ── View model ───────────────────────────────────────────────────────────────
 
 export interface CodexLayerView {

@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 import { GameState } from '../../types/game';
 import { PHASE_LABELS, dayName, isHuntSeason } from '../../systems/TimeSystem';
 import { getFatigueNote, getFatigueStatus } from '../../systems/FatigueSystem';
+import { getBottomLine } from '../../systems/BottomLineSystem';
 import DATA from '../../data';
 import Passage, { Speaker } from './Passage';
 
@@ -26,6 +27,7 @@ export default function ScenePanel({ state, onOpenSaves, onOpenInventory, onOpen
   // Day 18–21 the estate turns cooler and shorter-handed; the panel says so and
   // shifts its accent from the warm gold to frost while the hunt is on (D13).
   const huntSeason = isHuntSeason(state);
+  const bottomLine = getBottomLine(state);
 
   return (
     <div className={`flex flex-col lg:h-full bg-bg-card border rounded-sm overflow-hidden transition-colors ${huntSeason ? 'border-frost/40' : 'border-game-border'}`}>
@@ -72,7 +74,7 @@ export default function ScenePanel({ state, onOpenSaves, onOpenInventory, onOpen
       {/* What just happened, then where you now are. The prose keeps a reading
           measure of its own rather than running the full width of the panel
           (PlaytestFeedback 2.a). */}
-      <div className="flex-1 lg:overflow-y-auto px-5 py-4 space-y-4">
+      <div className="flex-1 lg:overflow-y-auto px-5 py-4 flex flex-col gap-4">
         {/* The body telling on the player, in the scene itself (D7). Amber while
             merely tired; rust once spent, where 嘴唇发紫 landed. */}
         {fatigueNote && (
@@ -107,6 +109,14 @@ export default function ScenePanel({ state, onOpenSaves, onOpenInventory, onOpen
           <div className="pt-2 border-t border-game-border/60 max-w-[46rem]">
             {children}
           </div>
+        )}
+
+        {/* A line of the place, at the foot of the column when there is room and at the
+            end of the reading when there is not. Company, never a lead (plan 3.6). */}
+        {bottomLine && (
+          <p className="mt-auto pt-2 text-game-dim font-serif text-xs italic leading-relaxed max-w-[46rem]">
+            {bottomLine}
+          </p>
         )}
       </div>
     </div>

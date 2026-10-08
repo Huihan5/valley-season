@@ -11,7 +11,9 @@
 > ---
 > ## 🔖 恢复点（compact 之后从这里继续）
 >
-> **最新（2026-10-08 之后；全库 742 测试绿、tsc 干净；本次 compact 前已全部 commit 并 push）**
+> **最新（2026-10-08 之后；全库 760 测试绿、tsc 干净；已提交并 push）**
+>
+> - ✅ **⑦ 前两条：点人物进见闻、中栏底部短句**（CHANGELOG `续七`）：右栏关系里的人名是按钮，点开见闻落在那个人的条目上（`CodexSystem.codexEntryOf`、`CodexPanel` 的 `focus`），不多开放任何层次。选项下面日常时段偶尔一句环境短句（`src/systems/BottomLineSystem.ts`，按赛季种子、日期、时段定一次，不碰引擎随机数；条件 `config.ts` 的 `BOTTOM_LINE_RULES`，文字 `scenes/bottom_lines.json`）；现在只有三句，都是闲笔原句，要不要再加两句（烟囱的烟、田里霜化）等作者说。**还没提交时请先 `git status` 看。**
 >
 > - ✅ **差异提示**（作者在三个示例里挑了"读过的淡一档"）：取决于世界状态的句子（地点底文、格雷格在马厩、人物招呼按信任档位、林地现状、集市到达/排队/买卖/归途）与它上一回出现相比没变，就淡一档（`game.known` = `#9c917a`）；随机句永远不淡。逻辑在 `src/systems/SeenSystem.ts` 与 `SceneSystem` 的 `*Parts` 函数，记录在 `GameState.seen`；场景按时段定"上一回"，行动结果按动作（`step`）定。文字与随机数取用顺序都没变。规则在 GDD_NEXT 13.1，实施在 CHANGELOG `2026-10-08，续` 与 `续三`，没接入的两处在 `DEVELOPMENT_PLAN` 3.1。
 > - ✅ **行囊**（CHANGELOG `续二`）：标题栏入口"卷宗"改为"行囊"，里面三页：卷宗（线索与地图）、文书（5）、物品（10）。不跨周目，显示时由现成的标记读出（`src/systems/InventorySystem.ts`、`src/components/common/Inventory.tsx`、`src/data/{zh,en}/inventory.json`）；新增标记 `henkCoin`、`henkPurse`。名字 行囊 / Satchel、物品 / Belongings 是我取的；"册页里的干枯小枝"并不在玩家手里，已在 CHANGELOG 里标给作者。
@@ -25,7 +27,7 @@
 > - ✅ **结局时刻的按钮**：4A/4B 判定后 `GameEngine.advancePhase` 先进入 `ending_handover`（只有"把整理出的判断交给蒂埃里"一个选项，记入历史），点击才写结局；4A/4B 开头改成玩家在场（4A 跟他走三天、下到墙根；4B 一起上山、一夜、一起抬回来）。中文是我写的，作者说这么小的中文我自己写就好，原句尽量保留。
 > - ✅ **文本工作台镜像已重新导出**（2026-10-08，1155 条）：镜像里没有未导入的作者改动，所以现在 `text-review/` 与 `src/data` 一致，含 4A/4B 新开头、Day 30 新句和 `ending_handover`。**以后改了 `src/data` 里的文字，要在作者动镜像之前重新 `npm run text:export`，否则作者导入旧镜像会把新文字改回去。**
 >
-> **下一步（以 `docs/DEVELOPMENT_PLAN.md` §2 为准）：** ~~③ 差异提示~~、~~④ 收集物（行囊）~~、~~⑤ 头像/说话人~~、~~⑥ 文本审查第一轮~~（已做）（⑥ 还剩一项：Day 30／21／27 固定日写死的天气）；⑦ 点人物进见闻 / 底部短句 / 结局后"可能错过什么"；⑧ 待做任务（右栏、场景图、itch 截图）。
+> **下一步（以 `docs/DEVELOPMENT_PLAN.md` §2 为准）：** ~~③ 差异提示~~、~~④ 收集物（行囊）~~、~~⑤ 头像/说话人~~、~~⑥ 文本审查第一轮~~（已做）（⑥ 还剩一项：Day 30／21／27 固定日写死的天气）；⑦ ~~点人物进见闻~~、~~底部短句~~（已做），**结局后"可能错过什么"**（要作者先定剧透深度、展示范围、要不要主动展开）；⑧ 待做任务（右栏、场景图、itch 截图）。
 >
 > **要注意的几点：**
 > - `docs/GDD_NEXT.md` 是设计权威（2026-10-07 接替 `GDD.md`，`CLAUDE.md`、`config.ts` 已指向它）；语言切换靠存档里的种子与操作历史重放整季（`src/systems/GameEngine.ts` 的 `replaySeason`），引擎内不能有 `Math.random`。

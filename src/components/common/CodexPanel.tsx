@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState, RefObject } from 'react';
 import { GameState } from '../../types/game';
-import { getCodex, CodexEntryView } from '../../systems/CodexSystem';
+import { getCodex, codexCategoryOf, CodexEntryView } from '../../systems/CodexSystem';
 import { CodexCategory } from '../../data/codex';
 import DATA from '../../data';
 import { fill } from '../../utils/text';
@@ -11,6 +11,9 @@ interface Props {
   /** The current run, or null between seasons (title screen) — then only the
    *  cross-run record shows. */
   state: GameState | null;
+  /** An entry to open on (a name was clicked elsewhere): its shelf is shown, the page
+   *  scrolls to it and its rule is lit. Opens nothing that was not already unlocked. */
+  focus?: string;
   onClose: () => void;
 }
 
@@ -21,10 +24,19 @@ interface Props {
  * opposite of the investigation 卷宗, which hides what you do not have. A profile's
  * deeper layers stay locked in place until their trust is reached (scheme 乙 + 精修).
  */
-export default function CodexPanel({ state, onClose }: Props) {
+export default function CodexPanel({ state, focus, onClose }: Props) {
   const cats = getCodex(state);
-  const [active, setActive] = useState<CodexCategory>(cats[0]?.id ?? 'people');
+  const [active, setActive] = useState<CodexCategory>(
+    (focus && codexCategoryOf(focus)) || cats[0]?.id || 'people',
+  );
   const cat = cats.find((c) => c.id === active) ?? cats[0];
+  const focused = useRef<HTMLDivElement>(null);
+
+  // Bring the clicked entry into view once, on opening. Optional-called because a test
+  // renderer has no layout to scroll.
+  useEffect(() => {
+    focused.current?.scrollIntoView?.({ block: 'start' });
+  }, []);
 
   return (
     <div
@@ -58,7 +70,14 @@ export default function CodexPanel({ state, onClose }: Props) {
             <p className="text-game-dim font-serif text-sm py-8 text-center">{T.empty}</p>
           ) : (
             <div className="space-y-5">
-              {cat.entries.map((e) => <Entry key={e.id} entry={e} />)}
+              {cat.entries.map((e) => (
+                <Entry
+                  key={e.id}
+                  entry={e}
+                  focused={e.id === focus}
+                  anchor={e.id === focus ? focused : undefined}
+                />
+              ))}
             </div>
           )}
         </div>
@@ -68,12 +87,14 @@ export default function CodexPanel({ state, onClose }: Props) {
 }
 
 /** People carry layers; lore entries do not — that is what tells a locked slot's tag apart. */
-function Entry({ entry }: { entry: CodexEntryView }) {
+function Entry({
+  entry, focused, anchor,
+}: { entry: CodexEntryView; focused: boolean; anchor?: RefObject<HTMLDivElement> }) {
   const isPerson = entry.layers.length > 0;
 
   if (!entry.unlocked) {
     return (
-      <div className="border-l-2 border-game-border pl-4 py-1 opacity-60">
+      <div ref={anchor} className="border-l-2 border-game-border pl-4 py-1 opacity-60">
         <span className="text-game-dim font-serif text-sm">{entry.title}</span>
         <span className="ml-2 text-game-dim/60 text-[11px] tracking-wider align-baseline">
           {isPerson ? T.lockedPerson : T.lockedLore}
@@ -83,7 +104,7 @@ function Entry({ entry }: { entry: CodexEntryView }) {
   }
 
   return (
-    <div className="border-l-2 border-gold-dim pl-4">
+    <div ref={anchor} className={`border-l-2 pl-4 ${focused ? 'border-gold' : 'border-gold-dim'}`}>
       <div className="flex items-baseline gap-2 mb-1">
         <span className="text-cream font-serif text-base">{entry.title}</span>
         {entry.subtitle && <span className="text-game-dim text-xs">{entry.subtitle}</span>}

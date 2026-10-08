@@ -114,6 +114,7 @@ function fileTitle(rel, zhJson) {
     'dialogue/fragments': 'NPC 对话片段 · dialogue fragments',
     'scenes/locations': '地点描写 · location descriptions',
     'scenes/ambient': '环境氛围文字 · ambient lines',
+    'scenes/bottom_lines': '中栏底部短句 · bottom-of-column lines',
     'scenes/market': '集市文字 · market',
     'scenes/rumors': '传闻 · rumors',
     'scenes/weather_lines': '天气描写 · weather lines',
