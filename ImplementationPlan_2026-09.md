@@ -13,6 +13,7 @@
 >
 > **最新（2026-10-08 之后；全库 796 测试绿、tsc 干净；续九已提交并 push）**
 >
+> - ✅ **盲测包已刷新**（2026-10-08，从 commit 9944622）：`../valley-season-blind-playtest-2026-10-08/`（河谷季.html、code.zip、itch.zip、design-reference、_先读我.txt；`text-review.zip` 是旧的、没动）。做法见记忆 `project-blind-playtest-package`。
 > - ✅ **结局后的"这一季没有走到的地方"**（CHANGELOG `续九`）：结局下面一行折起来的小字，点开至多三句方向（事、人、地、岔路四类取三类，种子定），人那几句可点进见闻；27 句文字是我起草的（续十补了第 3 天账目、第 12 天埃莱娜、第 20 天篝火夜七句），请作者读、改（文本工作台 `endings/missed`）。新标记 `visitedChapelNight`。规则在 GDD_NEXT 10.5，`src/systems/MissedSystem.ts`。
 > - ✅ **固定日的天气写定**（CHANGELOG `续八`）：Day 21 霜、27 晴、28–30 霜（像 Day 22）；Day 28、29 是我为 Day 30 的"这几天每天都有霜"补的，作者没点名。底部短句加到五句（加了烟囱、霜化）。⑥ 的审查因此全部清完。
 > - ✅ **⑦ 前两条：点人物进见闻、中栏底部短句**（CHANGELOG `续七`）：右栏关系里的人名是按钮，点开见闻落在那个人的条目上（`CodexSystem.codexEntryOf`、`CodexPanel` 的 `focus`），不多开放任何层次。选项下面日常时段偶尔一句环境短句（`src/systems/BottomLineSystem.ts`，按赛季种子、日期、时段定一次，不碰引擎随机数；条件 `config.ts` 的 `BOTTOM_LINE_RULES`，文字 `scenes/bottom_lines.json`）；现在五句，都是闲笔原句。**还没提交时请先 `git status` 看。**
