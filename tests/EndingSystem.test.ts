@@ -342,11 +342,20 @@ describe('结局三 · the difference is whether the player has admitted it', ()
   });
 });
 
-describe('结局 4A · what the player sees is all of it second-hand', () => {
-  it('gives the twelve kilometres and keeps the player away from the hollow', () => {
+describe('结局 4A · the player walks the three hollows with 蒂埃里', () => {
+  it('gives the twelve kilometres and takes the player all the way to the wall', () => {
     const found = text('ending4a', makeState({ flags: CLUES_4A }));
     expect(found).toContain('直线不到十二公里');
-    expect(found).toContain('您不用过去');
+    expect(found).toContain('你跟着他走了三天');
+    expect(found).toContain('你跟在他后面');
+    expect(found).not.toContain('您不用过去');
+    expect(found).not.toContain('他描述了他看到的东西');
+  });
+
+  it('opens on the handing over and does not date it for the player', () => {
+    const found = text('ending4a', makeState({ flags: CLUES_4A }));
+    expect(found.startsWith('你把你拼起来的东西交给了蒂埃里。')).toBe(true);
+    expect(found).not.toContain('十月二十几日');
   });
 
   it('has 埃莱娜 stay away unless she has decided about the player', () => {
@@ -367,7 +376,18 @@ describe('结局 4A · what the player sees is all of it second-hand', () => {
   });
 });
 
-describe('结局 4B · he is alive, and he asks the question himself', () => {
+describe('结局 4B · he is alive, and the player helps carry him down', () => {
+  it('puts the player on the ridge with 蒂埃里 and in the hall when he is carried in', () => {
+    const found = text('ending4b', makeState({ flags: CLUES_4B }));
+    expect(found).toContain('你跟着去了');
+    expect(found).toContain('你踩着他踩过的地方');
+    expect(found).toContain('傍晚到了庄园');
+    // He is found alive before he is carried anywhere, and the hall scene follows.
+    expect(found.indexOf('他还活着')).toBeLessThan(found.indexOf('傍晚到了庄园'));
+    expect(found.indexOf('傍晚到了庄园')).toBeLessThan(found.indexOf('他没有认出这是哪儿'));
+    expect(found).not.toContain('他们把人抬回来了');
+  });
+
   it('carries the question and splits on whether the player can answer it', () => {
     const base = makeState({ flags: CLUES_4B });
     expect(text('ending4b', base)).toContain('您为什么要留下来？');

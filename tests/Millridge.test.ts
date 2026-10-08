@@ -181,10 +181,14 @@ describe('the night ride changes how the season ends', () => {
     let stay = atTheLedger({ resources: quiet, flags: { ...clues } });
     stay = gameReducer(stay, { type: 'MAKE_CHOICE', choiceId: 'day30_close_book' });
     if (stay.pendingAdvance) stay = gameReducer(stay, { type: 'COMMIT_ADVANCE' });
+    // The truth waits for the player to take it to 蒂埃里 before the ending is written.
+    expect(stay.activeEvent?.id).toBe('ending_handover');
+    stay = gameReducer(stay, { type: 'MAKE_CHOICE', choiceId: 'hand_over_to_thierry' });
     expect(stay.endingId).toBe('ending4a');
 
     const rode = ride(4, 'millridge_nothing', { resources: quiet, flags: { ...clues } });
     expect(rode.endingId).not.toBe('ending4a');
+    expect(rode.activeEvent).toBeNull();
   });
 
   it('gives a steward with no standing at Millridge a coin for the horse and nothing else', () => {

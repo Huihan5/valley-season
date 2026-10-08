@@ -1,0 +1,21 @@
+{
+  "id": "ending_handover",
+  "day": 0,
+  "forced": true,
+  "advancesPhase": true,
+  "title": "交给蒂埃里",
+  "sceneText": "那一夜你没有睡多久。\n\n账本旁边摊着这一个月里别人零零碎碎交给你的东西。你把它们按先后排了一遍，又按人排了一遍。\n\n天亮之后你去找蒂埃里。",
+  "variants": {
+    "located": "他说过，要去的话跟他说，他带路。",
+    "unlocated": "没有一样东西指着地方。"
+  },
+  "choices": [
+    {
+      "id": "hand_over_to_thierry",
+      "text": "把整理出的判断交给蒂埃里",
+      "effects": {
+        "logEntry": "你把整理出的判断交给了蒂埃里。"
+      }
+    }
+  ]
+}

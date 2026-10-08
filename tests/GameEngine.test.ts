@@ -3,6 +3,8 @@ import { GameState, SeasonAction, FlagMap } from '../src/types/game';
 import { createInitialState, gameReducer, replaySeason } from '../src/systems/GameEngine';
 import { getFreeChoices } from '../src/systems/EventSystem';
 import { seededRng } from '../src/utils/rng';
+import { isPositionLineComplete } from '../src/systems/ClueSystem';
+import { PLANS, nextAction as nextSimulatedAction } from './helpers/simulation';
 
 // ── A player who clicks at random ───────────────────────────────────────────
 
@@ -285,5 +287,79 @@ describe('walking the woods, then cutting', () => {
     s = gameReducer(s, { type: 'MAKE_CHOICE', choiceId: 'fell_timber' });
     // 8 + 3 = 11: the second band, where the stumps are still new
     expect(s.lastResult).toContain('树桩还新');
+  });
+});
+
+// ── The truth endings wait for the player ───────────────────────────────────
+
+describe('handing the truth to 蒂埃里', () => {
+  /** Plays a steward's season up to the moment the engine asks for the handover, or to its end. */
+  function toTheMorning(planName: string, seed: number): GameState {
+    const plan = PLANS.find(p => p.name === planName)!;
+    const rng = seededRng('sim', plan.name, seed);
+    let s = createInitialState(seed);
+    for (let n = 0; !s.demoComplete && s.activeEvent?.id !== 'ending_handover' && n < 4000; n++) {
+      s = gameReducer(s, nextSimulatedAction(plan, s, rng));
+    }
+    return s;
+  }
+
+  /** The first seeds of the truth-seeking steward that end in 4A, and in 4B. */
+  const found: Record<'4a' | '4b', GameState | null> = { '4a': null, '4b': null };
+  for (let i = 1; i <= 60 && (!found['4a'] || !found['4b']); i++) {
+    const s = toTheMorning('detective', i * 7919);
+    if (s.activeEvent?.id !== 'ending_handover') continue;
+    const key = isPositionLineComplete(s) ? '4b' : '4a';
+    found[key] ??= s;
+  }
+
+  it('stops before the ending is written, on a morning with one thing to do', () => {
+    for (const key of ['4a', '4b'] as const) {
+      const s = found[key]!;
+      expect(s, key).not.toBeNull();
+      expect(s.demoComplete).toBe(false);
+      expect(s.endingId).toBeNull();
+      expect(s.activeEvent?.id).toBe('ending_handover');
+      expect(s.currentChoices.map(c => c.id)).toEqual(['hand_over_to_thierry']);
+      expect(s.currentSceneText).toContain('天亮之后你去找蒂埃里');
+    }
+  });
+
+  it('says only what is true about where he can be found', () => {
+    expect(found['4a']!.currentSceneText).toContain('没有一样东西指着地方');
+    expect(found['4a']!.currentSceneText).not.toContain('他带路');
+    expect(found['4b']!.currentSceneText).toContain('他带路');
+    expect(found['4b']!.currentSceneText).not.toContain('没有一样东西指着地方');
+  });
+
+  it('writes the ending once the player has done it, and records the act', () => {
+    for (const key of ['4a', '4b'] as const) {
+      const before = found[key]!;
+      const s = gameReducer(before, { type: 'MAKE_CHOICE', choiceId: 'hand_over_to_thierry' });
+      expect(s.demoComplete).toBe(true);
+      expect(s.endingId).toBe(key === '4a' ? 'ending4a' : 'ending4b');
+      expect(s.activeEvent).toBeNull();
+      expect(s.history![s.history!.length - 1]).toEqual({ type: 'MAKE_CHOICE', choiceId: 'hand_over_to_thierry' });
+      expect(s.log[s.log.length - 1]?.text).toBe('你把整理出的判断交给了蒂埃里。');
+    }
+  });
+
+  it('plays the same again from the seed, in the middle of it and at the end', () => {
+    for (const key of ['4a', '4b'] as const) {
+      const before = found[key]!;
+      expect(replaySeason(before)).toEqual(before);
+      const after = gameReducer(before, { type: 'MAKE_CHOICE', choiceId: 'hand_over_to_thierry' });
+      expect(replaySeason(after)).toEqual(after);
+      expect(replaySeason(JSON.parse(JSON.stringify(after)) as GameState)).toEqual(after);
+    }
+  });
+
+  it('does not ask for it on any other ending', () => {
+    for (const name of ['idle', 'quota', 'balanced']) {
+      const s = toTheMorning(name, 7919);
+      expect(s.demoComplete, name).toBe(true);
+      expect(s.history!.some(a => a.type === 'MAKE_CHOICE' && a.choiceId === 'hand_over_to_thierry'), name)
+        .toBe(false);
+    }
   });
 });

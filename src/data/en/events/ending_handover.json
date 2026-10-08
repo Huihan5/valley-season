@@ -1,0 +1,21 @@
+{
+  "id": "ending_handover",
+  "day": 0,
+  "forced": true,
+  "advancesPhase": true,
+  "title": "To Thierry",
+  "sceneText": "You did not sleep long that night.\n\nBeside the ledger lay everything people had handed you in scraps over the month. You put it in order by when, and then again by who.\n\nAt first light you went to find Thierry.",
+  "variants": {
+    "located": "He had said that if you wanted to go, you should tell him, and he would lead the way.",
+    "unlocated": "Nothing on the table pointed to a place."
+  },
+  "choices": [
+    {
+      "id": "hand_over_to_thierry",
+      "text": "Give Thierry what you have worked out",
+      "effects": {
+        "logEntry": "You gave Thierry what you had worked out."
+      }
+    }
+  ]
+}

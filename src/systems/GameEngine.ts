@@ -7,7 +7,7 @@ import {
   hasMorningFixedEvent,
 } from './EventSystem';
 import { rollRandomEvent, getPendingRandomEvent, markEventDay } from './RandomEventSystem';
-import { determineEnding, composeEnding } from './EndingSystem';
+import { determineEnding, composeEnding, opensWithHandover } from './EndingSystem';
 import {
   adjustActionTrust, adjustNobleTrust, adjustLordImpression, adjustTenantTrust, recordConversation,
 } from './RelationSystem';
@@ -356,6 +356,20 @@ function advancePhase(state: GameState, rng: Rng): GameState {
 
   if (isDemoComplete(newDay)) {
     const endingId = determineEnding(state);
+
+    // The truth endings open with something the player does. The ending is already
+    // decided; it is composed once the single choice of that morning has been made, and
+    // that choice goes into the history like any other, so a replay plays it again.
+    if (opensWithHandover(endingId) && !state.flags.event_done_ending_handover) {
+      const handover = getEventById('ending_handover', state);
+      if (handover) {
+        return enterEvent(
+          { ...state, pendingAdvance: false, lastResult: null, lastSpeaker: null },
+          handover,
+        );
+      }
+    }
+
     return {
       ...state,
       demoComplete: true,

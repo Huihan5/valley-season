@@ -102,6 +102,15 @@ export function getEndingData(id: EndingId): EndingData {
   return ENDINGS[id];
 }
 
+/**
+ * The truth endings wait for the player: before either is composed, the player takes
+ * what they have worked out to 蒂埃里 (the `ending_handover` event), and the ending text
+ * begins with the two of them going together.
+ */
+export function opensWithHandover(id: EndingId): boolean {
+  return id === 'ending4a' || id === 'ending4b';
+}
+
 /** 路德维希's three days. Only the endings where the player is still here get it. */
 const EPILOGUE_ENDINGS: EndingId[] = ['ending3', 'ending4a', 'ending4b'];
 

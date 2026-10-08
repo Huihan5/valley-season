@@ -19,7 +19,7 @@ import {
 } from './NobleSystem';
 import { getTrust } from './RelationSystem';
 import { countFlagsWithPrefix, countClues, CLUE_PREFIXES } from './FlagRegistry';
-import { getFragmentChoices, getLorenzChapelExtra } from './ClueSystem';
+import { getFragmentChoices, getLorenzChapelExtra, isPositionLineComplete } from './ClueSystem';
 import { determineEnding, meetsEnding2, getRetainFloor } from './EndingSystem';
 import {
   getMarketArrival, getMarketTradeResult, getMarketReturn, getMarketNoTrade,
@@ -67,6 +67,7 @@ const FIXED_EVENTS = [
   E.day22,
   E.day23,
   E.day30Morning, E.day30Evening, E.day30Millridge,
+  E.endingHandover,
 ] as unknown as EventData[];
 
 // ── Timing ─────────────────────────────────────────────────────────────────
@@ -462,6 +463,21 @@ function processMillridge(event: EventData, state: GameState): EventData {
   return { ...event, choices };
 }
 
+/**
+ * The morning after the last night, before either truth ending. The ending is decided
+ * (GameEngine.advancePhase) and then waits for one act that is the player's: taking what
+ * they have worked out to 蒂埃里. Whether he already said he would lead the way depends on
+ * whether the Day 27 cross-fix happened, which is also what separates 4A from 4B — so the
+ * morning says it, and says nothing about which ending is coming.
+ */
+function processHandover(event: EventData, state: GameState): EventData {
+  const v = event.variants ?? {};
+  const sceneText = [event.sceneText, isPositionLineComplete(state) ? v.located : v.unlocated]
+    .filter(Boolean)
+    .join('\n\n');
+  return { ...event, sceneText };
+}
+
 function millridgeGift(choiceId: string, shortfall: number): ChoiceEffects {
   const flags = { tookHenkDeal: true };
   if (choiceId === 'millridge_cash') return { guldmark: MILLRIDGE_CASH, flags };
@@ -549,6 +565,7 @@ function process(raw: EventData, state: GameState): EventData {
   if (event.id === 'day30_morning') return processDay30Morning(event, state);
   if (event.id === 'day30_evening') return processDay30(event, state);
   if (event.id === 'day30_millridge') return processMillridge(event, state);
+  if (event.id === 'ending_handover') return processHandover(event, state);
   return event;
 }
 

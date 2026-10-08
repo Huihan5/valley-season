@@ -46,6 +46,7 @@ import eventsDay27StreetCorner from './events/day27_street_corner.json';
 import eventsDay3 from './events/day3.json';
 import eventsDay30Evening from './events/day30_evening.json';
 import eventsDay30Millridge from './events/day30_millridge.json';
+import eventsEndingHandover from './events/ending_handover.json';
 import eventsDay30Morning from './events/day30_morning.json';
 import eventsDay4 from './events/day4.json';
 import eventsDay6Timothy from './events/day6_timothy.json';
@@ -118,6 +119,7 @@ const bundle = {
     day7DinnerHartmann: eventsDay7DinnerHartmann,
     day7DinnerReturn: eventsDay7DinnerReturn,
     day8Echo: eventsDay8Echo,
+    endingHandover: eventsEndingHandover,
     officeFolio: eventsOfficeFolio,
     timberRestraint: eventsTimberRestraint,
   },
