@@ -11,7 +11,7 @@
 > ---
 > ## 🔖 恢复点（compact 之后从这里继续）
 >
-> **最新（2026-10-08 之后；全库 731 测试绿、tsc 干净；差异提示、行囊已提交（`1c38b03`，未 push），头像与说话人还没提交）**
+> **最新（2026-10-08 之后；全库 731 测试绿、tsc 干净；差异提示、行囊、头像与说话人都已提交并 push（`a8e695c`））**
 >
 > - ✅ **差异提示**（作者在三个示例里挑了"读过的淡一档"）：取决于世界状态的句子（地点底文、格雷格在马厩、人物招呼按信任档位、林地现状、集市到达/排队/买卖/归途）与它上一回出现相比没变，就淡一档（`game.known` = `#9c917a`）；随机句永远不淡。逻辑在 `src/systems/SeenSystem.ts` 与 `SceneSystem` 的 `*Parts` 函数，记录在 `GameState.seen`；场景按时段定"上一回"，行动结果按动作（`step`）定。文字与随机数取用顺序都没变。规则在 GDD_NEXT 13.1，实施在 CHANGELOG `2026-10-08，续` 与 `续三`，没接入的两处在 `DEVELOPMENT_PLAN` 3.1。
 > - ✅ **行囊**（CHANGELOG `续二`）：标题栏入口"卷宗"改为"行囊"，里面三页：卷宗（线索与地图）、文书（5）、物品（10）。不跨周目，显示时由现成的标记读出（`src/systems/InventorySystem.ts`、`src/components/common/Inventory.tsx`、`src/data/{zh,en}/inventory.json`）；新增标记 `henkCoin`、`henkPurse`。名字 行囊 / Satchel、物品 / Belongings 是我取的；"册页里的干枯小枝"并不在玩家手里，已在 CHANGELOG 里标给作者。
