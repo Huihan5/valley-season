@@ -56,7 +56,7 @@ describe('the day the wind turns', () => {
   });
 
   it('leaves every other day to the dice', () => {
-    const rolls = new Set(Array.from({ length: 40 }, (_, i) => generateWeather(21, i * 3)));
+    const rolls = new Set(Array.from({ length: 40 }, (_, i) => generateWeather(23, i * 3)));
     expect(rolls.size).toBeGreaterThan(1);
   });
 

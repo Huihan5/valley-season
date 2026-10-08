@@ -246,7 +246,12 @@ export const FATIGUE_EXHAUSTED_THRESHOLD = 5;
 
 // Days whose weather is written rather than rolled.
 export const FORCED_WEATHER: Record<number, WeatherType> = {
+  21: 'frost', // the ride home from the hunt: 回程的路上有霜
   22: 'frost', // 维特 arrives on the day the wind turns (drafts 4.11)
+  27: 'sunny', // the last market: the low sun and the strip of light on the wall at the street corner
+  28: 'frost', // the last three mornings: 这几天每天都有霜 (Day 30), and the frost on the quilts that evening
+  29: 'frost',
+  30: 'frost',
 };
 
 // Weather probability pools by day range (day 1-10 only for demo)
@@ -419,6 +424,10 @@ export const BOTTOM_LINE_RULES: Record<string, BottomLineRule> = {
   wind_slope: { scenes: ['forest'], phases: DAYTIME, weathers: ['sunny', 'cloudy', 'frost'] },
   // 枫叶下得像下雪：庭院里，白天；落叶要到第二幕才多起来。
   maple_snow: { scenes: ['default'], phases: DAYTIME, from: 11 },
+  // 傍晚没有风，烟直着上去：庭院里，晚间，天气安静（雨天、雾天不说）。
+  chimney_smoke: { scenes: ['default'], phases: ['evening'], weathers: ['sunny', 'cloudy', 'frost'] },
+  // 早上霜化，田里冒白气：农田里，上午，霜从第 11 天起才有；下雨的早晨田里不冒。
+  frost_steam: { scenes: ['fields'], phases: ['morning'], weathers: ['sunny', 'cloudy', 'frost'], from: 11 },
 };
 
 /** scenes/action_results.json, by action. */

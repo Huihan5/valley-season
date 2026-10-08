@@ -15,6 +15,8 @@ const MEANT: Record<string, string> = {
   kitchen_window: '厨房窗玻璃上的水汽',
   wind_slope: '风从坡上下来',
   maple_snow: '枫叶下得像下雪',
+  chimney_smoke: '烟囱的烟是直着往上走的',
+  frost_steam: '整片田在冒白气',
 };
 
 function at(over: Partial<GameState>): GameState {
@@ -91,6 +93,21 @@ describe('where a line may be said', () => {
     for (const day of DAYS) for (const phase of PHASES) {
       const seen = idsSeen('default', { day, phase, weather: 'cloudy' }, 40).has('maple_snow');
       expect(seen, `Day ${day} ${phase}`).toBe(day >= 11 && phase !== 'evening');
+    }
+  });
+  it('the chimney smoke at dusk, in the courtyard, in quiet weather', () => {
+    for (const phase of PHASES) for (const weather of WEATHERS) {
+      const seen = idsSeen('default', { phase, weather, day: 8 }).has('chimney_smoke');
+      expect(seen, `${phase}/${weather}`).toBe(phase === 'evening' && weather !== 'rainy' && weather !== 'fog');
+    }
+    expect(idsSeen('fields', { phase: 'evening', weather: 'sunny', day: 8 }).has('chimney_smoke')).toBe(false);
+  });
+
+  it('the steam off the fields on a morning after frost has begun', () => {
+    for (const day of DAYS) for (const phase of PHASES) for (const weather of WEATHERS) {
+      const seen = idsSeen('fields', { day, phase, weather }, 20).has('frost_steam');
+      const fits = day >= 11 && phase === 'morning' && weather !== 'rainy' && weather !== 'fog';
+      expect(seen, `Day ${day} ${phase}/${weather}`).toBe(fits);
     }
   });
 });
