@@ -1,0 +1,70 @@
+{
+  "papers": {
+    "guarantee": {
+      "name": "Guarantee of Temporary Residence and Labour",
+      "line": "No. VS-18-0947. Thirty days, and you signed on the line for the person guaranteed. If it lapses unrenewed, you leave within seven days."
+    },
+    "ticket": {
+      "name": "Railway ticket",
+      "line": "You had it gripped in your hand when you came out of the chambers."
+    },
+    "hunt": {
+      "name": "The hunt invitation from Millridge",
+      "line": "The wax carries the Duke’s arms; the hand inside is Baron Henk’s. A small line at the foot: Her Grace the Duke will be present at the opening this year."
+    },
+    "letter": {
+      "name": "The chancery’s letter",
+      "line": "Beneath the progress summary, an addendum: the guarantee expires on the thirtieth of October, and a renewal must be submitted not later than seven days before."
+    },
+    "broker": {
+      "name": "The broker’s note",
+      "line": "No name on it. Only: “Willing to trade in kind, prices as the market goes, will call at the house.”"
+    }
+  },
+  "things": {
+    "ledger": {
+      "name": "The sheet you copied",
+      "line": "Hartmann’s last two months of sundry expenditure, copied by date. Three to five guldmark each, in a careful hand, nothing crossed out."
+    },
+    "brush": {
+      "name": "The second brush",
+      "line": "A shorter handle, used longer. “This one sits better,” Gregor said. The next day it hung on a hook by the stable door, on its own."
+    },
+    "fruit": {
+      "name": "A small bag of dried fruit",
+      "line": "A tenant’s wife made it. He put the bag in your hands and went, as though afraid you would hand it back. You had not seen the fruit before. Very sweet."
+    },
+    "pencil": {
+      "name": "A freshly sharpened pencil",
+      "line": "On the corner of the desk, where there had been none. That day Elena stood a while without going, and said thank you."
+    },
+    "sprig": {
+      "name": "The sprig in the folio",
+      "line": "Pressed flat, the colour gone to pale brown.",
+      "variants": {
+        "asked": "Pressed flat, the colour gone to pale brown. You took it to Elena; she said she had not touched what was inside.",
+        "replaced": "Pressed flat, the colour gone to pale brown. You put it back between the same two leaves."
+      }
+    },
+    "bark": {
+      "name": "The drawing on birch bark",
+      "line": "The stumps, the spacing, the line of the skid road, in charcoal. In the blank part Thierry added two strokes: a line for the stream, a cross for where it ran before it moved. Pressed inside an old folio in the office."
+    },
+    "bottle": {
+      "name": "Thierry’s bottle",
+      "line": "He handed it over at the street corner, half full and still warm. “Keep the bottle.”"
+    },
+    "coin": {
+      "name": "The guldmark from Henk",
+      "line": "“Get something for the horse on the road.” He did not sit down again."
+    },
+    "purse": {
+      "name": "The cloth bag from Millridge",
+      "line": "He counted it through in front of you and pushed it across. “Call it a loan from me. Repay it whenever.” You put it in an inside pocket; it was heavier than you expected."
+    },
+    "tin": {
+      "name": "The last steward’s tin",
+      "line": "Under a loose board in the office. A few coins, and half a sheet in a careful hand. Mostly figures; one line is not: an empty account, and a valley that has stopped speaking well of you, is a thing no letter of guarantee will hold against."
+    }
+  }
+}

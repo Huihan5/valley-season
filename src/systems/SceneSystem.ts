@@ -1,4 +1,4 @@
-import { GameState, DayPhase, WeatherType, NpcId } from '../types/game';
+import { GameState, DayPhase, WeatherType, NpcId, KeyedPart } from '../types/game';
 import { getTrust, getTrustTier } from './RelationSystem';
 import { countFlagsWithPrefix, CLUE_PREFIXES } from './FlagRegistry';
 import {
@@ -58,6 +58,24 @@ function pick<T>(pool: T[], rng: () => number): T | undefined {
   return pool[Math.floor(rng() * pool.length)];
 }
 
+const PARAGRAPH_BREAK = '\n\n';
+
+function plain(parts: KeyedPart[]): string {
+  return parts.map(p => p.text).join('');
+}
+
+/** Layers of text as paragraphs; a layer with nothing in it leaves no gap. */
+function paragraphs(...layers: KeyedPart[][]): KeyedPart[] {
+  return layers
+    .filter(layer => layer.some(p => p.text))
+    .flatMap((layer, i) => (i === 0 ? layer : [{ text: PARAGRAPH_BREAK }, ...layer]));
+}
+
+/** A line with no state behind it: a random draw, never compared. */
+function drawn(text: string | undefined): KeyedPart[] {
+  return text ? [{ text }] : [];
+}
+
 /** Draws `count` distinct entries without reordering the source pool. */
 function pickMany<T>(pool: T[], count: number, rng: () => number): T[] {
   const remaining = [...pool];
@@ -81,29 +99,46 @@ export function isGregorAtStable(state: GameState): boolean {
   return !onHunt && !away;
 }
 
-export function getLocationBase(state: GameState, sceneKey: string): string {
-  const entry = LOCATIONS[sceneKey] ?? LOCATIONS.default;
+/**
+ * The base text of the place, in the parts the difference hints compare: the text for
+ * this act and hour (changed by what the player has pieced together, and by nothing
+ * else), and 格雷格 on the end of it when he is there. They are separate slots because
+ * they change for separate reasons.
+ */
+export function getLocationParts(state: GameState, sceneKey: string): KeyedPart[] {
+  const place = LOCATIONS[sceneKey] ? sceneKey : 'default';
+  const entry = LOCATIONS[place];
   const act = getAct(state.day);
   const byAct = act === 3 ? entry.act3 : act === 2 ? entry.act2 : entry.act1;
   let body = byAct[state.phase];
+  let informed = false;
 
   // The forge-hall's evening line asks why 霍特曼 kept coming here. Once the player
   // has pieced enough together, the question is answered and the line has to change.
   if (entry.eveningInformed && state.phase === 'evening' && act === 1) {
     const clues = countClues(state);
-    if (clues >= CHAPEL_INFORMED_CLUE_COUNT) body = entry.eveningInformed;
-  }
-
-  if (entry.gregorPresent && isGregorAtStable(state)) {
-    body = `${body}${entry.gregorPresent[state.phase]}`;
+    if (clues >= CHAPEL_INFORMED_CLUE_COUNT) {
+      body = entry.eveningInformed;
+      informed = true;
+    }
   }
 
   // A few lines open with the place name themselves ("农田已经安静了。"). Those keep
   // their own opening rather than being announced twice. The join is punctuation,
   // and punctuation is a property of the language, so it lives in the data.
-  return body.startsWith(entry.label)
+  const lead = body.startsWith(entry.label)
     ? body
     : fill(DATA.ui.sceneLabel, { label: entry.label, body });
+  const parts: KeyedPart[] = [{ text: lead, slot: `base:${place}:${state.phase}`, key: `${act}${informed ? 'i' : ''}` }];
+
+  if (entry.gregorPresent && isGregorAtStable(state)) {
+    parts.push({ text: entry.gregorPresent[state.phase], slot: `gregor:${place}:${state.phase}`, key: 'here' });
+  }
+  return parts;
+}
+
+export function getLocationBase(state: GameState, sceneKey: string): string {
+  return plain(getLocationParts(state, sceneKey));
 }
 
 export function countClues(state: GameState): number {
@@ -137,45 +172,66 @@ export function getAmbient(sceneKey: string, rng: () => number): string {
 
 // ── 招呼语 ──────────────────────────────────────────────────────────────────
 
-export function getGreeting(state: GameState, npc: NpcId, rng: () => number): string {
+/**
+ * A greeting rests on how far the trust has come, not on which line of the tier was
+ * drawn: the same tier twice is the same greeting for the hints, whatever was said.
+ */
+export function getGreetingParts(state: GameState, npc: NpcId, rng: () => number): KeyedPart[] {
   const tiers = GREETINGS[npc];
-  if (!tiers) return '';
-  return pick(tiers[getTrustTier(getTrust(state, npc))] ?? [], rng) ?? '';
+  if (!tiers) return [];
+  const tier = getTrustTier(getTrust(state, npc));
+  const text = pick(tiers[tier] ?? [], rng);
+  return text ? [{ text, slot: `greeting:${npc}`, key: tier }] : [];
+}
+
+export function getGreeting(state: GameState, npc: NpcId, rng: () => number): string {
+  return plain(getGreetingParts(state, npc, rng));
 }
 
 // ── 行动结果文本 ────────────────────────────────────────────────────────────
 
-export function getActionResult(
+/** What the woods look like now, in the band the total felled has reached. */
+function forestStateParts(tier: number): KeyedPart[] {
+  const text = RESULTS.forest_state?.[tier];
+  return text ? [{ text, slot: 'forest', key: String(tier) }] : [];
+}
+
+export function getActionResultParts(
   kind: string,
   rng: () => number,
   vars: Record<string, string | number> = {},
-): string {
+): KeyedPart[] {
   if (kind === 'market_rumours') {
     const { intro, lines } = getMarketRumours(rng);
-    return [intro, RUMOURS.lead, ...lines].join('\n\n');
+    return paragraphs(drawn(intro), drawn(RUMOURS.lead as string), ...lines.map(drawn));
   }
   // Every felling ends on what the woods look like now, so the cutting shows: the same
   // four bands the walk reads, chosen by the total *after* this day's work.
   if (kind.startsWith('fell_timber_')) {
     const tier = Number(kind.slice('fell_timber_'.length));
     const felled = pick(RESULTS.fell_timber ?? [], rng);
-    return [felled ? fillVars(felled, vars) : '', RESULTS.forest_state?.[tier]]
-      .filter(Boolean).join('\n\n');
+    return paragraphs(drawn(felled ? fillVars(felled, vars) : ''), forestStateParts(tier));
   }
   // Walking the woods ends on what they look like now, which is not a number.
   if (kind.startsWith('survey_forest_')) {
     const tier = Number(kind.slice('survey_forest_'.length));
-    return [pick(RESULTS.survey_forest, rng), RESULTS.forest_state?.[tier]]
-      .filter(Boolean).join('\n\n');
+    return paragraphs(drawn(pick(RESULTS.survey_forest, rng)), forestStateParts(tier));
   }
   // The third afternoon in the stable carries an extra beat on the end of it.
   if (kind === 'stable_help_third') {
-    return [pick(RESULTS.stable_help, rng), RESULTS.stable_help_third?.[0]]
-      .filter(Boolean).join('\n\n');
+    return paragraphs(drawn(pick(RESULTS.stable_help, rng)), drawn(RESULTS.stable_help_third?.[0]));
   }
   const template = pick(RESULTS[kind] ?? [], rng);
-  if (!template) return '';
-  return fillVars(template, vars);
+  if (!template) return [];
+  return drawn(fillVars(template, vars));
+}
+
+export function getActionResult(
+  kind: string,
+  rng: () => number,
+  vars: Record<string, string | number> = {},
+): string {
+  return plain(getActionResultParts(kind, rng, vars));
 }
 
 function fillVars(template: string, vars: Record<string, string | number>): string {
@@ -192,42 +248,87 @@ function fillVars(template: string, vars: Record<string, string | number>): stri
  * carry the season; by the third act the fresh produce is gone and the stalls
  * are selling what people mean to live on until spring.
  */
-export function getMarketArrival(state: GameState): string {
+export function getMarketArrivalParts(state: GameState, slotPrefix = 'market:arrival'): KeyedPart[] {
   const act = getAct(state.day);
   const base = MARKET.arrival[`act${act}` as 'act1' | 'act2' | 'act3'];
   // By the last market of the month the grain merchant either knows your cart or does not.
-  const recognition = act === 3
-    ? (state.flags.marketFirstVisitDone ? MARKET.act3Known : MARKET.act3Unknown)
-    : '';
-  return [base, recognition, MARKET.arrivalTail].filter(Boolean).join('\n\n');
+  const known = !!state.flags.marketFirstVisitDone;
+  const recognition = act === 3 ? (known ? MARKET.act3Known : MARKET.act3Unknown) : '';
+  return paragraphs(
+    [{ text: base, slot: slotPrefix, key: `act${act}` }],
+    recognition ? [{ text: recognition, slot: `${slotPrefix}:recognition`, key: known ? 'known' : 'unknown' }] : [],
+    [{ text: MARKET.arrivalTail, slot: `${slotPrefix}:tail`, key: '-' }],
+  );
 }
 
-/** Queueing behind the grain stall, where the rumours come from. */
-export function getMarketAfternoon(state: GameState): string {
+export function getMarketArrival(state: GameState): string {
+  return plain(getMarketArrivalParts(state));
+}
+
+/**
+ * Queueing behind the grain stall, where the rumours come from. The queue is the same
+ * every month and what is said in it is not, so only the framing is compared.
+ */
+export function getMarketAfternoonParts(state: GameState): KeyedPart[] {
   const lines = readRumours(decodeRumours(state.flags[rumoursFlagKey(state.day)]));
-  return [RUMOURS.intro, RUMOURS.lead, ...lines].join('\n\n');
+  return paragraphs(
+    [{ text: RUMOURS.intro, slot: 'market:intro', key: '-' }],
+    [{ text: RUMOURS.lead as string, slot: 'market:lead', key: '-' }],
+    ...lines.map(drawn),
+  );
+}
+
+export function getMarketAfternoon(state: GameState): string {
+  return plain(getMarketAfternoonParts(state));
+}
+
+/**
+ * What a sale reads like. The merchant and the cart are the same every month, so every
+ * line of it is a state-less repeat and is set back from the second sale on; only the
+ * price (the Millridge agreement or not) is a state that can change.
+ */
+export function getMarketTradeResultParts(kind: string, state: GameState): KeyedPart[] {
+  if (kind === 'market_grain') return [{ text: MARKET.sellGrain, slot: 'market:sellGrain', key: '-' }];
+  if (kind === 'market_timber') {
+    const deal = !!state.flags.millridgeDealSigned;
+    return paragraphs(
+      [{ text: MARKET.sellTimber, slot: 'market:sellTimber', key: '-' }],
+      [{ text: deal ? MARKET.sellTimberMillridge : MARKET.sellTimberPlain, slot: 'market:timberPrice', key: deal ? 'deal' : 'plain' }],
+      [{ text: MARKET.sellTimberTail, slot: 'market:sellTimberTail', key: '-' }],
+    );
+  }
+  return [];
 }
 
 export function getMarketTradeResult(kind: string, state: GameState): string {
-  if (kind === 'market_grain') return MARKET.sellGrain;
-  if (kind === 'market_timber') {
-    const price = state.flags.millridgeDealSigned ? MARKET.sellTimberMillridge : MARKET.sellTimberPlain;
-    return [MARKET.sellTimber, price, MARKET.sellTimberTail].join('\n\n');
-  }
-  return '';
+  return plain(getMarketTradeResultParts(kind, state));
 }
 
 /** The ride home, which reads differently depending on how heavy the cart is. */
+export function getMarketReturnParts(sold: boolean): KeyedPart[] {
+  return paragraphs(
+    [{ text: MARKET.returnOpen, slot: 'market:returnOpen', key: '-' }],
+    [{ text: sold ? MARKET.returnSold : MARKET.returnUnsold, slot: 'market:return', key: sold ? 'sold' : 'unsold' }],
+    [{ text: MARKET.returnTail, slot: 'market:returnTail', key: '-' }],
+  );
+}
+
 export function getMarketReturn(sold: boolean): string {
-  return [
-    MARKET.returnOpen,
-    sold ? MARKET.returnSold : MARKET.returnUnsold,
-    MARKET.returnTail,
-  ].join('\n\n');
+  return plain(getMarketReturnParts(sold));
+}
+
+export function getMarketNoTradeParts(): KeyedPart[] {
+  return [{ text: MARKET.nothing, slot: 'market:nothing', key: '-' }];
 }
 
 export function getMarketNoTrade(): string {
-  return MARKET.nothing;
+  return plain(getMarketNoTradeParts());
+}
+
+/** Several stretches of keyed text as one result: the words, and the parts they came in. */
+export function resultOf(...stretches: KeyedPart[][]): { resultText: string; resultParts: KeyedPart[] } {
+  const resultParts = paragraphs(...stretches);
+  return { resultText: plain(resultParts), resultParts };
 }
 
 // ── 场景组装 ────────────────────────────────────────────────────────────────
@@ -237,16 +338,24 @@ export function getMarketNoTrade(): string {
  * rarely, and only on a quiet day — one 闲笔 that leads nowhere on purpose.
  * The market afternoon is its own thing: you are not at the manor, you are in a queue.
  */
-export function composeScene(state: GameState, sceneKey: string, rng: () => number): string {
+export function composeSceneParts(state: GameState, sceneKey: string, rng: () => number): KeyedPart[] {
   if (sceneKey === 'market' && state.flags.visitingMarketToday === state.day) {
-    return state.phase === 'afternoon' ? getMarketAfternoon(state) : getMarketArrival(state);
+    return state.phase === 'afternoon'
+      ? getMarketAfternoonParts(state)
+      // The same words the arrival result carries, but a scene is compared by the hour and a
+      // result by the action, so the two do not share slots.
+      : getMarketArrivalParts(state, 'market:arrivalScene');
   }
 
-  const layers = [getLocationBase(state, sceneKey), getWeatherLine(state.weather, rng)];
+  const layers = [getLocationParts(state, sceneKey), drawn(getWeatherLine(state.weather, rng))];
   if (shouldPlayAmbient(state, rng)) {
-    layers.push(getAmbient(sceneKey, rng));
+    layers.push(drawn(getAmbient(sceneKey, rng)));
   }
-  return layers.filter(Boolean).join('\n\n');
+  return paragraphs(...layers);
+}
+
+export function composeScene(state: GameState, sceneKey: string, rng: () => number): string {
+  return plain(composeSceneParts(state, sceneKey, rng));
 }
 
 // ── 流言 ────────────────────────────────────────────────────────────────────

@@ -11,16 +11,20 @@
 > ---
 > ## 🔖 恢复点（compact 之后从这里继续）
 >
-> **最新（2026-10-08，已 push 到 `a8acfce`；全库 659 测试绿、tsc 干净）**
+> **最新（2026-10-08 之后；全库 717 测试绿、tsc 干净；下面三项都还没 commit，其余已 push 到 `ae1d7e1`）**
 >
-> 本次会话做完了 `docs/DEVELOPMENT_PLAN.md` 的前两项，细节见 `docs/CHANGELOG.md` 顶部两条（2026-10-08、2026-10-07 续）。
+> - ✅ **差异提示**（作者在三个示例里挑了"读过的淡一档"）：取决于世界状态的句子（地点底文、格雷格在马厩、人物招呼按信任档位、林地现状、集市到达/排队/买卖/归途）与它上一回出现相比没变，就淡一档（`game.known` = `#9c917a`）；随机句永远不淡。逻辑在 `src/systems/SeenSystem.ts` 与 `SceneSystem` 的 `*Parts` 函数，记录在 `GameState.seen`；场景按时段定"上一回"，行动结果按动作（`step`）定。文字与随机数取用顺序都没变。规则在 GDD_NEXT 13.1，实施在 CHANGELOG `2026-10-08，续` 与 `续三`，没接入的两处在 `DEVELOPMENT_PLAN` 3.1。
+> - ✅ **行囊**（CHANGELOG `续二`）：标题栏入口"卷宗"改为"行囊"，里面三页：卷宗（线索与地图）、文书（5）、物品（10）。不跨周目，显示时由现成的标记读出（`src/systems/InventorySystem.ts`、`src/components/common/Inventory.tsx`、`src/data/{zh,en}/inventory.json`）；新增标记 `henkCoin`、`henkPurse`。名字 行囊 / Satchel、物品 / Belongings 是我取的；"册页里的干枯小枝"并不在玩家手里，已在 CHANGELOG 里标给作者。
+> - ⬜ **下一步：⑤ 头像与说话人的剩余部分**（`DEVELOPMENT_PLAN` 3.3）。
+>
+> 之前会话做完了 `docs/DEVELOPMENT_PLAN.md` 的前两项，细节见 `docs/CHANGELOG.md` 的 2026-10-08、2026-10-07 续两条。
 > - ✅ **结局规则重排**（`EndingSystem.determineEnding`；GDD_NEXT 10.1 / 5.12 / 8.1 / 8.3 已同步）：粮食 <60 硬线 → 一；然后 4B、4A、三、二；兜底 → 一。4A/4B：声望 ≥3；三：粮食 ≥90、声望 ≥5、贵族信任 ≥1、三人信任 ≥3；二：粮食 ≥75（印象 ≥1 时 73）。**库存线逐级降低：二 金卢 50/木材 12 > 三 20/5 > 真相 10/3**（作者要求"二砍一点、三四也加"，数字我按模拟定，已批准为起点）。
 > - ✅ **磨岭求援对所有人开放**（`day30Short` 取消）；Day 30 结账的"短" = `determineEnding(state) === 'ending1'`；账平时钱和柴按称职线读"余下几个"或"不多"（`settled_coin_thin` / `settled_timber_thin`）；Day 23 来信按三条线；状态栏粮食 75 / 金卢 50 / 木材 12 变金色。
 > - ✅ **种子模拟**：`npm run sim -- --seeds 200`（`tests/helpers/simulation.ts` 八个模拟玩家、`scripts/simulate.ts`、`tests/Simulation.test.ts`）。改经济、事件或结局数字后要跑。结局三靠模拟玩家自己到不了，资助后 98% 能到（卡的是钱）。
 > - ✅ **结局时刻的按钮**：4A/4B 判定后 `GameEngine.advancePhase` 先进入 `ending_handover`（只有"把整理出的判断交给蒂埃里"一个选项，记入历史），点击才写结局；4A/4B 开头改成玩家在场（4A 跟他走三天、下到墙根；4B 一起上山、一夜、一起抬回来）。中文是我写的，作者说这么小的中文我自己写就好，原句尽量保留。
 > - ✅ **文本工作台镜像已重新导出**（2026-10-08，1155 条）：镜像里没有未导入的作者改动，所以现在 `text-review/` 与 `src/data` 一致，含 4A/4B 新开头、Day 30 新句和 `ending_handover`。**以后改了 `src/data` 里的文字，要在作者动镜像之前重新 `npm run text:export`，否则作者导入旧镜像会把新文字改回去。**
 >
-> **下一步（以 `docs/DEVELOPMENT_PLAN.md` §2 为准）：** ③ **差异提示**（先做 2–3 个可以比较的界面示例，作者挑，再实施）；④ 收集物；⑤ 头像/说话人剩余；⑥ 文本"成立条件"审查；⑦ 点人物进见闻 / 底部短句 / 结局后"可能错过什么"；⑧ 待做任务（右栏、场景图、itch 截图）。
+> **下一步（以 `docs/DEVELOPMENT_PLAN.md` §2 为准）：** ~~③ 差异提示~~、~~④ 收集物（行囊）~~（已做）；⑤ 头像/说话人剩余；⑥ 文本"成立条件"审查；⑦ 点人物进见闻 / 底部短句 / 结局后"可能错过什么"；⑧ 待做任务（右栏、场景图、itch 截图）。
 >
 > **要注意的几点：**
 > - `docs/GDD_NEXT.md` 是设计权威（2026-10-07 接替 `GDD.md`，`CLAUDE.md`、`config.ts` 已指向它）；语言切换靠存档里的种子与操作历史重放整季（`src/systems/GameEngine.ts` 的 `replaySeason`），引擎内不能有 `Math.random`。

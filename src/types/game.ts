@@ -58,6 +58,11 @@ export interface Choice {
   resultKind?: string;
   /** Branch prose written for this one choice, shown once the event has resolved. */
   resultText?: string;
+  /**
+   * `resultText` again, split into the lines the difference hints compare (the market's
+   * results). It joins to `resultText`, which stays for everything that wants only the words.
+   */
+  resultParts?: KeyedPart[];
   /** Continue the scene at this event instead of returning to the day. */
   nextEvent?: string;
   /** Placeholder values for that result text, e.g. the yield the player just brought in. */
@@ -157,6 +162,35 @@ export type SeasonAction =
   | { type: 'ADVANCE_DAY_EVENT' }
   | { type: 'COMMIT_ADVANCE' };
 
+/**
+ * A stretch of prose as the engine composed it. A part with a `slot` is a line whose
+ * wording rests on a state of the world (the act, how far the trust has come, how bare
+ * the woods are), and `key` names that state; a part without one is a random draw, which
+ * differs from visit to visit by design and is never compared.
+ */
+export interface KeyedPart {
+  text: string;
+  slot?: string;
+  key?: string;
+}
+
+/** Prose after the comparison: `known` when the player has already read this very thing here. */
+export interface TextPart {
+  text: string;
+  known?: boolean;
+}
+
+/**
+ * What a slot said the last time it was on screen. `at` is the day-and-phase it was shown
+ * in; `before` is what it said before that, so that composing the same moment twice (a
+ * market trade does not move the clock) gives the same answer both times.
+ */
+export interface SeenRecord {
+  key: string;
+  at: number;
+  before: string | null;
+}
+
 export interface GameState {
   day: number;
   phase: DayPhase;
@@ -189,6 +223,17 @@ export interface GameState {
    * was not someone speaking to the player.
    */
   lastSpeaker?: NpcId | null;
+  /**
+   * `currentSceneText` and `lastResult` again, split where the player has read the
+   * same thing here before (difference hints: the panel sets those stretches back). Set
+   * only when something in the text is known; their text joins to the string they
+   * annotate, and a panel that finds they do not has been handed a stale pair and shows
+   * the plain string.
+   */
+  sceneParts?: TextPart[];
+  lastResultParts?: TextPart[] | null;
+  /** Per slot, what it said when last shown. Absent on saves from before the hints. */
+  seen?: Record<string, SeenRecord>;
   currentChoices: Choice[];
   /**
    * An action taken in the last phase of a day advances straight into the next

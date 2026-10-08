@@ -1,4 +1,4 @@
-import { GameState, Choice, ChoiceEffects, EventData, NpcId, SeasonAction } from '../types/game';
+import { GameState, Choice, ChoiceEffects, EventData, NpcId, SeasonAction, TextPart } from '../types/game';
 import { generateWeather } from './WeatherSystem';
 import { nextPhase, isDemoComplete } from './TimeSystem';
 import { applyDailyOperatingCost, clampResources, getInsolvencyEffects } from './ResourceSystem';
@@ -12,7 +12,8 @@ import {
   adjustActionTrust, adjustNobleTrust, adjustLordImpression, adjustTenantTrust, recordConversation,
 } from './RelationSystem';
 import { INITIAL_FLAGS } from './FlagRegistry';
-import { composeScene, getActionResult, getGreeting } from './SceneSystem';
+import { composeSceneParts, getActionResultParts, getGreetingParts } from './SceneSystem';
+import { instantOf, markKnown, partsText } from './SeenSystem';
 import { nextOpeningPage } from './OpeningSystem';
 import {
   INITIAL_RESOURCES, INITIAL_RELATIONSHIPS, TENANT_TRUST_INITIAL, FATIGUE_EXHAUSTED_THRESHOLD,
@@ -100,6 +101,7 @@ function enterEvent(state: GameState, event: EventData): GameState {
   return {
     ...entered,
     currentSceneText: interpolate(event.sceneText, state),
+    sceneParts: undefined,
     // Filtered against the flags the event itself just set: an event may decide
     // on arrival which of its choices exist at all. Then a paid choice the player
     // cannot cover is disabled rather than silently sold at a discount.
@@ -118,9 +120,18 @@ function buildStateForPhase(state: GameState, rng: Rng): GameState {
   }
 
   const free = { ...state, activeEvent: null, eventResolved: false };
+  // The scene is compared with what the same places and people said the last time they
+  // were on screen, so the panel can set back what the player has already read.
+  const read = markKnown(
+    composeSceneParts(free, free.currentScene, rng).map(p => ({ ...p, text: interpolate(p.text, state) })),
+    state.seen,
+    instantOf(state),
+  );
   return {
     ...free,
-    currentSceneText: interpolate(composeScene(free, free.currentScene, rng), state),
+    seen: read.seen,
+    currentSceneText: partsText(read.parts),
+    sceneParts: read.anyKnown ? read.parts : undefined,
     currentChoices: getFreeChoices(free),
   };
 }
@@ -172,21 +183,31 @@ function reduceSeason(state: GameState, action: SeasonAction, rng: Rng): GameSta
       // What the player sees happened: an action's result text, or the greeting of
       // whoever they went to see. Trust is read after the visit is recorded.
       let result: string | null = null;
+      let resultParts: TextPart[] | null = null;
       // Whoever the player went to see is the face on the result, however its text was
       // produced: a greeting, an action's own result, or a clue handed over. Taken from
       // the effects, not from the branch below — otherwise "lend a hand in the stable"
       // and the morning in the office, which both have results of their own, lose it.
       const speaker = (effects.conversationWith ?? effects.greetingFrom ?? null) as NpcId | null;
-      if (choice.resultText) {
+      // A result is read against what the same line said the last time one was shown. Each
+      // action is its own moment, so it is the step that dates it: two sales in one afternoon
+      // read the merchant's line twice, and the second time it is not news.
+      const keyed = choice.resultParts
+        ?? (choice.resultText ? null
+          : choice.resultKind ? getActionResultParts(choice.resultKind, rng, choice.resultVars)
+            : speaker ? getGreetingParts(next, speaker, rng) : null);
+      if (keyed) {
+        const read = markKnown(keyed, next.seen, (state.step ?? 0) + 1);
+        result = partsText(read.parts);
+        resultParts = read.anyKnown ? read.parts : null;
+        next = { ...next, seen: read.seen };
+      } else if (choice.resultText) {
         result = choice.resultText;
-      } else if (choice.resultKind) {
-        result = getActionResult(choice.resultKind, rng, choice.resultVars);
-      } else if (speaker) {
-        result = getGreeting(next, speaker, rng);
       }
       next = {
         ...next,
         lastResult: result,
+        lastResultParts: resultParts,
         lastSpeaker: speaker,
         currentScene: effects.nextScene ?? next.currentScene,
       };
@@ -364,7 +385,7 @@ function advancePhase(state: GameState, rng: Rng): GameState {
       const handover = getEventById('ending_handover', state);
       if (handover) {
         return enterEvent(
-          { ...state, pendingAdvance: false, lastResult: null, lastSpeaker: null },
+          { ...state, pendingAdvance: false, lastResult: null, lastResultParts: null, lastSpeaker: null },
           handover,
         );
       }
@@ -375,6 +396,7 @@ function advancePhase(state: GameState, rng: Rng): GameState {
       demoComplete: true,
       endingId,
       currentSceneText: composeEnding(state, endingId),
+      sceneParts: undefined,
       currentChoices: [],
     };
   }
@@ -396,7 +418,7 @@ function advancePhase(state: GameState, rng: Rng): GameState {
 
     const weather = generateWeather(newDay, rng);
     // A new day starts back at the manor, with yesterday's result cleared away.
-    next = { ...next, weather, currentScene: 'default', lastResult: null, lastSpeaker: null };
+    next = { ...next, weather, currentScene: 'default', lastResult: null, lastResultParts: null, lastSpeaker: null };
     next = { ...next, resources: applyDailyOperatingCost(next.resources) };
     next = { ...next, resources: clampResources(next.resources, next.flags) };
 
@@ -430,6 +452,7 @@ function advancePhase(state: GameState, rng: Rng): GameState {
           demoComplete: true,
           endingId: 'ending1',
           currentSceneText: composeEnding(dismissed, 'ending1'),
+          sceneParts: undefined,
           currentChoices: [],
           activeEvent: null,
         };

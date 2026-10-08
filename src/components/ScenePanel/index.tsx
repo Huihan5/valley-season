@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { GameState, NpcId } from '../../types/game';
+import { GameState, NpcId, TextPart } from '../../types/game';
 import { PHASE_LABELS, dayName, isHuntSeason } from '../../systems/TimeSystem';
 import { getFatigueNote, getFatigueStatus } from '../../systems/FatigueSystem';
 import DATA from '../../data';
@@ -16,16 +16,32 @@ const PORTRAITS: Partial<Record<NpcId, string>> = {
 };
 const NPC_NAMES: Record<NpcId, string> = ui.npc;
 
+/**
+ * The prose, with what the player has read here before set back a step (difference
+ * hints). The parts only annotate the string, so a pair that does not join to it is
+ * stale (an event has taken the screen since) and the plain string is shown instead.
+ */
+function Prose({ text, parts }: { text: string; parts?: TextPart[] | null }) {
+  if (!parts || parts.map(p => p.text).join('') !== text) return <>{text}</>;
+  return (
+    <>
+      {parts.map((p, i) => (
+        p.known ? <span key={i} className="text-game-known">{p.text}</span> : <span key={i}>{p.text}</span>
+      ))}
+    </>
+  );
+}
+
 interface Props {
   state: GameState;
   onOpenSaves: () => void;
-  onOpenJournal: () => void;
+  onOpenInventory: () => void;
   onOpenCodex: () => void;
   /** The choices, rendered inline under the prose and scrolling with it (B). */
   children?: ReactNode;
 }
 
-export default function ScenePanel({ state, onOpenSaves, onOpenJournal, onOpenCodex, children }: Props) {
+export default function ScenePanel({ state, onOpenSaves, onOpenInventory, onOpenCodex, children }: Props) {
   const { day, phase, activeEvent, currentSceneText, lastResult } = state;
   // Overwork the player can see in the scene, not only as a bar in the panel (D7).
   const fatigueNote = getFatigueNote(state.fatigue);
@@ -65,10 +81,10 @@ export default function ScenePanel({ state, onOpenSaves, onOpenJournal, onOpenCo
           {DATA.codex.open}
         </button>
         <button
-          onClick={onOpenJournal}
+          onClick={onOpenInventory}
           className="text-game-dim text-xs hover:text-cream transition-colors shrink-0"
         >
-          {ui.scenePanel.journal}
+          {ui.scenePanel.inventory}
         </button>
         <button
           onClick={onOpenSaves}
@@ -107,12 +123,12 @@ export default function ScenePanel({ state, onOpenSaves, onOpenJournal, onOpenCo
               </div>
             )}
             <p className="text-cream font-serif text-sm leading-relaxed whitespace-pre-line">
-              {lastResult}
+              <Prose text={lastResult} parts={state.lastResultParts} />
             </p>
           </div>
         )}
         <p className="text-game-text font-serif text-sm leading-relaxed whitespace-pre-line max-w-[46rem]">
-          {currentSceneText}
+          <Prose text={currentSceneText} parts={state.sceneParts} />
         </p>
 
         {/* The choices sit right under the last paragraph and scroll with it (B):

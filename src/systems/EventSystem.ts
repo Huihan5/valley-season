@@ -22,7 +22,7 @@ import { countFlagsWithPrefix, countClues, CLUE_PREFIXES } from './FlagRegistry'
 import { getFragmentChoices, getLorenzChapelExtra, isPositionLineComplete } from './ClueSystem';
 import { determineEnding, meetsEnding2, getRetainFloor } from './EndingSystem';
 import {
-  getMarketArrival, getMarketTradeResult, getMarketReturn, getMarketNoTrade,
+  getMarketArrivalParts, getMarketTradeResultParts, getMarketReturnParts, getMarketNoTradeParts, resultOf,
   drawRumours, encodeRumours, rumoursFlagKey,
   isGregorAtStable,
 } from './SceneSystem';
@@ -455,7 +455,13 @@ function processMillridge(event: EventData, state: GameState): EventData {
     // He does not refuse. He explains the account, and gives you a coin for the horse.
     return {
       ...choice,
-      effects: { ...choice.effects, guldmark: 1, logEntry: lines.millridgeShortOfTrust },
+      // The coin is something the player is handed, and keeps in the satchel.
+      effects: {
+        ...choice.effects,
+        guldmark: 1,
+        flags: { ...choice.effects?.flags, henkCoin: true },
+        logEntry: lines.millridgeShortOfTrust,
+      },
       resultText: event.variants?.short_of_trust,
     };
   });
@@ -480,7 +486,11 @@ function processHandover(event: EventData, state: GameState): EventData {
 
 function millridgeGift(choiceId: string, shortfall: number): ChoiceEffects {
   const flags = { tookHenkDeal: true };
-  if (choiceId === 'millridge_cash') return { guldmark: MILLRIDGE_CASH, flags };
+  // Only the cash scene puts a bag in the player's hands; the cart of the full deal carries
+  // its money in the load.
+  if (choiceId === 'millridge_cash') {
+    return { guldmark: MILLRIDGE_CASH, flags: { ...flags, henkPurse: true } };
+  }
   if (choiceId === 'millridge_goods') return { grain: shortfall, timber: MILLRIDGE_TIMBER, flags };
   return {
     grain: shortfall + MILLRIDGE_SPRING_SEED,
@@ -630,7 +640,7 @@ function getMarketAfternoonChoices(state: GameState): Choice[] {
         ...tradeEffects(lot),
         logEntry: fill(A.market.sellGrainLog, { n: lot, revenue: getGrainRevenue(lot) }),
       },
-      resultText: getMarketTradeResult('market_grain', state),
+      ...resultOf(getMarketTradeResultParts('market_grain', state)),
       advancesPhase: false,
     });
   }
@@ -649,7 +659,7 @@ function getMarketAfternoonChoices(state: GameState): Choice[] {
         ...tradeEffects(lot),
         logEntry: fill(A.market.sellTimberLog, { n: lot, revenue: getTimberRevenue(state, lot) }),
       },
-      resultText: getMarketTradeResult('market_timber', state),
+      ...resultOf(getMarketTradeResultParts('market_timber', state)),
       advancesPhase: false,
     });
   }
@@ -670,7 +680,7 @@ function getMarketAfternoonChoices(state: GameState): Choice[] {
       nextScene: 'default',
       logEntry: sold ? A.market.finishSoldLog : A.market.finishIdleLog,
     },
-    resultText: [sold ? '' : getMarketNoTrade(), getMarketReturn(sold)].filter(Boolean).join('\n\n'),
+    ...resultOf(sold ? [] : getMarketNoTradeParts(), getMarketReturnParts(sold)),
   });
 
   return choices;
@@ -893,7 +903,7 @@ export function getFreeChoices(state: GameState): Choice[] {
           nextScene: 'market',
           logEntry: A.market.goLog,
         },
-        resultText: getMarketArrival(state),
+        ...resultOf(getMarketArrivalParts(state)),
         disabled: exhausted,
         disabledReason: exhausted ? A.market.goTooTired : undefined,
       });

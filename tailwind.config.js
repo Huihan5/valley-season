@@ -31,6 +31,10 @@ export default {
           // disabled text. Kept a clear step below game-text so the hierarchy holds.
           dim: '#b3a68c',
           bright: '#f0e8d8',
+          // Prose the player has already read here, set back one step so the eye lands
+          // on what is new (difference hints, 2026-10). Body text, not microcopy: a step
+          // below game-text, still well clear of the disabled look the dims were lifted from.
+          known: '#9c917a',
           border: '#3a3530',
           'border-light': '#4a4540',
         },

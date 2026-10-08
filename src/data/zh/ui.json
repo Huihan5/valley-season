@@ -143,13 +143,11 @@
   },
   "scenePanel": {
     "saves": "存档",
-    "journal": "卷宗",
+    "inventory": "行囊",
     "huntSeason": "狩猎季",
     "huntSeasonSub": "狩猎季开了，这几日庄上总少着几个人手。"
   },
   "journal": {
-    "heading": "— 卷宗 —",
-    "close": "关闭",
     "tabClues": "线索",
     "tabMap": "地图",
     "groupEstate": "庄园里",
@@ -160,6 +158,14 @@
     "collapse": "收起",
     "mapCaption": "瓦莱维斯普公国",
     "mapAlt": "瓦莱维斯普公国地图"
+  },
+  "inventory": {
+    "heading": "— 行囊 —",
+    "close": "关闭",
+    "tabDossier": "卷宗",
+    "tabPapers": "文书",
+    "tabThings": "物品",
+    "empty": "还没有什么可以放进来的。"
   },
   "gallery": {
     "heading": "— 结局 —",

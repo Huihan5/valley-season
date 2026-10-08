@@ -15,6 +15,13 @@ export const INITIAL_FLAGS: FlagMap = {
   /** Day 30 night visit to 磨岭 — the player accepted 亨克's gift. Written by: Day 30 evening (阶段四). */
   tookHenkDeal: false,
 
+  /**
+   * What 亨克 puts in the player's hands at 磨岭, for the satchel (InventorySystem): the single
+   * coin he gives when trust is short, and the counted bag of the cash scene. Written by: Day 30 evening.
+   */
+  henkCoin: false,
+  henkPurse: false,
+
   /** Day 27 street corner — the player admitted they want to stay. Written by: Day 27 (阶段四). */
   admittedWantToStay: false,
 

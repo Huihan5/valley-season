@@ -10,6 +10,7 @@ import type { Bundle } from '../zh';
 
 import actions from './actions.json';
 import codex from './codex.json';
+import inventory from './inventory.json';
 import opening from './opening.json';
 import systemLines from './system_lines.json';
 import ui from './ui.json';
@@ -68,6 +69,7 @@ import eventsRandomRandomWell from './events/random/random_well.json';
 const bundle: Bundle = {
   actions: actions,
   codex: codex,
+  inventory: inventory,
   opening: opening,
   systemLines: systemLines,
   ui: ui,

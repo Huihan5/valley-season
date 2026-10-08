@@ -15,7 +15,7 @@ import EstateTaskList from './components/common/EstateTaskList';
 import OpeningSequence from './components/OpeningSequence';
 import TitleScreen from './components/TitleScreen';
 import SaveMenu from './components/common/SaveMenu';
-import Journal from './components/common/Journal';
+import Inventory from './components/common/Inventory';
 import EndingGallery from './components/common/EndingGallery';
 import CodexPanel from './components/common/CodexPanel';
 import { recordCodex, currentUnlocks } from './systems/CodexSystem';
@@ -36,7 +36,7 @@ export default function App() {
   // not saved: a refresh puts them back at the title with the season intact.
   const [atTitle, setAtTitle] = useState(true);
   const [savesOpen, setSavesOpen] = useState(false);
-  const [journalOpen, setJournalOpen] = useState(false);
+  const [inventoryOpen, setInventoryOpen] = useState(false);
   const [galleryOpen, setGalleryOpen] = useState(false);
   const [codexOpen, setCodexOpen] = useState(false);
   const [autoSave, setAutoSave] = useState<SaveSummary | null>(() => readSlotSummary(AUTO_SLOT));
@@ -292,7 +292,7 @@ export default function App() {
           <ScenePanel
             state={state}
             onOpenSaves={() => { refreshManualSaves(); setSavesOpen(true); }}
-            onOpenJournal={() => setJournalOpen(true)}
+            onOpenInventory={() => setInventoryOpen(true)}
             onOpenCodex={() => { recordCodex(currentUnlocks(state)); setCodexOpen(true); }}
           >
             <div key={`${state.day}-${state.phase}`} className="choices-enter">
@@ -326,8 +326,8 @@ export default function App() {
         />
       )}
 
-      {journalOpen && (
-        <Journal state={state} onClose={() => setJournalOpen(false)} />
+      {inventoryOpen && (
+        <Inventory state={state} onClose={() => setInventoryOpen(false)} />
       )}
 
       {codexOpen && (

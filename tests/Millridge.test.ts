@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { GameState, EventData, NpcId } from '../src/types/game';
 import { getEventById, getFixedEvent } from '../src/systems/EventSystem';
 import { createInitialState, gameReducer } from '../src/systems/GameEngine';
+import { getThings } from '../src/systems/InventorySystem';
 import {
   GRAIN_RETAIN_THRESHOLD, MILLRIDGE_CASH, MILLRIDGE_TIMBER, MILLRIDGE_SPRING_SEED,
   ENDING2_GULDMARK, ENDING2_TIMBER, ENDING_TRUTH_GULDMARK, ENDING_TRUTH_TIMBER,
@@ -195,5 +196,41 @@ describe('the night ride changes how the season ends', () => {
     const s = ride(1, 'millridge_everything');
     expect(s.endingId).toBe('ending1');
     expect(s.resources.guldmark).toBe(books.guldmark + 1);
+  });
+});
+
+describe('what the player carries home from 磨岭', () => {
+  const things = (s: GameState) => getThings(s).map(t => t.id);
+  const ride = (henk: number, ask: string) => {
+    let s = atTheLedger({
+      resources: { grain: 80, guldmark: 30, timber: 5, renown: 1 },
+      relationships: { ...ZERO, henk },
+    });
+    s = gameReducer(s, { type: 'MAKE_CHOICE', choiceId: 'day30_ride_millridge' });
+    s = gameReducer(s, { type: 'MAKE_CHOICE', choiceId: ask });
+    if (s.pendingAdvance) s = gameReducer(s, { type: 'COMMIT_ADVANCE' });
+    return s;
+  };
+
+  it('keeps the single coin that trust too short to help was given', () => {
+    for (const id of ['millridge_everything', 'millridge_cash', 'millridge_goods']) {
+      const s = ride(1, id);
+      expect(s.flags.henkCoin, id).toBe(true);
+      expect(things(s), id).toContain('coin');
+      expect(things(s), id).not.toContain('purse');
+    }
+  });
+
+  it('keeps the counted bag of the cash scene, and only that scene', () => {
+    expect(things(ride(2, 'millridge_cash'))).toContain('purse');
+    expect(things(ride(2, 'millridge_cash'))).not.toContain('coin');
+    expect(things(ride(4, 'millridge_everything'))).not.toContain('purse');
+    expect(things(ride(2, 'millridge_goods'))).not.toContain('purse');
+  });
+
+  it('keeps nothing from leaving empty-handed', () => {
+    const s = ride(4, 'millridge_nothing');
+    expect(things(s)).not.toContain('coin');
+    expect(things(s)).not.toContain('purse');
   });
 });
