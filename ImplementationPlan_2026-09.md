@@ -11,30 +11,24 @@
 > ---
 > ## 🔖 恢复点（compact 之后从这里继续）
 >
-> **最新补充（2026-10-07 晚，见 git log）：开发计划第一步已完成——结局判定重排 + 种子模拟（全库 647 测试绿、tsc 干净）。**
-> - ✅ **结局规则**（`EndingSystem.determineEnding`，GDD_NEXT 10.1/5.12/8.1/8.3 已同步）：粮食 <60 硬线 → 一；4B；4A；三（粮食 ≥90、声望 ≥5、贵族信任 ≥1、三人信任 ≥3）；二（粮食 ≥75/73、金卢 ≥50、木材 ≥12）；兜底 → 一。4A/4B 只要粮食 ≥60 与声望 ≥3。**库存线逐级降低：二 50/12 > 三 20/5 > 真相 10/3**（作者要求二砍一点、三四也加，数字我按模拟定）。
-> - ✅ **磨岭求援对所有人开放**（`day30Short` 取消；Day 30 结账的"短"改为"将得到结局一"）；Day 23 来信按三条线；状态栏粮食 75 / 金卢 50 / 木材 12 变金色。
-> - ✅ **种子模拟**：`npm run sim -- --seeds 200`（`tests/helpers/simulation.ts` 的八个模拟玩家、`scripts/simulate.ts`、`tests/Simulation.test.ts`）。五个结局都有模拟玩家到达；结局三靠模拟玩家自己到不了，资助后 98% 能到（卡的是钱，不是人）。改经济/事件/结局数字后跑它。
-> - ✅ **作者已批准**（2026-10-07）：两句 Day 30 新文字、"短"的新定义、粮食金线 90→75、库存线 50/12·20/5·10/3。Day 30 结账里"金卢一分不剩/木材见了底"已改写为"金卢不多/木材也不多"，并与称职线对齐（金卢 <50、木材 <12 读"不多"），模拟中两段都读得到。
-> - ✅ **结局时刻的按钮已做**（2026-10-08，CHANGELOG 顶部）：4A/4B 判定后先进入 `ending_handover`（只有"把整理出的判断交给蒂埃里"一个选项），点击才写结局；4A/4B 开头改成玩家在场（4A 跟他走三天、跟他下到墙根；4B 一起上山、一起把人抬回来）。659 测试绿。
-> - **下一步**：`docs/DEVELOPMENT_PLAN.md` §2 第 3 项——**差异提示**（先做 2–3 个可以比较的界面示例，作者挑，再实施）。
-> - 记忆：`project-simulation-tool` 新增，`dev-plan-2026-10` 已更新。
+> **最新（2026-10-08，已 push 到 `a8acfce`；全库 659 测试绿、tsc 干净）**
 >
-> ---
-> **以下是同日早些时候的恢复点：**
+> 本次会话做完了 `docs/DEVELOPMENT_PLAN.md` 的前两项，细节见 `docs/CHANGELOG.md` 顶部两条（2026-10-08、2026-10-07 续）。
+> - ✅ **结局规则重排**（`EndingSystem.determineEnding`；GDD_NEXT 10.1 / 5.12 / 8.1 / 8.3 已同步）：粮食 <60 硬线 → 一；然后 4B、4A、三、二；兜底 → 一。4A/4B：声望 ≥3；三：粮食 ≥90、声望 ≥5、贵族信任 ≥1、三人信任 ≥3；二：粮食 ≥75（印象 ≥1 时 73）。**库存线逐级降低：二 金卢 50/木材 12 > 三 20/5 > 真相 10/3**（作者要求"二砍一点、三四也加"，数字我按模拟定，已批准为起点）。
+> - ✅ **磨岭求援对所有人开放**（`day30Short` 取消）；Day 30 结账的"短" = `determineEnding(state) === 'ending1'`；账平时钱和柴按称职线读"余下几个"或"不多"（`settled_coin_thin` / `settled_timber_thin`）；Day 23 来信按三条线；状态栏粮食 75 / 金卢 50 / 木材 12 变金色。
+> - ✅ **种子模拟**：`npm run sim -- --seeds 200`（`tests/helpers/simulation.ts` 八个模拟玩家、`scripts/simulate.ts`、`tests/Simulation.test.ts`）。改经济、事件或结局数字后要跑。结局三靠模拟玩家自己到不了，资助后 98% 能到（卡的是钱）。
+> - ✅ **结局时刻的按钮**：4A/4B 判定后 `GameEngine.advancePhase` 先进入 `ending_handover`（只有"把整理出的判断交给蒂埃里"一个选项，记入历史），点击才写结局；4A/4B 开头改成玩家在场（4A 跟他走三天、下到墙根；4B 一起上山、一夜、一起抬回来）。中文是我写的，作者说这么小的中文我自己写就好，原句尽量保留。
+> - ✅ **文本工作台镜像已重新导出**（2026-10-08，1155 条）：镜像里没有未导入的作者改动，所以现在 `text-review/` 与 `src/data` 一致，含 4A/4B 新开头、Day 30 新句和 `ending_handover`。**以后改了 `src/data` 里的文字，要在作者动镜像之前重新 `npm run text:export`，否则作者导入旧镜像会把新文字改回去。**
 >
-> **（2026-10-07，commit `dfe1e50`；全库 617 测试绿、tsc 干净、已 push）**
+> **下一步（以 `docs/DEVELOPMENT_PLAN.md` §2 为准）：** ③ **差异提示**（先做 2–3 个可以比较的界面示例，作者挑，再实施）；④ 收集物；⑤ 头像/说话人剩余；⑥ 文本"成立条件"审查；⑦ 点人物进见闻 / 底部短句 / 结局后"可能错过什么"；⑧ 待做任务（右栏、场景图、itch 截图）。
 >
-> 本次会话：**核对 Codex 重写的 GDD_NEXT → 修一批缺陷 → 定新开发计划**（详见 `docs/CHANGELOG.md` 顶部 2026-10-07 条目）。
-> - ✅ **文档**：**`docs/GDD_NEXT.md` 接替 `GDD.md` 成为设计权威**（`CLAUDE.md`、`config.ts` 已指向它；`GDD.md` 留作历史）。补回宗教词汇表、路德维希三天与续签（10.4）、行程时长；作者保留了 Codex 的几处改动（微型→小型主权国家等）。**不要再"重写/静默改"作者的世界与人物文字，改了要标出来。**（`a4496bd`）
-> - ✅ **语言切换改为重放**（`07c34c5`）：reducer 从 `App.tsx` 移到 `src/systems/GameEngine.ts`；引擎内不再有 `Math.random`（`src/utils/rng.ts` 种子随机）；`GameState` 记 `seed/step/history`；`replaySeason()` 在当前语言下重放存档，规则数值一致才采用，否则回退旧路径（旧存档无历史）。→ 改引擎或事件数据后务必跑 `tests/GameEngine.test.ts`（含中↔英重放）；新的玩家动作类型要加进 `SeasonAction`。
-> - ✅ **修复一批**：节制采伐/册页事件不扣时段；随机事件撞档被吞；"第三幕的一天"看天气与时段（`variantRules`）；雨天收割按钮随产量档；Day 23 经纪人旁白；磨岭木材协议恢复（晚宴应下 → `millridgeDealSigned` → 集市木材 4）；维特第四层改为格雷格三段线索即开（`WYNTER_POSITION_KNOWN=3`）；专名 `von Alder`；内联数值入 config；头像覆盖所有带说话人的行动结果。
-> - ✅ **UI**：存档菜单"返回主界面"（保留本季）；**巡视农田/巡视林地改为左栏一次性事务**（时钟标记 ◷ + "只花时间"标签，`EstateTaskSystem` 的 `kind: 'survey'`），林地采伐加成 +2，**每次采伐结果附当前林地状况**（`fell_timber_{档}`）。
-> - ✅ **新开发计划已写**：`docs/DEVELOPMENT_PLAN.md`（替换 Codex 版，`dfe1e50`）。**已定、尚未实施**：结局判定重排——粮食 <60 硬线 → 一；然后 4B、4A、三、二，兜底 → 一；4A/4B 声望 ≥3、粮食 ≥60；三 声望 ≥5（所有结局里最吃声望）；二 粮食 ≥75（印象 ≥1 时 73）、金卢 ≥60、木材 ≥15；磨岭求援 Day 30 对所有人开放（解药或陷阱）；真相结局前加一个按钮"把整理出的判断交给蒂埃里"，之后正文直接同去（重写 4A/4B 开头）；种子模拟作长期工具校准这些数字。
->
-> **下一步（以 `docs/DEVELOPMENT_PLAN.md` §2 为准）：** ① 结局判定重排 + 种子模拟（先做：`EndingSystem.determineEnding` + config + 磨岭 + 测试 + GDD 5.12/8.1/10.1/10.3）；② 结局时刻按钮与 4A/4B 开头重写（中文作者写、我配英文）；③ 差异提示（先做 2–3 个可比较示例）；④ 收集物；⑤ 头像/说话人剩余；⑥ 文本"成立条件"审查；⑦ 点人物进见闻 / 底部短句 / 结局后"可能错过什么"；⑧ 待做任务（右栏、场景图、itch 截图）。
-> - 记忆：新增 `gdd-next-authority`（接替与已定决定）、`seeded-replay-engine`（引擎规则）、`dev-plan-2026-10`（计划与已定数值）；`project-text-workbench` 的提醒：`text:export` 会清空镜像，先确认镜像里没有未导入的改动。
-> - 作者说：`npm run lint` 因仓库没有 ESLint 配置跑不起来，**不必理会**。
+> **要注意的几点：**
+> - `docs/GDD_NEXT.md` 是设计权威（2026-10-07 接替 `GDD.md`，`CLAUDE.md`、`config.ts` 已指向它）；语言切换靠存档里的种子与操作历史重放整季（`src/systems/GameEngine.ts` 的 `replaySeason`），引擎内不能有 `Math.random`。
+> - 改引擎或事件数据后跑 `tests/GameEngine.test.ts`（含中↔英重放）与 `tests/Simulation.test.ts`；新的玩家动作类型要加进 `SeasonAction`。
+> - 模拟玩家按选项 id 排序，选项 id 变了会卡住（"nothing to choose"）。
+> - 不要静默改作者写的世界与人物文字，改了要标出来（CHANGELOG 里单列"新增文字"）。
+> - 作者说 `npm run lint` 因仓库没有 ESLint 配置跑不起来，不必理会。
+> - 记忆：`dev-plan-2026-10`（计划与已定数值）、`project-simulation-tool`、`seeded-replay-engine`、`gdd-next-authority`、`project-text-workbench`；新增两条工作方式：`feedback-patching-with-write-tool`、`feedback-minor-zh-claude-writes`。
 >
 > ---
 > **较早的恢复点（2026-09-21），保留供查：**
