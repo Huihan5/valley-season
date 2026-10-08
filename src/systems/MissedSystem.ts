@@ -19,7 +19,7 @@ import DATA from '../data';
  * told about a hunt that had not begun.
  */
 
-export type MissedKind = 'event' | 'person' | 'place';
+export type MissedKind = 'event' | 'person' | 'place' | 'choice';
 
 interface MissedRule {
   id: string;
@@ -42,8 +42,10 @@ function marketsVisited(s: GameState): number {
 }
 
 /**
- * Order inside a kind does not matter (the pick is seeded); order across kinds is the turn
- * in which they are read out. Ids are the keys of `endings/missed.json`.
+ * Order inside a kind does not matter (the pick is seeded), and neither does the order of the
+ * kinds: which three of the four are read out, and in what turn, is the season's seed too.
+ * Ids are the keys of `endings/missed.json`. A 'choice' is a fork the player did take: the
+ * line says the way they did not.
  */
 export const MISSED_RULES: MissedRule[] = [
   // 事 — whole occasions the season could have gone to
@@ -71,9 +73,18 @@ export const MISSED_RULES: MissedRule[] = [
   { id: 'boundary', kind: 'place', from: 16, missed: s => flag(s, 'forestReportReceived') && !flag(s, 'visitedBoundary') },
   { id: 'stumps', kind: 'place', from: 16, missed: s => flag(s, 'visitedBoundary') && !flag(s, 'documentedStumps') },
   { id: 'market', kind: 'place', from: 27, missed: s => marketsVisited(s) <= MISSED_MARKET_VISITS_FEW },
+
+  // 岔 — a fork the player came to and took one way
+  { id: 'ledger_followed', kind: 'choice', from: 4, missed: s => flag(s, 'investigatedLedger') },
+  { id: 'ledger_reported', kind: 'choice', from: 4, missed: s => flag(s, 'reportedLedger') },
+  { id: 'ledger_deferred', kind: 'choice', from: 4, missed: s => flag(s, 'deferredLedger') },
+  { id: 'elena_exposed', kind: 'choice', from: 13, npc: 'elena', missed: s => flag(s, 'exposedElena') },
+  { id: 'elena_shielded', kind: 'choice', from: 13, npc: 'elena', missed: s => flag(s, 'protectedElena') },
+  { id: 'hunt_night_left', kind: 'choice', from: 21, npc: 'henk', missed: s => flag(s, 'huntAttendedDay20') && !flag(s, 'campOvernight') },
+  { id: 'hunt_fire_other', kind: 'choice', from: 21, npc: 'henk', missed: s => flag(s, 'campOvernight') && !!s.flags.banquetAnswer },
 ];
 
-const KIND_ORDER: MissedKind[] = ['event', 'person', 'place'];
+const KINDS: MissedKind[] = ['event', 'person', 'place', 'choice'];
 const TEXT = (DATA.endings.missed as unknown as { lines: Record<string, string> }).lines;
 
 export interface MissedLine {
@@ -99,12 +110,12 @@ function shuffled<T>(items: T[], rng: () => number): T[] {
 
 /**
  * Up to MISSED_LINES_MAX lines, one kind after another so the three are not all the same sort
- * of thing. Which ones is decided by the season's seed, so the same ending reads the same
- * every time it is opened, in either language.
+ * of thing. The turn of the kinds and which line of each is decided by the season's seed, so
+ * the same ending reads the same every time it is opened, in either language.
  */
 export function getMissed(state: GameState): MissedLine[] {
   const holds = new Set(missedIds(state));
-  const byKind = KIND_ORDER.map(kind => shuffled(
+  const byKind = shuffled(KINDS, seededRng(state.seed ?? 0, 'missed', 'kinds')).map(kind => shuffled(
     MISSED_RULES.filter(r => r.kind === kind && holds.has(r.id)),
     seededRng(state.seed ?? 0, 'missed', kind),
   ));

@@ -21,6 +21,13 @@
     "ledger_some": "You turned the night ledger for a few evenings and did not come to the end of it.",
     "boundary": "Word came from the north woods. You did not walk out along it.",
     "stumps": "You looked at the stumps at the edge of the woods and wrote nothing down.",
-    "market": "On market Saturdays you mostly stayed at the manor."
+    "market": "On market Saturdays you mostly stayed at the manor.",
+    "ledger_followed": "On the third day you followed those pages where they led. Someone else would have written a letter about them; someone else would have set them down.",
+    "ledger_reported": "On the third day you put those pages in a letter to the baron. Someone else would have followed them up; someone else would have set them down.",
+    "ledger_deferred": "On the third day you set those pages aside until after the harvest. Someone else would have written a letter; someone else would have followed them up.",
+    "elena_exposed": "On the twelfth day the inspector asked about the receipts. There was an answer that would have kept Elena off that page. You did not give it.",
+    "elena_shielded": "On the twelfth day the inspector asked about the receipts. There was an answer that would have put Elena on that page. You did not give it.",
+    "hunt_night_left": "On the twentieth night the fire in the middle of the camp was still burning. You were already on the road back to the manor.",
+    "hunt_fire_other": "At the fire Henk asked how long you meant to stay. Answer it another way and the faces around that fire would have been different."
   }
 }

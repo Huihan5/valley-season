@@ -64,6 +64,14 @@ describe('a line is offered only when it is true', () => {
     ['boundary', { visitedBoundary: false }, { visitedBoundary: true }],
     ['stumps', { documentedStumps: false }, { documentedStumps: true }],
     ['market', { visitedMarket_day13: false, visitedMarket_day20: false, visitedMarket_day27: false }, { visitedMarket_day13: true, visitedMarket_day20: true }],
+    // the forks: true only for the way the player went
+    ['ledger_followed', { investigatedLedger: true }, { investigatedLedger: false }],
+    ['ledger_reported', { reportedLedger: true }, { reportedLedger: false }],
+    ['ledger_deferred', { deferredLedger: true }, { deferredLedger: false }],
+    ['elena_exposed', { exposedElena: true }, { exposedElena: false }],
+    ['elena_shielded', { protectedElena: true }, { protectedElena: false }],
+    ['hunt_night_left', { huntAttendedDay20: true, campOvernight: false }, { campOvernight: true }],
+    ['hunt_fire_other', { campOvernight: true, banquetAnswer: 'B' }, { banquetAnswer: '' }],
   ];
 
   for (const [id, makes, undoes] of cases) {
@@ -99,18 +107,48 @@ describe('a line is offered only when it is true', () => {
 describe('what is offered', () => {
   const sparse = () => run({ unlockForgeChapel: true, forestReportReceived: true, horseCareCount: 1 });
 
+  const kindsOf = (state: GameState) => getMissed(state).map(l => MISSED_RULES.find(r => r.id === l.id)!.kind);
+
   it(`at most ${MISSED_LINES_MAX}, one of each kind in turn`, () => {
     const lines = getMissed(sparse());
     expect(lines).toHaveLength(MISSED_LINES_MAX);
-    const kinds = lines.map(l => MISSED_RULES.find(r => r.id === l.id)!.kind);
-    expect(kinds).toEqual(['event', 'person', 'place']);
+    // no fork was taken in this run, so the three kinds left are all there is
+    expect([...kindsOf(sparse())].sort()).toEqual(['event', 'person', 'place']);
+  });
+
+  it('three different kinds out of four when the run has all four, and each kind gets its turn across seasons', () => {
+    const forked = (seed: number) => run({
+      unlockForgeChapel: true, forestReportReceived: true, horseCareCount: 1, investigatedLedger: true,
+    }, { seed });
+    const seen = new Set<string>();
+    for (let seed = 1; seed <= 60; seed++) {
+      const kinds = kindsOf(forked(seed));
+      expect(kinds).toHaveLength(MISSED_LINES_MAX);
+      expect(new Set(kinds).size).toBe(MISSED_LINES_MAX);
+      kinds.forEach(k => seen.add(k));
+    }
+    expect([...seen].sort()).toEqual(['choice', 'event', 'person', 'place']);
+  });
+
+  it('a fork line names the way not taken, and only one of the three ledger lines can ever be true', () => {
+    for (const flags of [{ investigatedLedger: true }, { reportedLedger: true }, { deferredLedger: true }] as FlagMap[]) {
+      const ids = missedIds(run({ ...COMPLETE, ...flags })).filter(id => id.startsWith('ledger_'));
+      expect(ids).toHaveLength(1);
+    }
+    // Elena: the answer that was not given is the other one
+    const exposed = missedIds(run({ ...COMPLETE, exposedElena: true, protectedElena: false }));
+    const shielded = missedIds(run({ ...COMPLETE, exposedElena: false, protectedElena: true }));
+    expect(exposed).toContain('elena_exposed');
+    expect(exposed).not.toContain('elena_shielded');
+    expect(shielded).toContain('elena_shielded');
+    expect(shielded).not.toContain('elena_exposed');
   });
 
   it('fills up from what is left when a kind has run out', () => {
     // only people and one place are missed
     const flags = { ...COMPLETE, attendedDinner: true, clue_mot_martha_lastwords: false, clue_mot_elena_burned: false, nightLedgerCount: 0 };
     const kinds = getMissed(run(flags)).map(l => MISSED_RULES.find(r => r.id === l.id)!.kind);
-    expect(kinds).toEqual(['person', 'place', 'person']);
+    expect([...kinds].sort()).toEqual(['person', 'person', 'place']);
   });
 
   it('is the same every time the ending is opened, whatever the language', () => {
