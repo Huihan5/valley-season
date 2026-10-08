@@ -79,6 +79,21 @@
     "henk": "Baron Henk",
     "lorenz": "Master Lorenz"
   },
+  "speakers": {
+    "gregor": "Gregor",
+    "marta": "Martha",
+    "elena": "Elena",
+    "lorenz": "Master Lorenz",
+    "henk": "Baron Henk",
+    "marguerite": "Baroness Marguerite",
+    "timothy": "Timothy",
+    "thierry": "Thierry",
+    "wynter": "Wynter",
+    "ludwig": "Baron Ludwig",
+    "duke": "Her Grace the Duke",
+    "hartmann": "Hartmann",
+    "wende": "Old Wende"
+  },
   "yieldTier": {
     "meagre": "meagre",
     "fair": "fair",

@@ -2,6 +2,7 @@ import { GameState, LogEntry } from '../types/game';
 import { CLUE_PREFIXES } from './FlagRegistry';
 import { ESTATE_FRAGMENTS } from './ClueSystem';
 import DATA from '../data';
+import { stripSpeech } from '../utils/speech';
 
 /**
  * The 卷宗 — the evidence the player is holding, handed back to them.
@@ -254,7 +255,9 @@ export function getJournal(state: GameState): JournalGroup[] {
       .map(source => {
         const { text, full } = resolve(source, state.log);
         // Only offer to expand when the full passage says more than the index line.
-        return { flag: source.flag, text, full: full && full !== text ? full : undefined };
+        // The passage was read with its speakers' faces over it; the file keeps the words.
+        const words = stripSpeech(full);
+        return { flag: source.flag, text, full: words && words !== text ? words : undefined };
       }),
   }));
 }

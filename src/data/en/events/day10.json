@@ -4,11 +4,11 @@
   "timing": "midday",
   "forced": true,
   "title": "The Tenants’ Petition",
-  "sceneText": "You are in the office when they come.\n\nFive of them. They stand in the courtyard and wait for somebody to come out. At the head of them is a man in his sixties, Old Wendt, whom you have seen twice out in the fields. He has a sheet of paper in his hand.\n\nOn the paper are the names of five households, and below them five signatures, three of which are marks.\n\n“Roofs and a cow shed,” Old Wendt says. “It was reported last year. Mr Hartmann wrote it down. It should be in the book.”\n\nThere is no grievance in the way he says it. He is stating a fact he has already checked.\n\nYou go back to the office and look through the outstanding list, and you find it. It is there, dated last November. Neat hand. Nothing recorded after it.",
+  "sceneText": "You are in the office when they come.\n\nFive of them. They stand in the courtyard and wait for somebody to come out. At the head of them is a man in his sixties, Old Wendt, whom you have seen twice out in the fields. He has a sheet of paper in his hand.\n\nOn the paper are the names of five households, and below them five signatures, three of which are marks.\n\n{@wende}“Roofs and a cow shed,” Old Wendt says. “It was reported last year. Mr Hartmann wrote it down. It should be in the book.”\n\nThere is no grievance in the way he says it. He is stating a fact he has already checked.\n\nYou go back to the office and look through the outstanding list, and you find it. It is there, dated last November. Neat hand. Nothing recorded after it.",
   "variants": {
     "informed": "You know that the five households are not in the same position.\n\nOld Wendt’s roof has leaked for two years, but there are only two of them in the house and one room is still fit to live in.\n\nThe one by the mill is the common cow shed, with one corner down, so that the whole village’s cattle are packed into the half that is left. Sickness in cattle spreads.\n\nOne is an old woman living alone. Her house will in fact stand another winter, but not two.\n\nThe remaining two have the least damage and the most people in them.",
     "uninformed": "There are five names on the list. You do not know which household is worst off.",
-    "partial_fair": "You say which three will be done, and why.\n\nNobody objects. Old Wendt nods and says the cow shed is certainly the most pressing. One of the men from the other two households opens his mouth, and in the end says nothing.\n\n“And the rest?” Old Wendt asks.\n\nYou say after the harvest.\n\n“Right,” he says. “Only keep it in mind.”\n\nHe leaves the paper behind, on the stone ledge of the porch.",
+    "partial_fair": "You say which three will be done, and why.\n\nNobody objects. Old Wendt nods and says the cow shed is certainly the most pressing. One of the men from the other two households opens his mouth, and in the end says nothing.\n\n{@wende}“And the rest?” Old Wendt asks.\n\nYou say after the harvest.\n\n{@wende}“Right,” he says. “Only keep it in mind.”\n\nHe leaves the paper behind, on the stone ledge of the porch.",
     "partial_unfair": "You say which three will be done.\n\nFor a moment nobody speaks.\n\nThen Old Wendt says right, thank you. He says it more politely than he said anything before.\n\nAfter they have gone the paper is still on the stone ledge of the porch, until the wind takes it to the ground."
   },
   "choices": [
@@ -25,7 +25,7 @@
         "flags": { "repairedAllHousing": true, "petitionResolved": true, "petitionFairness": "full" },
         "logEntry": "You approved repairs for all five households."
       },
-      "resultText": "Old Wendt takes the paper back, folds it twice and puts it in his pocket.\n\n“Thank you,” he says. And then they go, without staying about.\n\nThat afternoon Martha says less in the kitchen than usual. Going past, you find her talking to two others, and she stops when she sees you.\n\nThe last half of what you hear is “… somebody finally.”"
+      "resultText": "Old Wendt takes the paper back, folds it twice and puts it in his pocket.\n\n{@wende}“Thank you,” he says. And then they go, without staying about.\n\nThat afternoon Martha says less in the kitchen than usual. Going past, you find her talking to two others, and she stops when she sees you.\n\nThe last half of what you hear is “… somebody finally.”"
     },
     {
       "id": "repair_partial",
@@ -48,7 +48,7 @@
         "flags": { "deniedHousingPetition": true, "petitionResolved": true, "petitionFairness": "none" },
         "logEntry": "You put the petition off until after the harvest."
       },
-      "resultText": "Old Wendt looks at you a while.\n\n“Right,” he says.\n\nHe folds the paper up and puts it away, and turns and goes. The other four follow him. Through all of it not one of them says anything more.\n\nThe kitchen light went out earlier than usual that night."
+      "resultText": "Old Wendt looks at you a while.\n\n{@wende}“Right,” he says.\n\nHe folds the paper up and puts it away, and turns and goes. The other four follow him. Through all of it not one of them says anything more.\n\nThe kitchen light went out earlier than usual that night."
     }
   ]
 }

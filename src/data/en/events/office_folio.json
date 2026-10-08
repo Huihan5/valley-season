@@ -15,7 +15,7 @@
         },
         "logEntry": "You took the sprig to Elena and asked about it."
       },
-      "resultText": "You find her in the afternoon and show her the sprig.\n\nShe looks at it once and says she does not know.\n\n“I do not move what is inside when I clean,” she says. “With the folio I only wipe the cover.”\n\nWhat she says may well be true. You have no way to tell.\n\nWhen she has said it she waits a few seconds. You do not ask anything more, and she goes.\n\nThe folio was still in the same place the next day, with not a page moved."
+      "resultText": "You find her in the afternoon and show her the sprig.\n\nShe looks at it once and says she does not know.\n\n{@elena}“I do not move what is inside when I clean,” she says. “With the folio I only wipe the cover.”\n\nWhat she says may well be true. You have no way to tell.\n\nWhen she has said it she waits a few seconds. You do not ask anything more, and she goes.\n\nThe folio was still in the same place the next day, with not a page moved."
     },
     {
       "id": "folio_replace",

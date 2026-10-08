@@ -28,7 +28,7 @@
         "nextScene": "default",
         "logEntry": "You took your leave of Henk and rode back to Maplegate."
       },
-      "resultText": "You go to take your leave of Henk.\n\nHe is telling two men which line they are taking today, and stops when he sees you coming.\n\n“Off already?”\n\nYou say there are things waiting at the estate.\n\n“Fair enough,” he says. “You stayed last night. That is handsome of you.”\n\nHe means it. He claps you on the shoulder and turns back to his line.\n\nThere is frost on the road home. The horse goes slower than it came.\n\nMost of the morning is gone by the time you reach the estate. The people in the fields went out long ago. Martha is in the kitchen, and she nods when she sees you back, and asks nothing about the hunt.\n\nYou still have the afternoon."
+      "resultText": "You go to take your leave of Henk.\n\nHe is telling two men which line they are taking today, and stops when he sees you coming.\n\n{@henk}“Off already?”\n\nYou say there are things waiting at the estate.\n\n{@henk}“Fair enough,” he says. “You stayed last night. That is handsome of you.”\n\nHe means it. He claps you on the shoulder and turns back to his line.\n\nThere is frost on the road home. The horse goes slower than it came.\n\nMost of the morning is gone by the time you reach the estate. The people in the fields went out long ago. Martha is in the kitchen, and she nods when she sees you back, and asks nothing about the hunt.\n\nYou still have the afternoon."
     }
   ]
 }

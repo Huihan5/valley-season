@@ -16,7 +16,7 @@
         },
         "logEntry": "You asked Kessler to stay for lunch. He did not stay."
       },
-      "resultText": "“No need,” he says. “I eat in town.”\n\nHe puts the folder under his arm without breaking off what he is doing. It occurs to you that he has probably said that sentence dozens of times this year — that every steward on every estate asks him to a meal, and that every meal would make what he writes afterwards harder to write.\n\n“I shall be back next quarter,” he says, and goes."
+      "resultText": "{@timothy}“No need,” he says. “I eat in town.”\n\nHe puts the folder under his arm without breaking off what he is doing. It occurs to you that he has probably said that sentence dozens of times this year — that every steward on every estate asks him to a meal, and that every meal would make what he writes afterwards harder to write.\n\n{@timothy}“I shall be back next quarter,” he says, and goes."
     },
     {
       "id": "audit_other_estates",
@@ -27,7 +27,7 @@
         },
         "logEntry": "You asked Kessler about the other estates’ books."
       },
-      "resultText": "He stops and looks at you for two seconds.\n\n“The other estates’ books are the other estates’ business.”\n\nHe does not say it heavily, and there is no room at all left behind it. He fastens the folder and goes to the door.\n\n“Baron von Alder’s previous steward. I dealt with him three years,” he says. “He never asked me a question of that kind.”\n\nThe door closes."
+      "resultText": "He stops and looks at you for two seconds.\n\n{@timothy}“The other estates’ books are the other estates’ business.”\n\nHe does not say it heavily, and there is no room at all left behind it. He fastens the folder and goes to the door.\n\n{@timothy}“Baron von Alder’s previous steward. I dealt with him three years,” he says. “He never asked me a question of that kind.”\n\nThe door closes."
     },
     {
       "id": "audit_nature",
@@ -39,7 +39,7 @@
         },
         "logEntry": "You asked Kessler what that payment was, technically."
       },
-      "resultText": "His hands stop.\n\n“Technically it is nothing at all,” he says. “The sum is too small, the summary states a purpose, there is a record of who handled it. It does not constitute concealment. It does not constitute misappropriation. It does not even constitute negligence.”\n\n“If you are asking me what it is” — he shuts the clasp on the folder — “it is somebody making a thing flexible that ought not to have any give in it. That is not illegal.”\n\nHe stands up.\n\n“I have seen worse. I have seen more elegant. This is in the middle.”\n\nAt the door he stops a moment.\n\n“Baron von Alder’s previous steward. I dealt with him three years,” he says. “His books were cleaner than yours.”\n\nHe does not say whether that is praise or something else. He closes the door and goes."
+      "resultText": "His hands stop.\n\n{@timothy}“Technically it is nothing at all,” he says. “The sum is too small, the summary states a purpose, there is a record of who handled it. It does not constitute concealment. It does not constitute misappropriation. It does not even constitute negligence.”\n\n{@timothy}“If you are asking me what it is” — he shuts the clasp on the folder — “it is somebody making a thing flexible that ought not to have any give in it. That is not illegal.”\n\nHe stands up.\n\n{@timothy}“I have seen worse. I have seen more elegant. This is in the middle.”\n\nAt the door he stops a moment.\n\n{@timothy}“Baron von Alder’s previous steward. I dealt with him three years,” he says. “His books were cleaner than yours.”\n\nHe does not say whether that is praise or something else. He closes the door and goes."
     }
   ]
 }

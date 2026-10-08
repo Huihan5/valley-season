@@ -4,7 +4,7 @@
   "forced": true,
   "advancesPhase": true,
   "title": "Twenty Units",
-  "sceneText": "When today’s load is in, Gregor counts it over in the yard. He counts slowly, and when he has finished he counts it again.\n\n“Twenty,” he says.\n\nYou say the allowance is twenty-five.\n\n“Mm.”\n\nHe puts the marking pencil back in his pocket and looks at the stack.\n\n“Twenty-five is what the decree says. The decree is written for the whole north district.”\n\nHe pauses.\n\n“Oak on this slope takes sixty years to come to a size worth cutting. Cut twenty-five this year and next year you cut further north. What is further north is a steep face. Cut that and the soil will not hold.”\n\nThen he goes to see to the horses.\n\nHe did not say not to cut it. He only said the thing once.",
+  "sceneText": "When today’s load is in, Gregor counts it over in the yard. He counts slowly, and when he has finished he counts it again.\n\n{@gregor}“Twenty,” he says.\n\nYou say the allowance is twenty-five.\n\n{@gregor}“Mm.”\n\nHe puts the marking pencil back in his pocket and looks at the stack.\n\n{@gregor}“Twenty-five is what the decree says. The decree is written for the whole north district.”\n\nHe pauses.\n\n{@gregor}“Oak on this slope takes sixty years to come to a size worth cutting. Cut twenty-five this year and next year you cut further north. What is further north is a steep face. Cut that and the soil will not hold.”\n\nThen he goes to see to the horses.\n\nHe did not say not to cut it. He only said the thing once.",
   "choices": [
     {
       "id": "timber_finish",
@@ -30,7 +30,7 @@
         },
         "logEntry": "You stopped the season’s felling at twenty units."
       },
-      "resultText": "You say that is far enough.\n\nGregor is untying a rein, and his hands stop for half a second.\n\n“Mm.”\n\nHe goes on untying the rein.\n\nThat evening when you go to the stable he is standing in the doorway. He does not usually stand in the doorway.\n\n“That ground to the north,” he says. “My father’s generation cut it once. Half the slope came down that winter.”\n\n“Was it planted back?”\n\n“It was,” he says. “It has come up this thick now.”\n\nHe shows you with his hand. Less than a span.\n\n“Sixty years.”"
+      "resultText": "You say that is far enough.\n\nGregor is untying a rein, and his hands stop for half a second.\n\n{@gregor}“Mm.”\n\nHe goes on untying the rein.\n\nThat evening when you go to the stable he is standing in the doorway. He does not usually stand in the doorway.\n\n{@gregor}“That ground to the north,” he says. “My father’s generation cut it once. Half the slope came down that winter.”\n\n“Was it planted back?”\n\n{@gregor}“It was,” he says. “It has come up this thick now.”\n\nHe shows you with his hand. Less than a span.\n\n{@gregor}“Sixty years.”"
     }
   ]
 }

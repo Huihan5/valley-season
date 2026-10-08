@@ -4,14 +4,14 @@
   "timing": "midday",
   "forced": true,
   "title": "The Tax Audit",
-  "sceneText": "He walks in himself, unannounced. A chancery inspector calling does not require announcing.\n\nDark grey uniform, well cut and plainly years old, the cuffs worn to a shine. Early thirties, younger than you had imagined. He has a hard folder in his hand, and on coming into the office he first looks at which way the window faces, and then at you.\n\n“Kessler. Chancery,” he says. “This quarter’s check of the accounts.”",
+  "sceneText": "He walks in himself, unannounced. A chancery inspector calling does not require announcing.\n\nDark grey uniform, well cut and plainly years old, the cuffs worn to a shine. Early thirties, younger than you had imagined. He has a hard folder in his hand, and on coming into the office he first looks at which way the window faces, and then at you.\n\n{@timothy}“Kessler. Chancery,” he says. “This quarter’s check of the accounts.”",
   "variants": {
-    "met_before": "“We have met,” he adds, with no change of tone at all. “At the market.”",
+    "met_before": "{@timothy}“We have met,” he adds, with no change of tone at all. “At the market.”",
     "first_meeting": "He puts the folder on the desk, opens it and takes out a pen. No pleasantries.",
-    "body": "He sits down and starts through the ledger, quickly, his finger travelling down the figures, stopping now and then to make a note.\n\nHe asks you nothing. The room is quiet for close to twenty minutes.\n\n“Dues payable this quarter stand at fourteen and a half per cent of total yield,” he says at last. “At your present rate the final figure cannot be settled until the end of the month. That does not constitute a problem.”\n\nHe turns back several pages.\n\n“The problem is here.”",
-    "noticed": "“July to September. A series of small payments, summary column reading sundry.” He taps the tip of the pen against it. “You noticed.”\n\nIt is not a question. Your own marks are still on those pages.\n\n“Good,” he says, and turns past it.",
-    "missed": "“July to September. A series of small payments, summary column reading sundry.” He taps the tip of the pen against it. “You did not notice.”\n\nHe looks up, and for the first time he actually looks at you.\n\n“I am not accusing you of anything. You have been in post nine days, the ledger has a two-month hole in it, and anybody would go and look at the fields first.” He says it quite evenly. “But from now on you have noticed. I shall be back next quarter.”\n\nHe writes a line in his own record. You cannot make out what it says.",
-    "receipts": "He stops when he comes to the stack of receipts.\n\n“These receipts are not in the order the ledger enters them,” he says. “The ledger is by date. The receipts are by —”\n\nHe pulls the stack out and lays it on the desk, comparing.\n\n“By amount. Smallest first.”\n\nHe looks up.\n\n“Who has handled these receipts?”\n\nYou know the answer. Elena has the office; every sheet of paper in this room passes through her hands. And that arrangement is not your habit, nor does it look like Hartmann’s — his ledger runs by date from beginning to end.\n\nYou know one other thing: several sheets in that stack were filed after Hartmann disappeared."
+    "body": "He sits down and starts through the ledger, quickly, his finger travelling down the figures, stopping now and then to make a note.\n\nHe asks you nothing. The room is quiet for close to twenty minutes.\n\n{@timothy}“Dues payable this quarter stand at fourteen and a half per cent of total yield,” he says at last. “At your present rate the final figure cannot be settled until the end of the month. That does not constitute a problem.”\n\nHe turns back several pages.\n\n{@timothy}“The problem is here.”",
+    "noticed": "{@timothy}“July to September. A series of small payments, summary column reading sundry.” He taps the tip of the pen against it. “You noticed.”\n\nIt is not a question. Your own marks are still on those pages.\n\n{@timothy}“Good,” he says, and turns past it.",
+    "missed": "{@timothy}“July to September. A series of small payments, summary column reading sundry.” He taps the tip of the pen against it. “You did not notice.”\n\nHe looks up, and for the first time he actually looks at you.\n\n{@timothy}“I am not accusing you of anything. You have been in post nine days, the ledger has a two-month hole in it, and anybody would go and look at the fields first.” He says it quite evenly. “But from now on you have noticed. I shall be back next quarter.”\n\nHe writes a line in his own record. You cannot make out what it says.",
+    "receipts": "He stops when he comes to the stack of receipts.\n\n{@timothy}“These receipts are not in the order the ledger enters them,” he says. “The ledger is by date. The receipts are by —”\n\nHe pulls the stack out and lays it on the desk, comparing.\n\n{@timothy}“By amount. Smallest first.”\n\nHe looks up.\n\n{@timothy}“Who has handled these receipts?”\n\nYou know the answer. Elena has the office; every sheet of paper in this room passes through her hands. And that arrangement is not your habit, nor does it look like Hartmann’s — his ledger runs by date from beginning to end.\n\nYou know one other thing: several sheets in that stack were filed after Hartmann disappeared."
   },
   "onEnterEffects": {
     "flags": {
@@ -31,7 +31,7 @@
         },
         "logEntry": "You told the inspector the receipts had been filed by the housemaid."
       },
-      "resultText": "“The housemaid.” Timothy writes a line in the notebook.\n\n“Her name?”\n\nYou give it.\n\n“I shall need a word with her,” he says. “Not an examination. Whoever files a thing sometimes knows better than whoever entered it where it came from.”\n\nHe goes. The conversation happens in the hall, out of your hearing, three or four minutes.\n\nWhen he comes back he says nothing about it and goes on with the accounts.\n\nThat afternoon you meet Elena on the stairs. She gives you the way, backing to the wall, leaving you the whole width of the staircase, further back than she usually goes.\n\nHer head is down."
+      "resultText": "{@timothy}“The housemaid.” Timothy writes a line in the notebook.\n\n{@timothy}“Her name?”\n\nYou give it.\n\n{@timothy}“I shall need a word with her,” he says. “Not an examination. Whoever files a thing sometimes knows better than whoever entered it where it came from.”\n\nHe goes. The conversation happens in the hall, out of your hearing, three or four minutes.\n\nWhen he comes back he says nothing about it and goes on with the accounts.\n\nThat afternoon you meet Elena on the stairs. She gives you the way, backing to the wall, leaving you the whole width of the staircase, further back than she usually goes.\n\nHer head is down."
     },
     {
       "id": "receipts_mine",
@@ -42,7 +42,7 @@
         },
         "logEntry": "You told the inspector you had sorted the receipts yourself."
       },
-      "resultText": "“You did?”\n\n“I reorganised them when I took over.”\n\nHe looks at you for two seconds.\n\nYou do not know whether he believed it. He does not press. He only strikes out a half-written line in the notebook and turns to the next page.\n\n“Then the filing dates on this stack mean nothing,” he says.\n\nHe goes on down the accounts."
+      "resultText": "{@timothy}“You did?”\n\n“I reorganised them when I took over.”\n\nHe looks at you for two seconds.\n\nYou do not know whether he believed it. He does not press. He only strikes out a half-written line in the notebook and turns to the next page.\n\n{@timothy}“Then the filing dates on this stack mean nothing,” he says.\n\nHe goes on down the accounts."
     },
     {
       "id": "receipts_unknown",
@@ -53,7 +53,7 @@
         },
         "logEntry": "You said the receipts were from before you took over."
       },
-      "resultText": "“I do not know. That was before I took over.”\n\n“Mm.”\n\nHe asks nothing further. As procedure the answer is unassailable; you are genuinely not answerable for your predecessor’s filing.\n\nHe stacks the receipts back as they were and clips them together."
+      "resultText": "“I do not know. That was before I took over.”\n\n{@timothy}“Mm.”\n\nHe asks nothing further. As procedure the answer is unassailable; you are genuinely not answerable for your predecessor’s filing.\n\nHe stacks the receipts back as they were and clips them together."
     }
   ],
   "next": "day12_officer"

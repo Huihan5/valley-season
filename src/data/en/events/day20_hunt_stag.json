@@ -6,7 +6,7 @@
   "advancesPhase": true,
   "activationFlag": "huntAttendedDay20",
   "title": "The Stag That Stopped",
-  "sceneText": "The stag comes into the afternoon light and stands in the clear ground between two oaks.\n\nThe best shot in the field already has it, and Baron Henk raises a hand.\n\nHe is keeping the chance back. Every year one stag is left for the most welcome guest, or for whoever the Baron thinks is worth a try.\n\nNobody is looking at the stag. They are watching Henk, or watching who Henk is watching.\n\nHenk’s eyes come to rest on you, hold for a second, and move off. He has not decided.\n\nBeside you, Marguerite says quietly:\n\n“He is not looking for somebody to shoot a deer. He is looking for somebody to talk to.”",
+  "sceneText": "The stag comes into the afternoon light and stands in the clear ground between two oaks.\n\nThe best shot in the field already has it, and Baron Henk raises a hand.\n\nHe is keeping the chance back. Every year one stag is left for the most welcome guest, or for whoever the Baron thinks is worth a try.\n\nNobody is looking at the stag. They are watching Henk, or watching who Henk is watching.\n\nHenk’s eyes come to rest on you, hold for a second, and move off. He has not decided.\n\nBeside you, Marguerite says quietly:\n\n{@marguerite}“He is not looking for somebody to shoot a deer. He is looking for somebody to talk to.”",
   "onEnterEffects": {
     "flags": { "stagMoment": true }
   },
@@ -28,7 +28,7 @@
         "flags": { "stagPick": "B" },
         "logEntry": "You quietly asked Marguerite how Hartmann used to handle this moment."
       },
-      "resultText": "Her eyes do not leave the stag.\n\n“He took half a step back,” she says. “Every year. Back behind somebody else, where Henk could not find him.”\n\n“Seven years of stepping back?”\n\n“Seven years,” she says. “The eighth he did not come.”\n\nAhead of you somebody steps forward, and somebody else takes the chance.\n\nOnly then does Marguerite turn her head to look at you.\n\n“A person can keep out of the way of a thing for many years,” she says. “But keeping out of the way costs something, and what it costs runs out.”"
+      "resultText": "Her eyes do not leave the stag.\n\n{@marguerite}“He took half a step back,” she says. “Every year. Back behind somebody else, where Henk could not find him.”\n\n“Seven years of stepping back?”\n\n{@marguerite}“Seven years,” she says. “The eighth he did not come.”\n\nAhead of you somebody steps forward, and somebody else takes the chance.\n\nOnly then does Marguerite turn her head to look at you.\n\n{@marguerite}“A person can keep out of the way of a thing for many years,” she says. “But keeping out of the way costs something, and what it costs runs out.”"
     },
     {
       "id": "stag_stand_still",

@@ -8,7 +8,7 @@
   "sceneText": "",
   "variants": {
     "full": "There is a man waiting for you in the courtyard in the morning, one of the five. He has a small bag in his hands.\n\n“My wife made them,” he says. “They are not worth anything.”\n\nHe puts the bag into your hands and goes, quickly, as though afraid you will hand it back.\n\nInside is a dried fruit you have not seen before. Very sweet.",
-    "fair": "Old Wendt stopped you out in the fields.\n\n“They started on the cow shed yesterday,” he said. “I looked at it. It is being done properly.”\n\nHe paused.\n\n“The other two households. I spoke to them. They will not make trouble.”\n\nThen he went back to work. You do not know what he said to them.",
+    "fair": "Old Wendt stopped you out in the fields.\n\n{@wende}“They started on the cow shed yesterday,” he said. “I looked at it. It is being done properly.”\n\nHe paused.\n\n{@wende}“The other two households. I spoke to them. They will not make trouble.”\n\nThen he went back to work. You do not know what he said to them.",
     "unfair": "Two men did not turn up when the work was given out this morning.\n\nMartha said they had things at home. She was not looking at you when she said it.\n\nYou did not press her. You do not know whether you should have."
   },
   "choices": null

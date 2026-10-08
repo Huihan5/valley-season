@@ -79,6 +79,21 @@
     "henk": "亨克男爵",
     "lorenz": "洛伦茨匠师"
   },
+  "speakers": {
+    "gregor": "格雷格",
+    "marta": "玛莎",
+    "elena": "埃莱娜",
+    "lorenz": "洛伦茨匠师",
+    "henk": "亨克男爵",
+    "marguerite": "玛格丽特男爵夫人",
+    "timothy": "提莫西",
+    "thierry": "蒂埃里",
+    "wynter": "维特",
+    "ludwig": "路德维希男爵",
+    "duke": "公爵殿下",
+    "hartmann": "霍特曼",
+    "wende": "老文德"
+  },
   "yieldTier": {
     "meagre": "微薄",
     "fair": "尚可",

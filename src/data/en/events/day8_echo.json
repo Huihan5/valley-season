@@ -5,10 +5,10 @@
   "forced": true,
   "activationFlag": "attendedDinner",
   "title": "The Dinner Comes Back",
-  "sceneText": "When you came down this morning the talking in the kitchen stopped for a moment.\n\nNot the way it stops when people are caught, but the way it stops while the subject is changed. By the time you had gone past, the voices were up again, on something else.\n\nAt midday Martha, in the middle of talking to you, happened to mention the cook over at Thornwall.\n\n“That mutton she does, it is the way they do it on the other side of the hills,” she said. “Her husband came down off the ridge.”\n\nYou have not told anybody what you ate last night.",
+  "sceneText": "When you came down this morning the talking in the kitchen stopped for a moment.\n\nNot the way it stops when people are caught, but the way it stops while the subject is changed. By the time you had gone past, the voices were up again, on something else.\n\nAt midday Martha, in the middle of talking to you, happened to mention the cook over at Thornwall.\n\n{@marta}“That mutton she does, it is the way they do it on the other side of the hills,” she said. “Her husband came down off the ridge.”\n\nYou have not told anybody what you ate last night.",
   "variants": {
     "decorous": "In the afternoon Gregor said, at the stable: “I hear the Baroness saw you to the door yesterday.”\n\nThen he bent down and went on brushing. That was the third thing he had said this week.",
-    "graceless": "Going past the kitchen in the afternoon you heard somebody laughing inside. The laughing stopped when they saw you.\n\nMartha put her head out from behind the range, with the standard smile still on it.\n\n“Were there any orders, sir?”"
+    "graceless": "Going past the kitchen in the afternoon you heard somebody laughing inside. The laughing stopped when they saw you.\n\nMartha put her head out from behind the range, with the standard smile still on it.\n\n{@marta}“Were there any orders, sir?”"
   },
   "choices": null
 }

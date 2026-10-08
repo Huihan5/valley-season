@@ -28,7 +28,7 @@
         },
         "logEntry": "You sent the man selling tools on his way."
       },
-      "resultText": "You said no.\n\nHe did not press you. He has probably been turned down a good many times along the road. He drove the cart off.\n\nGregor stood beside you and watched it go.\n\n“The edges are good,” he said. “The hafts are new wood. Not seasoned.”\n\nHe paused.\n\n“Use them a month, catch one wet spell, and they will want replacing.”\n\nThat was the only stretch of speech he made all day."
+      "resultText": "You said no.\n\nHe did not press you. He has probably been turned down a good many times along the road. He drove the cart off.\n\nGregor stood beside you and watched it go.\n\n{@gregor}“The edges are good,” he said. “The hafts are new wood. Not seasoned.”\n\nHe paused.\n\n{@gregor}“Use them a month, catch one wet spell, and they will want replacing.”\n\nThat was the only stretch of speech he made all day."
     }
   ]
 }

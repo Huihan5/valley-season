@@ -5,7 +5,7 @@
   "forced": true,
   "activationFlag": "visitedMarket_day6",
   "title": "The East Side of the Square",
-  "sceneText": "Over against the wall on the east side of the square, a man is standing and eating.\n\nDark grey uniform, collar not unfastened. In one hand something wrapped in paper, in the other a small notebook. Two bites, a glance at the notebook, two more bites. He eats quickly, as though finishing a task that has to be finished.\n\nThere are people all around him, stallholders calling prices, children running past. He stands there like a stone of the wrong colour.\n\nHe has seen you. He swallows what is in his mouth and crushes the paper up.\n\n“The new steward at Maplegate.”\n\nYou do not remember meeting him.\n\n“Kessler. Chancery,” he says. “Your registration papers came across my desk last Wednesday.”",
+  "sceneText": "Over against the wall on the east side of the square, a man is standing and eating.\n\nDark grey uniform, collar not unfastened. In one hand something wrapped in paper, in the other a small notebook. Two bites, a glance at the notebook, two more bites. He eats quickly, as though finishing a task that has to be finished.\n\nThere are people all around him, stallholders calling prices, children running past. He stands there like a stone of the wrong colour.\n\nHe has seen you. He swallows what is in his mouth and crushes the paper up.\n\n{@timothy}“The new steward at Maplegate.”\n\nYou do not remember meeting him.\n\n{@timothy}“Kessler. Chancery,” he says. “Your registration papers came across my desk last Wednesday.”",
   "onEnterEffects": {
     "flags": { "met_timothy": true }
   },
@@ -17,7 +17,7 @@
         "flags": { "timothyDay6": "A" },
         "logEntry": "You asked Kessler to sit down and talk. He did not sit."
       },
-      "resultText": "“No need.” He finishes the last mouthful. “I am due back in fifteen minutes.”\n\nHe pushes the paper into his pocket, gives you a nod, and goes."
+      "resultText": "{@timothy}“No need.” He finishes the last mouthful. “I am due back in fifteen minutes.”\n\nHe pushes the paper into his pocket, gives you a nod, and goes."
     },
     {
       "id": "timothy6_how",
@@ -26,7 +26,7 @@
         "flags": { "timothyDay6": "B" },
         "logEntry": "You asked Kessler how he had known who you were."
       },
-      "resultText": "“I know every steward in this part of the district,” he says. “A new one is easier.”\n\nHe does not explain why a new one is easier. He shuts the notebook and puts it away inside his uniform.\n\n“I shall be at Maplegate on the twelfth of October to check the accounts,” he says. “I am telling you in advance. That is not a notice. It is a reminder.”\n\nThat sentence has given you eight days."
+      "resultText": "{@timothy}“I know every steward in this part of the district,” he says. “A new one is easier.”\n\nHe does not explain why a new one is easier. He shuts the notebook and puts it away inside his uniform.\n\n{@timothy}“I shall be at Maplegate on the twelfth of October to check the accounts,” he says. “I am telling you in advance. That is not a notice. It is a reminder.”\n\nThat sentence has given you eight days."
     },
     {
       "id": "timothy6_document",
@@ -35,7 +35,7 @@
         "flags": { "timothyDay6": "C", "clue_ofc_timothy_person": true },
         "logEntry": "You asked Kessler whether there was anything on the registration to watch."
       },
-      "resultText": "He looks at you. The look lasts longer than the last one.\n\n“There is one thing,” he says. “The guarantee runs thirty days exactly, counted from the date of arrival. Your date of arrival is entered as the thirtieth of September.”\n\n“Which makes your thirtieth day the thirtieth of October. Not the end of the month. The thirtieth. People get that wrong, and then discover on the last day that they have already expired.”\n\nHe opens the notebook again and glances at a page.\n\n“Also, the line for your remuneration reads one hundred and fifty guldmark. The estate’s quarterly operating budget is sixty.” He shuts the notebook. “That is not my business. I mention it only so that if anybody asks where your wages come from, you have an answer.”\n\nHe goes."
+      "resultText": "He looks at you. The look lasts longer than the last one.\n\n{@timothy}“There is one thing,” he says. “The guarantee runs thirty days exactly, counted from the date of arrival. Your date of arrival is entered as the thirtieth of September.”\n\n{@timothy}“Which makes your thirtieth day the thirtieth of October. Not the end of the month. The thirtieth. People get that wrong, and then discover on the last day that they have already expired.”\n\nHe opens the notebook again and glances at a page.\n\n{@timothy}“Also, the line for your remuneration reads one hundred and fifty guldmark. The estate’s quarterly operating budget is sixty.” He shuts the notebook. “That is not my business. I mention it only so that if anybody asks where your wages come from, you have an answer.”\n\nHe goes."
     }
   ]
 }

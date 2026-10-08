@@ -5,7 +5,7 @@
   "forced": true,
   "activationFlag": "attendedDinner",
   "title": "The Thornwall Dinner",
-  "sceneText": "Over the sweet course somebody asks Master Lorenz about the arrangements for the Observance this year.\n\n“The same as other years,” he says.\n\n“Surely there ought to be something new in it?” says Henk.\n\n“Why?” Lorenz asks back. He asks it very mildly, with nothing offensive in it at all, and the question stays there in the middle of the table with nobody picking it up.\n\nMarguerite sees you to the door. She does not do this for every guest; you saw Henk shown out by a servant.\n\nIt is cold outside already. She stands on the step without a coat.\n\n“That land at Maplegate is not easy to manage,” she says. “Not because the soil is poor. Because it is a little far from everybody.”\n\nShe pauses. Her pauses always run half a beat longer than other people’s.\n\n“Ludwig comes back every year for the Kindling. Stays three days, and goes.”",
+  "sceneText": "Over the sweet course somebody asks Master Lorenz about the arrangements for the Observance this year.\n\n{@lorenz}“The same as other years,” he says.\n\n{@henk}“Surely there ought to be something new in it?” says Henk.\n\n{@lorenz}“Why?” Lorenz asks back. He asks it very mildly, with nothing offensive in it at all, and the question stays there in the middle of the table with nobody picking it up.\n\nMarguerite sees you to the door. She does not do this for every guest; you saw Henk shown out by a servant.\n\nIt is cold outside already. She stands on the step without a coat.\n\n{@marguerite}“That land at Maplegate is not easy to manage,” she says. “Not because the soil is poor. Because it is a little far from everybody.”\n\nShe pauses. Her pauses always run half a beat longer than other people’s.\n\n{@marguerite}“Ludwig comes back every year for the Kindling. Stays three days, and goes.”",
   "next": "day7_dinner_return",
   "choices": [
     {
@@ -15,7 +15,7 @@
         "flags": { "dinnerPick3": "A" },
         "logEntry": "On leaving, you told Marguerite you would do your best at your work."
       },
-      "resultText": "“I shall do my best at my work.”\n\nShe nods.\n\n“Naturally.”\n\nShe says nothing further. The servant pushes the door open and she goes in.\n\nBefore it closes you hear somebody inside clearing the table.\n\nYou stand on the step a few seconds. What you said was not wrong. Anybody in that position might have said it.\n\nBut you did not answer what she said. She was not talking about work."
+      "resultText": "“I shall do my best at my work.”\n\nShe nods.\n\n{@marguerite}“Naturally.”\n\nShe says nothing further. The servant pushes the door open and she goes in.\n\nBefore it closes you hear somebody inside clearing the table.\n\nYou stand on the step a few seconds. What you said was not wrong. Anybody in that position might have said it.\n\nBut you did not answer what she said. She was not talking about work."
     },
     {
       "id": "dinner3_neighbours",
@@ -24,7 +24,7 @@
         "flags": { "dinnerPick3": "B" },
         "logEntry": "On leaving, you told Marguerite you should get to know your neighbours first."
       },
-      "resultText": "She looks at you a while.\n\n“Start next month, then,” she says. “You have no time this month. I know that.”\n\nShe turns and goes in, and the servant closes the door. You stand on the step a moment before you remember where your horse is tied."
+      "resultText": "She looks at you a while.\n\n{@marguerite}“Start next month, then,” she says. “You have no time this month. I know that.”\n\nShe turns and goes in, and the servant closes the door. You stand on the step a moment before you remember where your horse is tied."
     },
     {
       "id": "dinner3_the_baron",
@@ -33,7 +33,7 @@
         "flags": { "dinnerPick3": "C" },
         "logEntry": "On leaving, you said a word on the Baron’s behalf."
       },
-      "resultText": "“The Baron has duties of his own.”\n\nHer expression does not change, but the pause runs longer than the last one.\n\n“I knew Ludwig when he was twelve,” she says. “I do not imagine I need you to tell me what his duties are.”\n\nShe says it very evenly. There is no heat in it.\n\n“It is cold tonight. Mind the road.”\n\nShe turns and goes in. You are still standing where you were when the servant closes the door."
+      "resultText": "“The Baron has duties of his own.”\n\nHer expression does not change, but the pause runs longer than the last one.\n\n{@marguerite}“I knew Ludwig when he was twelve,” she says. “I do not imagine I need you to tell me what his duties are.”\n\nShe says it very evenly. There is no heat in it.\n\n{@marguerite}“It is cold tonight. Mind the road.”\n\nShe turns and goes in. You are still standing where you were when the servant closes the door."
     }
   ]
 }

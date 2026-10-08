@@ -6,7 +6,7 @@
   "advancesPhase": true,
   "activationFlag": "campOvernight",
   "title": "Supper in Camp",
-  "sceneText": "After two rounds of wine the talk in the camp breaks up. People fall into three or four knots, each on its own business.\n\nYou are sitting on the outside of the fire. Marguerite is across from you at an angle, not drinking, with something hot in her hands. Henk is on the other side, marking something out for three men, and his is the loudest voice there.\n\nThierry is not here. Somebody says he has gone to look at tomorrow’s line.\n\nThe fire is well up. The woods at night are so quiet you can hear something a long way off treading over the leaves.\n\nAt some point Henk turns his head.\n\n“Now then,” he says, loudly enough for the nearest few knots to hear it. “I have been meaning to ask.”\n\n“How long do you mean to stay here?”\n\nHe says it as a joke. His face has the expression of a joke on it.\n\nBut two or three people nearby have stopped talking.",
+  "sceneText": "After two rounds of wine the talk in the camp breaks up. People fall into three or four knots, each on its own business.\n\nYou are sitting on the outside of the fire. Marguerite is across from you at an angle, not drinking, with something hot in her hands. Henk is on the other side, marking something out for three men, and his is the loudest voice there.\n\nThierry is not here. Somebody says he has gone to look at tomorrow’s line.\n\nThe fire is well up. The woods at night are so quiet you can hear something a long way off treading over the leaves.\n\nAt some point Henk turns his head.\n\n{@henk}“Now then,” he says, loudly enough for the nearest few knots to hear it. “I have been meaning to ask.”\n\n{@henk}“How long do you mean to stay here?”\n\nHe says it as a joke. His face has the expression of a joke on it.\n\nBut two or three people nearby have stopped talking.",
   "choices": [
     {
       "id": "banquet_thirty_days",
@@ -16,7 +16,7 @@
         "flags": { "banquetAnswer": "A" },
         "logEntry": "At the camp supper you said thirty days, it is in the contract."
       },
-      "resultText": "“Thirty days,” you say. “It is in the contract.”\n\nHenk laughs out loud and slaps his thigh.\n\n“Good,” he says. “I like a man who knows his figures.”\n\nHe turns back to his own conversation. That is the end of it."
+      "resultText": "“Thirty days,” you say. “It is in the contract.”\n\nHenk laughs out loud and slaps his thigh.\n\n{@henk}“Good,” he says. “I like a man who knows his figures.”\n\nHe turns back to his own conversation. That is the end of it."
     },
     {
       "id": "banquet_up_to_baron",
@@ -25,7 +25,7 @@
         "flags": { "banquetAnswer": "B" },
         "logEntry": "You said that was for the Baron to say."
       },
-      "resultText": "“That is for the Baron to say,” you tell him.\n\n“For Ludwig to say.” Henk repeats it, and then nods. “So: you do not know.”\n\nHe asks nothing further, but after that sentence the attention of the people nearby drifts off as well.\n\nA log falls in on itself in the fire and throws up a spray of sparks."
+      "resultText": "“That is for the Baron to say,” you tell him.\n\n{@henk}“For Ludwig to say.” Henk repeats it, and then nods. “So: you do not know.”\n\nHe asks nothing further, but after that sentence the attention of the people nearby drifts off as well.\n\nA log falls in on itself in the fire and throws up a spray of sparks."
     },
     {
       "id": "banquet_havent_thought",
@@ -34,7 +34,7 @@
         "flags": { "banquetAnswer": "C", "askedWhyStay": true },
         "logEntry": "You said you had not thought about it. Marguerite headed the conversation off for you."
       },
-      "resultText": "“I have not thought about it.”\n\nYou hear how undefended that is in this company as soon as it is out.\n\nHenk’s eyes brighten. He leans in a little.\n\n“Not thought about it,” he says. “So it can be thought about. If you mean to be in the valley for the long run, some things are better arranged sooner than later. Whether a foreigner can hold property here in his own name, for instance — there is a good deal in that, and I could —”\n\n“Henk.”\n\nMarguerite does not raise her voice, and the whole outer ring goes quiet.\n\nShe moves the cup in her hands to a different place.\n\n“He manages an estate on behalf of a man who is not here,” she says. “Asking him at supper how long he means to stay is like asking your own steward how many years he intends to give you.”\n\nHenk is blank a moment, then laughs twice and opens his hands.\n\n“True enough,” he says. “I was only curious.”\n\nHe turns back. The people beside him start talking again.\n\nMarguerite does not look at you again. She is looking at the fire.\n\nAfter a while she says something, very quietly, and you are not certain it was said to you.\n\n“He should not have asked that here.”"
+      "resultText": "“I have not thought about it.”\n\nYou hear how undefended that is in this company as soon as it is out.\n\nHenk’s eyes brighten. He leans in a little.\n\n{@henk}“Not thought about it,” he says. “So it can be thought about. If you mean to be in the valley for the long run, some things are better arranged sooner than later. Whether a foreigner can hold property here in his own name, for instance — there is a good deal in that, and I could —”\n\n{@marguerite}“Henk.”\n\nMarguerite does not raise her voice, and the whole outer ring goes quiet.\n\nShe moves the cup in her hands to a different place.\n\n{@marguerite}“He manages an estate on behalf of a man who is not here,” she says. “Asking him at supper how long he means to stay is like asking your own steward how many years he intends to give you.”\n\nHenk is blank a moment, then laughs twice and opens his hands.\n\n{@henk}“True enough,” he says. “I was only curious.”\n\nHe turns back. The people beside him start talking again.\n\nMarguerite does not look at you again. She is looking at the fire.\n\nAfter a while she says something, very quietly, and you are not certain it was said to you.\n\n{@marguerite}“He should not have asked that here.”"
     }
   ]
 }

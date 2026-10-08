@@ -29,7 +29,7 @@
         "nextScene": "default",
         "logEntry": "You carried today’s bag back to Maplegate."
       },
-      "resultText": "You say you will take it back.\n\nA steward from another house glances at you — the look that means, so there are still people who do it that way. Most of them take the coin. Carrying it home means it has to be dealt with, and dealing with it takes hands, and coin is simpler.\n\nWhen you get back at dusk Martha takes the sack at the kitchen door and opens it to look.\n\n“Hare,” she says. “Three.”\n\nShe lifts the sack to weigh it in her hand and opens it a second time.\n\n“And pheasant.”\n\nShe does not thank you. She turns and goes into the kitchen, calling for people before she is through the door.\n\nThe kitchen light burned very late that night. What the tenants ate at midday the next day was not what they usually eat."
+      "resultText": "You say you will take it back.\n\nA steward from another house glances at you — the look that means, so there are still people who do it that way. Most of them take the coin. Carrying it home means it has to be dealt with, and dealing with it takes hands, and coin is simpler.\n\nWhen you get back at dusk Martha takes the sack at the kitchen door and opens it to look.\n\n{@marta}“Hare,” she says. “Three.”\n\nShe lifts the sack to weigh it in her hand and opens it a second time.\n\n{@marta}“And pheasant.”\n\nShe does not thank you. She turns and goes into the kitchen, calling for people before she is through the door.\n\nThe kitchen light burned very late that night. What the tenants ate at midday the next day was not what they usually eat."
     }
   ]
 }

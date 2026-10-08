@@ -5,7 +5,7 @@
   "forced": true,
   "activationFlag": "huntAttendedDay20",
   "title": "Stay or Ride",
-  "sceneText": "The fire burns in the middle of the camp, hotter than the fire in the estate forge-chapel and a great deal rougher.\n\nHenk catches you before dark.\n\n“Stay for supper,” he says. It is less an invitation than a statement of fact. “The third night of the season we always spend in camp.”\n\nHe does not explain who we is.\n\nThe tents are already up. The attendants have begun carrying the wine jars.\n\nYou understand what it means: if you stay, there is no getting back to the estate tonight. Tomorrow starts here.",
+  "sceneText": "The fire burns in the middle of the camp, hotter than the fire in the estate forge-chapel and a great deal rougher.\n\nHenk catches you before dark.\n\n{@henk}“Stay for supper,” he says. It is less an invitation than a statement of fact. “The third night of the season we always spend in camp.”\n\nHe does not explain who we is.\n\nThe tents are already up. The attendants have begun carrying the wine jars.\n\nYou understand what it means: if you stay, there is no getting back to the estate tonight. Tomorrow starts here.",
   "choices": [
     {
       "id": "overnight_stay",
@@ -27,7 +27,7 @@
         "nextScene": "default",
         "logEntry": "You rode back to Maplegate through the night."
       },
-      "resultText": "You say there are things at the estate tomorrow and you have to get back.\n\nHenk is blank for half a second — it has probably been a long time since anyone turned down an invitation of that kind from him — and then laughs at once.\n\n“Of course,” he says. “You are busier than we are.”\n\nHe has your horse brought round, and adds that the road is dark and someone should hang a lantern for you. He is just as warm about all of it as before.\n\nThe ride back takes two hours. A forest road at night is much longer than it is by day.\n\nThe kitchen light is still on when you reach the estate. Martha sees you through the window and stops for a moment; she had thought you were not coming back.\n\n“There is some in the pot,” she says."
+      "resultText": "You say there are things at the estate tomorrow and you have to get back.\n\nHenk is blank for half a second — it has probably been a long time since anyone turned down an invitation of that kind from him — and then laughs at once.\n\n{@henk}“Of course,” he says. “You are busier than we are.”\n\nHe has your horse brought round, and adds that the road is dark and someone should hang a lantern for you. He is just as warm about all of it as before.\n\nThe ride back takes two hours. A forest road at night is much longer than it is by day.\n\nThe kitchen light is still on when you reach the estate. Martha sees you through the window and stops for a moment; she had thought you were not coming back.\n\n{@marta}“There is some in the pot,” she says."
     }
   ]
 }

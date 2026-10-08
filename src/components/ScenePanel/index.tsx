@@ -1,36 +1,11 @@
 import { ReactNode } from 'react';
-import { GameState, NpcId, TextPart } from '../../types/game';
+import { GameState } from '../../types/game';
 import { PHASE_LABELS, dayName, isHuntSeason } from '../../systems/TimeSystem';
 import { getFatigueNote, getFatigueStatus } from '../../systems/FatigueSystem';
 import DATA from '../../data';
-import Gregor from '../../assets/portraits/Gregor.png';
-import Martha from '../../assets/portraits/Martha.png';
-import Elena from '../../assets/portraits/Elena.png';
-import Lorenz from '../../assets/portraits/Lorenz.png';
+import Passage, { Speaker } from './Passage';
 
 const ui = DATA.ui;
-
-// Only the four who live on the estate have portraits; the nobles are named without one.
-const PORTRAITS: Partial<Record<NpcId, string>> = {
-  gregor: Gregor, marta: Martha, elena: Elena, lorenz: Lorenz,
-};
-const NPC_NAMES: Record<NpcId, string> = ui.npc;
-
-/**
- * The prose, with what the player has read here before set back a step (difference
- * hints). The parts only annotate the string, so a pair that does not join to it is
- * stale (an event has taken the screen since) and the plain string is shown instead.
- */
-function Prose({ text, parts }: { text: string; parts?: TextPart[] | null }) {
-  if (!parts || parts.map(p => p.text).join('') !== text) return <>{text}</>;
-  return (
-    <>
-      {parts.map((p, i) => (
-        p.known ? <span key={i} className="text-game-known">{p.text}</span> : <span key={i}>{p.text}</span>
-      ))}
-    </>
-  );
-}
 
 interface Props {
   state: GameState;
@@ -110,26 +85,20 @@ export default function ScenePanel({ state, onOpenSaves, onOpenInventory, onOpen
         {lastResult && (
           <div className="border-l-2 border-gold-dim pl-4 max-w-[46rem]">
             {/* A face to the voice, when someone is speaking to you (P15). */}
-            {speaker && (
-              <div className="flex items-center gap-2 mb-2">
-                {PORTRAITS[speaker] && (
-                  <img
-                    src={PORTRAITS[speaker]}
-                    alt=""
-                    className="w-8 h-8 rounded-full object-cover border border-gold-dim/40 shrink-0"
-                  />
-                )}
-                <span className="text-gold-dim text-xs font-serif tracking-wider">{NPC_NAMES[speaker]}</span>
-              </div>
-            )}
-            <p className="text-cream font-serif text-sm leading-relaxed whitespace-pre-line">
-              <Prose text={lastResult} parts={state.lastResultParts} />
-            </p>
+            {speaker && <Speaker id={speaker} className="mb-2" />}
+            <Passage
+              text={lastResult}
+              parts={state.lastResultParts}
+              speakers={!speaker}
+              className="text-cream font-serif text-sm leading-relaxed whitespace-pre-line"
+            />
           </div>
         )}
-        <p className="text-game-text font-serif text-sm leading-relaxed whitespace-pre-line max-w-[46rem]">
-          <Prose text={currentSceneText} parts={state.sceneParts} />
-        </p>
+        <Passage
+          text={currentSceneText}
+          parts={state.sceneParts}
+          className="text-game-text font-serif text-sm leading-relaxed whitespace-pre-line max-w-[46rem]"
+        />
 
         {/* The choices sit right under the last paragraph and scroll with it (B):
             the player decides inside the reading, not on a panel below it. A short

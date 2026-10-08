@@ -5,7 +5,7 @@
   "forced": true,
   "activationFlag": "visitedMarket_day13",
   "title": "At the Notice Board",
-  "sceneText": "At the north end of the market there is a duchy notice board with the forestry decrees nailed up on it, the table of felling allowances, and several notices that have begun to curl at the edges.\n\nFour or five men are standing in front of it, and the one in the middle in the dark green coat is explaining something. His hands move while he talks, marking out the height and the thickness of a tree, and the others are nodding.\n\n“— so under thirty you declare it yourself, and over thirty wants a separate approval. It is a nuisance, yes, but if you cut it and do not declare it, one look from my side and it is three years’ worth.”\n\nSomebody asks something, and he laughs, loudly.\n\nTurning round, he sees you and stops for a moment; he does not know you. Then he looks at the cart behind you, and at what is on it.\n\n“Maplegate?”",
+  "sceneText": "At the north end of the market there is a duchy notice board with the forestry decrees nailed up on it, the table of felling allowances, and several notices that have begun to curl at the edges.\n\nFour or five men are standing in front of it, and the one in the middle in the dark green coat is explaining something. His hands move while he talks, marking out the height and the thickness of a tree, and the others are nodding.\n\n{@thierry}“— so under thirty you declare it yourself, and over thirty wants a separate approval. It is a nuisance, yes, but if you cut it and do not declare it, one look from my side and it is three years’ worth.”\n\nSomebody asks something, and he laughs, loudly.\n\nTurning round, he sees you and stops for a moment; he does not know you. Then he looks at the cart behind you, and at what is on it.\n\n{@thierry}“Maplegate?”",
   "onEnterEffects": {
     "flags": { "met_thierry": true }
   },
@@ -17,7 +17,7 @@
         "flags": { "thierryDay13": "A" },
         "logEntry": "You met Thierry, the forester for the north district, at the notice board."
       },
-      "resultText": "“Thierry. Forester, north district.” He puts out his hand. “You have twenty-five left of this year’s allowance over your way.”\n\nHe has the figure by heart, and he says it as loosely as he would say the weather.\n\n“If you want me, I am in the woods. Two hundred days of the year I am in there.”"
+      "resultText": "{@thierry}“Thierry. Forester, north district.” He puts out his hand. “You have twenty-five left of this year’s allowance over your way.”\n\nHe has the figure by heart, and he says it as loosely as he would say the weather.\n\n{@thierry}“If you want me, I am in the woods. Two hundred days of the year I am in there.”"
     },
     {
       "id": "thierry13_how",
@@ -26,7 +26,7 @@
         "flags": { "thierryDay13": "B" },
         "logEntry": "You asked Thierry how he had known you were from Maplegate."
       },
-      "resultText": "“The timber on your cart.” He points at it. “North slope oak. The cut face runs red. Only you and Thornwall have that tree around here, and Thornwall does not sell wood.”\n\nHe is a little pleased with himself when he has said it, and rubs his nose.\n\n“Thierry. Forester, north district.”"
+      "resultText": "{@thierry}“The timber on your cart.” He points at it. “North slope oak. The cut face runs red. Only you and Thornwall have that tree around here, and Thornwall does not sell wood.”\n\nHe is a little pleased with himself when he has said it, and rubs his nose.\n\n{@thierry}“Thierry. Forester, north district.”"
     },
     {
       "id": "thierry13_boundary",
@@ -35,7 +35,7 @@
         "flags": { "thierryDay13": "C", "clue_ofc_thierry_range": true },
         "logEntry": "You asked Thierry about the boundary of the north wood."
       },
-      "resultText": "“Ah.” He smooths down one of the sheets on the board. “Which stretch?”\n\nYou describe roughly where.\n\n“That stretch is trouble,” he says, straight out. “The boundary is written as the stream, and the stream changed course in last year’s spring flood. Whether you reckon by the old bed or the new one after a change is not in the file, because whoever wrote the file did not expect a river to move.”\n\nHe pulls a much-folded sheet out of his canvas bag — a map he drew himself — and taps a point on it.\n\n“My round comes to an end here.” His finger stops on a line. “Past this line is not somewhere I am uninterested in. It is woodland that was never declared, and nobody lives there. Every autumn there are hunters coming through from that side.”\n\nHe folds the sheet away.\n\n“If you ever want to go and look at it, do not go alone.”"
+      "resultText": "{@thierry}“Ah.” He smooths down one of the sheets on the board. “Which stretch?”\n\nYou describe roughly where.\n\n{@thierry}“That stretch is trouble,” he says, straight out. “The boundary is written as the stream, and the stream changed course in last year’s spring flood. Whether you reckon by the old bed or the new one after a change is not in the file, because whoever wrote the file did not expect a river to move.”\n\nHe pulls a much-folded sheet out of his canvas bag — a map he drew himself — and taps a point on it.\n\n{@thierry}“My round comes to an end here.” His finger stops on a line. “Past this line is not somewhere I am uninterested in. It is woodland that was never declared, and nobody lives there. Every autumn there are hunters coming through from that side.”\n\nHe folds the sheet away.\n\n{@thierry}“If you ever want to go and look at it, do not go alone.”"
     }
   ]
 }

@@ -16,7 +16,7 @@
         "nextScene": "forest",
         "logEntry": "You drew the stumps, the measurements and the line of the skid road on a piece of birch bark."
       },
-      "resultText": "You did not bring paper. You draw with charcoal on the inner face of a piece of birch bark.\n\nThe positions of the eleven stumps, the spacing roughly, the line of the skid road, and the figures Thierry gave: thirty-two, thirty-five, thirty-eight — and a declared limit of thirty.\n\nThierry watches you draw.\n\n“That is accurate,” he says. “The proportions are wrong, though.”\n\nHe crouches and adds two strokes with a finger in the blank part of the bark: a line for the stream, and a cross for where the stream ran before it moved.\n\n“Take that back and look at it against a map yourself,” he says. “I cannot give you the file, but maps are public.”\n\nYou carry the bark back to the estate and press it inside an old folio in the office."
+      "resultText": "You did not bring paper. You draw with charcoal on the inner face of a piece of birch bark.\n\nThe positions of the eleven stumps, the spacing roughly, the line of the skid road, and the figures Thierry gave: thirty-two, thirty-five, thirty-eight — and a declared limit of thirty.\n\nThierry watches you draw.\n\n{@thierry}“That is accurate,” he says. “The proportions are wrong, though.”\n\nHe crouches and adds two strokes with a finger in the blank part of the bark: a line for the stream, and a cross for where the stream ran before it moved.\n\n{@thierry}“Take that back and look at it against a map yourself,” he says. “I cannot give you the file, but maps are public.”\n\nYou carry the bark back to the estate and press it inside an old folio in the office."
     },
     {
       "id": "record_remember",

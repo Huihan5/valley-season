@@ -27,7 +27,7 @@
         },
         "logEntry": "You spent an afternoon down the well cleaning it out yourself."
       },
-      "resultText": "You took two men down with you.\n\nThe bottom of the well is deeper than you thought, and colder. You were down there over an hour, and brought up a heap of things: rotted staves off a bucket, several stones, one shoe.\n\nWhen you came up Martha was standing at the well head with a bowl of something hot in her hands.\n\n“Drink it,” she said.\n\nYou drank it. She watched you finish, took the bowl away, and said nothing else at all.\n\nThe next day’s water ran clear."
+      "resultText": "You took two men down with you.\n\nThe bottom of the well is deeper than you thought, and colder. You were down there over an hour, and brought up a heap of things: rotted staves off a bucket, several stones, one shoe.\n\nWhen you came up Martha was standing at the well head with a bowl of something hot in her hands.\n\n{@marta}“Drink it,” she said.\n\nYou drank it. She watched you finish, took the bowl away, and said nothing else at all.\n\nThe next day’s water ran clear."
     }
   ]
 }
