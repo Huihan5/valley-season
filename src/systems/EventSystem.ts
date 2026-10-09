@@ -457,6 +457,23 @@ function processDay30(event: EventData, state: GameState): EventData {
 }
 
 /**
+ * What 亨克 says when the trust is not there. He counts what he has offered, and what the
+ * player did with the one thing he asked — which depends on what happened at the dinner:
+ * he only put the timber proposal to someone who sat at the table, and "you never answered"
+ * is only true of the one who put it off (dinnerPick1 'C'). Everyone else is told what they
+ * did, or is not told about a proposal they never heard.
+ */
+function shortOfTrust(event: EventData, state: GameState): string {
+  const v = event.variants ?? {};
+  const pick = state.flags.attendedDinner ? state.flags.dinnerPick1 : null;
+  const count = pick === null ? v.short_of_trust_count_absent
+    : pick === 'A' ? v.short_of_trust_count_accepted
+      : pick === 'B' ? v.short_of_trust_count_refused
+        : v.short_of_trust_count_deferred;
+  return [v.short_of_trust_open, count, v.short_of_trust_close].filter(Boolean).join('\n\n');
+}
+
+/**
  * 磨岭 at night. What 亨克 gives depends on how far the player has actually got
  * with him; asking for more than that is the worst conversation in the game,
  * because he is not rude about it. The renown is gone either way — not for what
@@ -482,7 +499,7 @@ function processMillridge(event: EventData, state: GameState): EventData {
         flags: { ...choice.effects?.flags, henkCoin: true },
         logEntry: lines.millridgeShortOfTrust,
       },
-      resultText: event.variants?.short_of_trust,
+      resultText: shortOfTrust(event, state),
     };
   });
 

@@ -1,4 +1,6 @@
+import { useContext } from 'react';
 import { TextPart } from '../../types/game';
+import { CodexLinks } from '../common/CodexLinks';
 import { SpeakerId, isSpeakerId } from '../../data/speakers';
 import { hasSpeech, splitSpeech } from '../../utils/speech';
 import DATA from '../../data';
@@ -19,10 +21,15 @@ export const PORTRAITS: Partial<Record<SpeakerId, string>> = {
 
 export const SPEAKER_NAMES: Record<SpeakerId, string> = DATA.ui.speakers;
 
-/** The face and the name over a line: who is talking. `size` is a Tailwind square. */
+/**
+ * The face and the name over a line: who is talking. `size` is a Tailwind square. When the
+ * player holds that person's page in the 见闻, the face and name open it, as the names in the
+ * relations column do.
+ */
 export function Speaker({ id, size = 'w-8 h-8', className = '' }: { id: SpeakerId; size?: string; className?: string }) {
-  return (
-    <div className={`flex items-center gap-2 ${className}`}>
+  const open = useContext(CodexLinks)?.(id) ?? null;
+  const who = (
+    <>
       {PORTRAITS[id] && (
         <img
           src={PORTRAITS[id]}
@@ -31,7 +38,18 @@ export function Speaker({ id, size = 'w-8 h-8', className = '' }: { id: SpeakerI
         />
       )}
       <span className="text-gold-dim text-xs font-serif tracking-wider">{SPEAKER_NAMES[id]}</span>
-    </div>
+    </>
+  );
+  if (!open) return <div className={`flex items-center gap-2 ${className}`}>{who}</div>;
+  return (
+    <button
+      type="button"
+      title={DATA.ui.statusPanel.openCodex}
+      onClick={open}
+      className={`flex items-center gap-2 rounded-sm text-left hover:bg-bg-hover transition-colors ${className}`}
+    >
+      {who}
+    </button>
   );
 }
 

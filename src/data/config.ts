@@ -484,3 +484,13 @@ export const TOTAL_DAYS = 30;
 export const MISSED_LINES_MAX = 3;
 // "集市的周六你大多留在了庄园": the four market Saturdays, and at most this many were visited.
 export const MISSED_MARKET_VISITS_FEW = 1;
+
+// ── 声音 (DEVELOPMENT_PLAN 3.9) ───────────────────────────────────────────────
+// Quiet by design: a bed deepens the silence, it never leads. None of this is heard until a
+// sound file is dropped into src/assets/audio/ under a cue's id (docs/SOUND_LIST.md).
+export const AUDIO_DEFAULT_VOLUME = 0.6;        // master, 0 to 1; the author's mute/volume panel is still to be placed
+export const AUDIO_BED_GAIN = 0.7;              // a bed sits under the master
+export const AUDIO_ONE_SHOT_GAIN = 0.9;         // a single sound a little above the beds
+export const AUDIO_FADE_MS = 2500;              // a bed comes in and goes out over this long
+export const AUDIO_INDOOR_WEATHER_GAIN = 0.35;  // the rain or wind heard from inside a room
+export const AUDIO_ONE_SHOT_GAP_MS = 350;       // the same one-shot is not repeated inside this

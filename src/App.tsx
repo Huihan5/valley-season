@@ -1,7 +1,8 @@
-import { useReducer, useEffect, useState, useCallback } from 'react';
+import { useReducer, useEffect, useState, useCallback, useMemo } from 'react';
 import { getEndingData, EndingId } from './systems/EndingSystem';
 import { getOpeningPage } from './systems/OpeningSystem';
 import { gameReducer, createInitialState, replaySeason } from './systems/GameEngine';
+import { NpcId } from './types/game';
 import DATA from './data';
 import { fill } from './utils/text';
 import { newSeed } from './utils/rng';
@@ -19,7 +20,8 @@ import Inventory from './components/common/Inventory';
 import Retrospect from './components/common/Retrospect';
 import CodexPanel from './components/common/CodexPanel';
 import Missed from './components/common/Missed';
-import { recordCodex, currentUnlocks } from './systems/CodexSystem';
+import { recordCodex, currentUnlocks, unlockedKeys, codexEntryOf } from './systems/CodexSystem';
+import { CodexLinks, CodexLink } from './components/common/CodexLinks';
 import {
   AUTO_SLOT, ManualSlot, SaveSummary,
   writeSlot, readSlot, clearSlot, readSlotSummary, listManualSlots,
@@ -27,6 +29,8 @@ import {
 } from './systems/SaveSystem';
 import { getLocale, setLocale } from './data/locale';
 import { readSeenEndings, recordEnding } from './systems/CollectionSystem';
+import { useCues } from './audio/useCues';
+import { playCue } from './audio';
 
 const ui = DATA.ui;
 
@@ -48,6 +52,7 @@ export default function App() {
     if (state) recordCodex(currentUnlocks(state));
     setCodexFocus(entryId);
     setCodexOpen(true);
+    playCue('ui_page');
   };
   const [autoSave, setAutoSave] = useState<SaveSummary | null>(() => readSlotSummary(AUTO_SLOT));
   const [manualSaves, setManualSaves] = useState<(SaveSummary | null)[]>(() => listManualSlots());
@@ -104,6 +109,24 @@ export default function App() {
       ? ui.app.documentTitle
       : fill(ui.app.documentTitleInSeason, { day: state.day });
   }, [state.day, atTitle]);
+
+  // Sound follows the state and nothing else; with no sound files it does nothing at all.
+  useCues(atTitle ? 'title' : 'season', state);
+
+  // A face or a name in the reading opens that person's page, when the player holds it.
+  const codexLink = useMemo<CodexLink>(() => {
+    const held = unlockedKeys(state);
+    return (who) => {
+      const entry = codexEntryOf(who as NpcId);
+      return entry && held.has(entry) ? () => openCodexAt(entry) : null;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state]);
+
+  const choose = (id: string) => {
+    playCue('ui_tap');
+    dispatch({ type: 'MAKE_CHOICE', choiceId: id });
+  };
 
   const startNewSeason = () => {
     clearSlot(AUTO_SLOT);
@@ -186,7 +209,7 @@ export default function App() {
           onNew={startNewSeason}
           onContinue={continueSeason}
           onOpenSaves={() => setSavesOpen(true)}
-          onOpenRetrospect={() => setRetroOpen(true)}
+          onOpenRetrospect={() => { setRetroOpen(true); playCue('ui_page'); }}
         />
         {savesOpen && (
           <SaveMenu
@@ -267,83 +290,85 @@ export default function App() {
     <ChoicePanel
       choices={state.currentChoices}
       mode={state.activeEvent ? 'event' : 'daily'}
-      onChoice={(id) => dispatch({ type: 'MAKE_CHOICE', choiceId: id })}
+      onChoice={choose}
     />
   );
 
   return (
-    <div className="h-screen bg-bg text-game-text flex flex-col overflow-hidden p-3">
-      {/* The whole board is capped and centred: on a wide screen the reading column
-          stays snug against the readouts instead of stranding a gap between them.
-          Below lg the three columns stop being columns — they stack into one scroll
-          (reading first, then the readouts, then the record), because a 375px phone
-          cannot spare 256px to a fixed status rail and still leave a column to read in. */}
-      <div className="flex flex-col lg:flex-row gap-3 w-full max-w-[78rem] mx-auto flex-1 min-h-0 overflow-y-auto lg:overflow-visible">
-        {/* Left: the estate's business, and the record beneath it (B) — the log
-            moved out from between the prose and the choices. Desktop only: below lg
-            the tasks already return inside the 劳作 tab and the log stacks at the end. */}
-        <div className="w-48 shrink-0 hidden lg:flex flex-col gap-3 min-h-0">
-          <div className="flex-1 min-h-0">
-            <EstateTaskList
+    <CodexLinks.Provider value={codexLink}>
+      <div className="h-screen bg-bg text-game-text flex flex-col overflow-hidden p-3">
+        {/* The whole board is capped and centred: on a wide screen the reading column
+            stays snug against the readouts instead of stranding a gap between them.
+            Below lg the three columns stop being columns — they stack into one scroll
+            (reading first, then the readouts, then the record), because a 375px phone
+            cannot spare 256px to a fixed status rail and still leave a column to read in. */}
+        <div className="flex flex-col lg:flex-row gap-3 w-full max-w-[78rem] mx-auto flex-1 min-h-0 overflow-y-auto lg:overflow-visible">
+          {/* Left: the estate's business, and the record beneath it (B) — the log
+              moved out from between the prose and the choices. Desktop only: below lg
+              the tasks already return inside the 劳作 tab and the log stacks at the end. */}
+          <div className="w-48 shrink-0 hidden lg:flex flex-col gap-3 min-h-0">
+            <div className="flex-1 min-h-0">
+              <EstateTaskList
+                state={state}
+                actionableIds={new Set(state.currentChoices.filter(c => !c.disabled).map(c => c.id))}
+                marketChoice={state.currentChoices.find(c => c.id === 'go_to_market') ?? null}
+                inEvent={state.activeEvent !== null}
+                onTake={choose}
+              />
+            </div>
+            <LogDrawer log={state.log} />
+          </div>
+
+          {/* Centre: the prose, with the choices inline beneath it. */}
+          <div className="min-w-0 lg:flex-1">
+            <ScenePanel
               state={state}
-              actionableIds={new Set(state.currentChoices.filter(c => !c.disabled).map(c => c.id))}
-              marketChoice={state.currentChoices.find(c => c.id === 'go_to_market') ?? null}
-              inEvent={state.activeEvent !== null}
-              onTake={(id) => dispatch({ type: 'MAKE_CHOICE', choiceId: id })}
+              onOpenSaves={() => { refreshManualSaves(); setSavesOpen(true); }}
+              onOpenInventory={() => { setInventoryOpen(true); playCue('ui_page'); }}
+              onOpenCodex={() => { recordCodex(currentUnlocks(state)); setCodexOpen(true); playCue('ui_page'); }}
+            >
+              <div key={`${state.day}-${state.phase}`} className="choices-enter">
+                {choiceArea}
+              </div>
+            </ScenePanel>
+          </div>
+
+          {/* Right: the estate's readouts — a fixed rail at desktop, a full-width block
+              under the reading when stacked. */}
+          <div className="w-full lg:w-64 shrink-0">
+            <StatusPanel
+              state={state}
+              onOpenCodex={openCodexAt}
             />
           </div>
-          <LogDrawer log={state.log} />
+
+          {/* The record: it lives in the left column at desktop, but that column is gone
+              when stacked, so it gets a home at the foot of the scroll on small screens. */}
+          <div className="lg:hidden">
+            <LogDrawer log={state.log} />
+          </div>
         </div>
 
-        {/* Centre: the prose, with the choices inline beneath it. */}
-        <div className="min-w-0 lg:flex-1">
-          <ScenePanel
-            state={state}
-            onOpenSaves={() => { refreshManualSaves(); setSavesOpen(true); }}
-            onOpenInventory={() => setInventoryOpen(true)}
-            onOpenCodex={() => { recordCodex(currentUnlocks(state)); setCodexOpen(true); }}
-          >
-            <div key={`${state.day}-${state.phase}`} className="choices-enter">
-              {choiceArea}
-            </div>
-          </ScenePanel>
-        </div>
-
-        {/* Right: the estate's readouts — a fixed rail at desktop, a full-width block
-            under the reading when stacked. */}
-        <div className="w-full lg:w-64 shrink-0">
-          <StatusPanel
-            state={state}
-            onOpenCodex={openCodexAt}
+        {savesOpen && (
+          <SaveMenu
+            slots={manualSaves}
+            canSave
+            onSave={saveManual}
+            onLoad={loadManual}
+            onDelete={deleteManual}
+            onLeave={state.demoComplete ? undefined : leaveToTitle}
+            onClose={() => setSavesOpen(false)}
           />
-        </div>
+        )}
 
-        {/* The record: it lives in the left column at desktop, but that column is gone
-            when stacked, so it gets a home at the foot of the scroll on small screens. */}
-        <div className="lg:hidden">
-          <LogDrawer log={state.log} />
-        </div>
+        {inventoryOpen && (
+          <Inventory state={state} onClose={() => setInventoryOpen(false)} />
+        )}
+
+        {codexOpen && (
+          <CodexPanel state={state} focus={codexFocus} onClose={closeCodex} />
+        )}
       </div>
-
-      {savesOpen && (
-        <SaveMenu
-          slots={manualSaves}
-          canSave
-          onSave={saveManual}
-          onLoad={loadManual}
-          onDelete={deleteManual}
-          onLeave={state.demoComplete ? undefined : leaveToTitle}
-          onClose={() => setSavesOpen(false)}
-        />
-      )}
-
-      {inventoryOpen && (
-        <Inventory state={state} onClose={() => setInventoryOpen(false)} />
-      )}
-
-      {codexOpen && (
-        <CodexPanel state={state} focus={codexFocus} onClose={closeCodex} />
-      )}
-    </div>
+    </CodexLinks.Provider>
   );
 }

@@ -4,7 +4,7 @@
  *
  *   npm run audit                 the report, grouped by kind of claim
  *   npm run audit -- --rule time  only one kind (time, weather, relative, repeat, presence,
- *                                 dayend, knowledge, date)
+ *                                 dayend, knowledge, date, weekday, callback)
  *   npm run audit -- --out FILE   write the report to a file as well
  *
  * It does not decide anything. For every string it works out where the string can appear
@@ -49,6 +49,8 @@ interface Item {
   path: string;
   text: string;
   where: Where;
+  /** What an event needs before it plays (a flag, a variant), for reading a callback against. */
+  gate?: string;
 }
 
 function weathersOn(from: number, to: number): WeatherType[] {
@@ -140,9 +142,17 @@ function whereOf(seen: Seen | undefined): Where {
 // ── The corpus ──────────────────────────────────────────────────────────────
 
 const corpus: Item[] = [];
-const add = (pool: string, path: string, text: unknown, where: Where) => {
-  if (typeof text === 'string' && text.trim()) corpus.push({ pool, path, text, where });
+const add = (pool: string, path: string, text: unknown, where: Where, gate?: string) => {
+  if (typeof text === 'string' && text.trim()) corpus.push({ pool, path, text, where, gate });
 };
+
+/** The conditions written on an event itself, as a short note for the report. */
+function gateOf(e: EventData, variant?: string): string {
+  const bits: string[] = [];
+  if (e.activationFlag) bits.push(`needs flag ${e.activationFlag}`);
+  if (variant) bits.push(`variant ${variant}`);
+  return bits.join('; ');
+}
 
 function strings(node: unknown, trail: string, visit: (trail: string, text: string) => void, skip: Set<string>) {
   if (typeof node === 'string') visit(trail, node);
@@ -249,7 +259,7 @@ function buildCorpus() {
       const rule = m ? rules[m[1]] : undefined;
       const ph = rule?.timing ? [TIMING[rule.timing]] : phase ? [phase] : null;
       const w = rule?.weather ? rule.weather : day ? weathersOn(day, day) : null;
-      add('event', `events/${e.id} ${trail}`, text, { phases: ph, weathers: w, days: day ? [day, day] : null });
+      add('event', `events/${e.id} ${trail}`, text, { phases: ph, weathers: w, days: day ? [day, day] : null }, gateOf(e, m?.[1]));
     }, EVENT_SKIP);
   }
   const random = Object.values(DATA.randomEvents) as unknown as EventData[];
@@ -262,7 +272,7 @@ function buildCorpus() {
       const rule = m ? rules[m[1]] : undefined;
       const ph = rule?.timing ? [TIMING[rule.timing]] : e.timing ? [TIMING[e.timing]] : null;
       const w = rule?.weather ? rule.weather : days ? weathersOn(...days) : null;
-      add('random', `events/random/${e.id} ${trail}`, text, { phases: ph, weathers: w, days });
+      add('random', `events/random/${e.id} ${trail}`, text, { phases: ph, weathers: w, days }, gateOf(e, m?.[1]));
     }, EVENT_SKIP);
   }
 
@@ -293,6 +303,9 @@ const REPEAT = /第一次|第二次|第三次|头一回|初次|终于|又一次|
 const PRESENCE = /格雷格|玛莎|埃莱娜|洛伦茨|提莫西|蒂埃里|亨克|老文德|霍特曼|路德维希|佃户们?|匠师/g;
 const DAYEND = /这一天(已经|就|也)?(结束|过去|完了|没有)|一天到此|没有别的事|没什么(别的)?(可做|要做)|该休息了|收工了|该睡了|歇下了|熄了灯|入睡|睡着了/g;
 const KNOWLEDGE = /你(已经|早就|一直|早已)(知道|明白|清楚)|你(还)?记得|你想起|你之前|你上次|你曾经|你说过|你答应过/g;
+// A sentence that points back at something that happened in an earlier scene. Whether the thing
+// happened is what the reader of the report has to settle, against the gate printed with it.
+const CALLBACK = /昨天|昨日|昨晚|昨夜|前天|前几天|几天前|今早|今晨|今天早上|那天|那晚|那一晚|那一天|上回|上次|上一次|早些时候|刚才|方才|你说过|你答应过|你们说好|那件事|那封信|那次|那张纸|还记得|你曾经|你已经(?!知道)/g;
 const WEEKDAY = /(周|星期|礼拜)[一二三四五六日天]/g;
 const DATE = /十月[一二三四五六七八九十]+[日号]|[一二三四五六七八九十两]+天(后|之后|前|以后|内)|还有[一二三四五六七八九十两]+天|(第[一二三四五六七八九十]+)天/g;
 
@@ -351,6 +364,11 @@ function scan() {
     if (pool !== 'ending') {
       for (const { sentence, match } of sentencesWith(text, KNOWLEDGE)) hit('knowledge', item, sentence, `assumes what the player knows or did (${match})`);
     }
+    if (['event', 'random', 'ending', 'fragment'].includes(pool)) {
+      for (const { sentence, match } of sentencesWith(text, CALLBACK)) {
+        hit('callback', item, sentence, `points back (${match})${item.gate ? `; gate: ${item.gate}` : '; no gate on the event'}`);
+      }
+    }
     if (['event', 'random', 'fragment'].includes(pool) && where.days) {
       for (const { sentence, match } of sentencesWith(text, WEEKDAY)) {
         const day = where.days[0];
@@ -367,7 +385,7 @@ function scan() {
 
 function report(): string {
   const lines: string[] = [];
-  const rules = ['time', 'weather', 'relative', 'repeat', 'presence', 'dayend', 'knowledge', 'date', 'weekday'];
+  const rules = ['time', 'weather', 'relative', 'repeat', 'presence', 'dayend', 'knowledge', 'date', 'weekday', 'callback'];
   const titles: Record<string, string> = {
     time: '时间：句子说了上午／下午／晚上，但它也可能在别的时段出现',
     weather: '天气：句子写了雨／霜／雾／日光，但它也可能在别的天气出现',
@@ -378,6 +396,7 @@ function report(): string {
     knowledge: '已知：句子假定玩家知道或做过某件事',
     date: '日期与天数：事件里的日期和"N 天"，要对日历',
     weekday: '星期：句子点了星期几，要对日历（Day 6 是周六，Day 1 是周一）',
+    callback: '回指：句子指向前面发生过的事（昨天、今早、那次……），要核对前提在每条路径上是否成立',
   };
   lines.push(`# 文本审查报告（"这句话什么时候成立"）\n`);
   lines.push(`扫描 ${corpus.length} 段文字，${hits.length} 处待看。每一条是一个问题，不是结论：多数回答是"没问题"。\n`);
