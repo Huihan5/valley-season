@@ -47,8 +47,12 @@ describe('getEffectChips (D11/P7 colour cues)', () => {
     expect(chips.find(c => c.key === 'timber')).toMatchObject({ tone: 'gain', value: 2 });
   });
 
-  it('reads a renown gain as a gain', () => {
-    const chips = getEffectChips(choice({ description: 'x', effects: { renown: 1 } }));
-    expect(chips).toEqual([{ key: 'renown', icon: '⭐', sign: '+', value: 1, tone: 'gain' }]);
+  // Renown is a word in the status panel, so a choice tells which way it moves and not how far.
+  it('shows renown as a direction, never an amount', () => {
+    const up = getEffectChips(choice({ description: 'x', effects: { renown: 1 } }));
+    expect(up).toEqual([{ key: 'renown', icon: '⭐', sign: '↑', value: null, tone: 'gain' }]);
+
+    const down = getEffectChips(choice({ description: 'x', effects: { renown: -3 } }));
+    expect(down).toEqual([{ key: 'renown', icon: '⭐', sign: '↓', value: null, tone: 'cost' }]);
   });
 });

@@ -9,6 +9,8 @@ import { Choice } from '../types/game';
  * to the microcopy and are never shown as numbers (D3); the exact grain/timber a
  * work action brings in stays hidden behind its tier word (the yield is a band,
  * not a promise — GDD 5.4 / PlaytestFeedback 4.b), so those gains are suppressed.
+ * Renown is a word in the status panel, so here it shows which way an action moves it
+ * and not by how much: an arrow, no number.
  */
 
 export type ChipTone = 'cost' | 'gain';
@@ -16,9 +18,10 @@ export type ChipTone = 'cost' | 'gain';
 export interface EffectChip {
   key: string;
   icon: string;
-  /** '+' or '−' (a real minus glyph, not a hyphen). */
+  /** '+' or '−' (a real minus glyph, not a hyphen); '↑' or '↓' for renown. */
   sign: string;
-  value: number;
+  /** The amount; null where only the direction is told (renown). */
+  value: number | null;
   tone: ChipTone;
 }
 
@@ -90,6 +93,14 @@ export function getEffectChips(choice: Choice): EffectChip[] {
   push('grain', e.grain, estimatedYield);
   push('timber', e.timber, estimatedYield);
   push('guldmark', e.guldmark);
-  push('renown', e.renown);
+  if (e.renown) {
+    chips.push({
+      key: 'renown',
+      icon: ICONS.renown,
+      sign: e.renown > 0 ? '↑' : '↓',
+      value: null,
+      tone: e.renown > 0 ? 'gain' : 'cost',
+    });
+  }
   return chips;
 }

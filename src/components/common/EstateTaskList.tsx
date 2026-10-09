@@ -1,3 +1,4 @@
+import { Fragment } from 'react';
 import { GameState, Choice } from '../../types/game';
 import { getEstateTasks } from '../../systems/EstateTaskSystem';
 import DATA from '../../data';
@@ -6,6 +7,21 @@ import { fill } from '../../utils/text';
 const ui = DATA.ui;
 
 const T = ui.estateTaskList;
+
+/** A card's line of cost and effect. A renown mark ("⭐ ↑") reads gold, as it does under a
+ *  choice, wherever it sits in the line; the rest stays in the card's own colour. */
+function Summary({ text }: { text: string }) {
+  return (
+    <>
+      {text.split(' · ').map((part, i) => (
+        <Fragment key={i}>
+          {i > 0 && ' · '}
+          {part.startsWith('⭐') ? <span className="text-gold">{part}</span> : part}
+        </Fragment>
+      ))}
+    </>
+  );
+}
 
 interface Props {
   state: GameState;
@@ -107,7 +123,7 @@ export default function EstateTaskList({ state, actionableIds, marketChoice, inE
               }`}>
                 {task.status === 'done' ? T.done
                   : task.status === 'blocked' ? task.blockedReason
-                    : task.summary}
+                    : <Summary text={task.summary} />}
               </p>
               {notNow && (
                 <p className="text-[11px] leading-snug pl-4 text-amber/85">{T.daytimeOnly}</p>

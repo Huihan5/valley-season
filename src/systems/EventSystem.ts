@@ -796,9 +796,7 @@ export function getFreeChoices(state: GameState): Choice[] {
             tier: getYieldTierLabel(timberGain),
           })
           : overruns
-            ? fill(A.fellTimber.overruns, {
-              tier: getYieldTierLabel(timberGain), renown: TIMBER_OVERRUN_RENOWN,
-            })
+            ? fill(A.fellTimber.overruns, { tier: getYieldTierLabel(timberGain) })
             // Past the line the allowance stops being the useful number. Saying
             // "0 left" would read as a wall, and it is not one.
             : quotaLeft <= 0

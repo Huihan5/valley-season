@@ -16,7 +16,7 @@
     "text": "前往林地采伐",
     "rainedOut": "阴雨天，林地工作暂停",
     "brokePromise": "预计采伐 {tier} · 你说过就到二十单位 · 格雷格会记在心里",
-    "overruns": "预计采伐 {tier} · 超出本季额度 · 声望 {renown}",
+    "overruns": "预计采伐 {tier} · 超出本季额度 · 损失大量声望",
     "pastQuota": "预计采伐 {tier} · 已超出本季额度",
     "withinQuota": "预计采伐 {tier}，本季额度还剩 {n} 单位",
     "log": "你在林地采伐了 {n} 单位木材。",
@@ -182,7 +182,7 @@
     },
     "attire": {
       "label": "瓦莱维斯普秋装",
-      "effect": "声望 +1"
+      "effect": "⭐ ↑"
     },
     "surveyFields": {
       "label": "巡视农田",

@@ -16,7 +16,7 @@
     "text": "Cut timber in the woods",
     "rainedOut": "Rain. No work in the woods today",
     "brokePromise": "Expect a {tier} cut · you said twenty units and no more · Gregor will remember it",
-    "overruns": "Expect a {tier} cut · past the season’s allowance · renown {renown}",
+    "overruns": "Expect a {tier} cut · past the season’s allowance · a great deal of renown lost",
     "pastQuota": "Expect a {tier} cut · already past the season’s allowance",
     "withinQuota": "Expect a {tier} cut, {n} units left of the season’s allowance",
     "log": "You cut {n} units of timber in the woods.",
@@ -182,7 +182,7 @@
     },
     "attire": {
       "label": "Valewisp autumn dress",
-      "effect": "renown +1"
+      "effect": "⭐ ↑"
     },
     "surveyFields": {
       "label": "Walk the fields",
