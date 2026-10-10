@@ -118,6 +118,7 @@
     "relationsHeading": "— 关系 —",
     "openCodex": "翻到见闻里的这一页",
     "tenants": "佃户",
+    "tenantsMood": "佃户态度：{word}",
     "purseEmpty": "账上已经空了。",
     "purseLow": "账上不够明天的日常开销。",
     "trustTiers": {
@@ -143,8 +144,8 @@
     "daysLeft": "距季末 {n} 天",
     "daysLeftOne": "距季末 {n} 天",
     "lastDay": "今天是这一季的最后一天",
-    "nextMarket": "下个集市 · {n} 天后",
-    "nextMarketOne": "下个集市 · {n} 天后",
+    "nextMarket": "下个集市 {n} 天后",
+    "nextMarketOne": "下个集市 {n} 天后",
     "marketToday": "今天就是集市日",
     "noMoreMarket": "本季不再有集市"
   },
@@ -198,12 +199,18 @@
     "tabEndings": "结局",
     "close": "关闭"
   },
+  "sound": {
+    "open": "声音",
+    "off": "关",
+    "mute": "静音",
+    "volume": "音量"
+  },
   "estateTaskList": {
     "heading": "庄园事务",
     "outstanding": "{n} 项未办",
     "done": "已完成",
     "daytimeOnly": "白天再做（上午或下午）",
-    "timeOnly": "只花时间",
+    "costsTime": "花费时间",
     "inEventTitle": "事件处理中",
     "inEventBody": "当前正在处理事件，无法安排其他事务。"
   },

@@ -2,7 +2,6 @@ import { useReducer, useEffect, useState, useCallback, useMemo } from 'react';
 import { getEndingData, EndingId } from './systems/EndingSystem';
 import { getOpeningPage } from './systems/OpeningSystem';
 import { gameReducer, createInitialState, replaySeason } from './systems/GameEngine';
-import { NpcId } from './types/game';
 import DATA from './data';
 import { fill } from './utils/text';
 import { newSeed } from './utils/rng';
@@ -28,7 +27,7 @@ import {
   setPendingResume, takePendingResume,
 } from './systems/SaveSystem';
 import { getLocale, setLocale } from './data/locale';
-import { readSeenEndings, recordEnding } from './systems/CollectionSystem';
+import { readSeenEndings, recordEnding, hasSomethingToLookBack } from './systems/CollectionSystem';
 import { useCues } from './audio/useCues';
 import { playCue } from './audio';
 
@@ -117,7 +116,7 @@ export default function App() {
   const codexLink = useMemo<CodexLink>(() => {
     const held = unlockedKeys(state);
     return (who) => {
-      const entry = codexEntryOf(who as NpcId);
+      const entry = codexEntryOf(who);
       return entry && held.has(entry) ? () => openCodexAt(entry) : null;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -173,6 +172,13 @@ export default function App() {
   const saveManual = (slot: ManualSlot) => {
     writeSlot(slot, state);
     refreshManualSaves();
+    playCue('ui_seal');
+  };
+
+  // Giving the name is signing: the seal sounds once.
+  const sign = (name: string) => {
+    playCue('ui_seal');
+    dispatch({ type: 'SET_PLAYER_NAME', name });
   };
 
   const deleteManual = (slot: ManualSlot) => {
@@ -206,6 +212,7 @@ export default function App() {
         <TitleScreen
           auto={autoSave}
           hasManualSaves={manualSaves.some(Boolean)}
+          canLookBack={hasSomethingToLookBack(seenEndings, autoSave !== null, manualSaves.some(Boolean))}
           onNew={startNewSeason}
           onContinue={continueSeason}
           onOpenSaves={() => setSavesOpen(true)}
@@ -233,14 +240,14 @@ export default function App() {
     // Name first, then the documents (D6): until it is given, the only screen is
     // the signature. After that the letter renders already bearing it.
     if (!state.playerName) {
-      return <NameEntry onSubmit={(name) => dispatch({ type: 'SET_PLAYER_NAME', name })} />;
+      return <NameEntry onSubmit={sign} />;
     }
     return (
       <OpeningSequence
         page={openingPage}
         index={state.openingPage as number}
         playerName={state.playerName}
-        onSign={(name) => dispatch({ type: 'SET_PLAYER_NAME', name })}
+        onSign={sign}
         onAdvance={() => dispatch({ type: 'ADVANCE_OPENING' })}
         onSkip={() => dispatch({ type: 'SKIP_OPENING' })}
       />
@@ -269,7 +276,7 @@ export default function App() {
   ) : pendingInput ? (
     <NameInput
       spec={pendingInput}
-      onSubmit={(name) => dispatch({ type: 'SET_PLAYER_NAME', name })}
+      onSubmit={sign}
     />
   ) : isNarrativeOnly ? (
     <button

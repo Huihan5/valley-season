@@ -91,7 +91,7 @@ rebuilding to GDD v3 — see `docs/V3_BUILD_BRIEF.md` for the authoritative phas
 3. **Stage 3 — Repeatable text**: greetings, location bases, act variants, weather lines, action results.
 4. **Stage 4 — Events**: 16 rewrites + Day 0/4/8/11/13/27, market structure, officer encounters.
 5. **Stage 5 — Investigation & endings**: three clue groups, rewritten ending determination.
-6. **Stage 6 — Playtest fixes**: remaining UI items from `PlaytestFeedback.md`.
+6. **Stage 6 — Playtest fixes**: remaining UI items from `docs/playtest/PlaytestFeedback.md`.
 
 ### Self-Management Protocol
 When working autonomously:

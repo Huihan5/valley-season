@@ -29,6 +29,8 @@ export interface CodexCondition {
   met?: NpcId;
   trust?: { npc: NpcId; min: number };
   flag?: string;
+  /** Any one of these will do (the two officers are met in more than one place). */
+  any?: CodexCondition[];
 }
 
 export interface CodexLayerDef {
@@ -41,6 +43,11 @@ export interface CodexEntryDef {
   category: CodexCategory;
   reveal: CodexReveal;
   unlock: CodexCondition;
+  /**
+   * Who the page is about, as the speaker id the reading uses, for a person the relations system
+   * does not keep (the two officers). Absent for the six who are: the `met` of the unlock names them.
+   */
+  person?: string;
   /** People carry three layers (照面 / 底细 / 原型); lore entries carry none and use one body. */
   layers?: CodexLayerDef[];
 }
@@ -66,6 +73,29 @@ export const CODEX_ENTRIES: CodexEntryDef[] = [
   { id: 'lorenz', category: 'people', reveal: 'silhouette', unlock: { met: 'lorenz' }, layers: personLayers('lorenz') },
   { id: 'marguerite', category: 'people', reveal: 'silhouette', unlock: { met: 'marguerite' }, layers: personLayers('marguerite') },
   { id: 'henk', category: 'people', reveal: 'silhouette', unlock: { met: 'henk' }, layers: personLayers('henk') },
+
+  // 公务员 — the two officers keep no trust (they are not in the relations list), so what opens their
+  // pages is what the player has been through with them: meeting them (照面), a second working
+  // conversation (底细), and the one that is only had in one of the two Day 27 talks (原型, so that it
+  // is what a second and third season are for, like the rest).
+  {
+    id: 'timothy', category: 'people', reveal: 'silhouette', person: 'timothy',
+    unlock: { any: [{ flag: 'met_timothy' }, { flag: 'timothyDay12' }] },
+    layers: [
+      { id: 'face', unlock: { any: [{ flag: 'met_timothy' }, { flag: 'timothyDay12' }] } },
+      { id: 'inside', unlock: { flag: 'timothyDay12' } },
+      { id: 'archetype', unlock: { flag: 'clue_ofc_timothy_declaration' } },
+    ],
+  },
+  {
+    id: 'thierry', category: 'people', reveal: 'silhouette', person: 'thierry',
+    unlock: { flag: 'met_thierry' },
+    layers: [
+      { id: 'face', unlock: { flag: 'met_thierry' } },
+      { id: 'inside', unlock: { any: [{ flag: 'thierryDay15' }, { flag: 'thierryDay19' }] } },
+      { id: 'archetype', unlock: { flag: 'clue_pos_locate' } },
+    ],
+  },
 
   // 玛里尼 — the kingdom. Rational feudalism is baseline knowledge (you came here to
   // work inside it); the local faith you learn through the forge-keeper.

@@ -78,6 +78,26 @@
         "archetype": "He is the kind of baron who knows the web of contract by heart and turns it to his own account without once breaking a rule — harder to deal with than a man who breaks them, because you cannot tell him from the system itself. Every noble here owes duties upward and a guarantee downward, the way Baron von Alder stood surety for you; Henk only reads that web of favour and interest closer than most."
       }
     },
+    "timothy": {
+      "title": "Inspector Timothy",
+      "subtitle": "The Ducal Chancery",
+      "silhouette": "The inspector at the Chancery",
+      "layers": {
+        "face": "An inspector at the Ducal Chancery in Valehold, in his third year posted to Valewisp. Dark grey uniform, cuffs worn shiny, a gilt-chained pince-nez. He speaks flat and exact, with no pleasantries; he opens with a figure.",
+        "inside": "From a small town near Forgehold, from a family without much money, he finished at the Radiant Collegium on a scholarship and entered the civil service. To him a tax rate is more than law: it is a moral gauge. He has seen more account books than smiling faces and smells a trick in a column of numbers at once, yet he has learned to close one eye on a harmless lie — not smoothness, only knowing that life is not easy.",
+        "archetype": "The Kingdom trains its civil servants and posts them out to the duchies: his training and his promotion belong to the Kingdom, his daily work to the duchy, where he takes his orders from the Chancery. His loyalty goes to neither side. It goes to one thing, that the system should run correctly. The records are his, so the duchy cannot shade what it reports to the Kingdom; and his career is in the Kingdom’s hands, so he can be moved on at any time, and he is already reckoning when. It is a place the system made, not one he chose."
+      }
+    },
+    "thierry": {
+      "title": "Forester Thierry",
+      "subtitle": "North of Valehold",
+      "silhouette": "The forester",
+      "layers": {
+        "face": "The third son of a count’s house, forester for the country north of Valehold. Easy, generous, cheerful, with the natural slackness of a Valewisp man. He can look idle at his work, and he does not fail when it counts.",
+        "inside": "The first child inherits the house, the second goes into the Sanctum, and the third has little choice: service in some far-off army, or a marriage of convenience. At a hunting party he amused the Duke and made himself a fourth road, and what the Duke saw was a man who shows real ability at the moment it is needed. He thinks Timothy lives too hard, like a horse reined too tight; he never says so, only brings a bottle along, happens to walk part of the way with him, and points out one particular oak.",
+        "archetype": "What he keeps is the balance of the whole woodland: thinning, closing, the numbers of game, the felling ordinances, with a knowledge that runs across ecology, forestry and the habits of animals. In matters of the woods, rank gives way to technical judgment and a lord must take his advice; in a country that worships the forge, the one with the craft is not placed wholly by birth. In hunt season he becomes the one man the whole day cannot do without, laying out the routes, placing the stands, reading where the game will go. In front is the grace of nobles riding with bows; behind it, his exact reckoning."
+      }
+    },
     "rational_feudalism": {
       "title": "Rational Feudalism",
       "subtitle": "Kingdom of Marigni",

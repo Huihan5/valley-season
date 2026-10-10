@@ -494,3 +494,22 @@ export const AUDIO_ONE_SHOT_GAIN = 0.9;         // a single sound a little above
 export const AUDIO_FADE_MS = 2500;              // a bed comes in and goes out over this long
 export const AUDIO_INDOOR_WEATHER_GAIN = 0.35;  // the rain or wind heard from inside a room
 export const AUDIO_ONE_SHOT_GAP_MS = 350;       // the same one-shot is not repeated inside this
+export const AUDIO_STAGGER_MS = 700;            // when one step earns two sounds, the second comes this much later
+export const AUDIO_NIGHT_BED_LAST_DAY = 12;     // the night bed (crickets) is for the first nights only; the valley goes quiet after
+export const AUDIO_CAMP_NIGHT_DAY = 20;         // the night at the hunters' camp (and the morning after) has the camp's fire
+export const AUDIO_TOUCH_MIN_MS = 30000;        // a sound that comes now and then (the owl) comes no sooner than this after the last…
+export const AUDIO_TOUCH_MAX_MS = 90000;        // …and no later than this
+/**
+ * Where each sound sits against the others (1 = as it is, no more: an element's volume cannot
+ * go over 1). Set from measured loudness (EBU R128): a bed toward about -22 LUFS, a single sound
+ * toward about -26 (the footsteps are already quieter than that, so they stay at 1). The ear is
+ * the author's, so these are the first guess.
+ */
+export const AUDIO_CUE_GAIN: Record<string, number> = {
+  amb_rain: 0.5, amb_rain_inside: 0.85, amb_wind_cold: 0.8, amb_fields: 0.5, amb_night: 0.5,
+  phase_dawn: 0.35, act_axe: 0.6, act_scythe: 0.8, ui_page: 0.55,
+  res_coin: 0.6, res_grain: 0.4, res_timber: 0.45,
+  ui_seal: 0.8, evt_horn: 0.8, evt_hooves: 0.8, evt_stag: 0.8,
+  evt_door_open: 0.58, evt_door_close: 0.38, evt_door_heavy_open: 0.88, evt_door_heavy_close: 0.84,
+  evt_steps_stone: 0.5, evt_horse: 0.55, evt_livestock: 0.25, evt_owl: 0.21,
+};

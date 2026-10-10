@@ -333,7 +333,7 @@ PlaytestFeedback 1.e：Day 19 下午的文本里出现"Day 15 那天"，出戏�
 
 ### 票二 · PlaytestFeedback 收尾（2 SP）
 
-原文在仓库根目录 `PlaytestFeedback.md`（2026-06-14，v2 时期）。逐条分诊结果：
+原文在 `docs/playtest/PlaytestFeedback.md`（2026-06-14，v2 时期）。逐条分诊结果：
 
 **已由阶段二至五解决，不必再看**：1.a 行动无叙事反馈、1.b 事件内容太少、1.c 天气与时段的文字拆分、4.a 集市不可用、4.b 预估过于精确、4.c 疲劳惩罚（`getHarvestYield` / `getTimberYield` 已有）、4.d 狩猎季割裂、4.e.i 来信署名（v3 的 Day 23 本就是公爵文秘室，男爵在 Day 30）、4.f.i 木材不能变卖（经纪人有 timber_to_gold）、4.f.ii 汇率（磨岭协议 +1 金卢/单位）、4.g.i Day 30 上午与夜间分开。
 

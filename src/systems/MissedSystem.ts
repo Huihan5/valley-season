@@ -82,6 +82,10 @@ export const MISSED_RULES: MissedRule[] = [
   { id: 'elena_shielded', kind: 'choice', from: 13, npc: 'elena', missed: s => flag(s, 'protectedElena') },
   { id: 'hunt_night_left', kind: 'choice', from: 21, npc: 'henk', missed: s => flag(s, 'huntAttendedDay20') && !flag(s, 'campOvernight') },
   { id: 'hunt_fire_other', kind: 'choice', from: 21, npc: 'henk', missed: s => flag(s, 'campOvernight') && !!s.flags.banquetAnswer },
+  // the stag in the clearing (Day 20, afternoon): each of the three ways of standing, as the way the others were not
+  { id: 'stag_forward', kind: 'choice', from: 20, npc: 'henk', missed: s => s.flags.stagPick === 'A' },
+  { id: 'stag_asked', kind: 'choice', from: 20, npc: 'marguerite', missed: s => s.flags.stagPick === 'B' },
+  { id: 'stag_still', kind: 'choice', from: 20, npc: 'henk', missed: s => s.flags.stagPick === 'C' },
 ];
 
 const KINDS: MissedKind[] = ['event', 'person', 'place', 'choice'];

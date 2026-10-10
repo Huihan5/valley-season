@@ -11,6 +11,7 @@ import {
   ORCHARD_FULL_YIELD_LAST_DAY,
   NIGHT_LEDGER_CLUE_AT,
   FATIGUE_EXHAUSTED_THRESHOLD,
+  DINNER_DAY,
 } from '../src/data/config';
 
 const ZERO: Record<NpcId, number> = { gregor: 0, marta: 0, elena: 0, marguerite: 0, henk: 0, lorenz: 0 };
@@ -215,6 +216,18 @@ describe('the two walks are one-off estate tasks', () => {
     expect(kinds.task_survey_forest).toBe('survey');
     expect(kinds.task_repair_tools).toBe('work');
     expect(kinds.task_attire).toBe('work');
+  });
+
+  it('sit in three groups, kept together, because the list draws a rule where a group ends', () => {
+    const all = getEstateTasks(makeState({ day: DINNER_DAY + 1 }));
+    const group = Object.fromEntries(all.map(t => [t.id, t.group]));
+    expect(group.task_survey_fields).toBe('walk');
+    expect(group.task_survey_forest).toBe('walk');
+    expect(['task_repair_tools', 'task_clear_storage', 'task_tenant_meeting'].map(id => group[id])).toEqual(['harvest', 'harvest', 'harvest']);
+    expect(['task_repair_stable', 'task_gift_marguerite', 'task_attire'].map(id => group[id])).toEqual(['other', 'other', 'other']);
+    // walk, then harvest, then the rest, with no group split in two
+    const order = all.map(t => t.group).filter((g, i, a) => i === 0 || g !== a[i - 1]);
+    expect(order).toEqual(['walk', 'harvest', 'other']);
   });
 });
 

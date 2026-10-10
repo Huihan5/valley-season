@@ -85,7 +85,7 @@ export default function EstateTaskList({ state, actionableIds, marketChoice, inE
           </button>
         )}
 
-        {tasks.map((task) => {
+        {tasks.map((task, i) => {
           const takeable = task.status === 'available' && actionableIds.has(task.id);
           // Available but not offered this phase — the estate work is a daytime job,
           // so at night it is a preview, not a button. Say so, or it reads as broken.
@@ -93,6 +93,8 @@ export default function EstateTaskList({ state, actionableIds, marketChoice, inE
           // The two walks cost no money, only a phase and a point of fatigue: a clock
           // for the marker and a tag, so the price reads as time rather than coin.
           const isWalk = task.kind === 'survey';
+          // A gold rule marks where one group ends and the next begins (the specs are in group order).
+          const newGroup = i > 0 && task.group !== tasks[i - 1].group;
           const body = (
             <>
               <div className="flex items-baseline gap-1.5">
@@ -112,7 +114,7 @@ export default function EstateTaskList({ state, actionableIds, marketChoice, inE
                 </span>
                 {isWalk && task.status !== 'done' && (
                   <span className="ml-auto shrink-0 text-[9px] leading-4 px-1 rounded-sm border border-amber/30 text-amber/80">
-                    {T.timeOnly}
+                    {T.costsTime}
                   </span>
                 )}
               </div>
@@ -131,18 +133,22 @@ export default function EstateTaskList({ state, actionableIds, marketChoice, inE
             </>
           );
 
-          return takeable ? (
-            <button
-              key={task.id}
-              onClick={() => onTake(task.id)}
-              className="group w-full text-left rounded-sm px-1 py-1 -mx-1 hover:bg-bg-hover cursor-pointer transition-colors"
-            >
-              {body}
-            </button>
-          ) : (
-            <div key={task.id} className={task.status === 'done' ? 'opacity-40 px-1' : 'px-1'}>
-              {body}
-            </div>
+          return (
+            <Fragment key={task.id}>
+              {newGroup && <div className="h-px bg-gold-dim/50" aria-hidden="true" />}
+              {takeable ? (
+                <button
+                  onClick={() => onTake(task.id)}
+                  className="group w-full text-left rounded-sm px-1 py-1 -mx-1 hover:bg-bg-hover cursor-pointer transition-colors"
+                >
+                  {body}
+                </button>
+              ) : (
+                <div className={task.status === 'done' ? 'opacity-40 px-1' : 'px-1'}>
+                  {body}
+                </div>
+              )}
+            </Fragment>
           );
         })}
       </div>

@@ -1,8 +1,12 @@
 import { describe, it, expect } from 'vitest';
-import { CuePlayer, AudioBackend, Voice, Every } from '../src/audio/CuePlayer';
+import { CuePlayer, AudioBackend, Voice, Every, Later } from '../src/audio/CuePlayer';
 import { AUDIO_KEY, readAudioSettings, writeAudioSettings, clampVolume } from '../src/audio/settings';
 import { indexByCue, AUDIO_FILES } from '../src/audio/files';
-import { AUDIO_BED_GAIN, AUDIO_DEFAULT_VOLUME, AUDIO_FADE_MS, AUDIO_ONE_SHOT_GAP_MS } from '../src/data/config';
+import { CUES } from '../src/data/cues';
+import {
+  AUDIO_BED_GAIN, AUDIO_DEFAULT_VOLUME, AUDIO_FADE_MS, AUDIO_ONE_SHOT_GAP_MS, AUDIO_ONE_SHOT_GAIN, AUDIO_CUE_GAIN,
+  AUDIO_TOUCH_MIN_MS, AUDIO_TOUCH_MAX_MS,
+} from '../src/data/config';
 
 // The player is held to what it promises without any sound in the room: a fake backend records
 // what was started, at what volume, and what was stopped.
@@ -25,7 +29,10 @@ function fakeBackend() {
   return { backend, started };
 }
 
-const FILES = { amb_rain: 'rain.ogg', amb_wind_cold: 'wind.ogg', ui_page: 'page.ogg', phase_dusk: 'anvil.ogg' };
+const FILES = {
+  amb_rain: ['rain.ogg'], amb_wind_cold: ['wind.ogg'], ui_page: ['page.ogg'], phase_dusk: ['anvil.ogg'],
+  act_axe: ['chop1.ogg', 'chop2.ogg', 'chop3.ogg'], res_coin: ['coin.ogg'], evt_owl: ['owl1.ogg', 'owl2.ogg'],
+};
 /** No timer at all: the test moves the fades by hand. */
 const noTimer: Every = () => () => undefined;
 
@@ -66,11 +73,20 @@ describe('settings live in the browser and survive bad storage', () => {
 describe('files are found by the cue they are named for', () => {
   it('reads the name before the extension', () => {
     expect(indexByCue({ '../assets/audio/amb_rain.ogg': 'a', '../assets/audio/phase_dusk.mp3': 'b' }))
-      .toEqual({ amb_rain: 'a', phase_dusk: 'b' });
+      .toEqual({ amb_rain: ['a'], phase_dusk: ['b'] });
   });
 
-  it('is empty until the first sound is dropped in, so a build without sound has no player', () => {
-    expect(Object.keys(AUDIO_FILES)).toEqual([]);
+  it('gathers numbered versions of one cue, in file-name order', () => {
+    expect(indexByCue({
+      '../assets/audio/act_axe_02.ogg': 'two',
+      '../assets/audio/act_axe_01.ogg': 'one',
+      '../assets/audio/amb_rain_inside.ogg': 'in',
+      '../assets/audio/amb_rain.ogg': 'out',
+    })).toEqual({ act_axe: ['one', 'two'], amb_rain_inside: ['in'], amb_rain: ['out'] });
+  });
+
+  it('every sound file in the folder is named for a cue the game knows (a typo would be silent)', () => {
+    expect(Object.keys(AUDIO_FILES).filter(cue => !CUES[cue])).toEqual([]);
   });
 });
 
@@ -87,9 +103,9 @@ describe('the beds fade in and out and never start without a file', () => {
     p.setBeds(['amb_rain']);
     expect(started[0]).toMatchObject({ loop: true, volume: 0 });
     p.tick(AUDIO_FADE_MS / 2);
-    expect(started[0].volume).toBeCloseTo(0.5 * AUDIO_BED_GAIN * 0.5);
+    expect(started[0].volume).toBeCloseTo(0.5 * AUDIO_BED_GAIN * AUDIO_CUE_GAIN.amb_rain * 0.5);
     expect(p.tick(AUDIO_FADE_MS)).toBe(false);
-    expect(started[0].volume).toBeCloseTo(0.5 * AUDIO_BED_GAIN);
+    expect(started[0].volume).toBeCloseTo(0.5 * AUDIO_BED_GAIN * AUDIO_CUE_GAIN.amb_rain);
   });
 
   it('fades a bed that is no longer wanted and stops it only when it is silent', () => {
@@ -117,7 +133,7 @@ describe('the beds fade in and out and never start without a file', () => {
     const { p, started } = player();
     p.setBeds(['amb_rain'], { amb_rain: 0.35 });
     p.tick(AUDIO_FADE_MS);
-    expect(started[0].volume).toBeCloseTo(0.35 * AUDIO_BED_GAIN);
+    expect(started[0].volume).toBeCloseTo(0.35 * AUDIO_BED_GAIN * AUDIO_CUE_GAIN.amb_rain);
   });
 
   it('is silent while muted and comes back at the same level', () => {
@@ -152,12 +168,77 @@ describe('single sounds', () => {
     expect(started).toHaveLength(2);
   });
 
+  it('take their versions in turn, so one chop is not heard twice running', () => {
+    let t = 0;
+    const { p, started } = player({}, () => t);
+    for (let i = 0; i < 5; i += 1) {
+      p.playOnce('act_axe');
+      t += AUDIO_ONE_SHOT_GAP_MS + 1;
+    }
+    expect(started.map(s => s.url)).toEqual(['chop1.ogg', 'chop2.ogg', 'chop3.ogg', 'chop1.ogg', 'chop2.ogg']);
+  });
+
   it('do not start while muted, or when there is no file', () => {
     const { p, started } = player({ muted: true });
     p.playOnce('phase_dusk');
     p.setSettings({ muted: false });
-    p.playOnce('res_coin');
+    p.playOnce('res_grain');
     expect(started).toEqual([]);
+  });
+});
+
+describe('each sound has its own level', () => {
+  it('a single sound sits under the one-shot level by its own gain', () => {
+    const { p, started } = player({ volume: 0.5 });
+    p.playOnce('res_coin');
+    expect(started[0].volume).toBeCloseTo(AUDIO_ONE_SHOT_GAIN * AUDIO_CUE_GAIN.res_coin * 0.5);
+  });
+});
+
+describe('sounds that come now and then', () => {
+  function withTimer() {
+    const { backend, started } = fakeBackend();
+    const scheduled: { ms: number; fn: () => void; cancelled: boolean }[] = [];
+    const later: Later = (ms, fn) => {
+      const entry = { ms, fn, cancelled: false };
+      scheduled.push(entry);
+      return () => { entry.cancelled = true; };
+    };
+    const p = new CuePlayer(backend, FILES, { muted: false, volume: 1 }, { now: () => 0, every: noTimer, later, random: () => 0.5 });
+    return { p, started, scheduled };
+  }
+
+  it('first comes after a wait inside the window, never at once, and then again, until the list is emptied', () => {
+    const { p, started, scheduled } = withTimer();
+    p.setTouches(['evt_owl']);
+    expect(started).toEqual([]);
+    expect(scheduled).toHaveLength(1);
+    expect(scheduled[0].ms).toBe((AUDIO_TOUCH_MIN_MS + AUDIO_TOUCH_MAX_MS) / 2);
+    scheduled[0].fn();
+    expect(started.map(s => s.url)).toEqual(['owl1.ogg']);
+    expect(scheduled).toHaveLength(2);
+    // asking for the same thing again does not stack another timer
+    p.setTouches(['evt_owl']);
+    expect(scheduled).toHaveLength(2);
+    p.setTouches([]);
+    expect(scheduled[1].cancelled).toBe(true);
+  });
+
+  it('are not arranged for a sound with no file', () => {
+    const { p, scheduled } = withTimer();
+    p.setTouches(['evt_nothing']);
+    expect(scheduled).toEqual([]);
+  });
+
+  it('wait no shorter than the window allows, and no longer', () => {
+    const { backend } = fakeBackend();
+    for (const r of [0, 0.999]) {
+      const seen: number[] = [];
+      const later: Later = ms => { seen.push(ms); return () => undefined; };
+      new CuePlayer(backend, FILES, { muted: false, volume: 1 }, { later, random: () => r }).setTouches(['evt_owl']);
+      expect(seen[0]).toBeGreaterThanOrEqual(AUDIO_TOUCH_MIN_MS);
+      expect(seen[0]).toBeLessThanOrEqual(AUDIO_TOUCH_MAX_MS);
+    }
   });
 });
 

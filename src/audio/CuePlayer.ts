@@ -1,4 +1,7 @@
-import { AUDIO_BED_GAIN, AUDIO_ONE_SHOT_GAIN, AUDIO_FADE_MS, AUDIO_ONE_SHOT_GAP_MS } from '../data/config';
+import {
+  AUDIO_BED_GAIN, AUDIO_ONE_SHOT_GAIN, AUDIO_FADE_MS, AUDIO_ONE_SHOT_GAP_MS, AUDIO_CUE_GAIN,
+  AUDIO_TOUCH_MIN_MS, AUDIO_TOUCH_MAX_MS,
+} from '../data/config';
 import { AudioSettings, clampVolume } from './settings';
 
 /** One sound that has been started: it can be turned up or down, retried, and stopped. */
@@ -16,6 +19,14 @@ export interface AudioBackend {
 
 /** Calls `fn` every `ms` until the returned function is called. */
 export type Every = (ms: number, fn: () => void) => () => void;
+
+/** Calls `fn` once after `ms`, unless the returned function is called first. */
+export type Later = (ms: number, fn: () => void) => () => void;
+
+const realLater: Later = (ms, fn) => {
+  const id = setTimeout(fn, ms);
+  return () => clearTimeout(id);
+};
 
 const realEvery: Every = (ms, fn) => {
   const id = setInterval(fn, ms);
@@ -41,13 +52,25 @@ const FRAME_MS = 100;
 export class CuePlayer {
   private beds = new Map<string, Bed>();
   private lastShot = new Map<string, number>();
+  /** Which version of a single sound comes next. */
+  private turn = new Map<string, number>();
   private stopTimer: (() => void) | null = null;
+  /** The sounds that come now and then, and the timer for the next one. */
+  private touches: string[] = [];
+  private touchTimer: (() => void) | null = null;
 
   constructor(
     private backend: AudioBackend,
-    private files: Record<string, string>,
+    /** Each cue's files: one, or several versions of the same sound. */
+    private files: Record<string, string[]>,
     private settings: AudioSettings,
-    private options: { now?: () => number; every?: Every; save?: (settings: AudioSettings) => void } = {},
+    private options: {
+      now?: () => number;
+      every?: Every;
+      later?: Later;
+      random?: () => number;
+      save?: (settings: AudioSettings) => void;
+    } = {},
   ) {}
 
   private now(): number {
@@ -83,15 +106,15 @@ export class CuePlayer {
    * and one with no file is skipped. `gains` turns a bed down (the rain heard through a wall).
    */
   setBeds(wanted: string[], gains: Record<string, number> = {}): void {
-    const want = new Set(wanted.filter(id => this.files[id]));
+    const want = new Set(wanted.filter(id => this.files[id]?.length));
     for (const id of want) {
-      const gain = gains[id] ?? 1;
+      const gain = (gains[id] ?? 1) * (AUDIO_CUE_GAIN[id] ?? 1);
       const bed = this.beds.get(id);
       if (bed) {
         bed.target = 1;
         bed.gain = gain;
       } else {
-        this.beds.set(id, { voice: this.backend.start(this.files[id], true, 0), level: 0, target: 1, gain });
+        this.beds.set(id, { voice: this.backend.start(this.files[id][0], true, 0), level: 0, target: 1, gain });
       }
     }
     for (const [id, bed] of this.beds) if (!want.has(id)) bed.target = 0;
@@ -99,15 +122,47 @@ export class CuePlayer {
     this.keepFading();
   }
 
-  /** A single sound. The same one is not repeated inside AUDIO_ONE_SHOT_GAP_MS, and nothing starts while muted. */
+  /**
+   * A single sound. The same one is not repeated inside AUDIO_ONE_SHOT_GAP_MS, nothing starts
+   * while muted, and a cue with several versions plays them in turn.
+   */
   playOnce(id: string): void {
-    const url = this.files[id];
-    if (!url || this.master() === 0) return;
+    const versions = this.files[id];
+    if (!versions?.length || this.master() === 0) return;
     const now = this.now();
     const last = this.lastShot.get(id);
     if (last !== undefined && now - last < AUDIO_ONE_SHOT_GAP_MS) return;
     this.lastShot.set(id, now);
-    this.backend.start(url, false, AUDIO_ONE_SHOT_GAIN * this.master());
+    const next = this.turn.get(id) ?? 0;
+    this.turn.set(id, (next + 1) % versions.length);
+    const volume = AUDIO_ONE_SHOT_GAIN * (AUDIO_CUE_GAIN[id] ?? 1) * this.master();
+    this.backend.start(versions[next % versions.length], false, volume);
+  }
+
+  /**
+   * Sounds that come now and then while the moment lasts (the owl after dark): one of them, at a
+   * random time between AUDIO_TOUCH_MIN_MS and AUDIO_TOUCH_MAX_MS from now, and again after that,
+   * until the list is empty. The first is never at once.
+   */
+  setTouches(ids: string[]): void {
+    this.touches = ids.filter(id => this.files[id]?.length);
+    if (this.touches.length === 0) {
+      this.touchTimer?.();
+      this.touchTimer = null;
+    } else if (!this.touchTimer) {
+      this.scheduleTouch();
+    }
+  }
+
+  private scheduleTouch(): void {
+    const random = this.options.random ?? Math.random;
+    const wait = AUDIO_TOUCH_MIN_MS + random() * (AUDIO_TOUCH_MAX_MS - AUDIO_TOUCH_MIN_MS);
+    this.touchTimer = (this.options.later ?? realLater)(wait, () => {
+      this.touchTimer = null;
+      if (this.touches.length === 0) return;
+      this.playOnce(this.touches[Math.floor(random() * this.touches.length)]);
+      this.scheduleTouch();
+    });
   }
 
   /** The browser only lets sound start after a gesture: on the first one, try the beds again. */

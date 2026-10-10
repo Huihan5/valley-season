@@ -72,6 +72,10 @@ describe('a line is offered only when it is true', () => {
     ['elena_shielded', { protectedElena: true }, { protectedElena: false }],
     ['hunt_night_left', { huntAttendedDay20: true, campOvernight: false }, { campOvernight: true }],
     ['hunt_fire_other', { campOvernight: true, banquetAnswer: 'B' }, { banquetAnswer: '' }],
+    // the stag: true only for the way the player stood
+    ['stag_forward', { stagPick: 'A' }, { stagPick: 'B' }],
+    ['stag_asked', { stagPick: 'B' }, { stagPick: 'C' }],
+    ['stag_still', { stagPick: 'C' }, { stagPick: 'A' }],
   ];
 
   for (const [id, makes, undoes] of cases) {

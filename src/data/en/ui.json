@@ -118,6 +118,7 @@
     "relationsHeading": "— Relations —",
     "openCodex": "Turn to their page in the Compendium",
     "tenants": "Tenants",
+    "tenantsMood": "Tenants: {word}",
     "purseEmpty": "The account is empty.",
     "purseLow": "Not enough on the account for tomorrow’s running costs.",
     "trustTiers": {
@@ -143,8 +144,8 @@
     "daysLeft": "{n} days to the season’s end",
     "daysLeftOne": "{n} day to the season’s end",
     "lastDay": "The last day of the season",
-    "nextMarket": "Next market · in {n} days",
-    "nextMarketOne": "Next market · in {n} day",
+    "nextMarket": "Next market in {n} days",
+    "nextMarketOne": "Next market in {n} day",
     "marketToday": "Market day today",
     "noMoreMarket": "No more markets this season"
   },
@@ -198,12 +199,18 @@
     "tabEndings": "Endings",
     "close": "Close"
   },
+  "sound": {
+    "open": "Sound",
+    "off": "off",
+    "mute": "Mute",
+    "volume": "Volume"
+  },
   "estateTaskList": {
     "heading": "Estate business",
     "outstanding": "{n} outstanding",
     "done": "Done",
     "daytimeOnly": "In daylight (morning or afternoon)",
-    "timeOnly": "Time only",
+    "costsTime": "Costs time",
     "inEventTitle": "An event is underway",
     "inEventBody": "You cannot take on other estate work while this is going on."
   },

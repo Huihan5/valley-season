@@ -17,7 +17,7 @@
 | 2 | `DELTA_v2_to_v3.md` | 按主题分组的改动清单。这是施工单 |
 | 3 | `GDD_v3.md` 第 5、9、10 章 | 系统、调查、结局判定。数值全部在第 5 章，不需要外部文件 |
 | 4 | `NARRATIVE_DRAFTS.md` | 全部文本。每条都标了触发条件、消耗、写入的 flag |
-| 5 | `PlaytestFeedback.md`（repo 内） | 已知问题清单 |
+| 5 | `docs/playtest/PlaytestFeedback.md` | 已知问题清单 |
 
 `valley_season_numbers.md` 已废弃，内容并入 GDD 第 5 章。若两者冲突，以 GDD 为准。
 
@@ -190,7 +190,7 @@
 
 ### 阶段六 · 修 PlaytestFeedback
 
-按 `PlaytestFeedback.md` 逐条处理。已在 v3 中给出方案的：
+按 `docs/playtest/PlaytestFeedback.md` 逐条处理。已在 v3 中给出方案的：
 
 - 1.a 行动无叙事反馈 → 阶段三的行动结果文本
 - 4.b 预估文字过于精确 → 改等级制

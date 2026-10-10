@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { GameState } from '../types/game';
-import { resolveCues, cuesBetween, musicFor } from '../systems/CueSystem';
+import { resolveCues, cuesBetween, scheduleCues, musicFor } from '../systems/CueSystem';
 import { MUSIC_TITLE } from '../data/cues';
 import { getPlayer } from './index';
 
@@ -18,16 +18,19 @@ export function useCues(where: 'title' | 'season', state: GameState): void {
     if (!player) return;
     if (where === 'title') {
       player.setBeds([MUSIC_TITLE]);
+      player.setTouches([]);
       return;
     }
     const music = musicFor(state);
     if (music) {
       player.setBeds([music]);
+      player.setTouches([]);
     } else {
       const cues = resolveCues(state);
       player.setBeds(cues.ambient, cues.gains);
+      player.setTouches(cues.touches);
     }
-  }, [where, state.weather, state.phase, state.currentScene, state.demoComplete, state.endingId]);
+  }, [where, state.weather, state.phase, state.day, state.currentScene, state.demoComplete, state.endingId]);
 
   useEffect(() => {
     const before = previous.current;
@@ -35,6 +38,10 @@ export function useCues(where: 'title' | 'season', state: GameState): void {
     if (where !== 'season' || !before) return;
     const player = getPlayer();
     if (!player) return;
-    for (const id of cuesBetween(before, state)) player.playOnce(id);
+    // The first sound is at once; those after it (the dusk after the axe, a walk's steps) wait their turn.
+    const timers = scheduleCues(cuesBetween(before, state)).map(({ id, at }) => (
+      at === 0 ? (player.playOnce(id), undefined) : setTimeout(() => player.playOnce(id), at)
+    ));
+    return () => timers.forEach(t => t !== undefined && clearTimeout(t));
   }, [where, state]);
 }

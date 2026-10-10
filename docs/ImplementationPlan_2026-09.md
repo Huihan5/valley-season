@@ -6,10 +6,24 @@
 > - ⬜ **阶段三（文本精简 D2）** 未开始 ← **下一步**。
 > - 全库 528 测试绿，tsc 干净。
 >
-> 基于已确认的决定 **D1–D13**（见 `PlaytestFeedback_2026-09.md`）。
+> 基于已确认的决定 **D1–D13**（见 `docs/playtest/PlaytestFeedback_2026-09.md`）。
 >
 > ---
 > ## 🔖 恢复点（compact 之后从这里继续）
+>
+> **2026-10-10（最新，pre-compact 时的状态）：873 测试绿、`tsc` 干净、`npm run build` 与 `build:standalone` 通过。所有改动都在工作区，没有提交、没有推送：作者说"听完说可以我就提交"，他还没说。** 提交前先问一句。
+> - 这一晚做了：第一批和第二批声音接进游戏（36 个 cue 有声音，`src/assets/audio/` 约 15 MB）、声音控件（`SoundControl`，赛季顶栏和标题页）、左栏三段和右栏紧凑资源、日程一行、回望按钮只在有东西可回望时显示、提莫西和蒂埃里的见闻页（我起草，作者要读）、炉堂石板脚步和两次夜路马蹄、鹿的三句"没走的路"（我起草，作者要读）、根目录整理（`docs/ImplementationPlan_2026-09.md`、`docs/playtest/`、`design-drafts/`）。每一件的来龙去脉在 CHANGELOG 的 `2026-10-10`、`2026-10-09，续二`、`2026-10-09，续`、`2026-10-09`。
+> - **盲测包已重打**：`../valley-season-blind-playtest-2026-10-10/`（`_先读我.txt` 里有这一轮的更新说明和三个给测试者的问题）。单文件 HTML 21 MB，要压声音的办法见 CHANGELOG `2026-10-10`。
+> - **等作者**：① 听声音（办公室和写字的声音是抬了约 25 dB 的轻录音，底噪可能明显；炉堂循环 10.5 秒；蟋蟀只给前 12 天；砧响"远处"的处理；各声音音量 `AUDIO_CUE_GAIN`），说可以就提交推送；② 读我起草的：提莫西、蒂埃里两页（中英）、鹿的三句（中英）、新的两页见闻开放规则，以及之前交代过的那一批（说话人标注、行囊、地点底文、27 句"没走到的地方"、声望六个词、Day 28/29 的霜）；③ 要不要压声音。**留着以后找**（`docs/SOUND_LIST.md` E 节）：集市环境声（还要先接"人在集市里"的状态）、雾、音乐。
+> - 这台机器上的工具（都在会话的 scratchpad，不在项目里；会话没了就重建）：`ffmpeg-tools/`（ffmpeg-static）、`make-batch2.mjs`（切段、循环、对齐响度）、`loudness.mjs`、`import-library.mjs`、`make-code-zip.sh` + `make-zips.ps1`（盲测包；PowerShell 要加 `-ExecutionPolicy Bypass`）、`check-package.ps1`（核对压缩包；Git Bash 的 `tar` 读不了 zip）。
+>
+> **2026-10-09 晚（较早；862 测试绿、`tsc` 干净；仍在工作区，没有提交）：第二批声音做完并接上了，详见 CHANGELOG `2026-10-09，续`。** 36 个 cue 有文件；ffmpeg-static 装在 scratchpad（`ffmpeg-tools/`，不在项目里），切段、循环、响度的脚本在 scratchpad 的 `make-batch2.mjs`。门、脚步、动物、猫头鹰的原件作者已经拷回，我导入了（scratchpad 的 `import-library.mjs`），量了响度（`loudness.mjs`）、定了 `AUDIO_CUE_GAIN`，整季扫描测试（`CueSeason.test.ts`）看过频率；没用的下载和库文件夹都删了，`amb_market`、`amb_fog` 留着以后找（`docs/SOUND_LIST.md` E 节）。作者要听：蟋蟀只给前 12 天、`birds_day` 十月底是否太密、砧响"远处"的处理、各声音的音量（`AUDIO_CUE_GAIN`）、办公室和写字的声音是抬了 25 dB 的轻录音所以底噪可能明显、炉堂的循环只有 10.5 秒。都听过了再提交。
+>
+> **2026-10-09（较早；845 测试绿、`tsc` 干净；改动都在工作区，没有提交，等作者听过、验收）：**
+> - 作者带来了另一个项目里的 CC0 声音（87 个 ogg），用上的 21 个已按 cue id 放进 `src/assets/audio/`（来源 `docs/SOUND_CREDITS.md`），没用上的已删；播放器认 `名字_01.ogg` 这样的多版本并轮流播放；室内下雨有单独的一层；夜里户外的蟋蟀只给前 12 天；伐木是斧头、收割是镰刀（`act_scythe` 还没文件）。
+> - 作者选定了左右栏的新方案，已改：左栏分三段加金线、标签"花费时间"，右栏资源只留图标和读数（声望、佃户各占一行，"佃户态度：冷淡"），日程下面并成一行。
+> - 根目录整理过：本文件就在 `docs/`，`PlaytestFeedback*.md` 在 `docs/playtest/`，生成的 `audit-report.md` 在 `design-drafts/`，Freesound 下载的落脚处是 `design-drafts/audio-inbox/`（不进 git）。详见 CHANGELOG 2026-10-09。
+> - **声音控件已做**（`SoundControl`：赛季里在"见闻 行囊 存档"之后，标题页在"回望"旁边，静音开关加音量）；第一批七个声音都齐了（`phase_dusk.wav` 是作者下载的 ldezem 砧响经我处理，`ui_page_01–03` 是 Kenney 的 `bookFlip`）。**都还没提交，等作者听过。** 作者问单文件构建里的声音要不要压，我的意见是现在不压，等声音多了再说；itch 版本可以考虑用多文件构建。**还在等作者：** ① 听过之后的意见：砧响"远处"的处理（低通 2.5 kHz、峰值 0.5）、蟋蟀只给前 12 天、`birds_day` 在十月底会不会太密、各床的音量。② 第二批要不要做（金卢、粮食、木材、镰刀、门、脚步、动物……；作者的库里有的先用库里的）。③ 蟋蟀"前十二天"和 `birds_day` 在十月底是不是太密，等作者的耳朵。⑤ 门、脚步、牛羊马、猫头鹰已删，作者要用就先定它们在什么时刻响，再把原件拷回来（作者的原件在他的那个项目的 `audio/v1.0/`）。
 >
 > **最新（2026-10-08 夜；全库 839 测试绿、`tsc` 干净、`npm run build` 与 `build:standalone` 通过；全部已 commit 并 push，工作树干净，最后一次提交见 `git log`）**
 >

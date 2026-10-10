@@ -5,6 +5,7 @@ import { getFatigueNote, getFatigueStatus } from '../../systems/FatigueSystem';
 import { getBottomLine } from '../../systems/BottomLineSystem';
 import DATA from '../../data';
 import Passage, { Speaker } from './Passage';
+import SoundControl from '../common/SoundControl';
 
 const ui = DATA.ui;
 
@@ -83,6 +84,7 @@ export default function ScenePanel({ state, onOpenSaves, onOpenInventory, onOpen
         >
           {ui.scenePanel.saves}
         </button>
+        <SoundControl variant="header" />
       </div>
 
       {/* What just happened, then where you now are. The prose keeps a reading

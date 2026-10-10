@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { SaveStorage } from '../src/systems/SaveSystem';
-import { readSeenEndings, recordEnding, clearSeenEndings } from '../src/systems/CollectionSystem';
+import { readSeenEndings, recordEnding, clearSeenEndings, hasSomethingToLookBack } from '../src/systems/CollectionSystem';
 
 /** vitest runs under `environment: 'node'`, so localStorage has to be handed in. */
 function fakeStorage(seed: Record<string, string> = {}): SaveStorage {
@@ -47,6 +47,18 @@ describe('the ending gallery', () => {
     recordEnding('ending1', storage);
     clearSeenEndings(storage);
     expect(readSeenEndings(storage)).toEqual([]);
+  });
+});
+
+describe('whether the title page has anything to look back on', () => {
+  it('does not, in a browser that has never played', () => {
+    expect(hasSomethingToLookBack([], false, false)).toBe(false);
+  });
+
+  it('does once an ending has been reached, a season begun, or a save kept', () => {
+    expect(hasSomethingToLookBack(['ending1'], false, false)).toBe(true);
+    expect(hasSomethingToLookBack([], true, false)).toBe(true);
+    expect(hasSomethingToLookBack([], false, true)).toBe(true);
   });
 });
 

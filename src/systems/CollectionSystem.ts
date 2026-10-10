@@ -55,6 +55,15 @@ export function recordEnding(id: EndingId, storage = defaultStorage()): void {
   }
 }
 
+/**
+ * Whether the title page has anything behind its 回望: an ending reached, or a season begun (the
+ * autosave, or one of the manual slots). A browser that has never played has nothing to look back
+ * on, and the button would open onto empty pages.
+ */
+export function hasSomethingToLookBack(seen: readonly EndingId[], hasAutoSave: boolean, hasManualSaves: boolean): boolean {
+  return seen.length > 0 || hasAutoSave || hasManualSaves;
+}
+
 export function clearSeenEndings(storage = defaultStorage()): void {
   if (!storage) return;
   try {

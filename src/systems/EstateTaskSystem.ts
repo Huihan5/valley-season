@@ -40,6 +40,13 @@ export type TaskStatus = 'available' | 'done' | 'blocked';
 /** 'survey' tasks cost time and fatigue but no coin; the list draws them differently. */
 export type TaskKind = 'work' | 'survey';
 
+/**
+ * Where the list draws a task: the two walks, the harvest preparation that builds on itself
+ * (tools, then storage, then the tenants), and the rest, each its own. The list shows the groups
+ * in this order with a gold rule between them, so the specs stay in the same order.
+ */
+export type TaskGroup = 'walk' | 'harvest' | 'other';
+
 export interface EstateTask {
   id: string;
   label: string;
@@ -47,6 +54,7 @@ export interface EstateTask {
   summary: string;
   status: TaskStatus;
   kind: TaskKind;
+  group: TaskGroup;
   /** Why it cannot be taken yet; only set when blocked. */
   blockedReason?: string;
   guldmark: number;
@@ -69,6 +77,8 @@ interface TaskSpec {
   timber?: number;
   fatigue?: number;
   kind?: TaskKind;
+  /** Absent means 'other'. */
+  group?: TaskGroup;
   doneFlag: string;
   recipient?: NpcId;
   nextScene?: string;
@@ -94,6 +104,7 @@ const SPECS: TaskSpec[] = [
     guldmark: 0,
     fatigue: 1,
     kind: 'survey',
+    group: 'walk',
     doneFlag: 'surveyedFields',
     nextScene: 'fields',
     resultKind: () => 'survey_fields',
@@ -109,6 +120,7 @@ const SPECS: TaskSpec[] = [
     guldmark: 0,
     fatigue: 1,
     kind: 'survey',
+    group: 'walk',
     doneFlag: 'surveyedForest',
     nextScene: 'forest',
     // Walking ends on what the woods look like now; every felling after it does too.
@@ -124,6 +136,7 @@ const SPECS: TaskSpec[] = [
       to: HARVEST_YIELD.toolsRepaired,
     }),
     guldmark: REPAIR_TOOLS_COST,
+    group: 'harvest',
     doneFlag: 'toolsRepaired',
   },
   {
@@ -134,6 +147,7 @@ const SPECS: TaskSpec[] = [
       to: HARVEST_YIELD.toolsAndStorage,
     }),
     guldmark: CLEAR_STORAGE_COST,
+    group: 'harvest',
     doneFlag: 'storageCleared',
     requires: (s) => (s.flags.toolsRepaired ? null : TEXT.clearStorage.needsTools),
   },
@@ -145,6 +159,7 @@ const SPECS: TaskSpec[] = [
       to: HARVEST_YIELD.fullyPrepared,
     }),
     guldmark: 0,
+    group: 'harvest',
     doneFlag: 'fullyPrepared',
     requires: (s) => {
       if (!s.flags.storageCleared) return TEXT.tenantMeeting.needsStorage;
@@ -233,6 +248,7 @@ export function getEstateTasks(state: GameState): EstateTask[] {
       summary: describe(spec),
       status,
       kind: spec.kind ?? 'work',
+      group: spec.group ?? 'other',
       blockedReason,
       guldmark: spec.guldmark,
       timber,

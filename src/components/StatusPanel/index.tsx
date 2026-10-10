@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { GameState, NpcId } from '../../types/game';
 import { WEATHER_LABELS, WEATHER_ICONS } from '../../systems/WeatherSystem';
 import { getFatigueLabel, getFatigueEffect } from '../../systems/FatigueSystem';
@@ -43,9 +44,6 @@ const RENOWN_LABELS: Record<TrustTier, string> = ui.statusPanel.renownTiers;
 const renownWord = (value: number): string => RENOWN_LABELS[getTrustTier(value)];
 const tierColor = (value: number): string =>
   value > 0 ? 'text-gold-dim' : value < 0 ? 'text-rust' : 'text-game-dim';
-
-/** English wants "1 unit" and "2 units"; Chinese wants 单位 either way. */
-const units = (n: number) => plural(n, ui.resources.unitOne, ui.resources.unit);
 
 interface Props {
   state: GameState;
@@ -98,39 +96,39 @@ export default function StatusPanel({ state, onOpenCodex }: Props) {
       {/* Resources */}
       <div className="px-4 py-3 border-b border-game-border">
         <p className={SECTION_LABEL}>{T.resourcesHeading}</p>
-        <div className="space-y-2">
+        {/* Only the picture and the reading; the name is in the hover text. */}
+        <div className="grid grid-cols-2 gap-x-3 gap-y-2">
           {/* A number turns gold once it clears the line a competent season is held to, so
               the player can see which of the three is still behind without being told what
               the line is for. Grain, coin and wood each have one (GDD 10.1). */}
-          <ResourceRow icon="🌾" label={ui.resources.grain} value={resources.grain} unit={units(resources.grain)} target={GRAIN_RETAIN_THRESHOLD} />
+          <ResourceCell icon="🧺" label={ui.resources.grain} tone={numberTone(resources.grain, GRAIN_RETAIN_THRESHOLD)}>
+            {resources.grain}
+          </ResourceCell>
           {/* The finite crop still standing — the clock behind the 抢收 (GDD 5.4). On a
               frost day it reads cold, because that is the night it starts to go. */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-1.5">
-              <span className="text-sm">🌾</span>
-              <span className="text-game-dim text-xs">{T.fieldGrain}</span>
-            </div>
-            {fieldGrain > 0 ? (
-              <span className={`text-sm font-serif tabular-nums ${weather === 'frost' ? 'text-frost' : 'text-cream-dim'}`}>
-                {fieldGrain}{` ${units(fieldGrain)}`}
-              </span>
-            ) : (
-              <span className="text-game-dim text-xs">{T.fieldGrainCleared}</span>
-            )}
-          </div>
-          <ResourceRow icon="🪙" label={ui.resources.guldmark} value={resources.guldmark} unit="" target={ENDING2_GULDMARK} warnBelow={15} />
-          <ResourceRow icon="🪵" label={ui.resources.timber} value={resources.timber} unit={units(resources.timber)} target={ENDING2_TIMBER} warnBelow={5} />
+          <ResourceCell
+            icon="🌾"
+            label={T.fieldGrain}
+            tone={fieldGrain > 0 ? (weather === 'frost' ? 'text-frost' : 'text-cream-dim') : 'text-game-dim'}
+          >
+            {fieldGrain > 0 ? fieldGrain : T.fieldGrainCleared}
+          </ResourceCell>
+          <ResourceCell icon="🪙" label={ui.resources.guldmark} tone={numberTone(resources.guldmark, ENDING2_GULDMARK, 15)}>
+            {resources.guldmark}
+          </ResourceCell>
+          <ResourceCell icon="🪵" label={ui.resources.timber} tone={numberTone(resources.timber, ENDING2_TIMBER, 5)}>
+            {resources.timber}
+          </ResourceCell>
           {/* What the valley thinks of the steward — renown and the tenants' regard — reads as
               a word, like each person's does, never the raw number (PlaytestFeedback 2026-09
               / D3). The two standings with the nobles and the lord have no readout at all:
               what they bought shows in the letters and the carriage. */}
-          <WordRow icon="⭐" label={ui.resources.renown} word={renownWord(resources.renown)} tone={tierColor(resources.renown)} />
-          <WordRow
-            icon="🏠"
-            label={T.tenants}
-            word={tierWord(getEffectiveTenantTrust(state))}
-            tone={tierColor(getEffectiveTenantTrust(state))}
-          />
+          <ResourceCell icon="⭐" label={ui.resources.renown} tone={tierColor(resources.renown)} wide>
+            {renownWord(resources.renown)}
+          </ResourceCell>
+          <ResourceCell icon="🏠" label={T.tenants} tone={tierColor(getEffectiveTenantTrust(state))} wide>
+            {fill(T.tenantsMood, { word: tierWord(getEffectiveTenantTrust(state)) })}
+          </ResourceCell>
         </div>
         {/* An empty purse used to pass in silence (PlaytestFeedback 4.a.iii). */}
         {resources.guldmark < DAILY_GULDMARK_COST && (
@@ -249,50 +247,32 @@ function CalendarSection({ day }: { day: number }) {
           );
         })}
       </div>
-      <div className="mt-2 space-y-0.5">
-        <p className="text-game-dim text-xs">{daysLeftLine}</p>
-        <p className="text-amber/80 text-xs">{marketLine}</p>
-      </div>
+      <p className="mt-2 text-xs">
+        <span className="text-game-dim">{daysLeftLine} · </span>
+        <span className="text-amber/80">{marketLine}</span>
+      </p>
     </div>
   );
 }
 
-/** A row whose reading is a word: how the valley holds the steward, not a count. */
-function WordRow({ icon, label, word, tone }: { icon: string; label: string; word: string; tone: string }) {
-  return (
-    <div className="flex items-center justify-between">
-      <div className="flex items-center gap-1.5">
-        <span className="text-sm">{icon}</span>
-        <span className="text-game-dim text-xs">{label}</span>
-      </div>
-      <span className={`text-sm font-serif ${tone}`}>{word}</span>
-    </div>
-  );
+/** A count's colour: gold once it clears its line, rust once it runs low, cream otherwise. */
+function numberTone(value: number, target?: number, warnBelow?: number): string {
+  if (target !== undefined && value >= target) return 'text-gold';
+  if (warnBelow !== undefined && value < warnBelow) return 'text-rust';
+  return 'text-cream';
 }
 
-interface ResourceRowProps {
-  icon: string;
-  label: string;
-  value: number;
-  unit: string;
-  target?: number;
-  warnBelow?: number;
-}
-
-function ResourceRow({ icon, label, value, unit, target, warnBelow }: ResourceRowProps) {
-  const isLow = warnBelow !== undefined && value < warnBelow;
-  const isGood = target !== undefined && value >= target;
-  const color = isGood ? 'text-gold' : isLow ? 'text-rust' : 'text-cream';
-
+/**
+ * One reading in the resources block: the picture and the reading, nothing else. The name is
+ * the hover text, and is there for a screen reader (the picture is hidden from it). The counts
+ * share a row two to a line; a word takes the whole line, because it may be long.
+ */
+function ResourceCell({ icon, label, tone, wide = false, children }: { icon: string; label: string; tone: string; wide?: boolean; children: ReactNode }) {
   return (
-    <div className="flex items-center justify-between">
-      <div className="flex items-center gap-1.5">
-        <span className="text-sm">{icon}</span>
-        <span className="text-game-dim text-xs">{label}</span>
-      </div>
-      <span className={`text-sm font-serif ${color}`}>
-        {value}{unit && ` ${unit}`}
-      </span>
+    <div className={`flex items-center gap-1.5 min-w-0 ${wide ? 'col-span-2' : ''}`} title={label}>
+      <span className="text-sm" aria-hidden="true">{icon}</span>
+      <span className="sr-only">{label}</span>
+      <span className={`text-sm font-serif tabular-nums ${tone}`}>{children}</span>
     </div>
   );
 }

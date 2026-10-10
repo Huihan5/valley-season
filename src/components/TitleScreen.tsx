@@ -1,6 +1,7 @@
 import { SaveSummary } from '../systems/SaveSystem';
 import { formatMoment } from '../systems/TimeSystem';
 import DATA from '../data';
+import SoundControl from './common/SoundControl';
 import { LOCALES, LOCALE_NAMES, getLocale, setLocale } from '../data/locale';
 
 const ui = DATA.ui;
@@ -11,6 +12,8 @@ interface Props {
   /** The autosave, if the browser is holding one. */
   auto: SaveSummary | null;
   hasManualSaves: boolean;
+  /** An ending reached or a season begun: before that, 回望 would open onto empty pages. */
+  canLookBack: boolean;
   onNew: () => void;
   onContinue: () => void;
   onOpenSaves: () => void;
@@ -23,7 +26,7 @@ interface Props {
  * bilingual build will need (PlaytestFeedback 3.a). Both live here.
  */
 export default function TitleScreen({
-  auto, hasManualSaves, onNew, onContinue, onOpenSaves, onOpenRetrospect,
+  auto, hasManualSaves, canLookBack, onNew, onContinue, onOpenSaves, onOpenRetrospect,
 }: Props) {
   const resumable = auto && !auto.finished;
   const locale = getLocale();
@@ -67,13 +70,22 @@ export default function TitleScreen({
         )}
 
         {/* The 见闻 and the endings reached, as one place to look back (not offered inside
-            a season, where the 见闻 has its own button in the header). */}
-        <button
-          onClick={onOpenRetrospect}
-          className="px-6 py-2.5 border border-game-border text-game-text font-serif text-sm rounded-sm hover:bg-bg-hover hover:border-gold-dim transition-all"
-        >
-          {ui.retrospect.open}
-        </button>
+            a season, where the 见闻 has its own button in the header). It shows once there is
+            something to look back on: an ending reached, or a season begun. */}
+        <div className="flex gap-2">
+          {canLookBack && (
+            <button
+              onClick={onOpenRetrospect}
+              className="flex-1 px-6 py-2.5 border border-game-border text-game-text font-serif text-sm rounded-sm hover:bg-bg-hover hover:border-gold-dim transition-all"
+            >
+              {ui.retrospect.open}
+            </button>
+          )}
+          {/* The sound, beside the one place that looks back: both are things that belong to the
+              player rather than to a season. Not drawn when the build has no sound; on its own it
+              takes the whole row. */}
+          <SoundControl variant="title" wide={!canLookBack} />
+        </div>
 
         {/* Changing language reloads: the text is wired in at module load, and the
             season is on the autosave, so there is nothing to lose by starting over

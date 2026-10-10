@@ -44,6 +44,7 @@ const hasMet = (state: GameState, npc: NpcId): boolean => getKnownNpcs(state, [n
 
 function conditionMet(state: GameState, c: CodexCondition): boolean {
   if (c.fromStart) return true;
+  if (c.any) return c.any.some(one => conditionMet(state, one));
   if (c.met) return hasMet(state, c.met);
   if (c.trust) return getTrust(state, c.trust.npc) >= c.trust.min;
   if (c.flag) return !!state.flags[c.flag];
@@ -130,8 +131,8 @@ export function unlockedKeys(state: GameState | null, storage = defaultStorage()
  * rather than somebody else's page. Only people count: a lore entry that merely unlocks on
  * meeting them (the Sacred Flame, on Lorenz) is not their profile.
  */
-export function codexEntryOf(npc: NpcId): string | null {
-  const entry = CODEX_ENTRIES.find((e) => e.category === 'people' && e.unlock.met === npc);
+export function codexEntryOf(who: string): string | null {
+  const entry = CODEX_ENTRIES.find((e) => e.category === 'people' && (e.person ?? e.unlock.met) === who);
   return entry ? entry.id : null;
 }
 

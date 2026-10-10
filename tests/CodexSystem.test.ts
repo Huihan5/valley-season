@@ -123,7 +123,7 @@ describe('getCodex shapes the shelves by the reveal rules', () => {
   it('shows locked people as silhouette slots and counts them, but hides the hidden entry', () => {
     const cats = getCodex(makeState(), fakeStorage());
     const people = cats.find(c => c.id === 'people')!;
-    expect(people.total).toBe(6);
+    expect(people.total).toBe(8);
     expect(people.unlockedCount).toBe(3);            // the three residents
     // Lorenz is flag-gated, so on Day 1 he is a locked silhouette: shape, not name.
     expect(find(cats, 'people', 'lorenz')!.unlocked).toBe(false);
@@ -197,8 +197,15 @@ describe('a clicked name goes to that person’s page', () => {
     expect(codexCategoryOf('sacred_flame')).toBe('marigni');
   });
 
+  it('the two officers have pages of their own, found by the name the reading uses', () => {
+    expect(codexEntryOf('timothy')).toBe('timothy');
+    expect(codexEntryOf('thierry')).toBe('thierry');
+    expect(codexCategoryOf('timothy')).toBe('people');
+  });
+
   it('an id the codex does not hold opens nothing', () => {
-    expect(codexCategoryOf('timothy')).toBeNull();
+    expect(codexCategoryOf('wynter')).toBeNull();
+    expect(codexEntryOf('wynter')).toBeNull();
     expect(codexCategoryOf('')).toBeNull();
   });
 
@@ -213,5 +220,51 @@ describe('a clicked name goes to that person’s page', () => {
     expect(entry.layers.find(l => l.id === 'inside')!.locked).toBe(true);
     expect(entry.layers.find(l => l.id === 'archetype')!.locked).toBe(true);
     expect(getCodex(run, fakeStorage())).toEqual(before);
+  });
+});
+
+// ── the two officers: pages opened by what the player has been through with them ──
+
+describe('the officers’ pages', () => {
+  const layers = (flags: Record<string, unknown>, id: 'timothy' | 'thierry') => {
+    const entry = find(getCodex(makeState({ flags: flags as never }), fakeStorage()), 'people', id)!;
+    return { entry, locked: Object.fromEntries(entry.layers.map(l => [l.id, l.locked])) };
+  };
+
+  it('are silhouettes until they are met, and the six who keep trust are not displaced', () => {
+    const t = layers({}, 'timothy');
+    expect(t.entry.unlocked).toBe(false);
+    expect(t.entry.title).toBe(zh.codex.entries.timothy.silhouette);
+    expect(layers({}, 'thierry').entry.unlocked).toBe(false);
+  });
+
+  it('Timothy opens on the Day 6 meeting or on the Day 12 audit, whichever the player had', () => {
+    expect(layers({ met_timothy: true }, 'timothy').entry.unlocked).toBe(true);
+    expect(layers({ timothyDay12: 'A' }, 'timothy').entry.unlocked).toBe(true);
+    expect(layers({ met_timothy: true }, 'timothy').locked).toEqual({ face: false, inside: true, archetype: true });
+  });
+
+  it('Timothy goes deeper with the audit, and deepest with the Day 27 conversation with him', () => {
+    expect(layers({ met_timothy: true, timothyDay12: 'C' }, 'timothy').locked).toEqual({ face: false, inside: false, archetype: true });
+    expect(layers({ timothyDay12: 'C', clue_ofc_timothy_declaration: true }, 'timothy').locked).toEqual({ face: false, inside: false, archetype: false });
+    // the other officer's Day 27 talk does not open his
+    expect(layers({ met_timothy: true, timothyDay12: 'C', clue_pos_locate: true }, 'timothy').locked.archetype).toBe(true);
+  });
+
+  it('Thierry opens on any meeting, goes deeper on the stumps or the ride, deepest on the Day 27 talk', () => {
+    expect(layers({ met_thierry: true }, 'thierry').locked).toEqual({ face: false, inside: true, archetype: true });
+    expect(layers({ met_thierry: true, thierryDay15: 'C' }, 'thierry').locked.inside).toBe(false);
+    expect(layers({ met_thierry: true, thierryDay19: 'A' }, 'thierry').locked.inside).toBe(false);
+    expect(layers({ met_thierry: true, clue_pos_locate: true }, 'thierry').locked.archetype).toBe(false);
+  });
+
+  it('has its words in both languages, three layers each', () => {
+    for (const id of ['timothy', 'thierry'] as const) {
+      for (const book of [zh, en]) {
+        const e = book.codex.entries[id] as { title: string; subtitle: string; silhouette: string; layers: Record<string, string> };
+        expect(e.title.length, id).toBeGreaterThan(0);
+        expect(Object.keys(e.layers).sort(), id).toEqual(['archetype', 'face', 'inside']);
+      }
+    }
   });
 });
