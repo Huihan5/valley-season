@@ -11,10 +11,10 @@
 > ---
 > ## 🔖 恢复点（compact 之后从这里继续）
 >
-> **2026-10-10（最新，pre-compact 时的状态）：873 测试绿、`tsc` 干净、`npm run build` 与 `build:standalone` 通过。所有改动都在工作区，没有提交、没有推送：作者说"听完说可以我就提交"，他还没说。** 提交前先问一句。
+> **2026-10-10（最新，pre-compact 时的状态）：873 测试绿、`tsc` 干净、`npm run build` 与 `build:standalone` 通过。已提交并推送（`a4d0110`，main 与 origin/main 一致，工作区干净）：作者在 pre-compact 之后说"先提交并推送"。**
 > - 这一晚做了：第一批和第二批声音接进游戏（36 个 cue 有声音，`src/assets/audio/` 约 15 MB）、声音控件（`SoundControl`，赛季顶栏和标题页）、左栏三段和右栏紧凑资源、日程一行、回望按钮只在有东西可回望时显示、提莫西和蒂埃里的见闻页（我起草，作者要读）、炉堂石板脚步和两次夜路马蹄、鹿的三句"没走的路"（我起草，作者要读）、根目录整理（`docs/ImplementationPlan_2026-09.md`、`docs/playtest/`、`design-drafts/`）。每一件的来龙去脉在 CHANGELOG 的 `2026-10-10`、`2026-10-09，续二`、`2026-10-09，续`、`2026-10-09`。
 > - **盲测包已重打**：`../valley-season-blind-playtest-2026-10-10/`（`_先读我.txt` 里有这一轮的更新说明和三个给测试者的问题）。单文件 HTML 21 MB，要压声音的办法见 CHANGELOG `2026-10-10`。
-> - **等作者**：① 听声音（办公室和写字的声音是抬了约 25 dB 的轻录音，底噪可能明显；炉堂循环 10.5 秒；蟋蟀只给前 12 天；砧响"远处"的处理；各声音音量 `AUDIO_CUE_GAIN`），说可以就提交推送；② 读我起草的：提莫西、蒂埃里两页（中英）、鹿的三句（中英）、新的两页见闻开放规则，以及之前交代过的那一批（说话人标注、行囊、地点底文、27 句"没走到的地方"、声望六个词、Day 28/29 的霜）；③ 要不要压声音。**留着以后找**（`docs/SOUND_LIST.md` E 节）：集市环境声（还要先接"人在集市里"的状态）、雾、音乐。
+> - **等作者**：① 听声音（办公室和写字的声音是抬了约 25 dB 的轻录音，底噪可能明显；炉堂循环 10.5 秒；蟋蟀只给前 12 天；砧响"远处"的处理；各声音音量 `AUDIO_CUE_GAIN`），有意见我来调；② 读我起草的：提莫西、蒂埃里两页（中英）、鹿的三句（中英）、新的两页见闻开放规则，以及之前交代过的那一批（说话人标注、行囊、地点底文、27 句"没走到的地方"、声望六个词、Day 28/29 的霜）；③ 要不要压声音。**留着以后找**（`docs/SOUND_LIST.md` E 节）：集市环境声（还要先接"人在集市里"的状态）、雾、音乐。
 > - 这台机器上的工具（都在会话的 scratchpad，不在项目里；会话没了就重建）：`ffmpeg-tools/`（ffmpeg-static）、`make-batch2.mjs`（切段、循环、对齐响度）、`loudness.mjs`、`import-library.mjs`、`make-code-zip.sh` + `make-zips.ps1`（盲测包；PowerShell 要加 `-ExecutionPolicy Bypass`）、`check-package.ps1`（核对压缩包；Git Bash 的 `tar` 读不了 zip）。
 >
 > **2026-10-09 晚（较早；862 测试绿、`tsc` 干净；仍在工作区，没有提交）：第二批声音做完并接上了，详见 CHANGELOG `2026-10-09，续`。** 36 个 cue 有文件；ffmpeg-static 装在 scratchpad（`ffmpeg-tools/`，不在项目里），切段、循环、响度的脚本在 scratchpad 的 `make-batch2.mjs`。门、脚步、动物、猫头鹰的原件作者已经拷回，我导入了（scratchpad 的 `import-library.mjs`），量了响度（`loudness.mjs`）、定了 `AUDIO_CUE_GAIN`，整季扫描测试（`CueSeason.test.ts`）看过频率；没用的下载和库文件夹都删了，`amb_market`、`amb_fog` 留着以后找（`docs/SOUND_LIST.md` E 节）。作者要听：蟋蟀只给前 12 天、`birds_day` 十月底是否太密、砧响"远处"的处理、各声音的音量（`AUDIO_CUE_GAIN`）、办公室和写字的声音是抬了 25 dB 的轻录音所以底噪可能明显、炉堂的循环只有 10.5 秒。都听过了再提交。
