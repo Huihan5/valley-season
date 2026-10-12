@@ -12,6 +12,7 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
+import { patchJson } from './lib/json-patch.mjs';
 
 const ROOT = process.cwd();
 const ZH = path.join(ROOT, 'src/data/zh');
@@ -86,8 +87,13 @@ function main() {
     const rel = path.relative(OUT, md).split(path.sep).join('/').replace(/\.md$/, '.json');
     const zhPath = path.join(ZH, rel), enPath = path.join(EN, rel);
     if (!fs.existsSync(zhPath)) { warn(`无源文件 no source json: ${rel} (skipped)`); continue; }
-    const zhJson = JSON.parse(fs.readFileSync(zhPath, 'utf8'));
-    const enJson = fs.existsSync(enPath) ? JSON.parse(fs.readFileSync(enPath, 'utf8')) : {};
+    const zhRaw = fs.readFileSync(zhPath, 'utf8');
+    const enRaw = fs.existsSync(enPath) ? fs.readFileSync(enPath, 'utf8') : null;
+    const zhJson = JSON.parse(zhRaw);
+    const enJson = enRaw !== null ? JSON.parse(enRaw) : {};
+    // What changes, key by key. The files are patched string by string afterwards, so nothing
+    // but the changed strings moves (re-writing the whole file reflows its inline objects).
+    const zhEdits = new Map(), enEdits = new Map();
 
     const text = fs.readFileSync(md, 'utf8');
     let m, fileTouched = false;
@@ -102,8 +108,8 @@ function main() {
       if (curZh === undefined) { warn(`未知键 unknown key ${rel} › ${key} (skipped — 结构改动请改代码)`); unknown++; continue; }
 
       let touched = false;
-      if (curZh !== zhVal) { if (!setAtPath(zhJson, key, zhVal)) { warn(`写入失败 ${rel} › ${key} (zh)`); } else { touched = true; } }
-      if (curEn !== undefined && curEn !== enVal) { if (!setAtPath(enJson, key, enVal)) { warn(`写入失败 ${rel} › ${key} (en)`); } else { touched = true; } }
+      if (curZh !== zhVal) { if (!setAtPath(zhJson, key, zhVal)) { warn(`写入失败 ${rel} › ${key} (zh)`); } else { zhEdits.set(key, zhVal); touched = true; } }
+      if (curEn !== undefined && curEn !== enVal) { if (!setAtPath(enJson, key, enVal)) { warn(`写入失败 ${rel} › ${key} (en)`); } else { enEdits.set(key, enVal); touched = true; } }
 
       if (touched) {
         changed++; fileTouched = true;
@@ -114,8 +120,12 @@ function main() {
 
     if (fileTouched) {
       filesChanged++;
-      fs.writeFileSync(zhPath, JSON.stringify(zhJson, null, 2) + '\n', 'utf8');
-      if (fs.existsSync(enPath)) fs.writeFileSync(enPath, JSON.stringify(enJson, null, 2) + '\n', 'utf8');
+      try {
+        if (zhEdits.size) fs.writeFileSync(zhPath, patchJson(zhRaw, zhEdits), 'utf8');
+        if (enRaw !== null && enEdits.size) fs.writeFileSync(enPath, patchJson(enRaw, enEdits), 'utf8');
+      } catch (err) {
+        warn(`写入失败 ${rel}: ${err.message}`);
+      }
     }
   }
 

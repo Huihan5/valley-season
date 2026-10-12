@@ -15,6 +15,7 @@ A text-based estate management game set in the Duchy of Valewisp, Kingdom of Mar
 ```
 valley-season/
 ├── CLAUDE.md                # You are here — project rules
+├── 剧情文本/                 # The plot script: all Chinese story text as one readable file (npm run script:export / script:import; see 文本编辑指南.md). A mirror — src/data stays the source of truth
 ├── docs/                    # Design documents (READ-ONLY reference)
 │   ├── GDD_NEXT.md          # Current GDD — sole design authority (succeeds GDD.md, 2026-10); numbers live in ch.5
 │   ├── GDD.md               # GDD v3.0 — superseded, kept for history and for passages not yet carried over
