@@ -59,7 +59,7 @@ const FIXED_EVENTS = [
   E.day8Echo, E.day10, E.day11Echo, E.day13Echo, E.day13Thierry,
   E.day12, E.day12Officer, E.day15, E.day15Stumps, E.day15Record,
   E.timberRestraint, E.officeFolio,
-  E.day27Officers, E.day27StreetCorner,
+  E.day27Officers, E.day27StreetCorner, E.day28GoNow,
   E.day18, E.day18HuntArrival,
   E.day19HuntRide,
   E.day20HuntStag, E.day20HuntOvernight, E.day20CampBanquet,

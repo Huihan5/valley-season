@@ -33,6 +33,12 @@ export interface ChoiceEffects {
   tenantTrust?: number;
   flags?: FlagMap;
   nextScene?: string;
+  /**
+   * Ends the season on the spot with this ending (an ending id), without the days that were
+   * still to come: a choice the story does not let the player take back. The ending is
+   * composed from the state as it stands; nothing is decided by the numbers.
+   */
+  endsSeason?: string;
   logEntry?: string;
 }
 

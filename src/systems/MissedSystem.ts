@@ -86,6 +86,8 @@ export const MISSED_RULES: MissedRule[] = [
   { id: 'stag_forward', kind: 'choice', from: 20, npc: 'henk', missed: s => s.flags.stagPick === 'A' },
   { id: 'stag_asked', kind: 'choice', from: 20, npc: 'marguerite', missed: s => s.flags.stagPick === 'B' },
   { id: 'stag_still', kind: 'choice', from: 20, npc: 'henk', missed: s => s.flags.stagPick === 'C' },
+  // the morning of Day 28, for the one who knew where he was and said the harvest first
+  { id: 'rescue_waited', kind: 'choice', from: 28, missed: s => flag(s, 'waitedAtDawn28') },
 ];
 
 const KINDS: MissedKind[] = ['event', 'person', 'place', 'choice'];

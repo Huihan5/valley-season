@@ -48,6 +48,7 @@ import eventsDay22 from './events/day22.json';
 import eventsDay23 from './events/day23.json';
 import eventsDay27Officers from './events/day27_officers.json';
 import eventsDay27StreetCorner from './events/day27_street_corner.json';
+import eventsDay28GoNow from './events/day28_go_now.json';
 import eventsDay3 from './events/day3.json';
 import eventsDay30Evening from './events/day30_evening.json';
 import eventsDay30Millridge from './events/day30_millridge.json';
@@ -116,6 +117,7 @@ const bundle: Bundle = {
     day23: eventsDay23,
     day27Officers: eventsDay27Officers,
     day27StreetCorner: eventsDay27StreetCorner,
+    day28GoNow: eventsDay28GoNow,
     day3: eventsDay3,
     day30Evening: eventsDay30Evening,
     day30Millridge: eventsDay30Millridge,

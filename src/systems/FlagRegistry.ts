@@ -29,6 +29,12 @@ export const INITIAL_FLAGS: FlagMap = {
   henkCoin: false,
   henkPurse: false,
 
+  /**
+   * Day 28, dawn: the player knew where Hartmann was and chose to finish the harvest first. Read by the
+   * after-ending note on what the season did not reach (MissedSystem). Written by: day28_go_now.
+   */
+  waitedAtDawn28: false,
+
   /** Day 27 street corner — the player admitted they want to stay. Written by: Day 27 (阶段四). */
   admittedWantToStay: false,
 

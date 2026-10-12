@@ -7,7 +7,7 @@ import {
   hasMorningFixedEvent,
 } from './EventSystem';
 import { rollRandomEvent, getPendingRandomEvent, markEventDay } from './RandomEventSystem';
-import { determineEnding, composeEnding, opensWithHandover } from './EndingSystem';
+import { determineEnding, composeEnding, opensWithHandover, EndingId } from './EndingSystem';
 import {
   adjustActionTrust, adjustNobleTrust, adjustLordImpression, adjustTenantTrust, recordConversation,
 } from './RelationSystem';
@@ -230,6 +230,10 @@ function reduceSeason(state: GameState, action: SeasonAction, rng: Rng): GameSta
         const advancesPhase = choice.advancesPhase ?? state.activeEvent.advancesPhase ?? false;
         next = { ...next, flags: { ...next.flags, [doneFlag]: true }, activeEvent: null };
 
+        // A choice the story will not let the player take back: the season stops here, and
+        // the ending is written from the state as it stands.
+        if (effects.endsSeason) return finishSeason(next, effects.endsSeason as EndingId);
+
         // A chained scene keeps going: the phase is charged once, at the end.
         const chained = chainedEvent(next, choice.nextEvent ?? state.activeEvent.next);
         if (chained) return enterEvent(next, chained);
@@ -370,6 +374,27 @@ function commitAdvance(prev: GameState, next: GameState, advances: boolean, rng:
     return { ...next, pendingAdvance: true };
   }
   return advancePhase(next, rng);
+}
+
+/**
+ * End the season now, with this ending, whatever day it is. Nothing is decided by the numbers
+ * here — the choice that called for it did that — so a steward who is behind on the harvest
+ * still gets the ending they went out for.
+ */
+function finishSeason(state: GameState, endingId: EndingId): GameState {
+  return {
+    ...state,
+    pendingAdvance: false,
+    demoComplete: true,
+    endingId,
+    currentSceneText: composeEnding(state, endingId),
+    sceneParts: undefined,
+    currentChoices: [],
+    activeEvent: null,
+    lastResult: null,
+    lastResultParts: null,
+    lastSpeaker: null,
+  };
 }
 
 function advancePhase(state: GameState, rng: Rng): GameState {

@@ -6,7 +6,7 @@
     "hunt": "In Millridge’s hunting grounds, those days, there was no horse of yours.",
     "millridge": "The road to Millridge after dark: you did not take it.",
     "thierry": "A man keeps the woods here, and you never once met him.",
-    "timothy": "The man the chancery sent: you never met him face to face.",
+    "timothy": "The man the Secretariat sent: you never met him face to face.",
     "gregor_none": "You never groomed a horse for Gregor.",
     "gregor_some": "Two brushes hang in the stable. Gregor only ever let you use one.",
     "marta_word": "Martha is still holding a sentence back from you.",
@@ -31,6 +31,7 @@
     "hunt_fire_other": "At the fire Henk asked how long you meant to stay. Answer it another way and the faces around that fire would have been different.",
     "stag_forward": "On the afternoon of the twentieth day the stag stood in the middle of the clearing and Henk raised a hand. You stepped forward. Stand another way and far fewer people would have been talking around you that afternoon.",
     "stag_asked": "On the afternoon of the twentieth day, as Henk raised his hand, you asked Marguerite in a low voice how Hartmann had got through this moment. Whoever stepped forward, and whoever stood still, did not hear her answer.",
-    "stag_still": "On the afternoon of the twentieth day Henk’s eyes rested on you, then moved on. You stayed where you were. Whoever stepped forward, and whoever asked in a low voice, heard something you did not."
+    "stag_still": "On the afternoon of the twentieth day Henk’s eyes rested on you, then moved on. You stayed where you were. Whoever stepped forward, and whoever asked in a low voice, heard something you did not.",
+    "rescue_waited": "On the morning of the twenty-eighth day there was frost on the window glass, and the line of the hills to the north sat low in grey. You said after the harvest. Someone else would have set out that same day."
   }
 }

@@ -236,6 +236,9 @@ function scoreEvent(p: Plan, s: GameState, c: Choice): number {
     if (key === 'millridgeDealSigned') score += 4;
     if (key === 'clue_pos_locate' && p.truth) score += 20; // the position line, for the better ending
   }
+  // The bots keep to the harvest: leaving it on Day 28 ends the season, and the plans are there to
+  // measure the seasons that run their course (the early rescue has its own tests).
+  if (c.id === 'day28_go_now') score -= 1000;
   // Tells the player the thing they will pay for later; the ones that stop the felling.
   if (c.id === 'timber_stop') score += p.social ? 6 : -1;
 

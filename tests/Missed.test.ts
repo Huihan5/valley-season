@@ -76,6 +76,8 @@ describe('a line is offered only when it is true', () => {
     ['stag_forward', { stagPick: 'A' }, { stagPick: 'B' }],
     ['stag_asked', { stagPick: 'B' }, { stagPick: 'C' }],
     ['stag_still', { stagPick: 'C' }, { stagPick: 'A' }],
+    // the morning of Day 28: true only for the one who said the harvest first
+    ['rescue_waited', { waitedAtDawn28: true }, { waitedAtDawn28: false }],
   ];
 
   for (const [id, makes, undoes] of cases) {

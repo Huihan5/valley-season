@@ -1,0 +1,30 @@
+{
+  "id": "day28_go_now",
+  "day": 28,
+  "timing": "dawn",
+  "forced": true,
+  "activationFlag": "clue_pos_locate",
+  "title": "Two Points on the Stone",
+  "sceneText": "It gets light late. There is frost on the window glass, and the line of the hills to the north sits low in a layer of grey, as though it had already begun to come down over there.\n\nThe two points on the stone yesterday, an inch apart. When you close your eyes they are still where he drew them.\n\nIt is a full day’s walk. Thierry said: if you want to go, tell me.\n\nThe wheat in the fields is not all in. The last three days of accounts are spread on the desk, and nobody will do them for you.",
+  "choices": [
+    {
+      "id": "day28_go_now",
+      "text": "Go to Thierry now",
+      "effects": {
+        "endsSeason": "ending4b",
+        "logEntry": "You did not wait for the harvest to be in. You went to Thierry that same day."
+      }
+    },
+    {
+      "id": "day28_wait",
+      "text": "After the harvest, then",
+      "effects": {
+        "flags": {
+          "waitedAtDawn28": true
+        },
+        "logEntry": "You decided it would wait until the harvest was in."
+      },
+      "resultText": "You say after the harvest.\n\nAs you say it you are looking out of the window. The frost on the glass is going back, a little at a time.\n\nToday’s work is in the fields."
+    }
+  ]
+}
