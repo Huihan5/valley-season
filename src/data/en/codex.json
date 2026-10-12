@@ -80,12 +80,12 @@
     },
     "timothy": {
       "title": "Inspector Timothy",
-      "subtitle": "The Ducal Chancery",
-      "silhouette": "The inspector at the Chancery",
+      "subtitle": "The Ducal Secretariat",
+      "silhouette": "The inspector at the Secretariat",
       "layers": {
-        "face": "An inspector at the Ducal Chancery in Valehold, in his third year posted to Valewisp. Dark grey uniform, cuffs worn shiny, a gilt-chained pince-nez. He speaks flat and exact, with no pleasantries; he opens with a figure.",
+        "face": "An inspector at the Ducal Secretariat in Valehold, in his third year posted to Valewisp. Dark grey uniform, cuffs worn shiny, a gilt-chained pince-nez. He speaks flat and exact, with no pleasantries; he opens with a figure.",
         "inside": "From a small town near Forgehold, from a family without much money, he finished at the Radiant Collegium on a scholarship and entered the civil service. To him a tax rate is more than law: it is a moral gauge. He has seen more account books than smiling faces and smells a trick in a column of numbers at once, yet he has learned to close one eye on a harmless lie — not smoothness, only knowing that life is not easy.",
-        "archetype": "The Kingdom trains its civil servants and posts them out to the duchies: his training and his promotion belong to the Kingdom, his daily work to the duchy, where he takes his orders from the Chancery. His loyalty goes to neither side. It goes to one thing, that the system should run correctly. The records are his, so the duchy cannot shade what it reports to the Kingdom; and his career is in the Kingdom’s hands, so he can be moved on at any time, and he is already reckoning when. It is a place the system made, not one he chose."
+        "archetype": "The Kingdom trains its civil servants and posts them out to the duchies: his training and his promotion belong to the Kingdom, his daily work to the duchy, where he takes his orders from the Secretariat. His loyalty goes to neither side. It goes to one thing, that the system should run correctly. The records are his, so the duchy cannot shade what it reports to the Kingdom; and his career is in the Kingdom’s hands, so he can be moved on at any time, and he is already reckoning when. It is a place the system made, not one he chose."
       }
     },
     "thierry": {

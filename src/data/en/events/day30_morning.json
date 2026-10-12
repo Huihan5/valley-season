@@ -4,10 +4,10 @@
   "timing": "dawn",
   "forced": true,
   "title": "The Last Day",
-  "sceneText": "The thirtieth of October.\n\nYou wake before it is properly light and there is frost outside the window. There has been frost every day this week.\n\nThere is already movement downstairs, no earlier than usual and no later. Martha is in the kitchen, Gregor is in the stable, the people in the fields went out long ago.\n\nToday is no different from yesterday. What has to be done today is the same set of things that had to be done yesterday.\n\nOnly: once today is done, will there be a tomorrow?",
+  "sceneText": "The thirtieth of October.\n\nYou wake before it is properly light and there is frost outside the window.\n\nThere has been frost every day this week.\n\nThere is already movement downstairs. As on any day, Martha is in the kitchen, Gregor is in the stable, the people in the fields have gone out.\n\nToday is no different from yesterday. What has to be done today is the same set of things that had to be done yesterday.\n\nOnly: once today is done, what is there to do tomorrow?",
   "variants": {
     "elena_distant": "As you come down, Elena is wiping the stair rail. She sees you and turns side-on to let you pass.",
-    "elena_close": "As you come down, Elena is carrying a great roll of something out towards the yard.\n\nThe winter quilts. She takes them out one at a time and lays them over the rail along the yard wall to air.\n\nToday is the thirtieth of October.\n\nThose quilts will not be wanted until the middle of November. She did not ask anybody whether they should be aired now."
+    "elena_close": "As you come down, Elena is carrying a great roll of something out towards the yard.\n\nThe winter quilts. She takes them out one at a time and lays them over the rail along the yard wall to air.\n\nToday is the thirtieth of October.\n\nThose quilts will not be wanted until the middle of November. Nobody has told her to. For people in the valley, it is simply time."
   },
   "choices": null
 }

@@ -6,7 +6,7 @@
   "advancesPhase": true,
   "activationFlag": "huntAttendedDay21Continued",
   "title": "What the Hunt Brings In",
-  "sceneText": "Today’s line runs west of the camp, easy slope, thin woods.\n\nThe chance at big game was spent yesterday; after that stag, today the field is out for small things. Hare, pheasant, partridge, and with luck a duck or two come up from the bottoms.\n\nThis kind of hunting needs no ceremony. The men spread out and go slowly. Thierry is somewhere up the slope, and now and then he calls, and the field leans a little in one direction.\n\nYou take a few things.\n\nWhen it is counted at midday the stewards put their bags together. Somebody counts yours for you.",
+  "sceneText": "Today’s line runs west of the camp: an easier slope, thin woods.\n\nAfter that stag, the share of big game is spent. Today the field is out for small things. Hare, pheasant, partridge, and with luck a duck or two come up from the bottoms.\n\nThis kind of hunting needs no ceremony. The men spread out and go slowly. Thierry is somewhere up the slope, and now and then he calls, and the field leans a little further in one direction.\n\nWhen it is counted at midday the stewards put their bags together.\n\nYou too take a few things.",
   "choices": [
     {
       "id": "harvest_sell",
@@ -17,7 +17,7 @@
         "nextScene": "forest",
         "logEntry": "You sold today’s bag on the spot for coin."
       },
-      "resultText": "The man buying game has come out from Valehold. His scales are accurate and he names his price without fuss. He counts it, gives you a figure, and you find it fair enough.\n\nHe settles on the spot. Your share goes into a basket with everyone else’s."
+      "resultText": "The man buying game has come out from Valehold. His scales are accurate and he names his price without fuss. He gives you a figure, and you find it fair enough.\n\nHe settles on the spot. Your share goes into a basket with everyone else’s."
     },
     {
       "id": "harvest_carry_home",
@@ -29,7 +29,7 @@
         "nextScene": "default",
         "logEntry": "You carried today’s bag back to Maplegate."
       },
-      "resultText": "You say you will take it back.\n\nA steward from another house glances at you — the look that means, so there are still people who do it that way. Most of them take the coin. Carrying it home means it has to be dealt with, and dealing with it takes hands, and coin is simpler.\n\nWhen you get back at dusk Martha takes the sack at the kitchen door and opens it to look.\n\n{@marta}“Hare,” she says. “Three.”\n\nShe lifts the sack to weigh it in her hand and opens it a second time.\n\n{@marta}“And pheasant.”\n\nShe does not thank you. She turns and goes into the kitchen, calling for people before she is through the door.\n\nThe kitchen light burned very late that night. What the tenants ate at midday the next day was not what they usually eat."
+      "resultText": "You say you will take it back.\n\nA steward from another house glances at you — the look that means, so there are still people who do it that way. Most of them take the coin. Carrying it home means it has to be dealt with, and dealing with it takes hands, and coin is simpler.\n\nBack at the estate, Martha takes the sack at the kitchen door.\n\n{@marta}“Hare.” She has looked into the sack. “Three.”\n\nShe lifts the sack to weigh it in her hand and opens it a second time.\n\n{@marta}“And two pheasant.”\n\nShe turns and goes into the kitchen, calling for people as she goes.\n\nThe kitchen light burned later than usual that night. What the tenants ate at midday the next day was not what they usually eat."
     }
   ]
 }

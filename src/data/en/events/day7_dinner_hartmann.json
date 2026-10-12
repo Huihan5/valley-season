@@ -5,7 +5,7 @@
   "forced": true,
   "activationFlag": "attendedDinner",
   "title": "The Thornwall Dinner",
-  "sceneText": "After the main course one of the neighbouring landholders puts down his knife.\n\n“That … predecessor of yours,” he says. “What actually happened there?”\n\nEvery movement at the table gets a little quieter. Everyone goes on eating, and the rhythm no longer matches.\n\nHenk smiles. “Every man to his own road. Anybody who does this work long enough has a moment of wanting a different life.”\n\nMarguerite says nothing. She is waiting for you to speak.",
+  "sceneText": "After the main course one of the neighbouring landholders puts down his knife and turns to you.\n\n“That … predecessor of yours,” he says. “What actually happened there?”\n\nEvery movement at the table gets a little quieter. Everyone goes on eating, and the rhythm no longer matches.\n\nHenk smiles. “Every man to his own road. Anybody who does this work long enough has a moment of wanting a different life.”\n\nYou notice that Marguerite is waiting for you to speak.",
   "next": "day7_dinner_departure",
   "choices": [
     {
@@ -15,7 +15,7 @@
         "flags": { "dinnerPick2": "A" },
         "logEntry": "You said at the dinner that you were looking into Hartmann."
       },
-      "resultText": "“I am looking into it.”\n\nYou know as soon as it is out that it was too soon.\n\nHenk’s expression does not change. He is still smiling, and he sets his fork down half a beat slower than he did before.\n\n{@henk}“Looking into it,” he says. “Looking into what?”\n\nYou say there are places in the accounts that do not come out.\n\n{@henk}“The accounts.” He repeats it, and then turns to the neighbouring landholder. “There, you see — that is the good of a new man. What the old hands have grown used to, a new one sees is wrong at a glance.”\n\nSomebody at the table agrees with him. And so the subject passes.\n\nMarguerite has not spoken at all.\n\nFor the rest of the meal Henk talks to you twice about timber and once about the weather. He is extremely pleasant."
+      "resultText": "As soon as it is out you know it was too soon.\n\nHenk is still smiling, but he sets his fork down half a beat slower than he did before.\n\n{@henk}“Looking into what?”\n\nYou say there are places in the accounts that do not come out.\n\n{@henk}“The accounts.” He repeats it, and then turns to the neighbouring landholder. “There, you see — that is the good of a new man. What the old hands have grown used to, a new one sees is wrong at a glance.”\n\nSomebody at the table agrees with him. And so the subject passes.\n\nMarguerite has not spoken at all.\n\nFor the rest of the meal Henk talks to you twice about timber and once about the weather. He is extremely pleasant."
     },
     {
       "id": "dinner2_not_my_business",
@@ -24,7 +24,7 @@
         "flags": { "dinnerPick2": "B" },
         "logEntry": "You turned the subject of Hartmann away at the dinner."
       },
-      "resultText": "“I do not know,” you say. “What I took over was the estate, not his affairs.”\n\nThe neighbouring landholder nods and says that is fair enough.\n\nThe talk moves on to this year’s prices.\n\nYou have lost nothing, and you have got nothing. You eat the rest of the meal in peace.\n\nMarguerite looked at you once after you had finished speaking, and then bent to her soup.\n\nYou do not know what that look meant. You never work it out all evening."
+      "resultText": "“I do not know,” you say. “What I took over was the estate, not his affairs.”\n\nThe neighbouring landholder nods and says that is fair enough.\n\nThe talk moves on to this year’s prices.\n\nYou have lost nothing, and you have got nothing. You eat the rest of the meal in peace.\n\nMarguerite bends her head to her soup."
     },
     {
       "id": "dinner2_ask_them",
@@ -33,7 +33,7 @@
         "flags": { "dinnerPick2": "C" },
         "logEntry": "You handed the subject of Hartmann back to the table."
       },
-      "resultText": "Henk speaks first. He says Hartmann was “a man who took it all too seriously”, and laughs a little after saying it, as though there were something funny in the assessment.\n\nThe neighbouring landholder says his memory was frighteningly good — that he could recite an entry from three years back.\n\nMarguerite does not join in. Only when the subject is nearly past does she say one thing.\n\n{@marguerite}“The last time he came to me was at the end of the summer.”\n\nShe does not say what he came for. Having said it she reaches for her water glass, and that movement ends the subject."
+      "resultText": "Henk speaks first. He says Hartmann was “a man who took it all too seriously”, and laughs a little after saying it.\n\nThe neighbouring landholder says his memory was frighteningly good — that he could recite an entry from three years back.\n\nMarguerite does not join in. Only when the subject is nearly past does she say one thing.\n\n{@marguerite}“The last time I saw him was at the end of the summer.”\n\nShe reaches for her water glass, and that movement ends the subject."
     }
   ]
 }

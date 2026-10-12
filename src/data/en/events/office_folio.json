@@ -4,7 +4,7 @@
   "forced": true,
   "advancesPhase": true,
   "title": "Something Pressed Between the Leaves",
-  "sceneText": "Going through last year’s files, you come to a folio with no number on it.\n\nIt is not accounts. There are loose things inside it: two receipts, a copy of a contract, several notes written half through.\n\nThe hand on the notes is Hartmann’s.\n\nWhen you reach the middle, something slides out from between the leaves.\n\nA small sprig of a dried plant. Pressed very flat, the colour gone to pale brown, the edges whole. It was put in there carefully. It did not fall in by chance.\n\nYou hold it up to the light.\n\nThis folio is in this room. This room is cleaned by Elena. And the way the thing has been laid between the leaves says that whoever laid it there wanted it to stay flat.",
+  "sceneText": "Going through last year’s files, you come to a folio with no number on it.\n\nIt is not accounts. There are loose things inside it: two receipts, a copy of a contract, several notes written half through.\n\nThe hand on the notes is Hartmann’s.\n\nWhen you reach the middle, something slides out from between the leaves.\n\nA small sprig of a dried plant, pressed very flat, the colour gone to pale brown, the edges whole.\n\nYou hold it up to the light.\n\nThis folio is in this room. This room is cleaned by Elena. And the way the thing has been laid between the leaves says that whoever laid it there wanted it to stay flat.",
   "choices": [
     {
       "id": "folio_ask",
@@ -15,7 +15,7 @@
         },
         "logEntry": "You took the sprig to Elena and asked about it."
       },
-      "resultText": "You find her in the afternoon and show her the sprig.\n\nShe looks at it once and says she does not know.\n\n{@elena}“I do not move what is inside when I clean,” she says. “With the folio I only wipe the cover.”\n\nWhat she says may well be true. You have no way to tell.\n\nWhen she has said it she waits a few seconds. You do not ask anything more, and she goes.\n\nThe folio was still in the same place the next day, with not a page moved."
+      "resultText": "You find her in the afternoon and show her the sprig.\n\nShe looks at it once and says she does not know.\n\n{@elena}“I do not move what is inside when I clean,” she says. “With the folio I only wipe the cover.”\n\nWhat she says may well be true. You have no way to tell.\n\nShe waits a few seconds, sees that you do not ask anything more, and turns and goes.\n\nThe folio was still in the same place the next day, with not a page moved."
     },
     {
       "id": "folio_replace",
@@ -30,7 +30,7 @@
         },
         "logEntry": "You put the sprig back between the same two pages."
       },
-      "resultText": "You lay it back between the same two pages, squared to where it was, then close the folio and put it back on the shelf.\n\nWhen you put it back you push it in half an inch further than it stood, because you would rather nobody saw at a glance that you had touched it.\n\nYou mention it to nobody.\n\nThree days later you go past that shelf. The folio is still there.\n\nSomebody has drawn it back out half an inch."
+      "resultText": "You lay it back between the same two pages, squared to where it was, then close the folio and put it back on the shelf.\n\nYou push the folio in half an inch further than it stood, because you would rather nobody saw at a glance that you had touched it.\n\nYou mention it to nobody.\n\nThree days later you go past that shelf. The folio is still there.\n\nSomebody has drawn it back out half an inch."
     }
   ]
 }

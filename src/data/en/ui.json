@@ -242,10 +242,10 @@
     "toTitleNote": "This season is saved; continue it from the title."
   },
   "opening": {
-    "signatureLabel": "Signature of the Guaranteed Party",
+    "signatureLabel": "Received by the Guaranteed Person",
     "signaturePrompt": "Write your name",
     "sign": "Sign",
-    "namePrompt": "Before the season begins, sign the guarantee of residence.",
+    "namePrompt": "Before the season begins, sign for the summary leaf of the guarantee.",
     "skip": "Skip the opening →"
   },
   "app": {

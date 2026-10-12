@@ -45,13 +45,13 @@ describe('the invitation', () => {
   });
 
   it('lets 格雷格 puncture the selling point without calling anyone a liar', () => {
-    expect(letter.sceneText).toContain('公爵殿下今年将莅临开幕');
-    expect(letter.sceneText).toContain('殿下年年都来');
+    expect(letter.sceneText).toContain('公爵阁下今年将莅临开幕');
+    expect(letter.sceneText).toContain('公爵年年都来');
     expect(letter.sceneText).toContain('只是从来不到我们这边');
   });
 
   it('marks the year 霍特曼 stopped coming', () => {
-    expect(letter.sceneText).toContain('第八年开始就找借口推掉了');
+    expect(letter.sceneText).toContain('第八年找了个借口推掉了');
   });
 
   it('separates declining from not answering, and charges more for silence', () => {
@@ -97,7 +97,7 @@ describe('the opening is the third chance at 贵族信任', () => {
 
   it('says why hiding is worse than staying home', () => {
     const edge = opening().choices?.find(c => c.id === 'hunt18_edge');
-    expect(edge?.resultText).toContain('你是自己站到边上去的');
+    expect(edge?.resultText).toContain('站到边上是你自己的选择');
   });
 });
 
@@ -132,12 +132,12 @@ describe('the stag', () => {
   })) as EventData;
 
   it('is about 亨克 rather than about the deer', () => {
-    expect(stag.sceneText).toContain('他不是要找人射鹿。他在找人说话。');
+    expect(stag.sceneText).toContain('没有人在看鹿。他们在看亨克，而亨克在看你。');
   });
 
   it('never says whether the shot landed', () => {
     const forward = stag.choices?.find(c => c.id === 'stag_step_forward');
-    expect(forward?.resultText).toContain('那一枪打没打中，这一天里再也没有人提起');
+    expect(forward?.resultText).toContain('那一枪打没打中，但这一天里再也没有人提起');
     expect(forward?.effects?.relationships).toEqual({ henk: 1 });
   });
 
@@ -203,7 +203,7 @@ describe('the banquet asks the question the wrong way round', () => {
   it('has 玛格丽特 step in when the question stops being polite', () => {
     const open = banquet.choices?.find(c => c.id === 'banquet_havent_thought');
     expect(open?.effects?.flags?.askedWhyStay).toBe(true);
-    expect(open?.resultText).toContain('这个问题他不该在这儿问');
+    expect(open?.resultText).toContain('这个问题不该在这儿问');
   });
 
   it('gives 领主印象 nothing for deferring to an absent baron', () => {
@@ -229,7 +229,7 @@ describe('the camp morning', () => {
     expect(sold?.effects?.guldmark).toBeGreaterThan(0);
     expect(carried?.effects?.relationships).toEqual({ marta: 1 });
     expect(carried?.effects?.tenantTrust).toBe(1);
-    expect(carried?.resultText).toContain('第二天中午佃户们吃的东西和平时不一样');
+    expect(carried?.resultText).toContain('第二天中午，佃户们吃的东西和平时不一样');
   });
 });
 
@@ -243,22 +243,22 @@ describe('the tree, and what people decide to tell you', () => {
 
   it('explains the oak without a shred of mysticism', () => {
     expect(tree().sceneText).toContain('圣火节的引火柴从这儿取');
-    expect(tree().sceneText).toContain('因为上一代人从这儿取。”他说，“这就是唯一的理由');
+    expect(tree().sceneText).toContain('但我们不砍它，只取它自己落下来的枝子');
     for (const retired of ['符号', '刻痕']) {
       expect(tree().sceneText, retired).not.toContain(retired);
     }
   });
 
   it('withholds the question 霍特曼 asked until 洛伦茨 trusts the listener', () => {
-    expect(tree().sceneText).not.toContain('是不是错得越多');
-    expect(tree({}, { lorenz: 3 }).sceneText).toContain('是不是错得越多');
+    expect(tree().sceneText).not.toContain('是不是就错得越多');
+    expect(tree({}, { lorenz: 3 }).sceneText).toContain('是不是就错得越多');
     expect(tree({}, { lorenz: 3 }).onEnterEffects?.flags?.clue_mot_lorenz_question).toBe(true);
   });
 
   it('does not replay the revelation to someone who already has it', () => {
     const again = tree({ clue_mot_lorenz_question: true }, { lorenz: 3 });
     expect(again.sceneText).toContain('这一年我想了很多次');
-    expect(again.sceneText).not.toContain('是不是错得越多');
+    expect(again.sceneText).not.toContain('是不是就错得越多');
   });
 
   it('gives 玛格丽特 fragment when noble trust and her regard together reach 2', () => {
@@ -321,7 +321,7 @@ describe('Day 19 in the saddle', () => {
   it('tells the three places apart for a player who already asked once', () => {
     const again = ride({ clue_ofc_thierry_range: true })
       .choices?.find(c => c.id === 'ride_ask_range');
-    expect(again?.resultText).toContain('您问这个问得很细');
+    expect(again?.resultText).toContain('您的问题很细致');
     expect(again?.resultText).toContain('石底');
   });
 

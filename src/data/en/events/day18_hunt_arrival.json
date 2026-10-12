@@ -6,12 +6,12 @@
   "advancesPhase": true,
   "activationFlag": "huntAttendedDay18",
   "title": "The Opening of the Season",
-  "sceneText": "The hunting ground is open country. The smell of the pine camp mixed with dung and leather. The Duke’s banner hangs slack; there is not enough autumn wind today to hold it.\n\nThe nobility and their stewards are spread out between the fires and the tents. Baron Henk is at the centre of it, laughing among a group of hunters he knows. Marguerite sits in a folding chair with a half-closed book in her hand, and her eyes are not on it.\n\nFurther off, a party is mounting up. There are many more of them than there are here, and they are turned out differently: dark riding dress all matching, and the same device on the tack. Somebody in the middle of that party — at this distance all you can see is that she is laughing.\n\nSomebody beside her points towards the tree line, and she nods. The whole party begins to move.\n\nFrom start to finish nobody looks over this way.\n\nThe Duke’s party goes. You watched for less than a minute.\n\nHenk sees you and waves.\n\n{@henk}“Maplegate. You came.” He puts a hand on your shoulder. “Hartmann was always finding reasons those last few years. We had all assumed that estate was done with hunting for good.”\n\nHe steers you towards the fire.\n\nHalfway there a man in a dark green coat comes round from behind a tent with a sheet of paper covered in lines. He is giving instructions to two men behind him as he walks, and they are nodding.\n\nHenk lets go of your shoulder.\n\n{@henk}“Vallant,” he calls. “Which side are we starting today?”\n\n{@thierry}“South-east.” The man does not even look up. “That wind this morning has pressed the scent down low; the deer are below the slope. If you push from the north they will run out of the ground, and I have nobody set that side.”\n\nHenk is blank for half a second, and then laughs. “As you say.”",
+  "sceneText": "The hunting ground is open country. The smell of the pine camp mixes with dung and leather. The banners hang slack; there is not enough autumn wind today to hold them.\n\nNobles and stewards are spread out between the fires and the tents. Baron Henk is at the centre of it, laughing among a group of hunters he knows. Marguerite sits in a folding chair with a half-closed book in her hand, looking elsewhere.\n\nFurther off, a party is mounting up. There are many more of them than there are here, and they are turned out differently: dark riding dress all matching, and the same device on the tack. Somebody in the middle of that party — at this distance all you can see is that she is laughing.\n\nSomebody points her towards the tree line, and she nods. The whole party begins to move. In under a minute the Duke’s party is gone. From start to finish nobody looks over this way.\n\nHenk sees you and waves.\n\n{@henk}“Maplegate. You came.” He puts a hand on your shoulder. “Hartmann found a reason not to last year, and we had all assumed that estate was done with hunting for good.”\n\nHe steers you towards the fire.\n\nHalfway there a man in a dark green coat comes round from behind a tent with a sheet of drawing paper covered in lines. He is giving instructions to two men behind him as he walks, and they are nodding.\n\nHenk lets go of your shoulder.\n\n{@henk}“Vallant,” he calls. “Which side are we starting today?”\n\n{@thierry}“South-east.” The forester does not even look up. “That wind this morning has pressed the scent down low; the deer are below the slope. If you push from the north they will run out of the ground, and nobody is set that side.”\n\nHenk is blank for half a second, and then laughs. “As you say.”",
   "onEnterEffects": {
     "flags": { "met_thierry": true }
   },
   "variants": {
-    "thierry_met": "{@thierry}“Again, then,” he says. “I did say I am in the woods two hundred days of the year. These five are inside that.”\n\nHe opens the sheet out a little further so that you can see it too.\n\n{@thierry}“South-east today. If you are riding along, do not ride at the very front. That lot up there like to race, and when they race they do not watch the ground.”",
+    "thierry_met": "{@thierry}“Again, then,” he says. “I did say I am in the woods two hundred days of the year. These five are inside that.”\n\nHe opens the sheet out a little so that you can see it too.\n\n{@thierry}“South-east today. If you are riding along, do not ride at the very front. That lot up there like to race, and when they race they do not watch the ground.”",
     "thierry_unmet": "{@thierry}“Vallant. Forester, north district.” He folds the sheet away. “And you are the new steward at Maplegate.”"
   },
   "choices": [
@@ -22,7 +22,7 @@
         "flags": { "huntDay18Pick": "A" },
         "logEntry": "You went with Henk into the circle at the fire."
       },
-      "resultText": "Henk takes you into the circle and names them one at a time. Two neighbouring landholders, a horse dealer up from Valehold, two stewards from other houses.\n\nWhen he comes to you he says “the new steward at Maplegate”. He does not give your name, and he does not say that you are a foreigner.\n\n{@henk}“He has been here under a month,” Henk says, “and the books are straight already.”\n\nYou have no idea where he heard that.\n\nSomebody in the circle asks where you are from. You tell them. Somebody says something and another man laughs. Not unkindly.\n\nHalf an hour later you notice that you are listening to them talk about other things — whose horses, whose land, this year’s prices. Nobody is asking you anything now.\n\nThis is more or less what it means to be caught when you fall."
+      "resultText": "Henk takes you into the circle and names them one at a time. Two neighbouring landholders, a horse dealer up from Valehold, two stewards from other houses.\n\nWhen he comes to you he says only “the new steward at Maplegate”. He does not give your name, and he does not say that you are a foreigner.\n\n{@henk}“He has been here under a month,” he says, “and the books are straight already.”\n\nWhere he heard that, you cannot tell.\n\nSomebody in the circle asks where you are from. You tell them. Somebody picks it up with a remark, and another man laughs.\n\nHalf an hour later you notice that you are listening to them talk about other things — whose horses, whose land, this year’s prices.\n\nNobody is asking you anything now."
     },
     {
       "id": "hunt18_marguerite",
@@ -31,7 +31,7 @@
         "flags": { "huntDay18Pick": "B" },
         "logEntry": "You went to pay your respects to Baroness Marguerite first."
       },
-      "resultText": "You go over to the folding chair.\n\nShe does not look up. She closes the book first, and then looks at you.\n\n{@marguerite}“You came,” she says. “Nobody has come from Ludwig’s estate in two years.”\n\nShe glances towards the fire.\n\n{@marguerite}“Henk is delighted. Have you noticed that he asks once a year why nobody from Maplegate comes?”\n\nShe sets the book on her knees.\n\n{@marguerite}“He does not miss Hartmann. He dislikes having a place stand empty when he does not know who will end up sitting in it.”"
+      "resultText": "You go over to the folding chair.\n\nShe does not look up. She closes the book first, and then looks at you.\n\n{@marguerite}“You came,” she says. “Nobody came from Ludwig’s estate last year.”\n\nShe tilts her head towards the fire.\n\n{@marguerite}“Henk is delighted. All last season he kept asking why nobody from Maplegate came.”\n\nMarguerite sets the book on her knees.\n\n{@marguerite}“He does not miss Hartmann. He just dislikes a place standing empty, when he knows who could have been sitting in it.”"
     },
     {
       "id": "hunt18_thierry",
@@ -40,7 +40,7 @@
         "flags": { "huntDay18Pick": "C" },
         "logEntry": "You stayed where you were and watched the man in the green coat set out the day’s line."
       },
-      "resultText": "You do not follow Henk straight away. You stay where you are and watch the man in the green coat.\n\nHe draws two more lines on the sheet, turns it round for the men beside him to see, says three sentences, and the two of them scatter to get on with it. The whole thing takes under a minute.\n\nHe looks up and sees you watching him."
+      "resultText": "You do not follow Henk straight away. You stay where you are and watch the man in the green coat.\n\nHe draws two more lines on the sheet, turns it round for the men beside him to see, says three sentences, and the two of them scatter to get on with it. The whole thing takes under a minute.\n\nThe man looks up and sees you watching him."
     },
     {
       "id": "hunt18_edge",
@@ -49,7 +49,7 @@
         "flags": { "huntDay18Pick": "D" },
         "logEntry": "You found a place at the edge of the camp and stayed there."
       },
-      "resultText": "You find a place at the edge of the camp, against an unhitched cart.\n\nYou can see the whole field from here. Henk at the centre, Marguerite in her chair, the man in the green coat giving instructions. Attendants carrying the wine jars. Somebody laughing.\n\nYou stand there about a quarter of an hour and nobody comes over.\n\nThis is not being slighted. Nobody has any obligation to come and find you today, and you walked to the edge yourself.\n\nOn the ride back at dusk Henk greeted you from the saddle, as warmly as he had in the morning.\n\nBut you heard nothing at all the whole afternoon."
+      "resultText": "You find a place at the edge of the camp, against an unhitched cart.\n\nYou can see the whole field from here. Henk at the centre, Marguerite in her chair, the man in the green coat giving instructions. Attendants carrying the wine jars. Somebody lighting a fire, and somebody doing warm-up exercises with a good deal of show.\n\nYou stand there about a quarter of an hour and nobody comes over.\n\nNobody has come to find you today; standing at the edge was your own choice.\n\nOn the ride back at dusk Henk greeted you from the saddle, as warmly as he had in the morning."
     }
   ]
 }

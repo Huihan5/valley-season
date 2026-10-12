@@ -4,10 +4,10 @@
   "timing": "evening",
   "forced": true,
   "title": "The Reckoning",
-  "sceneText": "After dark things stop, one at a time.\n\nThe people in the fields come back first. Then the light in the stable goes out. The kitchen holds on longest; Martha is clearing up, and she takes longer over it than usual.\n\nIn the office you finish the last page of the month’s accounts.\n\nWhat is spread on the desk: the general ledger, the tenant roll, the felling record, the market receipts, the assessment of dues. And the copy of the guarantee, number VS-18-0947.\n\nThirty days ago you put your name to it.",
+  "sceneText": "After dark things stop, one at a time.\n\nThe people in the fields come back first, and then the light in the stable goes out. The kitchen holds on longest; Martha takes longer over her clearing up than usual.\n\nIn the office you finish the last page of the month’s accounts.\n\nWhat is spread on the desk: the general ledger, the tenant roll, the felling record, the market receipts, the assessment of dues. And the copy of the guarantee, number VS-18-0947.\n\nThirty days ago you put your name to it.",
   "variants": {
     "admitted": "You said something on that street in Valehold. You have still not said it to a second person.",
-    "review": "You set down on paper what you did this month. Not to account for it; the forms for accounting for it are already filled in. You only wanted to see what these thirty days actually held.\n\nHow many mornings of reaping. How many trips to market. How many households’ roofs mended. How many evenings in the stable, and how many nights you slept against the office desk.\n\nThe numbers come out smaller than you thought. Thirty days is not long.\n\nThen you turn to the last page and look at tonight’s figures.",
+    "review": "You set down on paper what you did this month. The forms for accounting for it are already filled in; you only wanted to see what these thirty days actually held.\n\nHow many mornings of reaping. How many trips to market. How many households’ roofs mended. How many evenings in the stable, and how many nights you slept against the office desk.\n\nThe numbers come out smaller than you thought. Thirty days is not long.\n\nThen you turn to the last page and look at tonight’s figures.",
     "settled_grain_full": "There is grain enough for the winter, enough for the dues, and enough to sow come spring.",
     "settled_grain_tight": "There is grain enough for the winter, and enough for this year’s dues. Next year’s seed will have to be measured out, but the winter holds no fear.",
     "settled_grain_thin": "There is grain enough for the winter, but this year’s dues are not quite covered.",
@@ -21,7 +21,7 @@
     "settled_tail_close": "You sit for a long time.\n\nThirty days ago you got down from a two-wheeled cart, your luggage was set on the steps, and a man in his fifties said three words to you.\n\nYou do not know what tomorrow will be. But tonight this book balances.",
     "ride_note": "Ride to Millridge tonight. It takes the evening",
     "close_settled": "You closed the ledger.\n\nTonight this book owes nobody. You stayed a little longer in the office as it went dark.",
-    "short": "You work the figures three times.\n\nThree times the same.\n\nIt is not short by much. It is short by exactly the amount that one more morning spent on it a fortnight ago would have covered — and there is no fortnight ago now. There is only tonight.\n\nYou sit in the office and hear the stable door catch the wind somewhere off.\n\nAnd then you think of somebody."
+    "short": "You work the figures three times.\n\nThree times the same.\n\nIt is not short by much. It is short by exactly the amount that one more morning spent on it two weeks ago would have covered. But you only have tonight.\n\nYou sit in the office. Somewhere off, the stable door is caught by the wind.\n\nAnd then you think of somebody."
   },
   "choices": [
     {
@@ -41,7 +41,7 @@
       "effects": {
         "logEntry": "You closed the ledger."
       },
-      "resultText": "You closed the ledger.\n\nThe figures are the figures. Nothing you do tonight will make them into different figures, except one thing, and you did not do it.\n\nYou sat in the dark office until very late."
+      "resultText": "You closed the ledger.\n\nThe figures are the figures. Nothing you do tonight will make them into different figures.\n\nExcept one thing.\n\nYou sat in the dim office until very late."
     }
   ]
 }

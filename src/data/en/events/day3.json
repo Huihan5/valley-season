@@ -4,7 +4,7 @@
   "timing": "midday",
   "forced": true,
   "title": "The Crack in the Ledger",
-  "sceneText": "Sorting through the papers Hartmann left, you find that the last two months do not come out.\n\nIt is not a large sum. It is a series of small payments, three to five guldmark each, at irregular intervals, the summary column giving “sundry expenditure” for every one. Together they come to under twenty guldmark, which in a month of an estate’s turnover is next to invisible.\n\nYou copy them onto a sheet by date and look at it for a long time.\n\nWhat stops you is not the amount. It is that the date, the sum and the person handling it are recorded exactly for every one of them, in the same hand as every other page. Neat, unshaken, nothing corrected.\n\nA man who wanted to cover something would not record it that clearly.\n\nHe was keeping a record, not concealing one. He was leaving somebody a copy.\n\nOn the expenditure budget at the back you look twice, and you are not on it.\n\nYour pay is not in this ledger. It comes out of the Baron’s private budget in Forgehold, in a different system from the stable repairs, the tenants’ seed money, the kitchen buying. You account for every guldmark on this estate, and you yourself are one line in another book.\n\nThat book you cannot see.",
+  "sceneText": "Sorting through the papers Hartmann left, you find that the last two months do not come out.\n\nYou copy them onto a sheet by date and look at it for a long time. The sums are small, three to five guldmark each, at irregular intervals, the summary column giving “sundry expenditure” for every one. Together they come to under twenty guldmark, which in a month of an estate’s turnover is next to invisible.\n\nBut what really stops you is something else: the date, the sum and the person handling it are recorded exactly for every one of them, in a hand as neat as on every other page, with nothing corrected.\n\nA man who wanted to cover something would not record it that clearly.\n\nOn the expenditure budget at the back you look twice, and you are not on it.\n\nYour pay is not in this ledger. It comes out of the Baron’s private budget, and like the stable repairs, the tenants’ seed money and the kitchen buying, it is not in this operating budget. You account for every guldmark on this estate, and you yourself are one line in another book.\n\nThat book you cannot see.",
   "choices": [
     {
       "id": "investigate",
@@ -17,7 +17,7 @@
         },
         "logEntry": "You began looking properly into the irregular entries in the ledger."
       },
-      "resultText": "You sat with it another afternoon.\n\nThere is no payee named against those payments, only a reference: three letters and two digits, the same on all eight. You look for the reference on other pages, and you find it. It appears in the payment column of a carriage contract from three years ago.\n\nThe contract is Millridge’s.\n\nYou turned the corner of the page down.\n\nThen you sat a while, and smoothed the corner flat again. You do not know who you were arguing with."
+      "resultText": "You sat with it another afternoon.\n\nThere was no payee named against those payments, only a reference: three letters and two digits, the same on all five. You found the reference on other pages. It appears in the payment column of a carriage contract from three years ago.\n\nThe contract belonged to Millridge, the estate next door.\n\nYou turned the corner of the page down, and later you smoothed the corner flat again.\n\nYou did not know who you were arguing with."
     },
     {
       "id": "report",
@@ -30,7 +30,7 @@
         },
         "logEntry": "You wrote to Baron von Alder reporting the irregularity in the accounts."
       },
-      "resultText": "The letter came out short. You wrote it three times and each version was shorter.\n\nWhat finally went out was four lines: the state of the accounts as you took them over, the inconsistency you had found, what you intended to do about it, and a line asking him to be aware of it.\n\nWhen Elena came to collect what was going out, she glanced at the address on the envelope.\n\nShe said nothing.\n\nThree days later Martha asked you in the kitchen whether there had been any reply from Forgehold.\n\nYou had not told anybody that you wrote."
+      "resultText": "The letter came out short. You wrote it three times and each version was shorter.\n\nWhat finally went out was four lines: the state of the accounts as you took them over, the inconsistency found, what you intended to do about it, and a line asking him to be aware of it.\n\nElena sent the letter off for you. The maid glanced at the address on the envelope, but said nothing.\n\nThree days later Martha said there was a reply from Forgehold this morning.\n\nBefore you knew of it."
     },
     {
       "id": "defer",
@@ -41,7 +41,7 @@
         },
         "logEntry": "You set the ledger question aside and put the harvest first."
       },
-      "resultText": "You close those pages and put them back where they were.\n\nThe wheat is in the fields. That is the one thing that cannot wait.\n\nYou push the ledger to the corner of the desk, underneath a stack of tenant rolls. The next day you find it in the same place, except that Elena, tidying, has drawn it out and set it on top.\n\nShe probably thought you were looking for it."
+      "resultText": "You close those pages and put them back where they were.\n\nThe wheat is in the fields. That is the one thing that cannot wait.\n\nYou push the ledger to the corner of the desk, underneath a stack of tenant rolls. Over the next few days you find it back in the same place, except that Elena, tidying, has drawn it out and set it on top. Each time you put it back underneath.\n\nShe thinks you are looking for it."
     }
   ]
 }

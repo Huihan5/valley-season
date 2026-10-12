@@ -16,6 +16,14 @@ import DATA from '../data';
  * slots; not knowing what else there is to be given is part of the estate.
  */
 
+/**
+ * Where the satchel goes next (author, 2026-10-12). An item should be able to carry more than
+ * a line: the ticket may one day be a designed graphic, and the guarantee in 文书 opens its
+ * full text on a click — the summary leaf the player holds, and behind it the Old Tongue
+ * original (VS-18-0947 古语正本, with the Common Tongue beside it). Until then every item is
+ * words only. When it comes, add optional fields to InventoryItem and to Text (an image, a
+ * document id) rather than a second system.
+ */
 export type InventoryTab = 'dossier' | 'papers' | 'things';
 
 export interface InventoryItem {
@@ -48,6 +56,8 @@ const PAPERS: readonly Spec[] = [
   // Signed in the opening. Skipping the opening skips the page, not the paper.
   { id: 'guarantee', held: () => true },
   { id: 'ticket', held: () => true },
+  // The answer to the ledger report comes three days after the report is sent.
+  { id: 'baron_reply', held: s => !!s.flags.reportedLedger && s.day >= DATA.events.day3.day + 3 },
   { id: 'hunt', held: s => !!s.flags.huntingSeasonStarted },
   { id: 'letter', held: s => !!s.flags.lordsLetterRead },
   // The man comes in the afternoon of the day the letter does.

@@ -6,7 +6,7 @@
   "advancesPhase": true,
   "activationFlag": "huntAttendedDay20",
   "title": "The Stag That Stopped",
-  "sceneText": "The stag comes into the afternoon light and stands in the clear ground between two oaks.\n\nThe best shot in the field already has it, and Baron Henk raises a hand.\n\nHe is keeping the chance back. Every year one stag is left for the most welcome guest, or for whoever the Baron thinks is worth a try.\n\nNobody is looking at the stag. They are watching Henk, or watching who Henk is watching.\n\nHenk’s eyes come to rest on you, hold for a second, and move off. He has not decided.\n\nBeside you, Marguerite says quietly:\n\n{@marguerite}“He is not looking for somebody to shoot a deer. He is looking for somebody to talk to.”",
+  "sceneText": "The stag comes into the afternoon light and stands in the clear ground between two oaks.\n\nThe best shot in the field already has it, and Baron Henk raises a hand.\n\nHe is keeping the chance back. Every year one stag is left for whoever the Baron thinks is worth a try.\n\nNobody is looking at the stag. They are looking at Henk, and Henk is looking at you.\n\nHenk’s eyes come to rest on you for a second, and move off. He has not decided.\n\nBeside you, Marguerite says quietly:\n\n{@marguerite}“He is waiting for you.”",
   "onEnterEffects": {
     "flags": { "stagMoment": true }
   },
@@ -19,7 +19,7 @@
         "flags": { "stagPick": "A" },
         "logEntry": "You stepped forward and took the stag."
       },
-      "resultText": "You take one step forward.\n\nHenk laughs at once, claps you hard on the back and holds out the gun. Somebody nearby says something and several of them laugh with him.\n\nYou raise it. The stag is still standing there, its head turned a little to one side, its ears moving.\n\nFrom this distance it is larger than you had thought.\n\nYou did not fire. Or you did. The account stops here; whether that shot went home, nobody mentions again all day.\n\nBut you are talked to the whole afternoon. Somebody comes and asks where you are from. Somebody asks how long you mean to stay at Maplegate. Somebody tells you a story about last year’s stag, at length.\n\nOn the ride back at dusk you understand that Henk already has what he wanted.\n\nHe cleared a place, and then watched to see who would stand in it. You stood in it."
+      "resultText": "You take one step forward.\n\nHenk laughs at once, claps you hard on the back and holds out the gun. Somebody nearby says something and several of them laugh with him.\n\nYou raise it. The stag is still standing there, its head turned a little to one side, its ears moving.\n\nFrom this distance it is larger than you had thought.\n\nYou fire. Whether the shot went home, nobody mentions again all day. The whole afternoon people come to talk to you. Somebody asks where you are from. Somebody asks how long you mean to stay at Maplegate. Somebody tells you a story about last year’s stag, at length.\n\nOn the ride back at dusk you understand that Henk has the trophy he wanted."
     },
     {
       "id": "stag_ask_marguerite",
@@ -28,7 +28,7 @@
         "flags": { "stagPick": "B" },
         "logEntry": "You quietly asked Marguerite how Hartmann used to handle this moment."
       },
-      "resultText": "Her eyes do not leave the stag.\n\n{@marguerite}“He took half a step back,” she says. “Every year. Back behind somebody else, where Henk could not find him.”\n\n“Seven years of stepping back?”\n\n{@marguerite}“Seven years,” she says. “The eighth he did not come.”\n\nAhead of you somebody steps forward, and somebody else takes the chance.\n\nOnly then does Marguerite turn her head to look at you.\n\n{@marguerite}“A person can keep out of the way of a thing for many years,” she says. “But keeping out of the way costs something, and what it costs runs out.”"
+      "resultText": "Her eyes go to the stag.\n\n{@marguerite}“Every year he steps back behind somebody else, so that Henk cannot pick him.”\n\n“Seven years of stepping back?”\n\n{@marguerite}“Seven years,” she says. “The eighth he did not come.”\n\nAhead of you somebody else steps forward and takes the chance of the hunt.\n\nOnly then does Marguerite turn her head to look at you.\n\n{@marguerite}“A person can keep out of the way of a thing for many years,” she says. “Keeping out of the way costs more than facing it, and what it costs runs out.”"
     },
     {
       "id": "stag_stand_still",
@@ -37,7 +37,7 @@
         "flags": { "stagPick": "C" },
         "logEntry": "You stayed where you were and did not move."
       },
-      "resultText": "You do not move.\n\nHenk’s eyes rest on you once more, shorter this time than before, and go elsewhere.\n\nSomebody else steps forward.\n\nThings carry on. The noise comes back up, as though those few seconds had not happened.\n\nMarguerite says nothing further.\n\nFor the rest of that day Henk does not look at you again. He is not cold about it either; at supper he pours you wine and says two things about the weather.\n\nHe simply does not look at you again."
+      "resultText": "You do not move.\n\nHenk’s eyes rest on you once more, shorter this time than before, and go elsewhere.\n\nSomebody else steps forward.\n\nThings carry on. The noise comes back up, as though those few seconds had not happened.\n\nMarguerite says nothing further.\n\nFor the rest of that day Henk is not cold to you; at supper he pours you wine and says two things about the weather.\n\nHe simply does not look at you again."
     }
   ]
 }

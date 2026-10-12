@@ -5,8 +5,8 @@ const openingData = DATA.opening;
 
 export const OPENING_PAGES = (openingData.pages ?? []) as OpeningPage[];
 
-/** The blank the player signs on. */
-const SIGNATURE_BLANK = '＿＿＿＿＿＿';
+/** The blank the player signs on: six full-width underscores in the Chinese letter, six plain ones in the English. */
+const SIGNATURE_BLANK = /＿{6}|_{6}/;
 
 export function getOpeningPage(index: number): OpeningPage | null {
   return OPENING_PAGES[index] ?? null;

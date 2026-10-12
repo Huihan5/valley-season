@@ -16,7 +16,7 @@
         "nextScene": "forest",
         "logEntry": "You drew the stumps, the measurements and the line of the skid road on a piece of birch bark."
       },
-      "resultText": "You did not bring paper. You draw with charcoal on the inner face of a piece of birch bark.\n\nThe positions of the eleven stumps, the spacing roughly, the line of the skid road, and the figures Thierry gave: thirty-two, thirty-five, thirty-eight — and a declared limit of thirty.\n\nThierry watches you draw.\n\n{@thierry}“That is accurate,” he says. “The proportions are wrong, though.”\n\nHe crouches and adds two strokes with a finger in the blank part of the bark: a line for the stream, and a cross for where the stream ran before it moved.\n\n{@thierry}“Take that back and look at it against a map yourself,” he says. “I cannot give you the file, but maps are public.”\n\nYou carry the bark back to the estate and press it inside an old folio in the office."
+      "resultText": "You had not brought paper. You drew with charcoal on the inner face of a piece of birch bark.\n\nThe positions of the eleven stumps, the spacing roughly, the line of the skid road, and the figures Thierry gave: thirty-two, thirty-five, thirty-eight — and a declared limit of thirty.\n\nThierry watches you draw.\n\n{@thierry}“That is accurate,” he says. “The proportions are wrong, though.”\n\nHe crouches and adds two strokes with a finger in the blank part of the bark: a line for the stream, and a cross for where the stream ran before it moved.\n\n{@thierry}“Take that back and look at it against a map yourself,” he says. “I cannot give you the file, but maps are public.”\n\nYou carry the bark back to the estate and put it on the bookshelf in the office."
     },
     {
       "id": "record_remember",
@@ -25,7 +25,7 @@
         "nextScene": "forest",
         "logEntry": "You did not write it down. You thought it was not the kind of thing you forget."
       },
-      "resultText": "You decide it makes no difference whether you write it down. You have seen all of it. You will not forget it.\n\nOn the way back you run the figures through your head twice. Thirty-two, thirty-five, thirty-eight. Limit of thirty.\n\nThree days later you cannot remember whether it was thirty-eight or thirty-six.\n\nThe difference between those two numbers is four trees or two."
+      "resultText": "You decide it makes no difference whether you write it down. You have seen all of it anyway. You will not forget it.\n\nOn the way back you run the figures through your head twice. Thirty-two, thirty-five, thirty-eight. Limit of thirty.\n\nThree days later you cannot remember whether it was thirty-eight or thirty-six, and the difference between those two numbers is four trees or two."
     }
   ]
 }

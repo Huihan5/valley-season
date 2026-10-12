@@ -101,7 +101,7 @@ describe('the dinner is one outing and three decisions', () => {
     const state = makeState({ phase: 'evening', flags: { attendedDinner: true } });
     const askThem = getEventById('day7_dinner_hartmann', state)
       ?.choices?.find(c => c.id === 'dinner2_ask_them');
-    expect(askThem?.resultText).toContain('他上一次到我这儿来，是在夏末');
+    expect(askThem?.resultText).toContain('我上一次见到他是在夏末');
     expect(JSON.stringify(askThem?.effects?.flags ?? {})).not.toContain('clue_');
   });
 });
@@ -181,7 +181,7 @@ describe('Day 10 · the petition rewards having walked the place', () => {
     const informed = petition({ surveyedFields: true }).choices?.find(c => c.id === 'repair_partial');
     expect(informed?.effects?.flags?.petitionFairness).toBe('fair');
     expect(informed?.effects?.renown).toBe(1);
-    expect(informed?.resultText).toContain('牛棚那个确实最要紧');
+    expect(informed?.resultText).toContain('牛棚确实最要紧');
 
     const blind = petition({}).choices?.find(c => c.id === 'repair_partial');
     expect(blind?.effects?.flags?.petitionFairness).toBe('unfair');
@@ -232,7 +232,7 @@ describe('the three echoes come back the next morning', () => {
     const text = (fairness: string) =>
       echo(11, { petitionResolved: true, petitionFairness: fairness })?.sceneText ?? '';
     expect(text('full')).toContain('我媳妇做的');
-    expect(text('fair')).toContain('他们不闹');
+    expect(text('fair')).toContain('他们不会闹');
     expect(text('unfair')).toContain('有两个人没有到');
     expect(text('none')).toContain('有两个人没有到');
   });

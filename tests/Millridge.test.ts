@@ -45,7 +45,7 @@ const choice = (henk: number, id: string, grain = 60) =>
 describe('the ride itself is the cost', () => {
   it('is paid for going, not for what gets asked', () => {
     expect(night(0).sceneText).toContain('明天早上这一趟就会传遍整个河谷');
-    expect(night(0).sceneText).toContain('而磨岭这个方向，尤其');
+    expect(night(0).sceneText).toContain('而去磨岭的方向尤其');
   });
 
   it('has 格雷格 ask nothing and look once', () => {
@@ -68,7 +68,7 @@ describe('what he gives depends on where you actually stand with him', () => {
   it('fills the gap exactly, in goods, without being told the number', () => {
     const goods = choice(2, 'millridge_goods', 60);
     expect(goods?.effects?.grain).toBe(GRAIN_RETAIN_THRESHOLD - 60);
-    expect(goods?.resultText).toContain('他也没有解释他的木头为什么多');
+    expect(goods?.resultText).toContain('他也没有解释他的木头为什么这么多');
   });
 
   it('loads a whole cart at trust 4, and asks for nothing in return', () => {
@@ -94,7 +94,7 @@ describe('what he gives depends on where you actually stand with him', () => {
     expect(left?.effects?.grain).toBeUndefined();
     expect(left?.effects?.guldmark).toBeUndefined();
     expect(left?.effects?.flags).toBeUndefined();
-    expect(left?.resultText).toContain('但那个笑今天晚上第一次显得不合身');
+    expect(left?.resultText).toContain('但在你眼里那个笑容第一次显得如此不合身');
     expect(left?.resultText).toContain('整个河谷明天都会知道你去过');
   });
 });

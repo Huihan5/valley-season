@@ -74,8 +74,8 @@ const CLAIMS: Claim[] = [
   { id: 'henk-proposal', says: /跟您提过一次运木头的事/, holds: s => !!s.flags.attendedDinner },
   { id: 'henk-took-it', says: /那件事您当场就应了/, holds: s => !!s.flags.attendedDinner && s.flags.dinnerPick1 === 'A' },
   { id: 'henk-turned-down', says: /那件事您当着人回了我/, holds: s => !!s.flags.attendedDinner && s.flags.dinnerPick1 === 'B' },
-  { id: 'stag-yesterday', says: /那头鹿之后，队伍今天走的是小东西/, holds: s => !!s.flags.huntAttendedDay20 },
-  { id: 'word-at-the-fire', says: /你昨晚说的那句话，今天早上没有人提/, holds: s => ['A', 'B', 'C'].includes(String(s.flags.banquetAnswer)) },
+  { id: 'stag-yesterday', says: /在那头鹿之后，大猎物的份额已经用掉了/, holds: s => !!s.flags.huntAttendedDay20 },
+  { id: 'word-at-the-fire', says: /你昨晚说的那句话今天早上也没人提/, holds: s => ['A', 'B', 'C'].includes(String(s.flags.banquetAnswer)) },
 ];
 
 /** What the screen shows after each step: the scene and the line of what just happened. */

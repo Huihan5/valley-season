@@ -2,18 +2,22 @@
   "papers": {
     "guarantee": {
       "name": "Guarantee of Temporary Residence and Labour",
-      "line": "No. VS-18-0947. Thirty days, and you signed on the line for the person guaranteed. If it lapses unrenewed, you leave within seven days."
+      "line": "No. VS-18-0947. The summary leaf, holder’s copy. Thirty days, and you signed for it on the receipt line. If it lapses unrenewed, you leave within seven days."
     },
     "ticket": {
       "name": "Railway ticket",
-      "line": "You had it gripped in your hand when you came out of the chambers."
+      "line": "You had it gripped in your hand when you came out of the Duchy House."
+    },
+    "baron_reply": {
+      "name": "The Baron’s reply",
+      "line": "Short, and without a salutation. “Your letter is read. You noticed it early and reported it properly. That is good. The rest as usual; the harvest comes first.” Signed with the surname only."
     },
     "hunt": {
       "name": "The hunt invitation from Millridge",
       "line": "The wax carries the Duke’s arms; the hand inside is Baron Henk’s. A small line at the foot: Her Grace the Duke will be present at the opening this year."
     },
     "letter": {
-      "name": "The chancery’s letter",
+      "name": "The Secretariat’s letter",
       "line": "Beneath the progress summary, an addendum: the guarantee expires on the thirtieth of October, and a renewal must be submitted not later than seven days before."
     },
     "broker": {

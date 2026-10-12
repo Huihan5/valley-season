@@ -37,7 +37,7 @@ const site = (flags: FlagMap = {}) =>
 
 describe('the report', () => {
   it('arrives from a tenant who cannot say what he saw', () => {
-    expect(report().sceneText).toContain('“树倒了。”他说，“不是风倒的。”');
+    expect(report().sceneText).toContain('“树倒了。”他说，“不是风吹倒的。”');
     expect(report().advancesPhase).toBe(false);
     expect(report().choices).toBeNull();
   });
@@ -82,7 +82,7 @@ describe('what is actually in the north woods', () => {
   });
 
   it('leaves the steward knowing he cannot read this', () => {
-    expect(site().sceneText).toContain('你是一个管账的人');
+    expect(site().sceneText).toContain('你只是一个管账的人');
   });
 
   it('has 蒂埃里 introduce himself, or not, depending on the market', () => {

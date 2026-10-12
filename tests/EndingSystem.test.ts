@@ -299,7 +299,7 @@ describe('结局一 · the symmetry is 格雷格 at both ends of the same road',
 
   it('leaves 路德维希 out of it entirely', () => {
     const fired = makeState({ resources: { grain: 40, guldmark: 0, timber: 0, renown: 0 } });
-    expect(text('ending1', fired)).not.toContain('他每年圣火节回来，住三天');
+    expect(text('ending1', fired)).not.toContain('每年圣火节，路德维希男爵回来住三天');
   });
 });
 
@@ -312,20 +312,20 @@ describe('结局二 · the letter is the whole ending', () => {
   it('closes on the line about being told by post, with no epilogue after it', () => {
     const plain = text('ending2', makeState());
     expect(plain).toContain('你留下了，而通知你留下的是一封信');
-    expect(plain).not.toContain('他每年圣火节回来，住三天');
+    expect(plain).not.toContain('每年圣火节，路德维希男爵回来住三天');
   });
 });
 
 describe('结局三 · the difference is whether the player has admitted it', () => {
   it('runs the feast either way and splits on admittedWantToStay', () => {
     const quiet = text('ending3', valleyState());
-    expect(quiet).toContain('圣火节在十一月的第一个星期');
+    expect(quiet).toContain('圣火节在十一月的最后一个星期');
     expect(quiet).toContain('觉得这一天很长，而且不想它结束');
-    expect(quiet).not.toContain('还有七年十一个月');
+    expect(quiet).not.toContain('还有七年十个月');
 
     const said = text('ending3', valleyState({ flags: { admittedWantToStay: true } }));
     expect(said).toContain('我想要个身份');
-    expect(said).toContain('还有七年十一个月');
+    expect(said).toContain('还有七年十个月');
   });
 
   it('adds 玛格丽特 to the letter and 亨克 to the end of the night', () => {
@@ -335,9 +335,9 @@ describe('结局三 · the difference is whether the player has admitted it', ()
       .toContain('西边的储藏间');
   });
 
-  it('ends with 路德维希 at the head of the table', () => {
+  it('ends with 路德维希 staying to the end of the feast', () => {
     const full = text('ending3', valleyState());
-    expect(full).toContain('他在长桌的主位上坐了那顿饭');
+    expect(full).toContain('他吃得很少，但在庭院里待到了最后');
     expect(full).toContain('冬天就要来了');
   });
 });
@@ -371,7 +371,7 @@ describe('结局 4A · the player walks the three hollows with 蒂埃里', () =>
 
   it('sends 路德维希 to the narrow table in the hall', () => {
     const found = text('ending4a', makeState({ flags: CLUES_4A }));
-    expect(found).toContain('我以为那不是我该问的事');
+    expect(found).toContain('我以为那是不需要问的');
     expect(found).toContain('三天里他去了两次门厅那张窄桌');
   });
 });
@@ -384,7 +384,7 @@ describe('结局 4B · he is alive, and the player helps carry him down', () => 
     expect(found).toContain('傍晚到了庄园');
     // He is found alive before he is carried anywhere, and the hall scene follows.
     expect(found.indexOf('他还活着')).toBeLessThan(found.indexOf('傍晚到了庄园'));
-    expect(found.indexOf('傍晚到了庄园')).toBeLessThan(found.indexOf('他没有认出这是哪儿'));
+    expect(found.indexOf('傍晚到了庄园')).toBeLessThan(found.indexOf('他认出了这里是哪儿'));
     expect(found).not.toContain('他们把人抬回来了');
   });
 
@@ -400,7 +400,7 @@ describe('结局 4B · he is alive, and the player helps carry him down', () => 
 
   it('keeps the line the whole ending is built on', () => {
     expect(text('ending4b', makeState({ flags: CLUES_4B })))
-      .toContain('等着的东西来了，你也已经不是当初等它的那个人了');
+      .toContain('等着的东西来了，可你也已经不是当初等它的那个人了');
   });
 
   it('puts the two of them on the same page only if the player took the deal', () => {
@@ -418,7 +418,7 @@ describe('结局 4B · he is alive, and the player helps carry him down', () => 
 
 describe('the epilogue belongs to the endings where the player is still here', () => {
   it('plays for three, 4A and 4B, and never for one or two', () => {
-    const opening = '他每年圣火节回来，住三天';
+    const opening = '每年圣火节，路德维希男爵回来住三天';
     expect(text('ending3', valleyState())).toContain(opening);
     expect(text('ending4a', makeState({ flags: CLUES_4A }))).toContain(opening);
     expect(text('ending4b', makeState({ flags: CLUES_4B }))).toContain(opening);
@@ -428,7 +428,7 @@ describe('the epilogue belongs to the endings where the player is still here', (
   });
 
   it('changes only what he does with the three days', () => {
-    expect(text('ending3', valleyState())).toContain('他吃得很少，但他坐到了最后');
+    expect(text('ending3', valleyState())).toContain('他吃得很少，但在庭院里待到了最后');
     expect(text('ending4a', makeState({ flags: CLUES_4A }))).toContain('只翻了几页就合上了');
     expect(text('ending4b', makeState({ flags: CLUES_4B }))).toContain('第三次待了一个多小时');
   });
@@ -454,14 +454,62 @@ describe('the 磨岭 storeroom follows the player into every ending', () => {
     const cases: [EndingId, GameState, string][] = [
       ['ending1', fired, '下一任会自己发现的'],
       ['ending2', makeState(), '这间屋子的钥匙现在挂在你腰上'],
-      ['ending3', valleyState(), '会有人从磨岭过来，说一件很小的事'],
-      ['ending4a', makeState({ flags: CLUES_4A }), '磨岭的管事过来'],
+      ['ending3', valleyState(), '会有一个从磨岭过来的人，说一件很小的事'],
+      ['ending4a', makeState({ flags: CLUES_4A }), '亨克的管事过来'],
       ['ending4b', makeState({ flags: CLUES_4B }), '你把那一页翻过去了'],
     ];
     for (const [id, state, line] of cases) {
       expect(text(id, withDeal(state)), id).toContain(line);
       expect(text(id, state), id).not.toContain(line);
     }
+  });
+});
+
+describe('结局 4A · what the player carries out of the rite depends on the ledger', () => {
+  const withDeal = (flags: FlagMap = {}) =>
+    makeState({ flags: { ...CLUES_4A, tookHenkDeal: true, ...flags } });
+
+  it('recalls the cipher only for a player who looked into the ledger', () => {
+    expect(text('ending4a', withDeal({ investigatedLedger: true }))).toContain('你想起账本上那个代号');
+    expect(text('ending4a', withDeal())).not.toContain('你想起账本上那个代号');
+  });
+
+  it('gives the last two lines either way, and the farewell to the steward after them', () => {
+    for (const flags of [{}, { investigatedLedger: true }] as FlagMap[]) {
+      const full = text('ending4a', withDeal(flags));
+      expect(full).toContain('那个人躺在火里，是因为他拒绝了亨克');
+      expect(full).toContain('而你能站在这儿把庄园交出去，有一部分原因是你没有拒绝');
+      expect(full.indexOf('而你能站在这儿把庄园交出去')).toBeLessThan(full.indexOf('你送别了那位管事'));
+    }
+  });
+
+  it('says nothing of it without the deal, and not in 4B', () => {
+    expect(text('ending4a', makeState({ flags: { ...CLUES_4A, investigatedLedger: true } }))).not.toContain('你送别了那位管事');
+    expect(text('ending4b', makeState({ flags: { ...CLUES_4B, tookHenkDeal: true, investigatedLedger: true } })))
+      .not.toContain('你送别了那位管事');
+  });
+});
+
+describe('结局一 · the platform is the same on every road to it', () => {
+  const fired = makeState({ resources: { grain: 40, guldmark: 0, timber: 0, renown: 0 } });
+  const count = (s: string, needle: string) => s.split(needle).length - 1;
+
+  it('reaches the platform with or without the roof, and the roof only adds his word', () => {
+    const plain = text('ending1', fired);
+    expect(plain).toContain('到了站台');
+    expect(plain).toContain('路上小心');
+
+    const roofed = text('ending1', { ...fired, flags: { repairedStableRoof: true } });
+    expect(count(roofed, '到了站台')).toBe(1);
+    expect(roofed).toContain('屋顶今年不漏了');
+    expect(roofed).not.toContain('路上小心');
+  });
+
+  it('does not reach the platform twice when the dismissal came early', () => {
+    const early = text('ending1', { ...fired, flags: { dismissedEarly: true, repairedStableRoof: true } });
+    expect(count(early, '到了站台')).toBe(1);
+    expect(early).toContain('屋顶今年不漏了');
+    expect(early).not.toContain('国庆在即');
   });
 });
 

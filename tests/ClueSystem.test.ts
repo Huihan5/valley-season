@@ -142,7 +142,7 @@ describe('洛伦茨 says his piece because the player came, not because they ask
   it('gives the question at trust 3', () => {
     const extra = getLorenzChapelExtra(makeState({ relationships: { ...ZERO, lorenz: 3 } }));
     expect(extra?.flags.clue_mot_lorenz_question).toBe(true);
-    expect(extra?.resultText).toContain('他把这个活儿做得越好，是不是错得越多');
+    expect(extra?.resultText).toContain('他把这份工作做得越好，是不是就错得越多');
   });
 
   it('stays quiet below it', () => {
@@ -165,14 +165,14 @@ describe('洛伦茨 says his piece because the player came, not because they ask
       flags: { clue_mot_lorenz_question: true },
     });
     const extra = getLorenzChapelExtra(state);
-    expect(extra?.resultText).toContain('我这一行不该靠猜');
+    expect(extra?.resultText).toContain('可匠师不该靠猜');
     expect(Object.keys(extra?.flags ?? {})).toEqual(['lorenzExplainedWhy']);
 
     const after = makeState({
       relationships: { ...ZERO, lorenz: 5 },
       flags: { clue_mot_lorenz_question: true, lorenzExplainedWhy: true },
     });
-    expect(getLorenzChapelExtra(after)?.resultText).not.toContain('我这一行不该靠猜');
+    expect(getLorenzChapelExtra(after)?.resultText).not.toContain('可匠师不该靠猜');
   });
 
   it('rides the Thursday vigil rather than an action of its own', () => {
@@ -402,7 +402,7 @@ describe('洛伦茨 will not say the same thing twice', () => {
 
   it('never gets in front of the trust-4 piece', () => {
     const why = chapel(4, { clue_mot_lorenz_question: true });
-    expect(why?.resultText).toContain('我这一行不该靠猜');
+    expect(why?.resultText).toContain('可匠师不该靠猜');
     expect(why?.flags.lorenzAcknowledgedTold).toBeUndefined();
   });
 });

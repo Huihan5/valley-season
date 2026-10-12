@@ -47,11 +47,19 @@ describe('the signature', () => {
 
   it('writes the name onto the dotted line, and only there', () => {
     const signed = signLetter(OPENING_PAGES[0].text, '林越');
-    expect(signed).toContain('被担保人签署：林越');
+    expect(signed).toContain('被担保人签收：林越');
     expect(signed).not.toContain('＿＿＿＿＿＿');
     // The baron's own signature and both dates are untouched.
     expect(signed).toContain('担保人签署：冯·阿尔德　　日期：2018 年 9 月 27 日');
-    expect(signed).toContain('日期：2018 年 9 月 25 日');
+    expect(signed).toContain('日期：2018 年 9 月 28 日');
+  });
+});
+
+describe('the English letter is signed the same way', () => {
+  it('takes the name on its plain blank, and only there', () => {
+    const letter = 'Received by the Guaranteed Person: ______    Date: 28 September 2018';
+    expect(signLetter(letter, 'Ann')).toBe('Received by the Guaranteed Person: Ann    Date: 28 September 2018');
+    expect(signLetter(letter, '')).toBe(letter);
   });
 });
 

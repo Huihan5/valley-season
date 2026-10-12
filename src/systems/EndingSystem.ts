@@ -170,7 +170,14 @@ export function composeEnding(state: GameState, id: EndingId): string {
 
   // The 磨岭 storeroom follows the player into every ending, saying something
   // different in each. It is never commented on.
-  if (state.flags.tookHenkDeal) parts.push(v.henk);
+  if (state.flags.tookHenkDeal) {
+    parts.push(v.henk);
+    // At the rite the player thinks of him differently depending on whether the ledger
+    // was ever looked into: with it, the cipher on the page is part of what they carry.
+    if (id === 'ending4a') {
+      parts.push(state.flags.investigatedLedger ? v.henk_ledger : v.henk_noledger, v.henk_close);
+    }
+  }
 
   parts.push(...epilogue(id));
   return parts.filter(Boolean).join('\n\n');

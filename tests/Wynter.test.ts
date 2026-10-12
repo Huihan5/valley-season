@@ -60,14 +60,14 @@ describe('the day the wind turns', () => {
     expect(rolls.size).toBeGreaterThan(1);
   });
 
-  it('has the manor putting things away before anyone explains why', () => {
-    expect(scene()).toContain('没有人说为什么，他们只是做了');
+  it('has the manor putting things away on the morning the wind turns', () => {
+    expect(scene()).toContain('玛莎一大早就在腌最后一批菜');
   });
 });
 
 describe('what 维特 can say depends on what the player was told', () => {
   it('talks about the weather to a steward carrying nothing', () => {
-    expect(scene()).toContain('北边已经下过一场了');
+    expect(scene()).toContain('卢明维尔已经下过一场了');
     expect(scene()).not.toContain('顺序好像不对');
     expect(scene()).not.toContain('我把它按顺序说一遍');
   });
@@ -82,7 +82,7 @@ describe('what 维特 can say depends on what the player was told', () => {
 
   it('lays the whole thing out at six, marking which parts are inference', () => {
     const text = scene({ ...MOTIVE, ...POSITION_LINE });
-    expect(text).toContain('我会说清楚哪些是推的');
+    expect(text).toContain('有些是您告诉我的，有些是我推的');
     expect(text).toContain('仓促离开的人不收拾房间');
     expect(text).toContain('这是路过的人的便宜');
   });
@@ -134,7 +134,7 @@ describe('the fourth tier is the position line, and nothing else', () => {
   it('tells the player they already know, once the four are in hand', () => {
     const text = scene({ ...MOTIVE, ...POSITION_LINE });
     expect(text).toContain('您知道他在哪儿');
-    expect(text).toContain('我不是在问您。”他说，“我是在告诉您您已经知道了');
+    expect(text).toContain('我不是在问您。”他说，“我是在告诉您，您已经知道了');
   });
 
   it('closes on the instruction the whole game has been building to', () => {

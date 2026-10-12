@@ -89,7 +89,7 @@ describe('Day 3 · 账本的裂缝', () => {
 
   it('turns on the fact that 霍特曼 was recording, not hiding', () => {
     expect(event.sceneText).toContain('一个想遮掩的人不会记得这么清楚');
-    expect(event.sceneText).toContain('他在给什么人留一份底');
+    expect(event.sceneText).toContain('每一笔的日期、数目、经手人都记得清清楚楚');
   });
 
   it('keeps the steward off the estate books', () => {
@@ -105,7 +105,7 @@ describe('Day 3 · 账本的裂缝', () => {
 
   it('points the investigation at 磨岭 and nowhere else', () => {
     const investigate = event.choices?.find(c => c.id === 'investigate');
-    expect(investigate?.resultText).toContain('那份契约是磨岭的');
+    expect(investigate?.resultText).toContain('那份契约是隔壁磨岭庄园的');
   });
 
   it('states the phase cost but never the effect (GDD 11.6)', () => {
@@ -146,11 +146,11 @@ describe('Day 4 · 添柴', () => {
 
   it('lets him tell the player about Thursday in his own words', () => {
     expect(event.sceneText).toContain('每周四晚上我在这儿守夜');
-    expect(event.sceneText).toContain('也可以不来');
+    expect(event.sceneText).toContain('每周四晚您都可以过来坐');
   });
 
   it('keeps the sacred institutional: someone comes and feeds the fire', () => {
-    expect(event.sceneText).toContain('就是让炉子知道换人了');
+    expect(event.sceneText).toContain('就是让火知道换人了');
   });
 
   it('gates the forge-hall until he has opened it', () => {

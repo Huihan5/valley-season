@@ -36,6 +36,13 @@ describe('papers come when the season brings them', () => {
     expect(papers(at({ huntingSeasonStarted: true }))).toContain('hunt');
   });
 
+  it('has the Baron’s reply three days after the ledger was reported, and not otherwise', () => {
+    const reported = { reportedLedger: true };
+    expect(papers(at(reported, { day: 5 }))).not.toContain('baron_reply');
+    expect(papers(at(reported, { day: 6 }))).toContain('baron_reply');
+    expect(papers(at({}, { day: 12 }))).not.toContain('baron_reply');
+  });
+
   it('has the chancery letter once it has been read', () => {
     expect(papers(at())).not.toContain('letter');
     expect(papers(at({ lordsLetterRead: true }))).toContain('letter');

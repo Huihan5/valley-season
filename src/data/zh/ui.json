@@ -90,7 +90,7 @@
     "thierry": "蒂埃里",
     "wynter": "维特",
     "ludwig": "路德维希男爵",
-    "duke": "公爵殿下",
+    "duke": "公爵阁下",
     "hartmann": "霍特曼",
     "wende": "老文德"
   },
@@ -242,10 +242,10 @@
     "toTitleNote": "本季已自动保存，可在主界面继续。"
   },
   "opening": {
-    "signatureLabel": "被担保人签署",
+    "signatureLabel": "被担保人签收",
     "signaturePrompt": "写下你的名字",
     "sign": "签字",
-    "namePrompt": "这一季开始之前，先在居留担保书上签名。",
+    "namePrompt": "这一季开始之前，先在担保书摘要页上签收。",
     "skip": "跳过开场 →"
   },
   "app": {
