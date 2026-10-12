@@ -35,6 +35,14 @@ export const INITIAL_FLAGS: FlagMap = {
    */
   waitedAtDawn28: false,
 
+  /**
+   * What the player told the Baron in the opening when he asked what they would do about an
+   * expense they could not read: 'investigate', 'report' or 'defer' — the three things Day 3
+   * lets them do about the ledger — or '' if the opening was skipped. Read by: day3_ledger,
+   * which says it back. Written by: the question page of the opening (ANSWER_OPENING).
+   */
+  ledgerAnswer: '',
+
   /** Day 27 street corner — the player admitted they want to stay. Written by: Day 27 (阶段四). */
   admittedWantToStay: false,
 

@@ -5,6 +5,11 @@
   "forced": true,
   "title": "The Crack in the Ledger",
   "sceneText": "Sorting through the papers Hartmann left, you find that the last two months do not come out.\n\nYou copy them onto a sheet by date and look at it for a long time. The sums are small, three to five guldmark each, at irregular intervals, the summary column giving “sundry expenditure” for every one. Together they come to under twenty guldmark, which in a month of an estate’s turnover is next to invisible.\n\nBut what really stops you is something else: the date, the sum and the person handling it are recorded exactly for every one of them, in a hand as neat as on every other page, with nothing corrected.\n\nA man who wanted to cover something would not record it that clearly.\n\nOn the expenditure budget at the back you look twice, and you are not on it.\n\nYour pay is not in this ledger. It comes out of the Baron’s private budget, and like the stable repairs, the tenants’ seed money and the kitchen buying, it is not in this operating budget. You account for every guldmark on this estate, and you yourself are one line in another book.\n\nThat book you cannot see.",
+  "variants": {
+    "echo_investigate": "“Look into it first.” That was what you told him in Forgehold.",
+    "echo_report": "“Tell you first.” That was what you told him in Forgehold.",
+    "echo_defer": "“Leave it for now.” That was what you told him in Forgehold."
+  },
   "choices": [
     {
       "id": "investigate",

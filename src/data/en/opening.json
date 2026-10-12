@@ -16,10 +16,45 @@
     },
     {
       "id": "forgehold_2",
-      "kind": "scene",
+      "kind": "question",
       "act": "Act One · Forgehold",
       "heading": "The Baron’s Assessment",
-      "text": "Baron von Alder saw you at the Duchy House in Forgehold.\n\nHis office faces north and gets no sun. On the wall hangs a small painting of Maplegate Estate.\n\nThe meeting was short. He went through your record. He asked two questions, and the first was about your background. He did not look up while you answered.\n\nThe second question was: if there is an item of expenditure in a ledger that you cannot make sense of, what do you do first.\n\n“That will do.” He signed the guarantee and pushed it back to the middleman. The whole thing took under fifteen minutes.\n\nHe was already reading something else as you stood up. Before you left the Duchy House you looked back once at the painting.\n\nThe Forgehold sky was still that silver grey. You had a railway ticket gripped in your hand."
+      "text": "Baron von Alder saw you at the Duchy House in Forgehold.\n\nHis office faces north and gets no sun. On the wall hangs a small painting of Maplegate Estate.\n\nThe meeting was short. He went through your record. He asked two questions, and the first was about your background. He did not look up while you answered.\n\nThe second question was: if there is an item of expenditure in a ledger that you cannot make sense of, what do you do first.",
+      "choices": [
+        {
+          "id": "ledger_investigate",
+          "text": "Look into it, and find out who the money went to",
+          "effects": {
+            "flags": {
+              "ledgerAnswer": "investigate"
+            }
+          },
+          "resultText": "“Look into it first,” you said. “Find out who was paid, then the rest.”"
+        },
+        {
+          "id": "ledger_report",
+          "text": "Report it to him",
+          "effects": {
+            "flags": {
+              "ledgerAnswer": "report"
+            }
+          },
+          "resultText": "“Tell you first,” you said. “It is your ledger. You should know.”"
+        },
+        {
+          "id": "ledger_defer",
+          "text": "Leave it, and finish what is in front of you",
+          "effects": {
+            "flags": {
+              "ledgerAnswer": "defer"
+            }
+          },
+          "resultText": "“Leave it for now,” you said. “What is in front of me matters more. The ledger can wait a few days.”"
+        }
+      ],
+      "variants": {
+        "after_answer": "“That will do.” He signed the guarantee and pushed it back to the middleman. The whole thing took under fifteen minutes.\n\nHe was already reading something else as you stood up. Before you left the Duchy House you looked back once at the painting.\n\nThe Forgehold sky was still that silver grey. You had a railway ticket gripped in your hand."
+      }
     },
     {
       "id": "forgehold_3",

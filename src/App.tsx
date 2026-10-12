@@ -247,7 +247,9 @@ export default function App() {
         page={openingPage}
         index={state.openingPage as number}
         playerName={state.playerName}
+        flags={state.flags}
         onSign={sign}
+        onAnswer={choiceId => dispatch({ type: 'ANSWER_OPENING', choiceId })}
         onAdvance={() => dispatch({ type: 'ADVANCE_OPENING' })}
         onSkip={() => dispatch({ type: 'SKIP_OPENING' })}
       />

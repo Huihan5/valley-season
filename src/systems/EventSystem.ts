@@ -385,6 +385,18 @@ function processDay23(event: EventData, state: GameState): EventData {
 
 // Day 30 morning: 埃莱娜 airs the winter quilts on the day the contract expires.
 // She has not asked anyone whether that is still worth doing.
+/**
+ * Day 3. The Baron asked what the steward would do about an expense they could not read, in
+ * Forgehold (the opening's question page); here is the ledger, with the same three things to
+ * do about it. The page says back what they said, and does not say whether it was right: what
+ * they choose now is their own, and a steward who said one thing and does another is not told so.
+ */
+function processDay3(event: EventData, state: GameState): EventData {
+  const answer = String(state.flags.ledgerAnswer ?? '');
+  const echo = answer ? event.variants?.[`echo_${answer}`] : undefined;
+  return echo ? { ...event, sceneText: [event.sceneText, echo].join('\n\n') } : event;
+}
+
 function processDay30Morning(event: EventData, state: GameState): EventData {
   const v = event.variants ?? {};
   const close = airedQuilts(state);
@@ -597,6 +609,7 @@ function process(raw: EventData, state: GameState): EventData {
     ? { ...raw, phase: eventPhase(raw), advancesPhase: eventAdvancesPhase(raw) }
     : raw;
 
+  if (event.id === 'day3_ledger') return processDay3(event, state);
   if (event.id === 'day7_dinner_return') return processDinnerReturn(event, state);
   if (event.id === 'day8_echo' || event.id === 'day11_echo') return processEcho(event, state);
   if (event.id === 'day15_forest_report') return processForestReport(event, state);

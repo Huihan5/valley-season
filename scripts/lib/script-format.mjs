@@ -156,6 +156,13 @@ function eventUnit(ev, n, data) {
   ]);
   const out = [`### ${n}．${when}｜${ev.title}`, `> ${meta}`, ''];
   out.push(paras(ev.sceneText, data, ev.id), '');
+  out.push(...variantsAndChoices(ev, data));
+  return out;
+}
+
+/** The variant blocks and the choices (with their results) of an event or of a question page. */
+function variantsAndChoices(ev, data) {
+  const out = [];
   for (const [name, text] of Object.entries(ev.variants ?? {})) {
     out.push(`#### ◇ 变体｜${name}`, '', paras(text, data, `${ev.id}.${name}`), '');
   }
@@ -203,9 +210,10 @@ export function renderScript(root = process.cwd()) {
   out.push('## 一　开场', '');
   get('opening.json').pages.forEach((page, i) => {
     const name = [page.act, page.heading].filter(Boolean).join(' · ');
-    const kind = page.kind === 'letter' ? '文书' : '场景';
+    const kind = page.kind === 'letter' ? '文书' : page.kind === 'question' ? '问答' : '场景';
     out.push(`### ${i + 1}．${name}`, `> ${bar([`ID ${page.id}`, `类型 ${kind}`])}`, '');
     out.push(paras(page.text, data, page.id), '');
+    out.push(...variantsAndChoices(page, data));
   });
 
   // 二 主线事件, in the order a season plays them; anything not named above follows by day

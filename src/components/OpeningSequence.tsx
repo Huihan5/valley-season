@@ -1,5 +1,7 @@
-import { OpeningPage } from '../types/game';
-import { OPENING_PAGES, requiresSignature, signLetter } from '../systems/OpeningSystem';
+import { FlagMap, OpeningPage } from '../types/game';
+import {
+  OPENING_PAGES, answeredChoice, isQuestion, openingBody, requiresSignature, signLetter,
+} from '../systems/OpeningSystem';
 import NameInput from './common/NameInput';
 import DATA from '../data';
 
@@ -16,19 +18,24 @@ interface Props {
   page: OpeningPage;
   index: number;
   playerName: string;
+  /** What the season has written so far; a question page reads its answer back from here. */
+  flags: FlagMap;
   onSign: (name: string) => void;
+  onAnswer: (choiceId: string) => void;
   onAdvance: () => void;
   onSkip: () => void;
 }
 
 /**
- * Day 0. No status panel, no choices, no clock — the season has not started yet.
- * The letter is framed as a document; everything after it is read as prose.
+ * Day 0. No status panel, no clock — the season has not started yet. The letter is framed
+ * as a document; everything after it is read as prose, except the one place the Baron asks
+ * a question, where the answer is the player's.
  */
-export default function OpeningSequence({ page, index, playerName, onSign, onAdvance, onSkip }: Props) {
+export default function OpeningSequence({ page, index, playerName, flags, onSign, onAnswer, onAdvance, onSkip }: Props) {
   const isLetter = page.kind === 'letter';
   const unsigned = requiresSignature(page) && !playerName;
-  const body = isLetter ? signLetter(page.text, playerName) : page.text;
+  const body = isLetter ? signLetter(page.text, playerName) : openingBody(page, flags);
+  const asking = isQuestion(page) && !answeredChoice(page, flags);
   const [title, ...rest] = body.split('\n\n');
 
   return (
@@ -68,6 +75,31 @@ export default function OpeningSequence({ page, index, playerName, onSign, onAdv
       <div className="w-full max-w-2xl">
         {unsigned ? (
           <NameInput spec={SIGNATURE_SPEC} onSubmit={onSign} />
+        ) : asking ? (
+          <div className="bg-bg-card border border-game-border rounded-sm px-4 py-3 space-y-2 relative">
+            {page.choices!.map((choice, i) => (
+              <button
+                key={choice.id}
+                onClick={() => onAnswer(choice.id)}
+                className="group w-full text-left flex items-start gap-3 px-4 py-3 rounded-sm border border-game-border bg-bg hover:bg-bg-hover hover:border-gold hover:shadow-[inset_0_0_0_1px_rgba(196,163,90,0.35)] active:bg-bg-warm active:translate-y-px transition-all cursor-pointer"
+              >
+                <span className="shrink-0 mt-0.5 w-5 h-5 flex items-center justify-center rounded-sm border border-gold-dim/50 text-gold-dim text-[11px] tabular-nums group-hover:border-gold group-hover:text-gold">
+                  {i + 1}
+                </span>
+                <span className="flex-1 min-w-0 text-sm font-serif text-cream group-hover:text-gold">
+                  {choice.text}
+                </span>
+              </button>
+            ))}
+            <div className="flex justify-end pt-1">
+              <button
+                onClick={onSkip}
+                className="text-game-dim text-xs hover:text-cream transition-colors"
+              >
+                {ui.opening.skip}
+              </button>
+            </div>
+          </div>
         ) : (
           <div className="bg-bg-card border border-game-border rounded-sm px-4 py-3 flex items-center justify-center relative">
             <button

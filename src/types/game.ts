@@ -89,10 +89,18 @@ export interface TextInputSpec {
  */
 export interface OpeningPage {
   id: string;
-  kind: 'letter' | 'scene';
+  kind: 'letter' | 'scene' | 'question';
   act: string;
   heading: string;
   text: string;
+  /**
+   * A question page ends on a question the player answers, with the same fields an event's
+   * choice has: `effects.flags` is what the answer writes and `resultText` is the line the
+   * page shows once it has been given. The page does not turn on its own; 继续 follows the answer.
+   */
+  choices?: Choice[];
+  /** `after_answer`: what the page goes on to say, whichever answer was given. */
+  variants?: Record<string, string>;
 }
 
 export interface DialogueLine {
@@ -164,6 +172,7 @@ export type SeasonAction =
   | { type: 'MAKE_CHOICE'; choiceId: string }
   | { type: 'SET_PLAYER_NAME'; name: string }
   | { type: 'ADVANCE_OPENING' }
+  | { type: 'ANSWER_OPENING'; choiceId: string }
   | { type: 'SKIP_OPENING' }
   | { type: 'ADVANCE_DAY_EVENT' }
   | { type: 'COMMIT_ADVANCE' };

@@ -14,7 +14,7 @@ import {
 import { INITIAL_FLAGS } from './FlagRegistry';
 import { composeSceneParts, getActionResultParts, getGreetingParts, lineContextOf } from './SceneSystem';
 import { instantOf, markKnown, partsText } from './SeenSystem';
-import { nextOpeningPage } from './OpeningSystem';
+import { answeredChoice, getOpeningPage, isQuestion, nextOpeningPage } from './OpeningSystem';
 import {
   INITIAL_RESOURCES, INITIAL_RELATIONSHIPS, TENANT_TRUST_INITIAL, FATIGUE_EXHAUSTED_THRESHOLD,
 } from '../data/config';
@@ -256,6 +256,16 @@ function reduceSeason(state: GameState, action: SeasonAction, rng: Rng): GameSta
       // During the opening the letter is still on screen — signing does not turn the page.
       if (state.openingPage !== null) return { ...state, playerName: name };
       return buildStateForPhase({ ...state, playerName: name }, rng);
+    }
+
+    // The question page of the opening: the answer is written as flags and the page stays,
+    // now answered. It can be given once; the page is where it is given, not later.
+    case 'ANSWER_OPENING': {
+      const page = state.openingPage === null ? null : getOpeningPage(state.openingPage);
+      if (!isQuestion(page) || answeredChoice(page, state.flags)) return state;
+      const choice = page!.choices!.find(c => c.id === action.choiceId);
+      if (!choice) return state;
+      return { ...state, flags: { ...state.flags, ...choice.effects?.flags } };
     }
 
     case 'ADVANCE_OPENING': {
