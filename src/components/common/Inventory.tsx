@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { GameState } from '../../types/game';
 import { InventoryItem, InventoryTab, getPapers, getThings } from '../../systems/InventorySystem';
 import Journal from './Journal';
+import DocumentReader from './DocumentReader';
 import DATA from '../../data';
 
 const T = DATA.ui.inventory;
@@ -18,6 +19,9 @@ interface Props {
  */
 export default function Inventory({ state, onClose }: Props) {
   const [tab, setTab] = useState<InventoryTab>('dossier');
+  // A paper that has been opened to its full text; null while the lists are showing.
+  const [reading, setReading] = useState<InventoryItem | null>(null);
+  const pick = (next: InventoryTab) => { setTab(next); setReading(null); };
 
   return (
     <div
@@ -31,9 +35,9 @@ export default function Inventory({ state, onClose }: Props) {
         <div className="px-5 py-3 border-b border-game-border flex items-center gap-4">
           <span className="text-cream-dim text-xs tracking-wider">{T.heading}</span>
           <div className="flex gap-3">
-            <Tab label={T.tabDossier} active={tab === 'dossier'} onClick={() => setTab('dossier')} />
-            <Tab label={T.tabPapers} active={tab === 'papers'} onClick={() => setTab('papers')} />
-            <Tab label={T.tabThings} active={tab === 'things'} onClick={() => setTab('things')} />
+            <Tab label={T.tabDossier} active={tab === 'dossier'} onClick={() => pick('dossier')} />
+            <Tab label={T.tabPapers} active={tab === 'papers'} onClick={() => pick('papers')} />
+            <Tab label={T.tabThings} active={tab === 'things'} onClick={() => pick('things')} />
           </div>
           <button onClick={onClose} className="ml-auto text-game-dim text-xs hover:text-cream">
             {T.close}
@@ -42,7 +46,10 @@ export default function Inventory({ state, onClose }: Props) {
 
         <div className="overflow-y-auto px-5 py-4">
           {tab === 'dossier' && <Journal state={state} />}
-          {tab === 'papers' && <Items items={getPapers(state)} />}
+          {tab === 'papers' && reading && (
+            <DocumentReader state={state} id={reading.id} title={reading.name} onBack={() => setReading(null)} />
+          )}
+          {tab === 'papers' && !reading && <Items items={getPapers(state)} onRead={setReading} />}
           {tab === 'things' && <Items items={getThings(state)} />}
         </div>
       </div>
@@ -50,7 +57,7 @@ export default function Inventory({ state, onClose }: Props) {
   );
 }
 
-function Items({ items }: { items: InventoryItem[] }) {
+function Items({ items, onRead }: { items: InventoryItem[]; onRead?: (item: InventoryItem) => void }) {
   if (items.length === 0) {
     return <p className="text-game-dim font-serif text-sm py-8 text-center">{T.empty}</p>;
   }
@@ -60,6 +67,14 @@ function Items({ items }: { items: InventoryItem[] }) {
         <li key={item.id} className="border-l-2 border-gold-dim pl-4 font-serif max-w-[46rem]">
           <p className="text-cream text-sm">{item.name}</p>
           <p className="text-game-dim text-sm leading-relaxed mt-0.5">{item.line}</p>
+          {item.readable && onRead && (
+            <button
+              onClick={() => onRead(item)}
+              className="mt-1 text-xs text-gold hover:text-gold-bright transition-colors"
+            >
+              {T.read} ›
+            </button>
+          )}
         </li>
       ))}
     </ul>

@@ -187,7 +187,12 @@
     "tabDossier": "The File",
     "tabPapers": "Papers",
     "tabThings": "Belongings",
-    "empty": "Nothing has gone in here yet."
+    "empty": "Nothing has gone in here yet.",
+    "read": "Read in full",
+    "back": "Back",
+    "modeBoth": "Old Tongue and Common Tongue",
+    "modeCommon": "Common Tongue only",
+    "blank": "________"
   },
   "gallery": {
     "unseen": "Not yet seen",

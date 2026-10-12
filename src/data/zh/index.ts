@@ -8,6 +8,7 @@
  */
 import actions from './actions.json';
 import codex from './codex.json';
+import documents from './documents.json';
 import inventory from './inventory.json';
 import opening from './opening.json';
 import systemLines from './system_lines.json';
@@ -70,6 +71,7 @@ import eventsRandomRandomWell from './events/random/random_well.json';
 const bundle = {
   actions: actions,
   codex: codex,
+  documents: documents,
   inventory: inventory,
   opening: opening,
   systemLines: systemLines,

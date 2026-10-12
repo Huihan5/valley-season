@@ -19,8 +19,8 @@ const papers = (s: GameState) => getPapers(s).map(p => p.id);
 const things = (s: GameState) => getThings(s).map(t => t.id);
 
 describe('the satchel at the start of the season', () => {
-  it('holds the two papers the steward arrived with, and no things', () => {
-    expect(papers(at())).toEqual(['guarantee', 'ticket']);
+  it('holds the papers the steward arrived with — the guarantee in both its forms, and the ticket — and no things', () => {
+    expect(papers(at())).toEqual(['guarantee', 'deed', 'ticket']);
     expect(things(at())).toEqual([]);
   });
 
@@ -60,7 +60,7 @@ describe('papers come when the season brings them', () => {
       { huntingSeasonStarted: true, lordsLetterRead: true, brokerUnlocked: true },
       { day: 25, phase: 'morning' },
     );
-    expect(papers(s)).toEqual(['guarantee', 'ticket', 'hunt', 'letter', 'broker']);
+    expect(papers(s)).toEqual(['guarantee', 'deed', 'ticket', 'hunt', 'letter', 'broker']);
   });
 });
 

@@ -187,7 +187,12 @@
     "tabDossier": "卷宗",
     "tabPapers": "文书",
     "tabThings": "物品",
-    "empty": "还没有什么可以放进来的。"
+    "empty": "还没有什么可以放进来的。",
+    "read": "查阅全文",
+    "back": "返回",
+    "modeBoth": "古语与通用语对照",
+    "modeCommon": "只看通用语",
+    "blank": "＿＿＿＿＿＿＿＿"
   },
   "gallery": {
     "unseen": "未见",

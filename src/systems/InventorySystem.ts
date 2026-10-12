@@ -1,6 +1,7 @@
 import { GameState } from '../types/game';
 import { HORSE_CARE_TRUST_AT } from '../data/config';
 import DATA from '../data';
+import { isReadable } from './DocumentSystem';
 
 /**
  * The satchel: what the steward is carrying, besides the evidence.
@@ -17,12 +18,11 @@ import DATA from '../data';
  */
 
 /**
- * Where the satchel goes next (author, 2026-10-12). An item should be able to carry more than
- * a line: the ticket may one day be a designed graphic, and the guarantee in 文书 opens its
- * full text on a click — the summary leaf the player holds, and behind it the Old Tongue
- * original (VS-18-0947 古语正本, with the Common Tongue beside it). Until then every item is
- * words only. When it comes, add optional fields to InventoryItem and to Text (an image, a
- * document id) rather than a second system.
+ * Papers can open (author, 2026-10-12): the guarantee is two of them, the summary leaf the
+ * steward signed for and the deed behind it, the Old Tongue Original with the Common Tongue
+ * beside it (VS-18-0947). Whether an item opens is `readable`; what it opens to is the
+ * DocumentSystem's business. The ticket may one day be a designed graphic as well: when it is,
+ * add an optional image to InventoryItem and to Text rather than a second system.
  */
 export type InventoryTab = 'dossier' | 'papers' | 'things';
 
@@ -30,6 +30,8 @@ export interface InventoryItem {
   id: string;
   name: string;
   line: string;
+  /** The item opens to a full text on a click (see DocumentSystem). */
+  readable?: boolean;
 }
 
 interface Spec {
@@ -55,6 +57,8 @@ const played = (state: GameState, event: string) => !!state.flags[`event_done_${
 const PAPERS: readonly Spec[] = [
   // Signed in the opening. Skipping the opening skips the page, not the paper.
   { id: 'guarantee', held: () => true },
+  // The full text behind it. Held from the start for the same reason.
+  { id: 'deed', held: () => true },
   { id: 'ticket', held: () => true },
   // The answer to the ledger report comes three days after the report is sent.
   { id: 'baron_reply', held: s => !!s.flags.reportedLedger && s.day >= DATA.events.day3.day + 3 },
@@ -93,7 +97,12 @@ function read(specs: readonly Spec[], text: Record<string, Text>, state: GameSta
       const entry = text[spec.id];
       // A variant is the whole line, not a tail: how two sentences join is the language's business.
       const line = spec.variant ? entry.variants?.[spec.variant(state)] : undefined;
-      return { id: spec.id, name: entry.name, line: line ?? entry.line };
+      return {
+        id: spec.id,
+        name: entry.name,
+        line: line ?? entry.line,
+        ...(isReadable(spec.id) ? { readable: true } : {}),
+      };
     });
 }
 

@@ -1,0 +1,787 @@
+{
+  "blocks": [
+    {
+      "id": "m_kingdom",
+      "k": "masthead",
+      "old": "KUNINGRÎKI MARÎGNI"
+    },
+    {
+      "id": "m_title",
+      "k": "title",
+      "old": "Handfesti thera Burgiskepi\numbi tîdlîka Wonunga endi Thionost"
+    },
+    {
+      "id": "m_number",
+      "k": "masthead_small",
+      "old": "Nr. VS-18-0947"
+    },
+    {
+      "id": "m_original",
+      "k": "masthead_small",
+      "old": "URSCRIFT"
+    },
+    {
+      "id": "n_issued",
+      "k": "note",
+      "old": "Fan themu Ambahte thes Inlandes gigeban, fan theru Scrîfkamaru thes Heritogdômes Dalawisk mid-gitêknid, nâh themu fiartêndon Capitule thera Grundêwa."
+    },
+    {
+      "id": "n_language",
+      "k": "note",
+      "old": "Thiu Handfesti is an theru Aldtungu giscriban. Thiu Gimênitunga is thar te Kûthi endi ni habit Kraft."
+    },
+    {
+      "id": "legend",
+      "k": "legend"
+    },
+    {
+      "id": "h_parties",
+      "k": "heading",
+      "old": "THIA DÊLA"
+    },
+    {
+      "id": "parties_1",
+      "k": "clause",
+      "n": "1",
+      "old": "Burgio: Ludwig von Alder, Frîherro, Hêrro thes Hoves Ahornesgat, Lith thes Hêrrono Hûses fora that Heritogdôm Dalawisk; wonot an themu Hûse thes Heritogdômes te Smithihald."
+    },
+    {
+      "id": "parties_2",
+      "k": "clause",
+      "n": "2",
+      "old": "Burgiling: {playerName}, elilendi Man, Undarsâto ________, Pass-Nr. ________."
+    },
+    {
+      "id": "parties_3",
+      "k": "clause",
+      "n": "3",
+      "old": "Middilman: the te Smithihald giscribana Middilman, an themu Middilmanno Scrîfte Nr. FH-A-118."
+    },
+    {
+      "id": "h_recitals",
+      "k": "heading",
+      "old": "FORAQUIDI"
+    },
+    {
+      "id": "recitals_A",
+      "k": "clause",
+      "n": "A",
+      "old": "Hwanda thiu Grundêwa an hiru fiartêndon Capitule ênumu elilendiun Manne tîdlîka Wonunga an themu Kuningrîke êna thanne gilôbit, sô ên Hêrro thes Rîkes fora ina te Burgion stâd;"
+    },
+    {
+      "id": "recitals_B",
+      "k": "clause",
+      "n": "B",
+      "old": "hwanda the Burgio thena Hof Ahornesgat an themu Heritogdôme Dalawisk habit endi ênes tîdlîkan Hofwardes fora thia Herbistes Tîd bidit;"
+    },
+    {
+      "id": "recitals_C",
+      "k": "clause",
+      "n": "C",
+      "old": "hwanda the Burgiling thurh thena Middilman bad endi fan themu Burgione selbo te Smithihald gifrâgod warth;"
+    },
+    {
+      "id": "recitals_lead",
+      "k": "lead",
+      "old": "nu sô habbiad thia Dêla sus gifestid:"
+    },
+    {
+      "id": "h_arti",
+      "k": "heading",
+      "old": "LITH I · BIDÛDINGA"
+    },
+    {
+      "id": "arti_lead",
+      "k": "lead",
+      "old": "An thesaru Handfesti bidûdit:"
+    },
+    {
+      "id": "arti_1",
+      "k": "clause",
+      "n": "1",
+      "old": "Burgio: the Hêrro, the thesa Handfesti undar sînumu Insigile têknit endi fora thena Burgiling stâd."
+    },
+    {
+      "id": "arti_2",
+      "k": "clause",
+      "n": "2",
+      "old": "Burgiling: the elilendi Man, fora thena the Burgio stâd."
+    },
+    {
+      "id": "arti_3",
+      "k": "clause",
+      "n": "3",
+      "old": "Dag: ên Dag bi themu Jârrîme. The Dag thera Anakumi ni wirthit mid-gitald; thiu Frist biginnit mid themu aftaron Dage endi endot te Middinahte thes thrîtigosten Dages."
+    },
+    {
+      "id": "arti_4",
+      "k": "clause",
+      "n": "4",
+      "old": "Anakumi: the Dag, an themu the Burgiling êrist binnan thia Markon thes Heritogdômes Dalawisk kumit, sô hê an theru Scrîfkamaru giscriban is."
+    },
+    {
+      "id": "arti_5",
+      "k": "clause",
+      "n": "5",
+      "old": "Hof: the Hof Ahornesgat mid sînun Feldun, Holtun endi Hûsun, sô an themu Anahange B biscriban is."
+    },
+    {
+      "id": "arti_6",
+      "k": "clause",
+      "n": "6",
+      "old": "Frist: thiu Tîd thera Burgiskepi nâh themu Lithe II."
+    },
+    {
+      "id": "arti_7",
+      "k": "clause",
+      "n": "7",
+      "old": "Scrîfkamara: thiu Scrîfkamara thes Heritogdômes Dalawisk endi iro Ambahtman."
+    },
+    {
+      "id": "arti_8",
+      "k": "clause",
+      "n": "8",
+      "old": "Kortblad: that Blad te Kûthi, that themu Burgilinge sundar gigeban wirthit (Anahang E)."
+    },
+    {
+      "id": "h_artii",
+      "k": "heading",
+      "old": "LITH II · GIFT ENDI FRIST"
+    },
+    {
+      "id": "artii_1",
+      "k": "clause",
+      "n": "1",
+      "old": "The Burgiling mag an themu Hove wonon endi thionon thrîtig Dagos, gitald nâh themu Lithe I, 3."
+    },
+    {
+      "id": "artii_2",
+      "k": "clause",
+      "n": "2",
+      "old": "Ef thiu Frist ni wirthit giniuwod nâh themu Lithe XI, sô sal the Burgiling that Rîki binnan sibun Dagun rûmian."
+    },
+    {
+      "id": "artii_3",
+      "k": "clause",
+      "n": "3",
+      "old": "Thiu Wonunga ni gildit bûtan themu Heritogdôme Dalawisk, bûtan the Burgio it giscriban gilôbit."
+    },
+    {
+      "id": "h_artiii",
+      "k": "heading",
+      "old": "LITH III · THIONOST"
+    },
+    {
+      "id": "artiii_1",
+      "k": "clause",
+      "n": "1",
+      "old": "The Burgiling thionot sô tîdlîk Hofward: hê wardot that Werk thes Hoves, that Hîwiski endi thia innarun Thing, sô an themu Anahange A biscriban is."
+    },
+    {
+      "id": "artiii_2",
+      "k": "clause",
+      "n": "2",
+      "old": "The Burgiling ni mag ôdres Thionostes bigunnan, ni mid Lône ni âno Lôn."
+    },
+    {
+      "id": "artiii_3",
+      "k": "clause",
+      "n": "3",
+      "old": "Te thes Hoves Thurftun mag hê farun te Daluhald endi binnan themu Heritogdôme."
+    },
+    {
+      "id": "h_artiv",
+      "k": "heading",
+      "old": "LITH IV · WONUNGA"
+    },
+    {
+      "id": "artiv_1",
+      "k": "clause",
+      "n": "1",
+      "old": "The Burgiling wonot an themu Hêrrohûse thes Hoves. The Burgio gibit Kamara, Kost endi Fiar."
+    },
+    {
+      "id": "artiv_2",
+      "k": "clause",
+      "n": "2",
+      "old": "Ef the Burgiling thia Wonunga wehslot, sô sal the Burgio it theru Scrîfkamaru binnan thrim Dagun kûthian."
+    },
+    {
+      "id": "h_artv",
+      "k": "heading",
+      "old": "LITH V · PLEGA THES BURGION"
+    },
+    {
+      "id": "artv_1",
+      "k": "clause",
+      "n": "1",
+      "old": "The Burgio stâd fora thes Burgilinges Dâdi binnan theru Fristi, al sô fora sîna êgana."
+    },
+    {
+      "id": "artv_2",
+      "k": "clause",
+      "n": "2",
+      "old": "The Burgio geldit thia Kost thera Ûtfard, ef the Burgiling that Rîki rûmian môt."
+    },
+    {
+      "id": "artv_3",
+      "k": "clause",
+      "n": "3",
+      "old": "The Burgio sal theru Scrîfkamaru allaro Wehslo, thia thesa Handfesti angangad, binnan thrim Dagun kûthian."
+    },
+    {
+      "id": "h_artvi",
+      "k": "heading",
+      "old": "LITH VI · LÔN"
+    },
+    {
+      "id": "artvi_1",
+      "k": "clause",
+      "n": "1",
+      "old": "The Burgio geldit themu Burgilinge fora thia Frist ênan Lôn fan hund endi fîftig Guldmarko, mid Kosti endi Kamaru."
+    },
+    {
+      "id": "artvi_2",
+      "k": "clause",
+      "n": "2",
+      "old": "The Lôn wirthit fan thes Burgion êganaru Havu gigolden. Hê ni stâd an thes Hoves Bôkun, endi ni wirthit fan sînun Inkumiun ginuman."
+    },
+    {
+      "id": "artvi_3",
+      "k": "clause",
+      "n": "3",
+      "old": "The Lôn wirthit at Ende thera Fristi gigolden, eftho, ef thiu Frist êr slîtit, nâh themu Dêle thera githionodun Dago."
+    },
+    {
+      "id": "h_artvii",
+      "k": "heading",
+      "old": "LITH VII · PLEGA THES BURGILINGES"
+    },
+    {
+      "id": "artvii_1",
+      "k": "clause",
+      "n": "1",
+      "old": "The Burgiling sal thia Êwa thes Kuningrîkes, thia Setti thes Heritogdômes endi thia Sido thera Stedi haldan."
+    },
+    {
+      "id": "artvii_2",
+      "k": "clause",
+      "n": "2",
+      "old": "Hê ni sal bûtan themu Thionoste nâh themu Lithe III werkon."
+    },
+    {
+      "id": "artvii_3",
+      "k": "clause",
+      "n": "3",
+      "old": "Hê ni sal binnan themu Rîke ênga Lêra openlîko predikon, gôdlîka eftho weroldlîka, thia that sibunda Capitul thera Grundêwa ni gilôbit."
+    },
+    {
+      "id": "artvii_4",
+      "k": "clause",
+      "n": "4",
+      "old": "Hê sal thia Bôk thes Hoves wârlîko endi an Ordu haldan."
+    },
+    {
+      "id": "artvii_5",
+      "k": "clause",
+      "n": "5",
+      "old": "Hê ni mag thena Burgion an Lande, Rehte eftho Holte bindan âno thes Burgion giscribana Lof, endi nio ofar thia Holtmâta, thia that Heritogdôm gisettid habit."
+    },
+    {
+      "id": "artvii_6",
+      "k": "clause",
+      "n": "6",
+      "old": "Hê ni mag Land eftho Hûs an themu Rîke kôpon eftho êgan werthan."
+    },
+    {
+      "id": "artvii_7",
+      "k": "clause",
+      "n": "7",
+      "old": "Hê sal that Kortblad mid imu dragan endi theru Scrîfkamaru Ambahtmannun tôgian, sô hwan sô sie it bidiad."
+    },
+    {
+      "id": "h_artviii",
+      "k": "heading",
+      "old": "LITH VIII · UNDAR FIAR-SKÖLD"
+    },
+    {
+      "id": "artviii_1",
+      "k": "clause",
+      "n": "1",
+      "old": "Binnan theru Fristi stâd the Burgiling undar themu Fiar-skölde, al sô ên Undarsâto thes Kuningrîkes."
+    },
+    {
+      "id": "artviii_2",
+      "k": "clause",
+      "n": "2",
+      "old": "Hê sal thia Herthos endi thia Fiarthing êrôn al sô thia Landlûdi."
+    },
+    {
+      "id": "artviii_3",
+      "k": "clause",
+      "n": "3",
+      "old": "Ef the Burgiling binnan theru Fristi sterbit, sô wirthit hê nâh Sido thera Stedi te theru Fiarkêri gibrâht. The Burgio geldit thia Kost. Ef sîne Mâgos binnan thrîtig Dagun giscriban bidiad, sô wirthit im thiu Aska gigeban."
+    },
+    {
+      "id": "h_artix",
+      "k": "heading",
+      "old": "LITH IX · SCAWUNGA ENDI SCRÎF"
+    },
+    {
+      "id": "artix_1",
+      "k": "clause",
+      "n": "1",
+      "old": "The Burgiling sal sik binnan sibun Dagun aftar theru Anakumi an theru Scrîfkamaru scrîban lâtan."
+    },
+    {
+      "id": "artix_2",
+      "k": "clause",
+      "n": "2",
+      "old": "Thiu Scrîfkamara mag thes Hoves Bôk endi thes Burgilinges Scrifti te allaro Tîdi scawon, âno Kundi."
+    },
+    {
+      "id": "artix_3",
+      "k": "clause",
+      "n": "3",
+      "old": "The Burgiling sal theru Scrîfkamaru Ambahtmannun wârlîko andwordian."
+    },
+    {
+      "id": "h_artx",
+      "k": "heading",
+      "old": "LITH X · SLÎTUNGA"
+    },
+    {
+      "id": "artx_1",
+      "k": "clause",
+      "n": "1",
+      "old": "The Burgio mag thia Burgiskepi êr thera Fristi mid giscribanaru Kundi slîtan. Fan themu Dage thera Kundi ni wirthit ênig Lôn mêr gigolden."
+    },
+    {
+      "id": "artx_2",
+      "k": "clause",
+      "n": "2",
+      "old": "Sô sal the Burgiling thena Hof binnan thrim Dagun ofargeban endi that Rîki binnan sibun Dagun aftar theru Kundi rûmian."
+    },
+    {
+      "id": "artx_3",
+      "k": "clause",
+      "n": "3",
+      "old": "Thiu Scrîfkamara mag thia Burgiskepi slîtan, ef the Burgiling thesa Handfesti brikit."
+    },
+    {
+      "id": "h_artxi",
+      "k": "heading",
+      "old": "LITH XI · NIUWUNGA"
+    },
+    {
+      "id": "artxi_1",
+      "k": "clause",
+      "n": "1",
+      "old": "Thiu Frist mag êna giniuwod werthan, sô the Burgio niuwa Handfesti têknit. Thiu niuwa Handfesti sal binnan sibun Dagun êr themu Ende thera Fristi theru Scrîfkamaru bibrâht werthan."
+    },
+    {
+      "id": "artxi_2",
+      "k": "clause",
+      "n": "2",
+      "old": "Sô lango sô thiu Scrîfkamara thia niuwa Handfesti scawot, wonot the Burgiling mid Rehte."
+    },
+    {
+      "id": "artxi_3",
+      "k": "clause",
+      "n": "3",
+      "old": "Thiu êrista Niuwunga gildit nigentig Dagos. Aftar thrim Niuwungun, ênaru aftar ôdaru, gildit iowelîk ên Jâr."
+    },
+    {
+      "id": "artxi_4",
+      "k": "clause",
+      "n": "4",
+      "old": "Aftar fîf Jârun mag the Burgiling langa Wonunga bidian. Langa Wonunga ni is Thiodskepi."
+    },
+    {
+      "id": "artxi_5",
+      "k": "clause",
+      "n": "5",
+      "old": "Thiodskepi mag aftar ahto Jârun bidid werthan, mid ênumu Urkundie thes Thinges thera Stedi endi mid themu Kiese ênes Heritogdômes eftho thes Kuninges Landes. That Kuningrîki ni antfâhit twifalda Treuwa."
+    },
+    {
+      "id": "h_artxii",
+      "k": "heading",
+      "old": "LITH XII · ÛTFARD"
+    },
+    {
+      "id": "artxii_1",
+      "k": "clause",
+      "n": "1",
+      "old": "Ef the Burgiling that Rîki rûmian sal, sô sal hê thes Hoves Bôk endi Scrifti themu Burgione eftho sînumu Boden ofargeban."
+    },
+    {
+      "id": "artxii_2",
+      "k": "clause",
+      "n": "2",
+      "old": "That Kortblad sal an theru Marku ofargeban werthan."
+    },
+    {
+      "id": "artxii_3",
+      "k": "clause",
+      "n": "3",
+      "old": "Fan themu Thionoste nâh thesaru Handfesti ni wahsit nênig Reht te langeru Wonungu."
+    },
+    {
+      "id": "h_artxiii",
+      "k": "heading",
+      "old": "LITH XIII · ÊWA ENDI THING"
+    },
+    {
+      "id": "artxiii_1",
+      "k": "clause",
+      "n": "1",
+      "old": "Thesa Handfesti stâd undar theru Êwu thes Kuningrîkes."
+    },
+    {
+      "id": "artxiii_2",
+      "k": "clause",
+      "n": "2",
+      "old": "Strîd fan thesaru Handfesti wirthit fora themu Landthinge thes Heritogdômes Dalawisk gisônit; thiu lezta Klaga gâd te themu Hôhon Êwastôle."
+    },
+    {
+      "id": "h_artxiv",
+      "k": "heading",
+      "old": "LITH XIV · TUNGA"
+    },
+    {
+      "id": "artxiv_1",
+      "k": "clause",
+      "n": "1",
+      "old": "Thesa Handfesti is an theru Aldtungu giscriban."
+    },
+    {
+      "id": "artxiv_2",
+      "k": "clause",
+      "n": "2",
+      "old": "Thiu Gimênitunga is thar te Kûthi endi ni habit Kraft. Bi Twîfle gildit êna thiu Aldtunga."
+    },
+    {
+      "id": "artxiv_3",
+      "k": "clause",
+      "n": "3",
+      "old": "The Burgiling gihit, that hê thia Gimênitunga endi that Kortblad antfangan habit, endi that iro nêgen ina bindit."
+    },
+    {
+      "id": "h_artxv",
+      "k": "heading",
+      "old": "LITH XV · AFSCRIFTI"
+    },
+    {
+      "id": "artxv_1",
+      "k": "clause",
+      "n": "1",
+      "old": "Thesa Urscrift is an thrim Stukkun gimakod: ên te themu Ambahte thes Inlandes, ên te theru Scrîfkamaru, ên te themu Burgione."
+    },
+    {
+      "id": "artxv_2",
+      "k": "clause",
+      "n": "2",
+      "old": "The Burgiling antfâhit that Kortblad êna."
+    },
+    {
+      "id": "artxv_3",
+      "k": "clause",
+      "n": "3",
+      "old": "Thesa Handfesti gildit, sô sia the Burgio endi the Burgiling gitêknid habbiad endi thiu Scrîfkamara sia mid-gitêknid habit."
+    },
+    {
+      "id": "h_witness",
+      "k": "heading",
+      "old": "TE URKUNDIE"
+    },
+    {
+      "id": "witness_lead",
+      "k": "lead",
+      "old": "Te Urkundie thes habbiad thia Dêla hier undar gitêknid."
+    },
+    {
+      "id": "sg_guarantor",
+      "k": "party",
+      "old": "Burgio\nLudwig von Alder\nFrîherro, Hêrro thes Hoves Ahornesgat"
+    },
+    {
+      "id": "sg_guarantor_date",
+      "k": "field",
+      "old": "Stedi endi Dag:",
+      "oldFill": "Smithihald, 27. Witumânoth 2018"
+    },
+    {
+      "id": "sg_guarantor_seal",
+      "k": "seal",
+      "old": "(L.S.)"
+    },
+    {
+      "id": "sg_guaranteed",
+      "k": "party",
+      "old": "Burgiling"
+    },
+    {
+      "id": "sg_guaranteed_name",
+      "k": "field",
+      "old": "Namo:",
+      "oldFill": "{playerName}"
+    },
+    {
+      "id": "sg_guaranteed_date",
+      "k": "field",
+      "old": "Stedi endi Dag:",
+      "oldFill": "Smithihald, 25. Witumânoth 2018"
+    },
+    {
+      "id": "sg_secretariat",
+      "k": "party",
+      "old": "Mid-gitêknid fan theru Scrîfkamaru thes Heritogdômes Dalawisk"
+    },
+    {
+      "id": "sg_secretariat_officer",
+      "k": "field",
+      "old": "Ambahtman:"
+    },
+    {
+      "id": "sg_secretariat_date",
+      "k": "field",
+      "old": "Stedi endi Dag:",
+      "oldFill": "28. Witumânoth 2018"
+    },
+    {
+      "id": "sg_secretariat_seal",
+      "k": "seal",
+      "old": "(L.S.)"
+    },
+    {
+      "id": "sg_ministry",
+      "k": "party",
+      "old": "Gigeban fan themu Ambahte thes Inlandes"
+    },
+    {
+      "id": "sg_ministry_officer",
+      "k": "field",
+      "old": "Ambahtman:"
+    },
+    {
+      "id": "sg_ministry_date",
+      "k": "field",
+      "old": "Stedi endi Dag:",
+      "oldFill": "28. Witumânoth 2018"
+    },
+    {
+      "id": "sg_ministry_seal",
+      "k": "seal",
+      "old": "(L.S.)"
+    },
+    {
+      "id": "h_registry",
+      "k": "heading",
+      "old": "SCRÎF-INDRAGI"
+    },
+    {
+      "id": "registry_lead",
+      "k": "lead",
+      "old": "Fan theru Scrîfkamaru te fullianne."
+    },
+    {
+      "id": "reg_arrival",
+      "k": "field",
+      "old": "Dag thera Anakumi:",
+      "oldFill": "30. Witumânoth 2018",
+      "from": 3
+    },
+    {
+      "id": "reg_received",
+      "k": "field",
+      "old": "An theru Scrîfkamaru antfangan:",
+      "oldFill": "3. Windumemânoth 2018",
+      "from": 3
+    },
+    {
+      "id": "reg_officer",
+      "k": "field",
+      "old": "Ambahtman:",
+      "oldFill": "T. K.",
+      "from": 3
+    },
+    {
+      "id": "reg_term_end",
+      "k": "field",
+      "old": "Thiu Frist endot te Middinahte thes:",
+      "oldFill": "30. Windumemânoth 2018",
+      "from": 3
+    },
+    {
+      "id": "h_annex_a",
+      "k": "heading",
+      "old": "ANAHANG A · THIONOST-RÎM"
+    },
+    {
+      "id": "annex_a_1",
+      "k": "clause",
+      "n": "1",
+      "old": "Thiu Herbistarbêd thes Hoves endi iru Bergunga."
+    },
+    {
+      "id": "annex_a_2",
+      "k": "clause",
+      "n": "2",
+      "old": "Thiu Bôk thes Hoves, ôk thiu, thiu bi theru Anakumi opan lagun."
+    },
+    {
+      "id": "annex_a_3",
+      "k": "clause",
+      "n": "3",
+      "old": "Thiu Bedi thera Hoflûdio."
+    },
+    {
+      "id": "annex_a_4",
+      "k": "clause",
+      "n": "4",
+      "old": "Thiu Holt, binnan theru Holtmâtu, thiu themu Heritogdôme gikûthid is."
+    },
+    {
+      "id": "annex_a_5",
+      "k": "clause",
+      "n": "5",
+      "old": "Thiu Wardunga thes Hîwiskes."
+    },
+    {
+      "id": "annex_a_6",
+      "k": "clause",
+      "n": "6",
+      "old": "Thiu Brievo te themu Burgione."
+    },
+    {
+      "id": "annex_a_7",
+      "k": "clause",
+      "n": "7",
+      "old": "Thiu Andwordi fora theru Scrîfkamaru bi iru Scawungu."
+    },
+    {
+      "id": "annex_a_8",
+      "k": "clause",
+      "n": "8",
+      "old": "Ôdar Werk, that the Burgio binnan themu Lithe III giscriban bitêknit."
+    },
+    {
+      "id": "h_annex_b",
+      "k": "heading",
+      "old": "ANAHANG B · THE HOF"
+    },
+    {
+      "id": "annex_b_1",
+      "k": "clause",
+      "n": "1",
+      "old": "Namo: Hof Ahornesgat, an themu nordaron Dêle fan Daluhald, Heritogdôm Dalawisk."
+    },
+    {
+      "id": "annex_b_2",
+      "k": "clause",
+      "n": "2",
+      "old": "Akkar: umbi fiorhund Hektaron. Holt: umbi tuêhund Hektaron, an themu nordaron Hlîthe."
+    },
+    {
+      "id": "annex_b_3",
+      "k": "clause",
+      "n": "3",
+      "old": "Hoflûdi: umbi fîf endi tuêntig Hîwiski. Hîwiski thes Hêrrohûses: umbi fîftiân Man."
+    },
+    {
+      "id": "annex_b_4",
+      "k": "clause",
+      "n": "4",
+      "old": "Hûs: Hêrrohûs, Hroshûs, Korenhûs, Werkstedi; thiu Herthkamara an themu westaron Flugile thes Hêrrohûses."
+    },
+    {
+      "id": "annex_b_5",
+      "k": "clause",
+      "n": "5",
+      "old": "Thiu Marka te Nordar wid thena Hof Mulinhrug folgot themu Beke, sô hiu an themu Jâre 2016 gimetan warth."
+    },
+    {
+      "id": "annex_b_6",
+      "k": "clause",
+      "n": "6",
+      "old": "Thiu Herthkamara is an theru Wardu thes Smithes thera Stedi fan themu Fiarhûse. The Burgiling sal imu an theru Wakanaht thes Thunaresdages Ingang geban."
+    },
+    {
+      "id": "h_annex_c",
+      "k": "heading",
+      "old": "ANAHANG C · KUNDI THERA REHTO"
+    },
+    {
+      "id": "annex_c_lead",
+      "k": "lead",
+      "old": "The Burgiling habit Reht:"
+    },
+    {
+      "id": "annex_c_1",
+      "k": "clause",
+      "n": "1",
+      "old": "te Kamaru, Kosti, Fiare endi Lône nâh them Lithun IV endi VI;"
+    },
+    {
+      "id": "annex_c_2",
+      "k": "clause",
+      "n": "2",
+      "old": "te theru Scrîfkamaru selbo eftho giscriban te biddianne;"
+    },
+    {
+      "id": "annex_c_3",
+      "k": "clause",
+      "n": "3",
+      "old": "te themu Fiar-skölde nâh themu Lithe VIII;"
+    },
+    {
+      "id": "annex_c_4",
+      "k": "clause",
+      "n": "4",
+      "old": "that thesa Handfesti imu an theru Scrîfkamaru an theru Gimênitungu lûdo lesan wirthit, ef hê it bidit;"
+    },
+    {
+      "id": "annex_c_5",
+      "k": "clause",
+      "n": "5",
+      "old": "mid Rehte te wonianne, sô lango sô ên Niuwunga giscawod wirthit (Lith XI, 2)."
+    },
+    {
+      "id": "h_annex_d",
+      "k": "heading",
+      "old": "ANAHANG D · ANTFANG"
+    },
+    {
+      "id": "annex_d_lead",
+      "k": "lead",
+      "old": "Ik, the Burgiling, gihu, that ik thia Gimênitunga thera Handfesti Nr. VS-18-0947 endi that Kortblad antfangan habbiu."
+    },
+    {
+      "id": "ad_party",
+      "k": "party",
+      "old": "Burgiling"
+    },
+    {
+      "id": "ad_name",
+      "k": "field",
+      "old": "Namo:",
+      "oldFill": "{playerName}"
+    },
+    {
+      "id": "ad_date",
+      "k": "field",
+      "old": "Stedi endi Dag:",
+      "oldFill": "28. Witumânoth 2018"
+    },
+    {
+      "id": "h_annex_e",
+      "k": "heading",
+      "old": "ANAHANG E · KORTBLAD"
+    },
+    {
+      "id": "annex_e_lead",
+      "k": "lead",
+      "old": "Themu Burgilinge sundar gigeban. Ni is an theru Urscrifti giscriban."
+    }
+  ]
+}
