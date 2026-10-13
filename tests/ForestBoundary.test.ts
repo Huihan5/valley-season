@@ -87,7 +87,9 @@ describe('what is actually in the north woods', () => {
 
   it('has 蒂埃里 introduce himself, or not, depending on the market', () => {
     expect(site().sceneText).toContain('蒂埃里·瓦朗。北区林务官');
-    expect(site({ met_thierry: true }).sceneText).toContain('我说过我一年有两百天在这片林子里');
+    expect(site({ met_thierry: true }).sceneText).toContain('我一年有两百天在这片林子里');
+    // Only one of the three Day 13 answers has him say it at the market, so here he cannot say he did.
+    expect(site({ met_thierry: true }).sceneText).not.toContain('我说过');
     expect(site({ met_thierry: true }).sceneText).not.toContain('北区林务官');
   });
 });

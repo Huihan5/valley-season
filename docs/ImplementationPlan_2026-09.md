@@ -11,9 +11,15 @@
 > ---
 > ## 🔖 恢复点（compact 之后从这里继续）
 >
-> **2026-10-12（最新，pre-compact 时的状态）：982 测试绿、`tsc` 干净、`npm run build` 通过。作者说“做好之后写进 GDD，然后做 pre-compact，提交并推送”——全部已提交并推送，main 与 origin/main 一致，工作区干净（提交列表见 `git log`）。** 每一件的来龙去脉在 CHANGELOG 的 `2026-10-12` 到 `又续六`。
+> **2026-10-13（最新，pre-compact 时的状态）：982 测试绿。作者说“提交并推送，但是小说文件不放进 git，作为剧情文本也不打进测试包”——已提交并推送，main 与 origin/main 一致；小说版由 `.gitignore`（`剧情文本/*.docx`）挡在 git 外，`剧情文本/` 本来就在 `.gitattributes` 里设了 export-ignore。** 来龙去脉在 CHANGELOG 的 `2026-10-13`。
+> - **做了的事**：① **小说版** `剧情文本/河谷季_小说版.docx`（未跟踪的新文件）：把通往 4B 的理想路线排成一本第二人称小说，A5，112 页，华文宋体，目录页码由 Word 算。作者定的：第 28 天“现在就去”，没有剧情事件的日子用可重复的文字补。怎么做的、字体和分页上的坑，见记忆 `project-novel-docx`；生成脚本在会话 scratchpad 的 `novel/`，会话没了就要重建。② 排小说时发现一处前后不一致，作者说在游戏里改：第 15 天树桩（`day15_stumps.variants.met`）和第 18 天猎场开幕（`day18_hunt_arrival.variants.thierry_met`）里，蒂埃里说“我说过我一年有两百天在林子里”，可这句话只有第 13 天的选项 A 里说过。现在两处都去掉了“我说过”（中英一起改），`tests/ForestBoundary.test.ts` 守着；剧情文本稿和 `text-review/` 已重新导出，小说版也重排过了。
+> - **小说版只在本机**：`剧情文本/河谷季_小说版.docx` 不在 git 里，也不进测试包（作者的决定）。要重排就重新生成，见记忆 `project-novel-docx`。
+> - **盲测包**是按 `39a2c89` 打的，没有第 15、18 天这两句的修改（改动很小，下次重打时自然带上）。
+> - **等作者**：和下面 2026-10-12 那一条的“等作者”相同（古语那一句和 docx 的同步、`dawn_letter`、开场三个回答等），还没有回复。
+>
+> **2026-10-12（较早，pre-compact 时的状态）：982 测试绿、`tsc` 干净、`npm run build` 通过。作者说“做好之后写进 GDD，然后做 pre-compact，提交并推送”——全部已提交并推送，main 与 origin/main 一致，工作区干净（提交列表见 `git log`）。** 每一件的来龙去脉在 CHANGELOG 的 `2026-10-12` 到 `又续六`。
 > - **今天做了的事，按顺序**：① 润色版 A 类文本并入（中英）、摘要页、男爵的回信、4A 亨克拆分、英文术语对齐古语正本、第 28 天“现在就去”（`ChoiceEffects.endsSeason`）。② GDD_NEXT 更新；**剧情文本稿** `剧情文本/河谷季_剧情文本_中文.md` 和它的 `npm run script:export／script:import`（默认只预览，`-- --write` 才写进 `src/data/zh`）。③ 行囊“文书”里两份点开读全文的担保书（摘要页、古语正本；`DocumentSystem`、`DocumentReader`、`src/data/shared/deed.json`）。④ N4：开场男爵的问题由玩家作答（`ANSWER_OPENING`、旗标 `ledgerAnswer`），第 3 天说回。⑤ README 更新。⑥ 外部反馈的第一批：树桩数字、续签宽限、第 28 天田里已空的写法。⑦ 第二批：冬储清单（第 20 天起）、玛莎在钱剩 6 以下时说一次、4B 在“现在就去”之后多一封男爵回信、事件结果后不再留场景文字、修东西／清理仓储／休息的文字、提前解雇的副标题、签字页提示。⑧ **折价出售**（缓刑之后第一次要解雇时卖掉富余的粮食木柴）和**通知弹窗**（通用的 `Notice`），然后全部写进 GDD_NEXT（5.7、13.1 等）。
-> - **盲测包**：`../valley-season-blind-playtest-2026-10-12/` 是按 `f1e0cab` 打的（行囊文书和 N4 之后、反馈修订之前）。**之后的改动都不在包里**：第 28 天田里已空的写法、冬储清单、玛莎的提醒、折价出售和弹窗、事件结果不再重复场景文字、续签宽限、树桩数字等。作者在云端玩；要给人看新版得重打（做法见记忆 `project-blind-playtest-package`，脚本在会话的 scratchpad，会话没了就重建）。
+> - **盲测包**：`../valley-season-blind-playtest-2026-10-12/` 已按 `39a2c89` 重打（包含这一轮的全部改动；`_先读我.txt` 写了这一批和新增的两个测试者问题）。做法见记忆 `project-blind-playtest-package`。单文件 HTML 21 MB。
 > - **等作者**：① 读我写的：正本第十一条第一款里我写的那句**古语**（`Ef the Burgio thia niuwa Handfesti …`），并同步 `VS-18-0947_担保书古语正本.docx`（游戏读的是 `shared/deed.json`，docx 不会自动变）；4B 的 `dawn_letter`；开场三个回答的措辞和第 3 天那句回声；埃莱娜折价出售那一段和玛莎的那句；冬储清单的说明文字。② 没定的小事：正本是谁给的（第十五条第二款对第十四条第三款）；窄屏看不到冬储清单；摘要页要不要在签字之前摆出来（那是改 D6）；第 20 天起是不是合适。③ 以后：车票做成图（给条目加可选的图字段）。
 > - **这台机器上的做法（工具在会话的 scratchpad，不在项目里；会话没了就重建）**：docx → 文本（解 `word/document.xml` 取 `<w:t>`）→ 按 `ID xxx` 行分单元、`选项 N id` 前一行是选项文字、`◇ 变体 name` 起一个变体、说话人名字换回 `{@id}` → **只替换字符串字面量的补丁器**写回 JSON（不要用 `npm run text:import`：它会重写整个文件，把 25 个文件里的行内小对象展开，diff 很吵）→ 英文按段对齐旧中文／旧英文，没改的段沿用，改的段在旧英文上改。盲测包的脚本：`make-zips.ps1`、`check-package.ps1`（PowerShell 要加 `-ExecutionPolicy Bypass`）。**别在 git 工作树里放指向 `node_modules` 的目录联接再删工作树**：`git worktree remove` 会顺着联接把真的 `node_modules` 清空（这次发生过，用 `npm ci` 恢复了）。
 >

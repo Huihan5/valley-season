@@ -11,7 +11,7 @@
     "flags": { "met_thierry": true }
   },
   "variants": {
-    "thierry_met": "{@thierry}“Again, then,” he says. “I did say I am in the woods two hundred days of the year. These five are inside that.”\n\nHe opens the sheet out a little so that you can see it too.\n\n{@thierry}“South-east today. If you are riding along, do not ride at the very front. That lot up there like to race, and when they race they do not watch the ground.”",
+    "thierry_met": "{@thierry}“Again, then,” he says. “I am in the woods two hundred days of the year. These five are inside that.”\n\nHe opens the sheet out a little so that you can see it too.\n\n{@thierry}“South-east today. If you are riding along, do not ride at the very front. That lot up there like to race, and when they race they do not watch the ground.”",
     "thierry_unmet": "{@thierry}“Vallant. Forester, north district.” He folds the sheet away. “And you are the new steward at Maplegate.”"
   },
   "choices": [
