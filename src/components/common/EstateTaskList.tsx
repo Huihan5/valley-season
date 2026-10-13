@@ -1,6 +1,6 @@
 import { Fragment } from 'react';
 import { GameState, Choice } from '../../types/game';
-import { getEstateTasks } from '../../systems/EstateTaskSystem';
+import { getEstateTasks, getWinterStores } from '../../systems/EstateTaskSystem';
 import DATA from '../../data';
 import { fill } from '../../utils/text';
 
@@ -46,6 +46,7 @@ interface Props {
  */
 export default function EstateTaskList({ state, actionableIds, marketChoice, inEvent = false, onTake }: Props) {
   const tasks = getEstateTasks(state);
+  const winter = getWinterStores(state);
   const outstanding = tasks.filter(t => t.status !== 'done').length;
 
   return (
@@ -89,7 +90,8 @@ export default function EstateTaskList({ state, actionableIds, marketChoice, inE
           const takeable = task.status === 'available' && actionableIds.has(task.id);
           // Available but not offered this phase — the estate work is a daytime job,
           // so at night it is a preview, not a button. Say so, or it reads as broken.
-          const notNow = task.status === 'available' && !takeable;
+          // While an event holds the day, the reason is the event, which the panel already says.
+          const notNow = task.status === 'available' && !takeable && !inEvent;
           // The two walks cost no money, only a phase and a point of fatigue: a clock
           // for the marker and a tag, so the price reads as time rather than coin.
           const isWalk = task.kind === 'survey';
@@ -151,6 +153,24 @@ export default function EstateTaskList({ state, actionableIds, marketChoice, inE
             </Fragment>
           );
         })}
+
+        {/* What the books must hold for the ordinary way of being kept on, late in the season:
+            the same lines the ending is judged by (getWinterStores). */}
+        {winter && (
+          <div className="pt-2 border-t border-gold-dim/50 space-y-1">
+            <p className="text-cream-dim font-serif text-xs">{T.winterTitle}</p>
+            <p className="text-game-dim text-[10px] leading-snug">{T.winterNote}</p>
+            {winter.map(row => (
+              <p
+                key={row.id}
+                className={`flex justify-between font-serif text-[11px] leading-snug ${row.met ? 'text-game-text' : 'text-amber/90'}`}
+              >
+                <span>{row.met ? '✓' : '○'} {ui.resources[row.id]}</span>
+                <span className="tabular-nums">{row.have} / {row.need}</span>
+              </p>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

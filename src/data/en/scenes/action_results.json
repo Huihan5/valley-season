@@ -32,7 +32,7 @@
   ],
   "repair": [
     "The smith was brought out from Valehold for the day. You worked alongside him, which mostly meant handing things over and paying for them.\n\n{item} — done.",
-    "It was more trouble than you thought. Once it was open there was a second thing broken inside, and that cost more.\n\n{item} — done. It came to a little over what you had put aside.",
+    "It was more trouble than you thought. Once it was open there was a second thing broken inside, and the smith stayed on another half day.\n\n{item} — done.",
     "Gregor came over, looked at it, said two sentences and went. Done his way it went a great deal easier.\n\n{item} — done."
   ],
   "forage": [
@@ -62,12 +62,17 @@
   "rest": [
     "You did nothing at all this evening.\n\nThe lamp was not lit long before you went to bed early.\n\nGetting up the next morning, you realise it has been a very long time since you last had enough sleep.",
     "You stayed in your room all evening. That pale rectangle on the desk. You looked at it a long while.",
-    "You sat in the stable a while. Gregor did his work and you sat. Neither of you said anything.\n\nNothing at all moved forward tonight. You find you do not mind."
+    "After supper you sat out in the yard a while. The stable lamp was lit, and you could hear Gregor at his work inside.\n\nNothing at all moved forward tonight. You find you do not mind."
   ],
   "stable_help_third": [
     "When you have finished and are about to go, he takes a brush down off the rack and holds it out to you.\n\nNot the one he was using; that one is in his hand. This one has a shorter handle and has been used longer.\n\n“This one sits better,” he says.\n\nYou take it. You do not know what to say, and he does not wait for you to say it.\n\nWhen you come back the next day the brush is on a hook by the door, hung apart from the other tools, on its own."
   ],
   "night_ledger_4": [
     "You sat with it another night.\n\nThe eight volumes are the same eight volumes. You know by now what there is to look for, and it is not the figures, and it is no longer the handwriting either.\n\nYou only sit here, turning the pages of what one man wrote over eight years.\n\nWhen the lamp is half burned down you close the ledger.\n\nYou have finished with this."
+  ],
+  "clear_storage": [
+    "The barn was full of last year’s sacks, a broken rake, a few empty barrels nobody claimed. You and the day-hands carried things out for a day, and only at the end did the floor show, with dust half a hand deep.\n\nClearing the stores — done.",
+    "The door of the innermost bay had stuck, and Gregor put his shoulder to it. Inside was half a room of old fodder, gone to mould, all of which had to be dragged out.\n\nMost of the day was carrying. That evening the water was black when you washed your hands.\n\nClearing the stores — done.",
+    "You measured it against the old marks on the wall. The barn would hold more than the book said; the difference was only the part that clutter had been occupying.\n\nClearing the stores — done."
   ]
 }

@@ -12,14 +12,16 @@ import {
   adjustActionTrust, adjustNobleTrust, adjustLordImpression, adjustTenantTrust, recordConversation,
 } from './RelationSystem';
 import { INITIAL_FLAGS } from './FlagRegistry';
+import { makeNotice } from './NoticeSystem';
 import { composeSceneParts, getActionResultParts, getGreetingParts, lineContextOf } from './SceneSystem';
 import { instantOf, markKnown, partsText } from './SeenSystem';
 import { answeredChoice, getOpeningPage, isQuestion, nextOpeningPage } from './OpeningSystem';
 import {
   INITIAL_RESOURCES, INITIAL_RELATIONSHIPS, TENANT_TRUST_INITIAL, FATIGUE_EXHAUSTED_THRESHOLD,
+  LOW_FUNDS_WARNING_AT,
 } from '../data/config';
 import DATA from '../data';
-import { interpolate } from '../utils/text';
+import { interpolate, fill } from '../utils/text';
 import { createRng, hashParts } from '../utils/rng';
 
 const lines = DATA.systemLines;
@@ -323,8 +325,10 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
 
   const step = (state.step ?? 0) + 1;
   const rng = createRng(hashParts(state.seed ?? 0, step));
-  const next = reduceSeason(state, action, rng);
-  if (next === state) return state; // refused: nothing happened, so nothing is recorded
+  // A notice is read before the player's next action and is gone with it.
+  const settled = state.notice ? { ...state, notice: null } : state;
+  const next = reduceSeason(settled, action, rng);
+  if (next === settled) return state; // refused: nothing happened, so nothing is recorded
 
   return {
     ...next,
@@ -381,7 +385,10 @@ export function replaySeason(saved: GameState): GameState | null {
 function commitAdvance(prev: GameState, next: GameState, advances: boolean, rng: Rng): GameState {
   if (!advances) return buildStateForPhase(next, rng);
   if (nextPhase(prev.day, prev.phase).newDay && next.lastResult) {
-    return { ...next, pendingAdvance: true };
+    // The scene held under a result is the place the player acted in. An event is not a place:
+    // its text was read before the choice, and under its result it would be read a second time.
+    const held = prev.activeEvent ? { currentSceneText: '', sceneParts: undefined } : {};
+    return { ...next, ...held, pendingAdvance: true };
   }
   return advancePhase(next, rng);
 }
@@ -458,12 +465,15 @@ function advancePhase(state: GameState, rng: Rng): GameState {
     next = { ...next, resources: clampResources(next.resources, next.flags) };
 
     // An empty account settles once a day, and it settles downward.
-    const insolvency = getInsolvencyEffects(next.resources, next.tenantTrust, !!next.flags.stewardRescueUsed);
+    const insolvency = getInsolvencyEffects(
+      next.resources, next.tenantTrust, !!next.flags.stewardRescueUsed, !!next.flags.forcedSaleUsed,
+    );
     if (insolvency) {
       next = applyEffects(next, {
         renown: insolvency.renown,
         tenantTrust: insolvency.tenantTrust,
-        guldmark: insolvency.guldmark, // only set by the rescue; undefined is a no-op
+        guldmark: insolvency.guldmark, // only set by the rescue or the sale; undefined is a no-op
+        ...(insolvency.sold ? { grain: -insolvency.sold.grain, timber: -insolvency.sold.timber } : {}),
         logEntry: insolvency.logEntry,
       });
       next = {
@@ -479,6 +489,18 @@ function advancePhase(state: GameState, rng: Rng): GameState {
           lastResult: lines.stewardRescue,
         };
       }
+      // The first dismissal is sold past instead: the morning says what went, to whom, and for how much.
+      if (insolvency.sold) {
+        const { grain, timber, guldmark } = insolvency.sold;
+        const template = grain > 0 && timber > 0 ? lines.forcedSale : grain > 0 ? lines.forcedSaleGrain : lines.forcedSaleTimber;
+        const said = fill(template, { grain, timber, gold: guldmark });
+        next = {
+          ...next,
+          flags: { ...next.flags, forcedSaleUsed: true },
+          lastResult: said,
+          notice: makeNotice(lines.forcedSaleTitle, said),
+        };
+      }
       if (insolvency.dismissed) {
         const flags = { ...next.flags, dismissedEarly: true };
         const dismissed = { ...next, flags };
@@ -492,6 +514,11 @@ function advancePhase(state: GameState, rng: Rng): GameState {
           activeEvent: null,
         };
       }
+    }
+    // The purse is nearly empty and nothing has said so yet: Marta does, once, and says where coin
+    // comes from. A rescue or a dismissal has already said more than this.
+    if (!next.lastResult && !next.flags.lowFundsWarned && next.resources.guldmark <= LOW_FUNDS_WARNING_AT) {
+      next = { ...next, flags: { ...next.flags, lowFundsWarned: true }, lastResult: lines.lowFunds };
     }
     // Exhausted: the body gives out and the morning's own work is lost. But a
     // fixed dawn event still happens to the steward — the messenger comes whether

@@ -194,6 +194,9 @@
     "modeCommon": "Common Tongue only",
     "blank": "________"
   },
+  "notice": {
+    "ok": "Understood"
+  },
   "gallery": {
     "unseen": "Not yet seen",
     "empty": "No season has been played to its end."
@@ -215,6 +218,8 @@
     "outstanding": "{n} outstanding",
     "done": "Done",
     "daytimeOnly": "In daylight (morning or afternoon)",
+    "winterTitle": "Winter stores",
+    "winterNote": "Copied by Elena onto the last page of the ledger. To be kept on as usual, the books need these.",
     "costsTime": "Costs time",
     "inEventTitle": "An event is underway",
     "inEventBody": "You cannot take on other estate work while this is going on."
@@ -250,7 +255,7 @@
     "signatureLabel": "Received by the Guaranteed Person",
     "signaturePrompt": "Write your name",
     "sign": "Sign",
-    "namePrompt": "Before the season begins, sign for the summary leaf of the guarantee.",
+    "namePrompt": "Before the season begins, write your name. It goes on the receipt line of the guarantee’s summary leaf.",
     "skip": "Skip the opening →"
   },
   "app": {

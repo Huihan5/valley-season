@@ -15,6 +15,10 @@ import {
   INSOLVENCY_DISMISS_RENOWN,
   INSOLVENCY_DISMISS_TENANT,
   STEWARD_RESCUE_GULDMARK,
+  FORCED_SALE_GRAIN_PRICE,
+  FORCED_SALE_TIMBER_PRICE,
+  FORCED_SALE_TARGET,
+  ENDING2_TIMBER,
   FATIGUE_TIRED_THRESHOLD,
   GRAIN_RETAIN_THRESHOLD,
   GRAIN_EXCELLENT_THRESHOLD,
@@ -154,6 +158,30 @@ export function applyDailyOperatingCost(resources: Resources): Resources {
   return { ...resources, guldmark: resources.guldmark - DAILY_GULDMARK_COST };
 }
 
+/** What the barn and the woodpile gave up when the account could not be settled, and what it fetched. */
+export interface ForcedSale {
+  grain: number;
+  timber: number;
+  guldmark: number;
+}
+
+/**
+ * The part of the surplus sold to settle an empty account, or null when there is nothing to sell.
+ * Surplus is what the barn holds above the retention line and the woodpile above the competent
+ * ending's line: whatever the books were not going to need. Grain goes first, then timber, until
+ * the purse would hold the target; the price is poor on purpose, because the buyer knows.
+ */
+export function getForcedSale(resources: Resources): ForcedSale | null {
+  const surplusGrain = Math.max(0, Math.floor(resources.grain) - GRAIN_RETAIN_THRESHOLD);
+  const surplusTimber = Math.max(0, Math.floor(resources.timber) - ENDING2_TIMBER);
+  let wanted = Math.max(0, FORCED_SALE_TARGET - resources.guldmark);
+  const grain = Math.min(surplusGrain, Math.ceil(wanted / FORCED_SALE_GRAIN_PRICE));
+  wanted -= grain * FORCED_SALE_GRAIN_PRICE;
+  const timber = Math.min(surplusTimber, Math.ceil(Math.max(0, wanted) / FORCED_SALE_TIMBER_PRICE));
+  if (grain + timber === 0) return null;
+  return { grain, timber, guldmark: grain * FORCED_SALE_GRAIN_PRICE + timber * FORCED_SALE_TIMBER_PRICE };
+}
+
 export interface InsolvencyEffects {
   renown: number;
   tenantTrust: number;
@@ -161,6 +189,8 @@ export interface InsolvencyEffects {
   dismissed: boolean;
   /** The one-time reprieve fired instead of dismissal (D4). Carries the coin found. */
   rescued?: boolean;
+  /** Part of the surplus was sold instead of the steward being dismissed. `guldmark` is what it fetched. */
+  sold?: ForcedSale;
   guldmark?: number;
   logEntry: string;
 }
@@ -181,11 +211,16 @@ export interface InsolvencyEffects {
  * The first time both are spent, a one-time reprieve fires instead of dismissal
  * (D4): the player finds what the previous steward left behind, `rescued` coin and
  * a warning. `rescueUsed` says whether that has already happened this season.
+ *
+ * The first time dismissal would fire after that, a barn with something to spare is sold from
+ * instead (getForcedSale) and the season goes on; `saleUsed` says whether it already has. A steward
+ * with nothing to spare, or who has been through both, is dismissed.
  */
 export function getInsolvencyEffects(
   resources: Resources,
   tenantTrust: number,
   rescueUsed = false,
+  saleUsed = false,
 ): InsolvencyEffects | null {
   if (resources.guldmark > 0) return null;
 
@@ -201,6 +236,17 @@ export function getInsolvencyEffects(
         rescued: true,
         guldmark: STEWARD_RESCUE_GULDMARK,
         logEntry: lines.stewardRescueLog,
+      };
+    }
+    const sold = saleUsed ? null : getForcedSale(resources);
+    if (sold) {
+      return {
+        renown: 0,
+        tenantTrust: 0,
+        dismissed: false,
+        sold,
+        guldmark: sold.guldmark,
+        logEntry: lines.forcedSaleLog,
       };
     }
     return {

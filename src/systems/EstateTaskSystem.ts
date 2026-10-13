@@ -10,11 +10,15 @@ import {
   DINNER_DAY,
   SURVEY_FIELDS_LAST_DAY,
   FATIGUE_EXHAUSTED_THRESHOLD,
+  ENDING2_GULDMARK,
+  ENDING2_TIMBER,
+  WINTER_LIST_FROM_DAY,
 } from '../data/config';
 import DATA from '../data';
 import { fill } from '../utils/text';
 import { getEffectiveTenantTrust } from './RelationSystem';
 import { getForestTier } from './ResourceSystem';
+import { getRetainFloor } from './EndingSystem';
 
 const actions = DATA.actions;
 
@@ -149,6 +153,8 @@ const SPECS: TaskSpec[] = [
     guldmark: CLEAR_STORAGE_COST,
     group: 'harvest',
     doneFlag: 'storageCleared',
+    // Moving things out of a barn is not the smith's work: it has its own result text.
+    resultKind: () => 'clear_storage',
     requires: (s) => (s.flags.toolsRepaired ? null : TEXT.clearStorage.needsTools),
   },
   {
@@ -209,7 +215,7 @@ const SPECS: TaskSpec[] = [
   },
 ];
 
-const REPAIR_TASKS = new Set(['task_repair_tools', 'task_clear_storage', 'task_repair_stable']);
+const REPAIR_TASKS = new Set(['task_repair_tools', 'task_repair_stable']);
 
 function describe(spec: TaskSpec): string {
   const parts = [actions.common.onePhase];
@@ -267,7 +273,7 @@ export function getEstateTaskChoices(state: GameState): Choice[] {
   return getEstateTasks(state)
     .filter((task) => task.status !== 'done')
     .map((task) => {
-      // The three physical repairs share the 维修 result text; the two purchases do not.
+      // The two repairs share the 维修 result text; clearing the stores and the purchases have their own.
       const resultKind = task.resultKind ?? (REPAIR_TASKS.has(task.id) ? 'repair' : undefined);
       return {
         id: task.id,
@@ -299,4 +305,29 @@ export function getEstateTaskChoices(state: GameState): Choice[] {
  */
 export function getDecorumBonus(state: GameState): number {
   return state.flags.boughtGift && state.flags.boughtAttire ? 1 : 0;
+}
+
+export interface WinterStore {
+  id: 'grain' | 'guldmark' | 'timber';
+  have: number;
+  need: number;
+  met: boolean;
+}
+
+/**
+ * The winter-stores list on the estate board (playtest feedback 2026-10): what the books have
+ * to hold for the ordinary way of being kept on — grain over the retention line, and coin and
+ * wood in the purse and the pile. The lines are the ones the endings are judged by, read from the
+ * same place, so the list cannot say one thing and the ending another. It appears late in the
+ * season (WINTER_LIST_FROM_DAY), when it is a list of what is left to do, and not before.
+ */
+export function getWinterStores(state: GameState): WinterStore[] | null {
+  if (state.day < WINTER_LIST_FROM_DAY) return null;
+  const { grain, guldmark, timber } = state.resources;
+  const rows: [WinterStore['id'], number, number][] = [
+    ['grain', grain, getRetainFloor(state)],
+    ['guldmark', guldmark, ENDING2_GULDMARK],
+    ['timber', timber, ENDING2_TIMBER],
+  ];
+  return rows.map(([id, have, need]) => ({ id, have, need, met: have >= need }));
 }

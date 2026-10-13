@@ -194,6 +194,9 @@
     "modeCommon": "只看通用语",
     "blank": "＿＿＿＿＿＿＿＿"
   },
+  "notice": {
+    "ok": "知道了"
+  },
   "gallery": {
     "unseen": "未见",
     "empty": "还没有走完过一季。"
@@ -215,6 +218,8 @@
     "outstanding": "{n} 项未办",
     "done": "已完成",
     "daytimeOnly": "白天再做（上午或下午）",
+    "winterTitle": "冬储清单",
+    "winterNote": "埃莱娜抄在账本末页的。照常留任，账上要有这些。",
     "costsTime": "花费时间",
     "inEventTitle": "事件处理中",
     "inEventBody": "当前正在处理事件，无法安排其他事务。"
@@ -250,7 +255,7 @@
     "signatureLabel": "被担保人签收",
     "signaturePrompt": "写下你的名字",
     "sign": "签字",
-    "namePrompt": "这一季开始之前，先在担保书摘要页上签收。",
+    "namePrompt": "这一季开始之前，先写下你的名字。它会签在担保书摘要页的签收栏上。",
     "skip": "跳过开场 →"
   },
   "app": {

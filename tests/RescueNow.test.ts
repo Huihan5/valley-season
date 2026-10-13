@@ -62,7 +62,7 @@ describe('going now', () => {
     expect(s.activeEvent).toBeNull();
     expect(s.currentChoices).toEqual([]);
     expect(s.history![s.history!.length - 1]).toEqual({ type: 'MAKE_CHOICE', choiceId: 'day28_go_now' });
-    expect(s.log[s.log.length - 1]?.text).toBe('你没有等秋收完，当天就去找了蒂埃里。');
+    expect(s.log[s.log.length - 1]?.text).toBe('你没有再等，当天就去找了蒂埃里。');
   });
 
   it('does not look at the estate: an empty granary and no standing still get the same ending', () => {

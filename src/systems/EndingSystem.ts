@@ -98,6 +98,18 @@ export function determineEnding(state: GameState): EndingId {
   return meetsEnding2(state) ? 'ending2' : 'ending1';
 }
 
+/**
+ * The line under the ending's title. A steward let go before the term ran out has the same
+ * ending as one let go at its end, but not the same small print: the Secretariat's
+ * "we only handle dates" is true of the letter that comes at the end, and this one did not.
+ */
+export function getEndingSubtitle(state: GameState, id: EndingId): string {
+  const ending = ENDINGS[id];
+  return id === 'ending1' && state.flags.dismissedEarly
+    ? ending.variants?.early_subtitle ?? ending.subtitle
+    : ending.subtitle;
+}
+
 export function getEndingData(id: EndingId): EndingData {
   return ENDINGS[id];
 }
@@ -157,6 +169,8 @@ export function composeEnding(state: GameState, id: EndingId): string {
   }
 
   if (id === 'ending4b') {
+    // Gone at dawn on Day 28: the Baron's answer to the news is why the renewal came.
+    if (state.flags.wentAtDawn28) parts.push(v.dawn_letter);
     parts.push(v.awake);
     parts.push(state.flags.admittedWantToStay ? v.admitted : v.unadmitted);
     parts.push(v.after, v.continued, v.ludwig);

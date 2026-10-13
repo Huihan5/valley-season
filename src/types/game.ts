@@ -206,6 +206,12 @@ export interface SeenRecord {
   before: string | null;
 }
 
+/** A message that stops the screen until it has been read (NoticeSystem). */
+export interface Notice {
+  title: string;
+  text: string;
+}
+
 export interface GameState {
   day: number;
   phase: DayPhase;
@@ -257,6 +263,12 @@ export interface GameState {
    * the scene holds on the result with a 继续 beat, and COMMIT_ADVANCE turns the day.
    */
   pendingAdvance?: boolean;
+  /**
+   * Something the season did to the steward that must be read before anything else: raised by a
+   * rule (the forced sale is the first), cleared by the player's next action. Whether it has been
+   * read is the shell's to remember, not the season's.
+   */
+  notice?: Notice | null;
   activeEvent: EventData | null;
   eventResolved: boolean;
   log: LogEntry[];

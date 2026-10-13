@@ -38,8 +38,8 @@ function marks(all: Record<string, string>): Record<string, string> {
 const ZH_MARKS = marks(ZH);
 const EN_MARKS = marks(EN);
 
-/** Only prose that is drawn by the scene panel is allowed to carry marks. */
-const MAY_CARRY = /^(events|randomEvents|endings|scenes\.market)\b/;
+/** Only prose that is drawn by the scene panel is allowed to carry marks. systemLines.lowFunds and systemLines.forcedSale* are of that kind: each is only ever the morning's lead line, never a log entry. */
+const MAY_CARRY = /^(events|randomEvents|endings|scenes\.market|systemLines\.(lowFunds|forcedSale(Grain|Timber)?))\b/;
 
 describe('speaker marks in the data', () => {
   it('are used somewhere, so the check below is not about nothing', () => {

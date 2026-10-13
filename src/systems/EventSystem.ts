@@ -386,6 +386,25 @@ function processDay23(event: EventData, state: GameState): EventData {
 // Day 30 morning: 埃莱娜 airs the winter quilts on the day the contract expires.
 // She has not asked anyone whether that is still worth doing.
 /**
+ * Day 28, dawn. The page says whether the wheat is still in the fields, and the second choice
+ * says what it is waiting for: a steward who has brought it all in has the accounts left, not
+ * the harvest. Going now is the same either way.
+ */
+function processDay28(event: EventData, state: GameState): EventData {
+  const v = event.variants ?? {};
+  const bare = getFieldGrain(state) <= 0;
+  return {
+    ...event,
+    sceneText: [event.sceneText, bare ? v.field_empty : v.field_standing].join('\n\n'),
+    choices: bare
+      ? (event.choices ?? []).map(c => (
+        c.id === 'day28_wait' ? { ...c, text: v.wait_empty_text, resultText: v.wait_empty_result } : c
+      ))
+      : event.choices,
+  };
+}
+
+/**
  * Day 3. The Baron asked what the steward would do about an expense they could not read, in
  * Forgehold (the opening's question page); here is the ledger, with the same three things to
  * do about it. The page says back what they said, and does not say whether it was right: what
@@ -610,6 +629,7 @@ function process(raw: EventData, state: GameState): EventData {
     : raw;
 
   if (event.id === 'day3_ledger') return processDay3(event, state);
+  if (event.id === 'day28_go_now') return processDay28(event, state);
   if (event.id === 'day7_dinner_return') return processDinnerReturn(event, state);
   if (event.id === 'day8_echo' || event.id === 'day11_echo') return processEcho(event, state);
   if (event.id === 'day15_forest_report') return processForestReport(event, state);

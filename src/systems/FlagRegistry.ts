@@ -43,6 +43,24 @@ export const INITIAL_FLAGS: FlagMap = {
    */
   ledgerAnswer: '',
 
+  /**
+   * Day 28, dawn: the player did not wait. Read by 4B, which says what the Baron's reply to the news
+   * said and when the renewal was signed. Written by: day28_go_now.
+   */
+  wentAtDawn28: false,
+
+  /**
+   * The empty account was settled once by selling part of the barn's and the woodpile's surplus
+   * (getForcedSale) instead of the steward being dismissed. Written by: the morning change of day.
+   */
+  forcedSaleUsed: false,
+
+  /**
+   * Marta has said, once, that the kitchen purse is nearly empty (LOW_FUNDS_WARNING_AT). Written by:
+   * the morning change of day (GameEngine).
+   */
+  lowFundsWarned: false,
+
   /** Day 27 street corner — the player admitted they want to stay. Written by: Day 27 (阶段四). */
   admittedWantToStay: false,
 

@@ -1,5 +1,5 @@
 import { useReducer, useEffect, useState, useCallback, useMemo } from 'react';
-import { getEndingData, EndingId } from './systems/EndingSystem';
+import { getEndingData, getEndingSubtitle, EndingId } from './systems/EndingSystem';
 import { getOpeningPage } from './systems/OpeningSystem';
 import { gameReducer, createInitialState, replaySeason } from './systems/GameEngine';
 import DATA from './data';
@@ -19,6 +19,8 @@ import Inventory from './components/common/Inventory';
 import Retrospect from './components/common/Retrospect';
 import CodexPanel from './components/common/CodexPanel';
 import Missed from './components/common/Missed';
+import NoticeModal from './components/common/NoticeModal';
+import { noticeKey } from './systems/NoticeSystem';
 import { recordCodex, currentUnlocks, unlockedKeys, codexEntryOf } from './systems/CodexSystem';
 import { CodexLinks, CodexLink } from './components/common/CodexLinks';
 import {
@@ -42,6 +44,9 @@ export default function App() {
   const [savesOpen, setSavesOpen] = useState(false);
   const [inventoryOpen, setInventoryOpen] = useState(false);
   const [retroOpen, setRetroOpen] = useState(false);
+  // The notice the player has closed, by the key that names it (NoticeSystem). Not saved: it is a
+  // fact about the screen, and a reload shows the same notice again.
+  const [closedNotice, setClosedNotice] = useState<string | null>(null);
   const [codexOpen, setCodexOpen] = useState(false);
   // The entry a clicked name asked for; cleared when the codex closes, so the next plain
   // opening starts from the top again.
@@ -263,7 +268,7 @@ export default function App() {
     <div className="flex flex-col items-start gap-3 py-1">
       <div>
         <p className="text-gold font-serif text-lg">{getEndingData(state.endingId as EndingId).title}</p>
-        <p className="text-game-text text-sm mt-1">{getEndingData(state.endingId as EndingId).subtitle}</p>
+        <p className="text-game-text text-sm mt-1">{getEndingSubtitle(state, state.endingId as EndingId)}</p>
       </div>
       {/* 4.g.v: the way back to Day 1 stays a whisper, not a banner. */}
       <button
@@ -372,6 +377,10 @@ export default function App() {
 
         {inventoryOpen && (
           <Inventory state={state} onClose={() => setInventoryOpen(false)} />
+        )}
+
+        {state.notice && noticeKey(state) !== closedNotice && (
+          <NoticeModal notice={state.notice} onClose={() => setClosedNotice(noticeKey(state))} />
         )}
 
         {codexOpen && (

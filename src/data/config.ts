@@ -59,6 +59,17 @@ export const TIMBER_SEASON_QUOTA = 25;
 // Daily guldmark operating cost (auto-deducted each morning)
 export const DAILY_GULDMARK_COST = 2;
 
+// The first morning the purse stands at this many guldmark or fewer, Marta says so, once: about
+// three days of the daily cost, and the first money-short morning if the purse went down faster
+// than that. A steward who spends on the estate and keeps the grain has no other warning before
+// the account is empty (playtest feedback 2026-10), and the market is the one place to turn it
+// into coin.
+export const LOW_FUNDS_WARNING_AT = 6;
+
+// The winter-stores list on the estate board appears from this day: the frost, the Secretariat's
+// letter and the last two markets are close enough that what the books must hold is worth saying.
+export const WINTER_LIST_FROM_DAY = 20;
+
 // ── 账上空了之后 (作者裁定 2026-07-29；GDD ch.5 只写到「破产」二字) ─────────
 // 三级下滑。付不出钱先是外面知道，声望每天掉一点；声望不再是正的，住在这里的
 // 人才开始走，佃户信任每天掉一点；两样都归零而账上仍然是空的，男爵不等期限。
@@ -74,6 +85,16 @@ export const INSOLVENCY_DISMISS_TENANT = 0;
 // ending, the player finds what the previous steward left behind — some coin and
 // notes — worth this much, with a clear warning. Narrative in system_lines.stewardRescue.
 export const STEWARD_RESCUE_GULDMARK = 10;
+// A second one, for the steward who keeps the barn full and never goes to market (playtest
+// feedback 2026-10: the plan "harvest only" was dismissed on the morning of the second market
+// day, with a hundred grain in the barn). The first time dismissal would fire, if the barn and
+// the woodpile hold more than the books are meant to keep, part of the surplus is sold on the
+// spot at a poor price (about two thirds of the market's) until the purse holds the target, or
+// the surplus runs out. It never takes grain below the retention line or timber below the
+// competent ending's line, so what it sells is only what the ending did not need.
+export const FORCED_SALE_GRAIN_PRICE = 1;    // 金卢/unit (the market pays MARKET_GRAIN_PRICE)
+export const FORCED_SALE_TIMBER_PRICE = 2;   // 金卢/unit (the market pays MARKET_TIMBER_PRICE)
+export const FORCED_SALE_TARGET = 20;        // ten days of the daily cost
 
 // Storage cap until the barn is cleared out; clearing lifts it entirely (GDD ch.5.4).
 export const GRAIN_STORAGE_CAP_UNCLEARED = 80;

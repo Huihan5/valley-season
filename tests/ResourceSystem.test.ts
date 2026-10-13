@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import {
-  getGrainTier, getInsolvencyEffects, getTimberYield, getFieldGrain, getFrostDayEndLoss,
+  getGrainTier, getInsolvencyEffects, getForcedSale, getTimberYield, getFieldGrain, getFrostDayEndLoss,
 } from '../src/systems/ResourceSystem';
 import { Resources, GameState, FlagMap, WeatherType } from '../src/types/game';
 import {
@@ -10,6 +10,8 @@ import {
   INSOLVENCY_DISMISS_RENOWN, INSOLVENCY_DISMISS_TENANT, STEWARD_RESCUE_GULDMARK,
   TIMBER_YIELD, TIMBER_SURVEY_BONUS, TIMBER_TOOLS_BONUS, FATIGUE_TIRED_THRESHOLD,
   HARVESTABLE_TOTAL, FROST_LOSS_RATE,
+  FORCED_SALE_GRAIN_PRICE, FORCED_SALE_TIMBER_PRICE, FORCED_SALE_TARGET, ENDING2_TIMBER,
+  MARKET_GRAIN_PRICE, MARKET_TIMBER_PRICE,
 } from '../src/data/config';
 
 // getTimberYield only reads fatigue and flags off the state.
@@ -128,6 +130,66 @@ describe('getInsolvencyEffects', () => {
   it('keeps both dismissal lines at zero rather than at the axes own floors', () => {
     expect(INSOLVENCY_DISMISS_RENOWN).toBe(0);
     expect(INSOLVENCY_DISMISS_TENANT).toBe(0);
+  });
+});
+
+// A second reprieve, for the steward who keeps the barn full and never goes to market: the first
+// time dismissal would fire, part of the surplus is sold on the spot.
+describe('the forced sale', () => {
+  const books = (grain: number, timber: number, guldmark = 0): Resources => ({ grain, guldmark, timber, renown: -1 });
+
+  it('sells grain above the retention line, enough to bring the purse to the target', () => {
+    const sale = getForcedSale(books(103, 5));
+    expect(sale).toEqual({ grain: FORCED_SALE_TARGET / FORCED_SALE_GRAIN_PRICE, timber: 0, guldmark: FORCED_SALE_TARGET });
+  });
+
+  it('never takes grain below the retention line, nor timber below the competent ending’s', () => {
+    const grainLimited = getForcedSale(books(GRAIN_RETAIN_THRESHOLD + 5, 5))!;
+    expect(grainLimited.grain).toBe(5);
+    expect(grainLimited.timber).toBe(0);
+    const timberLimited = getForcedSale(books(GRAIN_RETAIN_THRESHOLD, ENDING2_TIMBER + 3))!;
+    expect(timberLimited).toEqual({ grain: 0, timber: 3, guldmark: 3 * FORCED_SALE_TIMBER_PRICE });
+  });
+
+  it('turns to the woodpile only for what the barn could not cover', () => {
+    const sale = getForcedSale(books(GRAIN_RETAIN_THRESHOLD + 8, ENDING2_TIMBER + 10))!;
+    expect(sale.grain).toBe(8);
+    expect(sale.timber).toBe(Math.ceil((FORCED_SALE_TARGET - 8 * FORCED_SALE_GRAIN_PRICE) / FORCED_SALE_TIMBER_PRICE));
+    expect(sale.guldmark).toBe(sale.grain * FORCED_SALE_GRAIN_PRICE + sale.timber * FORCED_SALE_TIMBER_PRICE);
+  });
+
+  it('pays less than the market does, which is the point of it', () => {
+    expect(FORCED_SALE_GRAIN_PRICE).toBeLessThan(MARKET_GRAIN_PRICE);
+    expect(FORCED_SALE_TIMBER_PRICE).toBeLessThan(MARKET_TIMBER_PRICE);
+  });
+
+  it('sells nothing when there is nothing to spare', () => {
+    expect(getForcedSale(books(GRAIN_RETAIN_THRESHOLD, ENDING2_TIMBER))).toBeNull();
+    expect(getForcedSale(books(40, 5))).toBeNull();
+  });
+
+  it('stands in for the first dismissal, after the tin, and only the first', () => {
+    const spent = books(103, 5);
+    const first = getInsolvencyEffects(spent, -1, true, false)!;
+    expect(first.dismissed).toBe(false);
+    expect(first.rescued).toBeFalsy();
+    expect(first.sold?.grain).toBe(20);
+    expect(first.guldmark).toBe(20);
+    expect(first.renown).toBe(0);
+    expect(first.tenantTrust).toBe(0);
+    const second = getInsolvencyEffects(spent, -1, true, true)!;
+    expect(second.dismissed).toBe(true);
+    expect(second.sold).toBeUndefined();
+  });
+
+  it('does not come before the tin, which is still the first thing that happens', () => {
+    const out = getInsolvencyEffects(books(103, 5), -1, false, false)!;
+    expect(out.rescued).toBe(true);
+    expect(out.sold).toBeUndefined();
+  });
+
+  it('leaves a steward with nothing to spare to be dismissed as before', () => {
+    expect(getInsolvencyEffects(books(70, 5), -1, true, false)?.dismissed).toBe(true);
   });
 });
 
