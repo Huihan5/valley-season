@@ -3,6 +3,7 @@ import { GameState } from '../../types/game';
 import { InventoryItem, InventoryTab, getPapers, getThings } from '../../systems/InventorySystem';
 import Journal from './Journal';
 import DocumentReader from './DocumentReader';
+import { useEscape } from './useEscape';
 import DATA from '../../data';
 
 const T = DATA.ui.inventory;
@@ -18,6 +19,7 @@ interface Props {
  * over. Like the file, it shows what the player has and never what they lack.
  */
 export default function Inventory({ state, onClose }: Props) {
+  useEscape(onClose, true, 'satchel');
   const [tab, setTab] = useState<InventoryTab>('dossier');
   // A paper that has been opened to its full text; null while the lists are showing.
   const [reading, setReading] = useState<InventoryItem | null>(null);

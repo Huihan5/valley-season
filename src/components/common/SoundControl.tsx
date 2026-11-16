@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import DATA from '../../data';
 import { getAudioSettings, setAudioSettings, playCue } from '../../audio';
+import { useEscape } from './useEscape';
 
 const T = DATA.ui.sound;
 
@@ -21,21 +22,16 @@ export default function SoundControl({ variant, wide = false }: { variant: keyof
   const [open, setOpen] = useState(false);
   const root = useRef<HTMLDivElement>(null);
 
-  // The panel closes on a click anywhere else, and on Escape.
+  // The panel closes on a click anywhere else, and on Escape (through the one shared stack,
+  // so Escape closes this and nothing else).
+  useEscape(() => setOpen(false), open, 'sound');
   useEffect(() => {
     if (!open) return;
     const away = (e: PointerEvent) => {
       if (!root.current?.contains(e.target as Node)) setOpen(false);
     };
-    const escape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setOpen(false);
-    };
     document.addEventListener('pointerdown', away);
-    document.addEventListener('keydown', escape);
-    return () => {
-      document.removeEventListener('pointerdown', away);
-      document.removeEventListener('keydown', escape);
-    };
+    return () => document.removeEventListener('pointerdown', away);
   }, [open]);
 
   if (!settings) return null;

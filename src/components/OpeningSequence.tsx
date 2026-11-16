@@ -3,6 +3,7 @@ import {
   OPENING_PAGES, answeredChoice, isQuestion, openingBody, requiresSignature, signLetter,
 } from '../systems/OpeningSystem';
 import NameInput from './common/NameInput';
+import KeyBadge from './common/KeyBadge';
 import DATA from '../data';
 
 const ui = DATA.ui;
@@ -54,7 +55,7 @@ export default function OpeningSequence({ page, index, playerName, flags, onSign
           </span>
         </div>
 
-        <div className="flex-1 overflow-y-auto px-6 py-5">
+        <div data-reading="" className="flex-1 overflow-y-auto px-6 py-5">
           {isLetter ? (
             <div className="border border-gold-dim/40 rounded-sm px-5 py-5 space-y-3">
               <p className="text-gold font-serif text-sm tracking-widest text-center">{title}</p>
@@ -81,11 +82,10 @@ export default function OpeningSequence({ page, index, playerName, flags, onSign
               <button
                 key={choice.id}
                 onClick={() => onAnswer(choice.id)}
+                data-hotkey-choice=""
                 className="group w-full text-left flex items-start gap-3 px-4 py-3 rounded-sm border border-game-border bg-bg hover:bg-bg-hover hover:border-gold hover:shadow-[inset_0_0_0_1px_rgba(196,163,90,0.35)] active:bg-bg-warm active:translate-y-px transition-all cursor-pointer"
               >
-                <span className="shrink-0 mt-0.5 w-5 h-5 flex items-center justify-center rounded-sm border border-gold-dim/50 text-gold-dim text-[11px] tabular-nums group-hover:border-gold group-hover:text-gold">
-                  {i + 1}
-                </span>
+                <KeyBadge n={i + 1} />
                 <span className="flex-1 min-w-0 text-sm font-serif text-cream group-hover:text-gold">
                   {choice.text}
                 </span>
@@ -104,6 +104,7 @@ export default function OpeningSequence({ page, index, playerName, flags, onSign
           <div className="bg-bg-card border border-game-border rounded-sm px-4 py-3 flex items-center justify-center relative">
             <button
               onClick={onAdvance}
+              data-hotkey-continue=""
               className="px-8 py-2.5 border border-gold-dim text-cream font-serif text-sm rounded-sm hover:bg-bg-hover hover:border-gold transition-all"
             >
               {ui.app.continue}

@@ -1,6 +1,7 @@
 import { Notice } from '../../types/game';
 import Passage from '../ScenePanel/Passage';
 import DATA from '../../data';
+import { useEscape } from './useEscape';
 
 const T = DATA.ui.notice;
 
@@ -14,6 +15,8 @@ interface Props {
  * (NoticeSystem). It has one way out, the button: there is nothing here to decide.
  */
 export default function NoticeModal({ notice, onClose }: Props) {
+  // Escape, Space and Enter all answer it (KeySystem); closing is acknowledging.
+  useEscape(onClose, true, 'notice');
   return (
     <div
       role="alertdialog"

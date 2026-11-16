@@ -2,6 +2,9 @@ import { Choice } from '../../types/game';
 import {
   getEffectChips, hasEstimatedYield, getChoiceCategory, ChoiceCategory,
 } from '../../systems/ChoicePreview';
+import { MAX_NUMBERED } from '../../systems/KeySystem';
+import KeyBadge from '../common/KeyBadge';
+import { useMediaQuery } from '../common/useMediaQuery';
 import DATA from '../../data';
 
 const C = DATA.ui.choicePanel;
@@ -17,8 +20,10 @@ const C = DATA.ui.choicePanel;
  */
 
 /** Estate tasks and the market trip already live in the left panel at desktop
- *  width, so hide their duplicates here from `lg` up (they return below `lg`,
- *  where the sidebar is gone). */
+ *  width, so their duplicates here are left out from `lg` up (they return below `lg`,
+ *  where the sidebar is gone). They are not drawn at all at that width, not hidden by CSS:
+ *  the keys 1–9 mean the nth numbered button on the page, and the badge must show that same n. */
+const LG_UP = '(min-width: 1024px)';
 const delegatedToSidebar = (id: string) => id.startsWith('task_') || id === 'go_to_market';
 
 /** Costs read rust, gains read gold — the estate's own two colours (D11/P7). */
@@ -84,13 +89,10 @@ function EventChoices({ choices, onChoice, locked }: Omit<Props, 'mode'> & { loc
               key={choice.id}
               onClick={() => !off && onChoice(choice.id)}
               disabled={off}
+              data-hotkey-choice=""
               className={`${buttonClass(off)} w-full flex items-start gap-3 px-4 py-3`}
             >
-              <span className={`shrink-0 mt-0.5 w-5 h-5 flex items-center justify-center rounded-sm border text-[11px] tabular-nums ${
-                off ? 'border-game-border text-game-dim' : 'border-gold-dim/50 text-gold-dim group-hover:border-gold group-hover:text-gold'
-              }`}>
-                {i + 1}
-              </span>
+              {i < MAX_NUMBERED && <KeyBadge n={i + 1} off={off} />}
               <span className="flex-1 min-w-0">
                 <p className={`text-sm font-serif ${off ? 'text-game-dim' : 'text-cream group-hover:text-gold'}`}>
                   {choice.text}
@@ -119,8 +121,14 @@ const CATS: { key: ChoiceCategory; label: string }[] = [
 ];
 
 function DailyChoices({ choices, onChoice, locked }: Omit<Props, 'mode'> & { locked: boolean }) {
+  const sidebar = useMediaQuery(LG_UP);
   const byCat: Record<ChoiceCategory, Choice[]> = { labor: [], social: [], rest: [] };
-  choices.forEach((c) => byCat[getChoiceCategory(c)].push(c));
+  choices
+    .filter((c) => !(sidebar && delegatedToSidebar(c.id)))
+    .forEach((c) => byCat[getChoiceCategory(c)].push(c));
+  // The number of a card is its place among the cards drawn, in the order they are drawn.
+  const number = new Map<string, number>();
+  CATS.forEach(({ key }) => byCat[key].forEach((c) => number.set(c.id, number.size + 1)));
 
   return (
     <div>
@@ -135,16 +143,21 @@ function DailyChoices({ choices, onChoice, locked }: Omit<Props, 'mode'> & { loc
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 {group.map((choice) => {
                   const off = locked || !!choice.disabled;
+                  const n = number.get(choice.id) as number;
                   return (
                     <button
                       key={choice.id}
                       onClick={() => !off && onChoice(choice.id)}
                       disabled={off}
-                      className={`${buttonClass(off)} px-4 py-3 ${delegatedToSidebar(choice.id) ? 'lg:hidden' : ''}`}
+                      data-hotkey-choice=""
+                      className={`${buttonClass(off)} px-4 py-3`}
                     >
-                      <p className={`text-sm font-serif mb-0.5 ${off ? 'text-game-dim' : 'text-cream group-hover:text-gold'}`}>
-                        {choice.text}
-                      </p>
+                      <div className="flex items-start gap-2 mb-0.5">
+                        {n <= MAX_NUMBERED && <KeyBadge n={n} off={off} />}
+                        <p className={`text-sm font-serif ${off ? 'text-game-dim' : 'text-cream group-hover:text-gold'}`}>
+                          {choice.text}
+                        </p>
+                      </div>
                       <ChoiceNote choice={choice} locked={locked} />
                       {!choice.disabled && choice.description ? <EffectChips choice={choice} /> : null}
                     </button>

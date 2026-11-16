@@ -249,7 +249,24 @@
     "load": "读取",
     "delete": "删除",
     "toTitle": "返回主界面",
-    "toTitleNote": "本季已自动保存，可在主界面继续。"
+    "toTitleNote": "本季已自动保存，可在主界面继续。",
+    "reading": "阅读",
+    "dimRead": "往季读过的文字，淡一档",
+    "keys": "数字键选择 · 空格往下读 · Esc 打开或关闭菜单"
+  },
+  "returnPoints": {
+    "heading": "回到这一季的某一天",
+    "note": "那天早晨之前的事原样留着，之后的由你重走。",
+    "point": "{day} · {name}",
+    "names": {
+      "market1": "第一个集市日",
+      "market2": "第二个集市日",
+      "hunt": "狩猎季",
+      "marketLast": "最后一个集市日"
+    },
+    "confirm": "回到{day}的早晨？",
+    "yes": "回去",
+    "no": "算了"
   },
   "opening": {
     "signatureLabel": "被担保人签收",

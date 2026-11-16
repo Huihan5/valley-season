@@ -1,6 +1,6 @@
-import { useReducer, useEffect, useState, useCallback, useMemo } from 'react';
+import { useReducer, useEffect, useState, useCallback, useMemo, useRef } from 'react';
 import { getEndingData, getEndingSubtitle, EndingId } from './systems/EndingSystem';
-import { getOpeningPage } from './systems/OpeningSystem';
+import { getOpeningPage, answeredChoice, isQuestion } from './systems/OpeningSystem';
 import { gameReducer, createInitialState, replaySeason } from './systems/GameEngine';
 import DATA from './data';
 import { fill } from './utils/text';
@@ -19,6 +19,14 @@ import Inventory from './components/common/Inventory';
 import Retrospect from './components/common/Retrospect';
 import CodexPanel from './components/common/CodexPanel';
 import Missed from './components/common/Missed';
+import ReturnPoints from './components/common/ReturnPoints';
+import { useHotkeys } from './components/common/useHotkeys';
+import { Beat, Surface } from './systems/KeySystem';
+import {
+  ReadMemory, ReadScreen, readReadMemory, writeReadMemory, recordScreen, screenOf, paragraphReader,
+  readReadingSettings, writeReadingSettings,
+} from './systems/ReadMemorySystem';
+import { GameState } from './types/game';
 import NoticeModal from './components/common/NoticeModal';
 import { noticeKey } from './systems/NoticeSystem';
 import { recordCodex, currentUnlocks, unlockedKeys, codexEntryOf } from './systems/CodexSystem';
@@ -99,6 +107,44 @@ export default function App() {
     writeSlot(AUTO_SLOT, state);
   }, [state, atTitle]);
 
+  // What this browser has read (ReadMemorySystem). Recorded whatever the setting says, when the
+  // player leaves a screen that was really shown: the state changes, or they go to the title.
+  // The ref is the record of the screen now showing; the memory is read only to draw the page.
+  const [dimRead, setDimRead] = useState(() => readReadingSettings().dimRead);
+  const [readMemory, setReadMemory] = useState<ReadMemory>(() => readReadMemory());
+  const memoryRef = useRef(readMemory);
+  const shownRef = useRef<ReadScreen | null>(null);
+  useEffect(() => {
+    const left = shownRef.current;
+    if (left) {
+      const next = recordScreen(memoryRef.current, left);
+      if (next !== memoryRef.current) {
+        memoryRef.current = next;
+        writeReadMemory(next);
+        setReadMemory(next);
+      }
+    }
+    shownRef.current = atTitle ? null : screenOf(state);
+  }, [state, atTitle]);
+
+  const changeDimRead = (on: boolean) => {
+    setDimRead(on);
+    writeReadingSettings({ dimRead: on });
+  };
+
+  const isRead = useMemo(
+    () => (dimRead && state.seed !== undefined && state.step !== undefined
+      ? paragraphReader(readMemory, state.seed, state.step, state.playerName)
+      : null),
+    [dimRead, readMemory, state.seed, state.step, state.playerName],
+  );
+
+  // After an ending, back to a morning of the same season (ReturnSystem). The autosave follows.
+  const returnToMorning = (morning: GameState) => {
+    playCue('ui_page');
+    dispatch({ type: 'LOAD_STATE', state: morning });
+  };
+
   // An event with nothing to decide gets a "继续" — either because it never had
   // choices, or because none of them apply to this playthrough.
   const isNarrativeOnly = state.activeEvent !== null && state.currentChoices.length === 0;
@@ -107,6 +153,28 @@ export default function App() {
   const pendingInput = state.activeEvent?.textInput && !state.playerName
     ? state.activeEvent.textInput
     : null;
+
+  // What the keyboard sees of the screen (KeySystem): where we are, and what it waits for.
+  const ending = state.demoComplete && !!state.endingId;
+  const page = state.openingPage === null ? null : getOpeningPage(state.openingPage);
+  const surface: Surface = atTitle ? 'title'
+    : page ? (state.playerName ? 'opening' : 'nameEntry')
+      : ending ? 'ending' : 'season';
+  // Until the name is given the opening is only the signature (NameEntry); after it, a page is a
+  // 继续, or the one question the Baron asks.
+  const beat: Beat = page
+    ? (!state.playerName ? 'input' : isQuestion(page) && !answeredChoice(page, state.flags) ? 'choices' : 'continue')
+    : ending ? 'none'
+      : pendingInput ? 'input'
+        : isNarrativeOnly || state.pendingAdvance ? 'continue'
+          : 'choices';
+  const openSaves = () => { refreshManualSaves(); setSavesOpen(true); };
+  useHotkeys({
+    surface,
+    beat,
+    screenKey: `${surface}:${state.seed}:${state.step}:${state.day}:${state.phase}:${state.openingPage}:${state.activeEvent?.id ?? ''}`,
+    onOpenMenu: openSaves,
+  });
 
   useEffect(() => {
     document.title = atTitle
@@ -231,6 +299,8 @@ export default function App() {
             onLoad={loadManual}
             onDelete={deleteManual}
             onClose={() => setSavesOpen(false)}
+            dimRead={dimRead}
+            onDimReadChange={changeDimRead}
           />
         )}
         {retroOpen && (
@@ -240,8 +310,7 @@ export default function App() {
     );
   }
 
-  const openingPage = state.openingPage === null ? null : getOpeningPage(state.openingPage);
-  if (openingPage) {
+  if (page) {
     // Name first, then the documents (D6): until it is given, the only screen is
     // the signature. After that the letter renders already bearing it.
     if (!state.playerName) {
@@ -249,7 +318,7 @@ export default function App() {
     }
     return (
       <OpeningSequence
-        page={openingPage}
+        page={page}
         index={state.openingPage as number}
         playerName={state.playerName}
         flags={state.flags}
@@ -279,6 +348,8 @@ export default function App() {
       </button>
       {/* The ending keeps its own close; this sits apart from it and stays shut until opened. */}
       <Missed state={state} onOpenCodex={openCodexAt} />
+      {/* As quiet as the line above it: a morning of this same season to walk again. */}
+      <ReturnPoints key={`${state.seed}-${state.step}`} state={state} onReturn={returnToMorning} />
     </div>
   ) : pendingInput ? (
     <NameInput
@@ -288,6 +359,7 @@ export default function App() {
   ) : isNarrativeOnly ? (
     <button
       onClick={() => dispatch({ type: 'ADVANCE_DAY_EVENT' })}
+      data-hotkey-continue=""
       className="px-8 py-2.5 border border-gold-dim text-cream font-serif text-sm rounded-sm hover:bg-bg-hover hover:border-gold transition-all"
     >
       {ui.app.continue}
@@ -296,6 +368,7 @@ export default function App() {
     // An evening action's outcome is on screen; the day turns only on the click.
     <button
       onClick={() => dispatch({ type: 'COMMIT_ADVANCE' })}
+      data-hotkey-continue=""
       className="px-8 py-2.5 border border-gold-dim text-cream font-serif text-sm rounded-sm hover:bg-bg-hover hover:border-gold transition-all"
     >
       {ui.app.continue}
@@ -337,9 +410,10 @@ export default function App() {
           <div className="min-w-0 lg:flex-1">
             <ScenePanel
               state={state}
-              onOpenSaves={() => { refreshManualSaves(); setSavesOpen(true); }}
+              onOpenSaves={openSaves}
               onOpenInventory={() => { setInventoryOpen(true); playCue('ui_page'); }}
               onOpenCodex={() => { recordCodex(currentUnlocks(state)); setCodexOpen(true); playCue('ui_page'); }}
+              isRead={isRead}
             >
               <div key={`${state.day}-${state.phase}`} className="choices-enter">
                 {choiceArea}
@@ -372,6 +446,8 @@ export default function App() {
             onDelete={deleteManual}
             onLeave={state.demoComplete ? undefined : leaveToTitle}
             onClose={() => setSavesOpen(false)}
+            dimRead={dimRead}
+            onDimReadChange={changeDimRead}
           />
         )}
 

@@ -1,4 +1,5 @@
 import { SaveSummary, ManualSlot, MANUAL_SLOTS } from '../../systems/SaveSystem';
+import { useEscape } from './useEscape';
 import { formatMoment } from '../../systems/TimeSystem';
 import DATA from '../../data';
 import { fill } from '../../utils/text';
@@ -17,6 +18,9 @@ interface Props {
   /** Leave the season for the title, keeping it. Offered only while a season is in progress. */
   onLeave?: () => void;
   onClose: () => void;
+  /** Whether prose read in an earlier season is set back a step (ReadMemorySystem). */
+  dimRead: boolean;
+  onDimReadChange: (dimRead: boolean) => void;
 }
 
 function savedAtLabel(iso: string): string {
@@ -32,7 +36,8 @@ function savedAtLabel(iso: string): string {
  * its own; these exist so a run can be branched — stand on Day 27 and take the
  * other road, without playing the month again.
  */
-export default function SaveMenu({ slots, canSave, onSave, onLoad, onDelete, onLeave, onClose }: Props) {
+export default function SaveMenu({ slots, canSave, onSave, onLoad, onDelete, onLeave, onClose, dimRead, onDimReadChange }: Props) {
+  useEscape(onClose, true, 'saves');
   return (
     <div
       className="fixed inset-0 bg-bg/80 flex items-center justify-center z-50 p-6"
@@ -102,6 +107,20 @@ export default function SaveMenu({ slots, canSave, onSave, onLoad, onDelete, onL
           })}
         </div>
 
+        {/* How a second season reads: a browser setting, like the sound, never part of a save. */}
+        <div className="px-5 py-3 border-t border-game-border flex items-center gap-3">
+          <span className="text-game-dim text-xs shrink-0">{T.reading}</span>
+          <label className="flex cursor-pointer items-center gap-2 font-serif text-xs text-game-text">
+            <input
+              type="checkbox"
+              checked={dimRead}
+              onChange={e => onDimReadChange(e.target.checked)}
+              className="accent-gold"
+            />
+            {T.dimRead}
+          </label>
+        </div>
+
         {onLeave && (
           <div className="px-5 py-3 border-t border-game-border flex items-center justify-between gap-3">
             <p className="text-game-dim text-xs">{T.toTitleNote}</p>
@@ -113,6 +132,9 @@ export default function SaveMenu({ slots, canSave, onSave, onLoad, onDelete, onL
             </button>
           </div>
         )}
+
+        {/* Which keys there are: drawn only where a keyboard is likely. */}
+        <p className="key-legend px-5 py-2 border-t border-game-border text-game-dim text-[11px] font-serif">{T.keys}</p>
       </div>
     </div>
   );

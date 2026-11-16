@@ -4,6 +4,7 @@ import { getCodex, codexCategoryOf, CodexEntryView } from '../../systems/CodexSy
 import { CodexCategory } from '../../data/codex';
 import DATA from '../../data';
 import { fill } from '../../utils/text';
+import { useEscape } from './useEscape';
 
 const T = DATA.codex;
 
@@ -25,6 +26,7 @@ interface Props {
  * deeper layers stay locked in place until their trust is reached (scheme 乙 + 精修).
  */
 export default function CodexPanel({ state, focus, onClose }: Props) {
+  useEscape(onClose, true, 'codex');
   return (
     <div
       className="fixed inset-0 bg-bg/80 flex items-center justify-center z-50 p-6"

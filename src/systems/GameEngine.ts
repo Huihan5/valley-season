@@ -376,6 +376,25 @@ export function replaySeason(saved: GameState): GameState | null {
 }
 
 /**
+ * Run a season again from its seed, stopping at the first state the test accepts — the initial
+ * state included, then after every recorded action. Its history is the prefix that led there.
+ * Null when there is nothing to replay, an action is refused on the way, or the test never holds.
+ * It checks nothing about the end of the season; whoever needs that asks replaySeason first.
+ */
+export function replayUntil(saved: GameState, reached: (s: GameState) => boolean): GameState | null {
+  if (saved.seed === undefined || !saved.history) return null;
+  let replay = createInitialState(saved.seed);
+  if (reached(replay)) return replay;
+  for (const action of saved.history) {
+    const next = gameReducer(replay, action);
+    if (next === replay) return null;
+    replay = next;
+    if (reached(replay)) return replay;
+  }
+  return null;
+}
+
+/**
  * Turn the phase — but not before the player has read what just happened. An
  * action taken in the day's last phase advances into the next morning, and the
  * day-change reset inside advancePhase clears `lastResult`. When such an action

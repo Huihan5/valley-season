@@ -1,4 +1,5 @@
-import { ReactNode, useEffect, useRef } from 'react';
+import { ReactNode, useEffect, useMemo, useRef } from 'react';
+import { withReadParts } from '../../systems/ReadMemorySystem';
 import { GameState } from '../../types/game';
 import { PHASE_LABELS, dayName, isHuntSeason } from '../../systems/TimeSystem';
 import { getFatigueNote, getFatigueStatus } from '../../systems/FatigueSystem';
@@ -16,10 +17,24 @@ interface Props {
   onOpenCodex: () => void;
   /** The choices, rendered inline under the prose and scrolling with it (B). */
   children?: ReactNode;
+  /**
+   * Whether a paragraph was read in an earlier season, or further along this one (ReadMemorySystem).
+   * Null when the setting is off: then the panel reads exactly as it always has.
+   */
+  isRead?: ((paragraph: string) => boolean) | null;
 }
 
-export default function ScenePanel({ state, onOpenSaves, onOpenInventory, onOpenCodex, children }: Props) {
+export default function ScenePanel({ state, onOpenSaves, onOpenInventory, onOpenCodex, children, isRead = null }: Props) {
   const { day, phase, activeEvent, currentSceneText, lastResult } = state;
+  // The result and the scene only: what was read before is set back on top of the hints' own marks.
+  const resultParts = useMemo(
+    () => (isRead && lastResult ? withReadParts(lastResult, state.lastResultParts, isRead) : state.lastResultParts),
+    [isRead, lastResult, state.lastResultParts],
+  );
+  const sceneParts = useMemo(
+    () => (isRead ? withReadParts(currentSceneText, state.sceneParts, isRead) : state.sceneParts),
+    [isRead, currentSceneText, state.sceneParts],
+  );
   // Overwork the player can see in the scene, not only as a bar in the panel (D7).
   const fatigueNote = getFatigueNote(state.fatigue);
   const spent = getFatigueStatus(state.fatigue) === 'exhausted';
@@ -90,7 +105,7 @@ export default function ScenePanel({ state, onOpenSaves, onOpenInventory, onOpen
       {/* What just happened, then where you now are. The prose keeps a reading
           measure of its own rather than running the full width of the panel
           (PlaytestFeedback 2.a). */}
-      <div ref={readingRef} className="flex-1 lg:overflow-y-auto px-5 py-4 flex flex-col gap-4">
+      <div ref={readingRef} data-reading="" className="flex-1 lg:overflow-y-auto px-5 py-4 flex flex-col gap-4">
         {/* The body telling on the player, in the scene itself (D7). Amber while
             merely tired; rust once spent, where 嘴唇发紫 landed. */}
         {fatigueNote && (
@@ -106,7 +121,7 @@ export default function ScenePanel({ state, onOpenSaves, onOpenInventory, onOpen
             {speaker && <Speaker id={speaker} className="mb-2" />}
             <Passage
               text={lastResult}
-              parts={state.lastResultParts}
+              parts={resultParts}
               speakers={!speaker}
               className="text-cream font-serif text-sm leading-relaxed whitespace-pre-line"
             />
@@ -114,7 +129,7 @@ export default function ScenePanel({ state, onOpenSaves, onOpenInventory, onOpen
         )}
         <Passage
           text={currentSceneText}
-          parts={state.sceneParts}
+          parts={sceneParts}
           className="text-game-text font-serif text-sm leading-relaxed whitespace-pre-line max-w-[46rem]"
         />
 

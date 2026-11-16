@@ -3,6 +3,7 @@ import { EndingId } from '../../systems/EndingSystem';
 import { CodexBrowser } from './CodexPanel';
 import EndingList from './EndingList';
 import DATA from '../../data';
+import { useEscape } from './useEscape';
 
 const T = DATA.ui.retrospect;
 
@@ -21,6 +22,7 @@ interface Props {
  */
 export default function Retrospect({ seen, onClose }: Props) {
   const [page, setPage] = useState<Page>('codex');
+  useEscape(onClose, true, 'retrospect');
 
   return (
     <div

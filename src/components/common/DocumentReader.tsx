@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { GameState } from '../../types/game';
 import { DocBlock, getDocument } from '../../systems/DocumentSystem';
+import { useEscape } from './useEscape';
 import DATA from '../../data';
 
 const T = DATA.ui.inventory;
@@ -20,6 +21,7 @@ interface Props {
  * Everything here is layout. What the paper says is the DocumentSystem's and the data's.
  */
 export default function DocumentReader({ state, id, title, onBack }: Props) {
+  useEscape(onBack, true, 'document');
   const [both, setBoth] = useState(true);
   const doc = getDocument(state, id);
   if (!doc) return null;

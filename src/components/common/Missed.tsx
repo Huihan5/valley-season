@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { GameState } from '../../types/game';
 import { getMissed } from '../../systems/MissedSystem';
 import DATA from '../../data';
@@ -19,6 +19,13 @@ interface Props {
 export default function Missed({ state, onOpenCodex }: Props) {
   const lines = getMissed(state);
   const [open, setOpen] = useState(false);
+  const list = useRef<HTMLUListElement>(null);
+
+  // Folded at the foot of the reading column, the list opens below what can be seen: bring it in.
+  useEffect(() => {
+    if (open) list.current?.scrollIntoView?.({ block: 'nearest' });
+  }, [open]);
+
   if (lines.length === 0) return null;
 
   return (
@@ -34,7 +41,7 @@ export default function Missed({ state, onOpenCodex }: Props) {
       </button>
 
       {open && (
-        <ul className="mt-2 ml-1 border-l border-game-border pl-4 space-y-1.5">
+        <ul ref={list} className="mt-2 ml-1 border-l border-game-border pl-4 space-y-1.5">
           {lines.map((line) => (
             <li key={line.id}>
               {line.codexEntry ? (

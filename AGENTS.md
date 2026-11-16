@@ -1,112 +1,111 @@
 # Valley Season 河谷季
 
-A text-based estate management game set in the Duchy of Valewisp, Kingdom of Marigni. React browser game with separated content and logic layers.
+A text-based estate management game set in the Duchy of Valewisp, Kingdom of Marigni. A React browser game with separated content and logic layers, in Chinese and English. The player is a newly hired steward of the Maplegate estate (枫径庄园) through a 30-day autumn season, and the game has five endings (`ENDING_IDS` in `src/systems/EndingSystem.ts`: `ending1`, `ending2`, `ending3`, `ending4a`, `ending4b`).
 
 ## Tech Stack
 
-- React (functional components, hooks)
-- JavaScript/TypeScript
-- Tailwind CSS for styling
-- Vite for build tooling
-- No external game engine — pure React state management
+- React 18 (functional components, hooks), TypeScript, Tailwind CSS, Vite. No game engine: plain React state through one reducer.
+- Vitest in the `node` environment (no DOM), vite-node for the scripts in `scripts/`.
+- Two builds: `npm run build` (ordinary `dist/`) and `npm run build:standalone` (one self-contained HTML file, `dist-standalone/index.html`).
 
 ## Project Structure
 
 ```
 valley-season/
-├── AGENTS.md                # You are here — project rules
-├── docs/                    # Design documents (READ-ONLY reference)
-│   ├── GDD.md               # GDD v3.0 — sole design authority, numbers live in ch.5
-│   ├── DELTA_v2_to_v3.md    # v2→v3 change manifest
-│   ├── V3_BUILD_BRIEF.md    # Phased implementation brief for the v3 rebuild
-│   ├── WORLDBOOK.md         # Kingdom of Marigni setting bible
-│   ├── STYLE_GUIDE.md       # Writing tone & sensory reference for narrative text
-│   └── CHANGELOG.md         # Track all changes with dates
+├── AGENTS.md                # You are here. CLAUDE.md carries the same rules for Claude Code; change both together
+├── docs/
+│   ├── GDD_NEXT.md          # Sole design and numbers authority (numbers in ch.5)
+│   ├── DEVELOPMENT_PLAN.md  # What is not built yet, and decided-but-unbuilt design
+│   ├── CHANGELOG.md         # Chinese, newest entry on top, headed `## [YYYY-MM-DD] — …`
+│   ├── ImplementationPlan_2026-09.md  # Carries the 恢复点 (recovery anchor) to resume from
+│   ├── WORLDBOOK.md  STYLE_GUIDE.md  SOUND_LIST.md  SOUND_CREDITS.md
+│   ├── GDD.md  DELTA_v2_to_v3.md  V3_BUILD_BRIEF.md  V3_PROGRESS.md  HANDOVER_2026-07-28.md  # history
+│   └── playtest/            # Tester feedback
+├── 剧情文本/                 # The plot script: all Chinese story text as one readable file. A mirror
+├── 文本编辑指南.md           # How the author edits text (script and text-review round trips)
+├── text-review/             # (gitignored) flat zh/en mirror of all prose, from `npm run text:export`
+├── design-drafts/           # (gitignored) author drafts and source material
 ├── src/
-│   ├── components/          # React UI components
-│   │   ├── ScenePanel/      # Left: narrative text, dialogue, events
-│   │   ├── StatusPanel/     # Right: date, weather, resources, relationships
-│   │   ├── ChoicePanel/     # Bottom: action buttons (2-3 options)
-│   │   └── common/          # Shared UI primitives
-│   ├── data/                # ALL narrative content lives here (content-logic separation)
-│   │   ├── events/          # Fixed events (day1.json, day3.json...) and random event pool
-│   │   ├── dialogue/        # NPC dialogue trees, keyed by trust level
-│   │   ├── scenes/          # Location descriptions, weather variants, ambient text
-│   │   └── endings/         # Five ending scripts
-│   ├── systems/             # Game logic (no narrative text in these files)
-│   │   ├── TimeSystem.ts    # Day/phase progression, 30-day cycle
-│   │   ├── WeatherSystem.ts # Weather generation from probability pools
-│   │   ├── ResourceSystem.ts# Grain, Guldmark, Timber, Renown tracking
-│   │   ├── RelationSystem.ts# NPC trust values, threshold unlocks
-│   │   ├── EventSystem.ts   # Fixed event triggers + random event pool draw
-│   │   ├── FatigueSystem.ts # Rest/fatigue counter
-│   │   └── EndingSystem.ts  # Day 30 ending determination logic
-│   ├── assets/              # Art: character portraits, region map
-│   ├── utils/               # Pure helper functions
-│   └── App.tsx              # Root component, game state orchestration
-├── public/
-├── tests/                   # Test files mirror src/ structure
-├── package.json
-└── vite.config.js
+│   ├── data/                # All content and tuning
+│   │   ├── zh/  en/         # Paired trees: actions, codex, documents, inventory, opening, ui,
+│   │   │                    #   system_lines, dialogue/, endings/, events/, scenes/
+│   │   ├── shared/          # Language-neutral data (the deed)
+│   │   └── config.ts  cues.ts  codex.ts  speakers.ts  locale.ts  index.ts
+│   ├── systems/             # Game logic, no prose (see below)
+│   ├── components/          # Renderers: ScenePanel, StatusPanel, ChoicePanel, common/, OpeningSequence, TitleScreen
+│   ├── audio/               # Cue player, settings, `useCues`; sound files in src/assets/audio
+│   ├── assets/  types/  utils/   # Portraits and map; `types/game.ts`; rng, speech, text helpers
+│   └── App.tsx              # Shell: title, opening, season, overlays; owns the reducer
+├── scripts/                 # simulate, audit-text, text-export/import, script-export/import
+├── tests/                   # `tests/**/*.test.ts`, one file or more per system; helpers/ holds the sim bots
+└── .claude/launch.json      # Dev server entry for Claude Code's browser preview, name `valley-season`
 ```
+
+`src/systems/`, by what each does:
+- **Engine, time, weather**: `GameEngine` (the reducer, `replaySeason`, `replayUntil`), `TimeSystem`, `WeatherSystem`, `FatigueSystem`.
+- **Economy**: `ResourceSystem`, `MarketSystem`, `EstateTaskSystem`, `ChoicePreview`.
+- **People**: `RelationSystem`, `NobleSystem`.
+- **Events**: `EventSystem` (fixed events and action results), `RandomEventSystem`, `OpeningSystem`, `NoticeSystem`, `FlagRegistry`.
+- **Investigation and endings**: `ClueSystem`, `JournalSystem`, `EndingSystem`, `MissedSystem`, `ReturnSystem`.
+- **Text composition and hints**: `SceneSystem`, `SeenSystem`, `BottomLineSystem`, `DocumentSystem`, `InventorySystem`, `CueSystem`.
+- **Browser-level records** (outlive a season): `SaveSystem`, `CollectionSystem` (endings gallery), `CodexSystem`, `ReadMemorySystem`.
+- **Keys**: `KeySystem` (pure decision), with the DOM half in `components/common/useHotkeys.ts` and `useEscape.ts`.
 
 ## Critical Rules
 
-### Content-Logic Separation (MOST IMPORTANT)
-- **All narrative text** (scene descriptions, dialogue, event text, ending scripts) lives in `src/data/` as JSON/MD files
-- **All game logic** (state changes, calculations, triggers) lives in `src/systems/`
-- Changing a scene description must NEVER require touching system code
-- Changing a game rule must NEVER require touching narrative files
-- Components in `src/components/` are renderers — they read from systems and display from data
+### Content and logic stay apart (most important)
+- Every user-visible string lives in `src/data/zh/` **and** `src/data/en/`, paired. The suite enforces it (`tests/Localization.test.ts` compares the key sets). Chinese is still a draft: revising it means carrying the English along.
+- Logic lives in `src/systems/` with no prose; components only render. Changing a scene must never touch system code, changing a rule must never touch narrative files.
+- Numbers (rates, costs, thresholds, probabilities, timings) live in `src/data/config.ts`, which mirrors GDD_NEXT ch.5. Never hardcode a balance number in a system.
+- Trust, renown and standing are shown as words or ↑/↓, never as raw numbers. Counts (grain, gold, timber) keep their numbers.
 
-### Numerical Values
-- NEVER hardcode game balance numbers in system files
-- All values (harvest rates, costs, thresholds, weather probabilities) come from `src/data/config.ts`, which mirrors **GDD ch.5**
-- GDD v3 is the sole numerical authority — the standalone `NUMBERS.md` was retired when v3 folded its tables into ch.5
+### The engine is a pure function of `(seed, history)`
+- `GameEngine.ts` is a reducer. A season is its seed plus the list of `SeasonAction`s; saves store both, and loading a save in the other language replays the season so the words change and the numbers do not. No `Math.random()`: draw from the season's rng.
+- A new player action must be added to `SeasonAction` (`src/types/game.ts`) and handled in `reduceSeason`. Anything that makes zh and en differ in logic (a branch on text, a different count of choices) breaks cross-language replay; `tests/GameEngine.test.ts` guards it.
+- Things that outlive a season (saves list, endings seen, codex, sound and reading settings, read memory) live in `localStorage` through their own system and never in `GameState`.
 
-### Writing Standards (for narrative content in src/data/)
-- Refer to `docs/STYLE_GUIDE.md` for tone, sensory palette, and voice samples
-- Writing tone: controlled, precise, cold-palette beauty. Reference: Sebald's architectural descriptions, Pamuk's Istanbul passages
-- Avoid fantasy clichés. This world is ancient, rational, built to last — not magical or mystical
-- The "sacred" should feel institutional and geological, not mystical
-- Religion uses forge/craft metaphors, NOT pastoral/spiritual ones. The local religious figure is a 匠师 (Forge-keeper/Master), not a priest/father
-- NPC dialogue must match their established voice (see GDD character section for voice samples)
+### Text
+- Tone and sensory palette: `docs/STYLE_GUIDE.md`. Controlled, precise, cold-palette beauty (Sebald's architecture, Pamuk's Istanbul). No fantasy clichés: this world is ancient, rational, built to last. The sacred is institutional and geological, not mystical.
+- Religion uses forge and craft metaphors, never pastoral ones. The local religious figure is a 匠师 (Forge-keeper), not a priest or father. NPC dialogue must match the established voice (GDD character section).
+- Punctuation: Chinese uses fullwidth punctuation and “” quotes (never 「」 or half-width); English uses curly ’.
+- A paragraph spoken by someone starts with `{@id}` (ids in `src/data/speakers.ts`; `tests/SpeechData.test.ts`).
+- A line that depends on state is a keyed part: difference hints (`SeenSystem`) set back what is unchanged since last shown. A random pool line is not keyed.
+- `npm run audit` finds lines whose claims their place does not back.
+- After editing prose in `src/data`, re-export the mirrors with `npm run text:export` and `npm run script:export`, but only when `text-review/` holds no unimported edits (see `文本编辑指南.md`: import first, export after).
+- Edit JSON with minimal diffs, keeping each file's formatting.
 
-### Testing
-- Run: `npm test`
-- Every system in `src/systems/` must have corresponding tests
-- Test game-critical paths: can the player reach each of the 5 endings? Does the harvest math check out?
+### UI
+- Layout is narrative-first: the choices sit inline under the prose in the reading column, with the estate tasks and the log in a left rail and the readouts on the right. Below `lg` everything stacks into one scrolling column. Do not re-open the layout question.
+- Keyboard: `KeySystem` decides what a key means (matched on `event.code`; held keys, modifiers, IME composition, typing in a field and the first `HOTKEY_GUARD_MS` of a new screen are refused), `useHotkeys` acts on the page. A numbered choice carries `data-hotkey-choice`, a 继续 button `data-hotkey-continue`, the reading column `data-reading`. Every overlay registers with `useEscape` so one Escape closes one thing. Keep the number shown equal to the key that works.
+- Anything that restarts or replaces a season (重新开始, 新的一季, 继续 on the title) is deliberately not bound to a key.
 
-## Development Workflow
+## Testing
 
-### Iteration Cycle
-This project follows a phased development plan. Each phase has a clear deliverable:
+- `npm test` (Vitest) and `npx tsc --noEmit` must both be clean before a unit of work is done. Every system has tests; logic you want tested is a pure function in `src/systems/`.
+- `npm run sim -- --seeds 200` after touching the economy, the events or the ending numbers: strategy bots play seasons on the real engine and report ending reach and economy. `tests/Simulation.test.ts` guards the same.
+- UI changes are checked in a real browser (`npm run dev`); tests cannot see the DOM.
+- `npm run lint` has no ESLint config and fails. Known and accepted; not a task.
 
-The v2 build (core loop, fixed-event chain, 5 endings) shipped in June 2026. The project is now
-rebuilding to GDD v3 — see `docs/V3_BUILD_BRIEF.md` for the authoritative phase plan:
+## Workflow
 
-0. **Stage 0 — Rename inventory**: enumerate every occurrence, mark replace vs. delete.
-1. **Stage 1 — Rename & cleanup**: apply GDD ch.12 name table, strip retired concepts. Ending logic untouched.
-2. **Stage 2 — New systems & variables**: playerName, nobleTrust, lordImpression, market rework.
-3. **Stage 3 — Repeatable text**: greetings, location bases, act variants, weather lines, action results.
-4. **Stage 4 — Events**: 16 rewrites + Day 0/4/8/11/13/27, market structure, officer encounters.
-5. **Stage 5 — Investigation & endings**: three clue groups, rewritten ending determination.
-6. **Stage 6 — Playtest fixes**: remaining UI items from `docs/playtest/PlaytestFeedback.md`.
+- Read the relevant doc before starting. `GDD_NEXT.md` for rules and numbers, `DEVELOPMENT_PLAN.md` for what is next.
+- After each unit of work, add an entry to `docs/CHANGELOG.md` (Chinese, newest on top).
+- If a design decision is ambiguous, stop and ask. No guessing and no TODOs in code: this world's setting density is high enough that one wrong detail causes rework in ten other places.
+- Never edit `docs/` without the author's approval. `CHANGELOG.md` is the exception, and GDD_NEXT is updated when the author says so.
+- Work on `main`; no feature branches. Commit and push only when asked.
+- Small connective Chinese may be written by the agent (keep the author's sentences, flag it in the CHANGELOG). Big scenes are the author's.
 
-### Self-Management Protocol
-When working autonomously:
-1. Before starting work, read the relevant docs/ file to confirm design intent
-2. After completing a unit of work, update `docs/CHANGELOG.md` with what changed and why
-3. If a design decision is ambiguous (not covered in the GDD), **stop and ask**. Do not guess and do not leave a TODO in the code — this world's setting density is high enough that one wrong detail causes rework in ten other places (see `docs/V3_BUILD_BRIEF.md`)
-4. Run tests after every system change
-5. Never modify docs/ files without explicit user approval — those are the user's design authority
+## Status
 
-### Commands
-- Dev server: `npm run dev`
-- Build: `npm run build`
-- Test: `npm test`
-- Lint: `npm run lint`
+The v3 rebuild (Stage 0 to 6 in `V3_BUILD_BRIEF.md`) is finished and is history. Current work is text polish, blind playtests, and the items in `DEVELOPMENT_PLAN.md`.
 
-## World Context (brief — see docs/ for full reference)
+## Commands
 
-Marigni is a wealthy Western European microstate with a unique "rational feudalism" — monarchy, council, and parliament coexist, and feudal contracts operate within a modern legal framework. The national religion (Temple Forged by the Sacred Flame) worships forge-craft, not a deity in the Christian sense. Currency is the Guldmark (圣火金卢). The game takes place in the Duchy of Valewisp, a pastoral agricultural region, on a mid-sized estate called Maplegate (枫径庄园). The player is a newly hired steward managing the estate through a 30-day autumn harvest season.
+- `npm run dev` · `npm run build` · `npm run build:standalone` · `npm run preview`
+- `npm test` · `npm run test:watch` · `npm run lint` (broken, see above)
+- `npm run sim -- --seeds 200` · `npm run audit`
+- `npm run text:export` · `npm run text:import` · `npm run script:export` · `npm run script:import`
+
+## World Context (brief; see docs/ for full reference)
+
+Marigni is a wealthy Western European microstate with a "rational feudalism": monarchy, council and parliament coexist, and feudal contracts operate within a modern legal framework. The national religion (Temple Forged by the Sacred Flame) worships forge-craft, not a deity in the Christian sense. Currency is the Guldmark (圣火金卢). The game takes place in the Duchy of Valewisp, a pastoral agricultural region, on a mid-sized estate called Maplegate (枫径庄园).

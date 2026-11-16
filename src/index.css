@@ -11,6 +11,25 @@
   animation: fadeInUp 0.18s ease-out both;
 }
 
+/* The number that picks a choice from the keyboard, and the line that says so: only where a keyboard
+   is likely, never on a touch screen. */
+.key-badge {
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+.key-legend {
+  display: none;
+}
+@media (pointer: fine) {
+  .key-badge {
+    display: flex;
+  }
+  .key-legend {
+    display: block;
+  }
+}
+
 @layer base {
   html, body, #root {
     height: 100%;

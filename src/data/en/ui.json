@@ -249,7 +249,24 @@
     "load": "Load",
     "delete": "Delete",
     "toTitle": "Return to title",
-    "toTitleNote": "This season is saved; continue it from the title."
+    "toTitleNote": "This season is saved; continue it from the title.",
+    "reading": "Reading",
+    "dimRead": "Set back text read in an earlier season",
+    "keys": "Number keys choose · Space reads on · Esc opens or closes this menu"
+  },
+  "returnPoints": {
+    "heading": "Go back to a day of this season",
+    "note": "Everything before that morning stays as it happened; the rest is yours to walk again.",
+    "point": "{day} · {name}",
+    "names": {
+      "market1": "the first market day",
+      "market2": "the second market day",
+      "hunt": "the hunt",
+      "marketLast": "the last market day"
+    },
+    "confirm": "Go back to the morning of {day}?",
+    "yes": "Go back",
+    "no": "Stay"
   },
   "opening": {
     "signatureLabel": "Received by the Guaranteed Person",

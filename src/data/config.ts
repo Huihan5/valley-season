@@ -506,6 +506,23 @@ export const MISSED_LINES_MAX = 3;
 // "集市的周六你大多留在了庄园": the four market Saturdays, and at most this many were visited.
 export const MISSED_MARKET_VISITS_FEW = 1;
 
+// ── 往季读过的文字 (ReadMemorySystem) ────────────────────────────────────────
+// A paragraph shorter than this (non-space characters, a speaker mark not counted) is neither
+// remembered nor set back: "嗯。" or a lone "继续" read in every season says nothing about the reading.
+export const READ_MEMORY_MIN_CHARS = 6;
+
+// ── 键盘 (KeySystem, useHotkeys) ──────────────────────────────────────────────
+// After the screen changes, the keys that choose or continue are ignored for this long, so a double
+// tap cannot answer the screen that has just come up.
+export const HOTKEY_GUARD_MS = 300;
+// "Read on" (space) scrolls the reading column by this much of its visible height; only at the
+// bottom does the key go on and continue.
+export const READ_ON_SCROLL_FRACTION = 0.85;
+// The column counts as at its bottom when no more than this many pixels are left below.
+export const READ_ON_BOTTOM_SLACK_PX = 6;
+// A smooth scroll that has not moved after this long is taken as not coming, and the column jumps.
+export const READ_ON_SMOOTH_GRACE_MS = 150;
+
 // ── 声音 (DEVELOPMENT_PLAN 3.9) ───────────────────────────────────────────────
 // Quiet by design: a bed deepens the silence, it never leads. None of this is heard until a
 // sound file is dropped into src/assets/audio/ under a cue's id (docs/SOUND_LIST.md).
