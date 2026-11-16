@@ -15,9 +15,10 @@ valley-season/
 ├── CLAUDE.md                # You are here. AGENTS.md carries the same rules for other agents; change both together
 ├── docs/
 │   ├── GDD_NEXT.md          # Sole design and numbers authority (numbers in ch.5)
-│   ├── DEVELOPMENT_PLAN.md  # What is not built yet, and decided-but-unbuilt design
+│   ├── DEVELOPMENT_PLAN.md  # Where things stand (its opening 现状 block, updated at the end of each round),
+│   │                        #   what is not built yet, what waits on the author (4.1), far-future ideas (5)
 │   ├── CHANGELOG.md         # Chinese, newest entry on top, headed `## [YYYY-MM-DD] — …`
-│   ├── ImplementationPlan_2026-09.md  # Carries the 恢复点 (recovery anchor) to resume from
+│   ├── legacy/              # Retired plans (ImplementationPlan_2026-09.md). History, not instructions
 │   ├── WORLDBOOK.md  STYLE_GUIDE.md  SOUND_LIST.md  SOUND_CREDITS.md
 │   ├── GDD.md  DELTA_v2_to_v3.md  V3_BUILD_BRIEF.md  V3_PROGRESS.md  HANDOVER_2026-07-28.md  # history
 │   └── playtest/            # Tester feedback
@@ -84,14 +85,15 @@ valley-season/
 - `npm test` (Vitest) and `npx tsc --noEmit` must both be clean before a unit of work is done. Every system has tests; logic you want tested is a pure function in `src/systems/`.
 - `npm run sim -- --seeds 200` after touching the economy, the events or the ending numbers: strategy bots play seasons on the real engine and report ending reach and economy. `tests/Simulation.test.ts` guards the same.
 - UI changes are checked in the browser preview (`.claude/launch.json`, name `valley-season`); tests cannot see the DOM.
+- When the check is done, stop the dev server **and close the preview tab**. The game has sound: a tab left open keeps playing birds and wind on the author's machine, even after the server has stopped.
 - `npm run lint` has no ESLint config and fails. Known and accepted; not a task.
 
 ## Workflow
 
 - Read the relevant doc before starting. `GDD_NEXT.md` for rules and numbers, `DEVELOPMENT_PLAN.md` for what is next.
-- After each unit of work, add an entry to `docs/CHANGELOG.md` (Chinese, newest on top).
+- After each unit of work, add an entry to `docs/CHANGELOG.md` (Chinese, newest on top). At the end of a round, bring the 现状 block at the top of `docs/DEVELOPMENT_PLAN.md` up to date; it is what the next session resumes from.
 - If a design decision is ambiguous, stop and ask. No guessing and no TODOs in code: this world's setting density is high enough that one wrong detail causes rework in ten other places.
-- Never edit `docs/` without the author's approval. `CHANGELOG.md` is the exception, and GDD_NEXT is updated when the author says so.
+- Never edit `docs/` without the author's approval. `CHANGELOG.md` and the 现状 block of `DEVELOPMENT_PLAN.md` are the exceptions, and GDD_NEXT is updated when the author says so.
 - Work on `main`; no feature branches. Commit and push only when asked.
 - Small connective Chinese may be written by Claude (keep the author's sentences, flag it in the CHANGELOG). Big scenes are the author's.
 

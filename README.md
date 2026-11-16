@@ -20,6 +20,9 @@ Fully playable in **中文 and English**, with an in-game language toggle. Switc
 - **The Satchel (行囊)**: the file of what you have learned, the papers you carry — the guarantee that brought you here can be opened and read in full, in the Old Tongue it was drawn up in with the Common Tongue beside it — and the small things people hand you. It shows what you have, never what you lack
 - **The Compendium (见闻)**: a cross-run archive of the people you meet and the world you learn, carried between seasons — so a second playthrough starts from what you already know
 - **Five endings** determined by your choices and the state of the estate. Under each, a few quiet lines about places the season did not reach
+- **After an ending**, a way back: return to a morning of the same season — a market day, the first day of the hunt — and walk on from there, with everything before it as you left it. No save needed beforehand
+- **Reading aids, both quiet**: a line that says what it said last time is set back a step, so the eye lands on what changed; and, if you turn it on, so is text you read in an earlier season
+- **Keyboard**: number keys choose, Space reads on, Esc opens the menu. A held key or a double tap never spends a day by accident
 - **Quiet sound**: wind, rain, the forge, hooves on the yard. No music. A mute and a volume control sit on the title screen and the season's top bar
 
 ## World
@@ -36,7 +39,7 @@ A season is a pure function of its seed and what the player did: the engine draw
 
 ## Development Status
 
-In active development. The core loop, the whole event chain, relationships, the investigation, the endings, the Compendium, the Satchel, sound and both languages are in; the full test suite (Vitest, around 900 tests) runs green. The work now is text and feel: a polished-text pass over the whole script, and blind playtests.
+In active development. The core loop, the whole event chain, relationships, the investigation, the endings, the Compendium, the Satchel, sound, keyboard play and both languages are in; the full test suite (Vitest, over a thousand tests) runs green. The work now is text and feel: a polished-text pass over the whole script, and blind playtests.
 
 | Phase | Status |
 |-------|--------|
@@ -49,8 +52,12 @@ In active development. The core loop, the whole event chain, relationships, the 
 | Seeded replay; language switch by replay | ✅ Done |
 | Sound (diegetic, no music) | ✅ Done |
 | Bilingual 中文 / English | ✅ Done |
+| Keyboard controls | ✅ Done |
+| Return to an earlier morning after an ending; cross-season read memory | ✅ Done |
 | Polished-text pass, UI polish | 🔧 In progress |
 | Blind playtests | 🔧 In progress |
+
+Being considered for later, none of it scheduled: afterwords for the people of the estate, something more for the ending that is hardest to reach, cutscenes, music in a few chosen places, and a winter season or a second term that leaves Maplegate for the country around it.
 
 ## Running Locally
 
